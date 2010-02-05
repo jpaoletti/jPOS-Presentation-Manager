@@ -1,0 +1,51 @@
+<project name="jPOS-EE-SDK-PM" basedir="../..">
+	<property file="build.properties"/>
+	<property name="module.name" value="pm_core" />
+	<property name="name" value="pm" />
+	<property name="dist.dir"    value="dist"/>
+	<property name="build.dir"   value="build"/>
+	<property name="modules.dir" value="modules"/>
+	<property name="build.src"   value="${build.dir}/src"/>
+	<property name="build.lib"   value="${build.dir}/lib"/>
+	<property name="build.cfg"   value="${build.dir}/cfg"/>
+	<property name="classes.dir"   value="${build.dir}/classes"/>
+	<property name="module.src.dir" value="${modules.dir}/${module.name}/src"/>
+	<property name="module.lib.dir" value="${modules.dir}/${module.name}/lib"/>
+	<property name="module.cfg.dir" value="${modules.dir}/${module.name}/cfg"/>
+
+	<property name="jpos.home" value="http://jpos.org/ee" />
+
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+	    <pathelement location="${module.lib.dir}/ant-contrib-1.0b3.jar"/>
+	  </classpath>
+	</taskdef>
+
+ 	<target name="prepare">
+ 		<echo>Deleting properties files</echo>
+ 		<delete>
+    	    <path>
+    	      	<fileset dir="${build.src}/org/jpos/ee/">
+    	        	<include name="ApplicationResource*.properties"/>
+    	       	</fileset>
+    	    </path>
+ 		</delete>
+ 		<echo>Building properties files</echo>
+ 		<foreach target="append_properties_file" param="the_file">
+ 	    	    <path>
+ 	    	      	<fileset dir="${modules.dir}" excludesfile="${modules.ignore.list}">
+ 	    	        	<include name="**/cfg/ApplicationResource*.properties"/>
+ 	    	       	</fileset>
+ 	    	    </path>
+ 	   	</foreach>
+ 	</target>
+	
+ 	<target name="append_properties_file" description="">
+ 		<basename file="${the_file}" property="filename"/>
+ 		<echo>${the_file}</echo>
+ 		<concat  destfile="${build.src}/org/jpos/ee/${filename}" append="true" force="true">
+ 			<fileset file="${the_file}" />
+ 		</concat>
+ 	</target>
+	
+</project>
