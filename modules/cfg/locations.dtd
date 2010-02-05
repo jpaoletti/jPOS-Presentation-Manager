@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % xhtml1-lat1 SYSTEM "xhtml1-lat1.ent"> %xhtml1-lat1;
+<!ELEMENT locations (location*)>
+<!ELEMENT location (EMPTY)>
+<!ATTLIST location id CDATA #REQUIRED>
+<!ATTLIST location class CDATA #REQUIRED>
