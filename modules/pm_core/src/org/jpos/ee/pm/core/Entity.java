@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jpos.ee.pm.core;
 
 import java.util.ArrayList;
@@ -35,8 +34,6 @@ import java.util.Map;
  *     <clazz>the.entity.Class</clazz>
  *     <auditable>false</auditable>
  *     <persistent>true</persistent>
- *     <searchable>true</searchable>
- *     <paginable>true</paginable>
  *     ...
  *     <operations>
  *     ...
@@ -99,31 +96,26 @@ public class Entity extends PMCoreObject {
      * @see EntityOwner*/
     private EntityOwner owner;
     
+    /**List of fields
+     * @see Field*/
+    private ArrayList<Field> fields;
+    
     /**Internal map to optimize getFieldById() method
      * @see #getFieldById(String)*/
     private Map<String,Field> fieldsbyid;
     
-    /**@deprecated*/ 
-    private ArrayList<Relation> relations;
-
-    /**Indicates if the interface allows search*/
-    private Boolean searchable;
-    
-    /**Indicates if the interface allows pagination*/
-    private Boolean paginable;
-    
     /**Operations of the entity. Standard operations are "add", "edit", "delete", "show", "list"
-     * but the developer can define whatever he wants.
+     * but the programmer can define whatever he wants.
      * <br/>{@code<operations>...</operations>}
      * @see Operations
      * @see Operation
      * @see OperationContext*/
     private Operations operations;
     
-    /**List of fields
-     * @see Field*/
-    private ArrayList<Field> fields;
-
+	/**A list of highlights.*/
+	private Highlights highlights;
+	
+    
     /**Default constructor*/
     public Entity () {
         super();
@@ -409,32 +401,17 @@ public class Entity extends PMCoreObject {
 	}
 
 	/**
-	 * @param searchable the searchable to set
+	 * @param highlights the highlights to set
 	 */
-	public void setSearchable(boolean searchable) {
-		this.searchable = searchable;
+	public void setHighlights(Highlights highlights) {
+		this.highlights = highlights;
 	}
 
 	/**
-	 * @return the searchable
+	 * @return the highlights
 	 */
-	public boolean isSearchable() {
-		if(searchable==null) return true;
-		return searchable;
+	public Highlights getHighlights() {
+		return highlights;
 	}
-
-	/**
-	 * @param paginable the paginable to set
-	 */
-	public void setPaginable(Boolean paginable) {
-		this.paginable = paginable;
-	}
-
-	/**
-	 * @return the paginable
-	 */
-	public Boolean getPaginable() {
-		if(paginable == null) return true;
-		return paginable;
-	}	
+	
 }

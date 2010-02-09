@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jpos.util;
 
-import java.util.Map;
 import java.util.HashMap;
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 

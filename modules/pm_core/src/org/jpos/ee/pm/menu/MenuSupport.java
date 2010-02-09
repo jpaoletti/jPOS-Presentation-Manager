@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,9 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.jpos.ee.pm.menu;
 
 import java.io.FileNotFoundException;
+
 import org.jpos.ee.pm.core.PMService;
 import org.jpos.ee.pm.security.SECUser;
 

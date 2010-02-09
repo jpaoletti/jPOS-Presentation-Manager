@@ -15,13 +15,42 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+package org.jpos.ee.pm.core;
 
-package org.jpos.ee.pm.core.monitor;
-
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.Properties;
 
-public class MonitorSource {
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.JDomDriver;
+
+public class ParameterGetterXML extends ParameterGetterSupport {
+	/**A properties object to get some extra configurations*/
 	private Properties properties;
 	
+	public ParameterGetterXML (){
+		parse();
+	}
 
+	public String getParameter(String id) {
+		if(getProperties()==null) return null;
+		return getProperties().getProperty(id);
+	}
+	
+	private void parse(){
+		XStream xstream;
+		xstream = new XStream(new JDomDriver());
+		xstream.alias("properties", Properties.class);
+		try {
+			properties = (Properties) xstream.fromXML (new FileReader ("cfg/pm.paramters.xml"));
+		} catch (FileNotFoundException e) {
+			properties = null;
+			PMLogger.error(e);
+		}
+	}
+
+	protected Properties getProperties() {
+		return properties;
+	}
+	
 }

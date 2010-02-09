@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.jpos.ee.pm.menu;
 
 /**This simple interface represents a MenuItem location, that is "where should this item points in 
@@ -38,7 +39,7 @@ package org.jpos.ee.pm.menu;
  * <pre>
  * {@code
  * <?xml version='1.0' ?>
- * <!DOCTYPE entity SYSTEM "menu.dtd">
+ * <!DOCTYPE entity SYSTEM "location.dtd">
  * <locations>
  *     <location id="yyyyy" class="org.jpos.ee.pm.yyyy.MenuItemLocationXxxxx"/>
  *     <location id="xxxxx" class="org.jpos.ee.pm.xxxx.MenuItemLocationYyyyy"/>

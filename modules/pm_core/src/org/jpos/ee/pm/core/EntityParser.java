@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -14,16 +14,13 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-package org.jpos.ee.pm.core;
+ */package org.jpos.ee.pm.core;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.Converters;
-import org.jpos.ee.pm.core.report.Report;
-import org.jpos.ee.pm.core.report.ReportFilter;
 import org.jpos.ee.pm.validator.Validator;
 
 import com.thoughtworks.xstream.XStream;
@@ -48,10 +45,15 @@ public class EntityParser {
         xstream.alias ("operations", Operations.class);
         xstream.alias ("operation", Operation.class);
         xstream.alias ("owner", EntityOwner.class);
-        xstream.alias ("report", Report.class);
-        xstream.alias ("report-filter", ReportFilter.class);
         xstream.alias ("converters", Converters.class);
         xstream.alias ("converter", Converter.class);
+        xstream.alias ("highlights", Highlights.class);
+        xstream.alias ("highlight", Highlight.class);
+        
+        xstream.useAttributeFor(Highlight.class, "field");
+        xstream.useAttributeFor(Highlight.class, "color");
+        xstream.useAttributeFor(Highlight.class, "value");
+        xstream.useAttributeFor(Highlight.class, "scope");
         
         xstream.addImplicitCollection(Entity.class, "fields", Field.class);
         xstream.addImplicitCollection(Converters.class, "converters", Converter.class);
@@ -59,11 +61,8 @@ public class EntityParser {
         xstream.addImplicitCollection(Field.class, "validators", Validator.class);
         
         xstream.addImplicitCollection(Operations.class, "operations", Operation.class);
+        xstream.addImplicitCollection(Highlights.class, "highlights", Highlight.class);
         xstream.addImplicitCollection(Operation.class, "validators", Validator.class);
-        
-        xstream.addImplicitCollection(Report.class,"filters",ReportFilter.class);
-        xstream.addImplicitCollection(Report.class,"agroupations",String.class);
-        xstream.addImplicitCollection(Report.class,"totalizations",String.class);
         
 	}
 	
@@ -82,13 +81,6 @@ public class EntityParser {
 	}
 	
 	
-	/**Parse a report file
-	 * @param filename The file name
-	 * @return The Report*/
-	public Report parseReportFile(String filename) throws FileNotFoundException{
-		return (Report) xstream.fromXML (new FileReader (filename));
-	}
-
 	/**
 	 * @return the parser
 	 */

@@ -15,18 +15,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpos.ee.pm.converter;
+package org.jpos.ee.pm.core;
 
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+public abstract class ParameterGetterSupport extends PMCoreObject implements ParameterGetter {
 
-public class ShowTimeZoneConverter extends ShowStringConverter {
-    
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
-		throw new IgnoreConvertionException("");
+	public abstract String getParameter(String id);
+	
+	public String getParameter(String id, String def){
+		String s = getParameter(id);
+		if(s==null) return def;
+		return s;
 	}
-}
+	
+	public Integer getParamAsInt(String id, Integer def){
+		String s = getParameter(id);
+		if(s==null)
+			return def;
+		else
+			return Integer.parseInt(s);			
+	}
 
+}

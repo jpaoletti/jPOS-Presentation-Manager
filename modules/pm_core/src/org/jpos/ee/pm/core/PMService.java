@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jpos.ee.pm.core;
 
 import java.io.FileNotFoundException;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jpos.ee.Constants;
-import org.jpos.ee.pm.core.report.Report;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 import org.jpos.ee.pm.menu.MenuItemLocationsParser;
 import org.jpos.q2.QBeanSupport;
@@ -31,7 +29,6 @@ import org.jpos.util.NameRegistrar;
 
 public class PMService extends QBeanSupport implements Constants{
     protected Map<Object,Entity> entities;
-    protected Map<Object,Report> reports;
     protected Map<String,MenuItemLocation> locations;
     private String template;
     private String appversion;
@@ -41,12 +38,12 @@ public class PMService extends QBeanSupport implements Constants{
     private String subtitle;
     private String logo;
     private String contact;
+    //private ParameterGetter parameterGetter;
     
     protected void initService() throws Exception {
         getLog().info ("Entity Manager activated");
         EntityParser parser = new EntityParser();
         loadEntities(parser);
-        loadReports(parser);
         loadLocations();
         template = cfg.get("template");
         if(template==null || template.compareTo("")==0) template="default";
@@ -72,18 +69,33 @@ public class PMService extends QBeanSupport implements Constants{
 			setLoginRequired(true);
 		}
 		
+		if(loginRequired) getLog().info("Login Required");
+		else getLog().info("Login Not Required");
+        
         try {
 			setIgnoreDb(cfg.getBoolean("ignore-db")); 
 		} catch (Exception e) {
 			setIgnoreDb(false);
 		}
-
-		if(loginRequired) getLog().info("Login Required");
-		else getLog().info("Login Not Required");
-        
-        
+		
+		//buildParameterGetter();
+		
         NameRegistrar.register (getCustomName(), this);
     }
+
+	/*private void buildParameterGetter() {
+		try {
+			String pg = cfg.get("parameter-getter");
+			if(pg != null)
+				parameterGetter = (ParameterGetter) EntitySupport.newObjectOf(pg);
+		} catch (Exception e) {
+			PMLogger.error(e);
+		}
+		if(parameterGetter==null){
+			PMLogger.error("Error getting ParameterGetter. Using default XML");
+			parameterGetter = new ParameterGetterXML();
+		}
+	}*/
 
 	private void loadLocations() {
 		MenuItemLocationsParser parser = new MenuItemLocationsParser("cfg/pm.locations.xml");
@@ -103,19 +115,6 @@ public class PMService extends QBeanSupport implements Constants{
     	return s;
     }
 
-	private void loadReports(EntityParser parser) throws Exception {
-		Map<Object,Report> m = new HashMap<Object,Report>();
-        String[] ss = cfg.getAll ("report");
-        for (Integer i=0; i<ss.length; i++) {
-            Report r = parser.parseReportFile(ss[i]);
-            m.put (r.getId(), r);
-            m.put (i, r);
-            r.setService(this);
-            getLog().info (r.toString());
-        }
-        reports = m;
-	}
-
 	private void loadEntities(EntityParser parser) throws FileNotFoundException {
 		Map<Object,Entity> m = new HashMap<Object,Entity>();
         String[] ss = cfg.getAll ("entity");
@@ -129,10 +128,6 @@ public class PMService extends QBeanSupport implements Constants{
         entities = m;
 	}
     
-	public Map<Object, Report> getReports() {
-		return reports;
-	}
-
 	public Map<Object,Entity> getEntities() {
         return entities;
     }
@@ -216,5 +211,13 @@ public class PMService extends QBeanSupport implements Constants{
 	public String getContact() {
 		return contact;
 	}
+
+	/*public void setParameterGetter(ParameterGetter parameterGetter) {
+		this.parameterGetter = parameterGetter;
+	}
+
+	public ParameterGetter getParameterGetter() {
+		return parameterGetter;
+	}*/
 	
 }

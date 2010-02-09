@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jpos.ee.pm.core;
 
 import java.util.ArrayList;
@@ -27,7 +26,7 @@ import org.jpos.ee.pm.validator.Validator;
 
 /**A Field represents an attribute of the represented entity. 
  * 
- * <h2>Simple field configuration</h2>
+ * <h2>Simple entity configuration file</h2>
  * <pre>
  * {@code
  * <field>
@@ -42,10 +41,15 @@ public class Field extends PMCoreObject{
 	/**The id of the field, there must be a getter and a setter for this name on the represented entity.*/
 	private String id;
 	
+	/**A descriptive name*/
+	//private String name;
+	
+	/**A short name
+	 * @deprecated*/
+	private String shortName;
+	
 	/**The width of the field value*/
 	private String width;
-	
-	/**The operations id where this field is displayed*/
 	private String display;
 	private int size;
 	private int maxLength;

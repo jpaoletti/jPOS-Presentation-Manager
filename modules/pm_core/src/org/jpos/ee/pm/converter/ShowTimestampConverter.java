@@ -1,6 +1,6 @@
 /*
- * jPOS Project [http://jpos.org]
- * Copyright (C) 2000-2008 Alejandro P. Revilla
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -70,14 +70,14 @@ public class ShowTimestampConverter extends Converter {
         }
         return df;
     }
-	@Override
-	public Object build(Entity entity, Field field, Operation operation,
+	
+    public Object build(Entity entity, Field field, Operation operation,
 			EntityInstanceWrapper einstance, Object value) throws ConverterException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	@Override
-	public String visualize(Entity entity, Field field, Operation operation,
+	
+    public String visualize(Entity entity, Field field, Operation operation,
 			EntityInstanceWrapper einstance, String extra) throws ConverterException {
 		// TODO Auto-generated method stub
 		return null;
