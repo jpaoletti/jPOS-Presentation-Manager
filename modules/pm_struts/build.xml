@@ -1,0 +1,79 @@
+<!--/*
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */-->
+<project name="PM-STRUTS" basedir="../.." >
+ 	<property file="build.properties"/>
+ 	<property name="module.name" value="pm_struts" />
+ 	<property name="module.lib.dir" value="${modules.dir}/${module.name}/lib"/>
+ 	<property name="module.cfg.dir" value="${modules.dir}/${module.name}/cfg"/>
+	<property name="module.webinf.dir" value="${build.dir}/webapps/pm/WEB-INF"/>
+	<property name="tmp.file" value="${build.cfg}/struts-config.tmp" />
+	<target name="prepare">
+  	<echo message="Struts: generating ${module.webinf.dir}/struts-config.xml" />
+	  	<copy file="${module.cfg.dir}/struts-config.head" tofile="${tmp.file}" overwrite="true" />
+	  	
+		<concat destfile="${tmp.file}" append="true" force="true">
+	   		<path>
+	     		<fileset dir="${modules.dir}" excludesfile="${modules.ignore.list}">
+	      			<include name="**/cfg/struts.beans"/>
+	     		</fileset>
+	   		</path>
+	  	</concat>
+
+		<concat destfile="${tmp.file}" append="true" force="true">
+			<path>
+				<fileset dir="${module.cfg.dir}" excludesfile="${modules.ignore.list}">
+					<include name="struts-config.mid1"/>
+				</fileset>
+			</path>
+		</concat>
+		<concat destfile="${tmp.file}" append="true" force="true">
+	   		<path>
+	     		<fileset dir="${modules.dir}" excludesfile="${modules.ignore.list}">
+	      			<include name="**/cfg/struts.fwds"/>
+	     		</fileset>
+	   		</path>
+	  	</concat>
+		<concat destfile="${tmp.file}" append="true" force="true">
+			<path>
+					<fileset dir="${module.cfg.dir}" excludesfile="${modules.ignore.list}">
+						<include name="struts-config.mid2"/>
+					</fileset>
+			</path>
+		</concat>
+
+		<concat destfile="${tmp.file}" append="true" force="true">
+	   		<path>
+	     		<fileset dir="${modules.dir}" excludesfile="${modules.ignore.list}">
+	      			<include name="**/cfg/struts.actions"/>
+	     		</fileset>
+	   		</path>
+	  	</concat>
+
+		<concat destfile="${tmp.file}" append="true" force="true">
+			<path>
+				<fileset dir="${module.cfg.dir}" excludesfile="${modules.ignore.list}">
+					<include name="struts-config.tail"/>
+				</fileset>
+			</path>
+		</concat>
+
+
+		<copy file="${tmp.file}" filtering="true" tofile="${module.webinf.dir}/struts-config.xml" overwrite="true" />
+		<delete file="${tmp.file}" />
+ 	</target>
+</project>

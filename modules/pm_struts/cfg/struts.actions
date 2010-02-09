@@ -1,0 +1,42 @@
+    <action path="/list" name="ListActionForm" type="org.jpos.ee.pm.struts.actions.ListAction" validate="false" scope="request">
+      <forward name="success" path="/pages/list.jsp"/>
+    </action>
+    <action path="/filter" name="AddActionForm" type="org.jpos.ee.pm.struts.actions.FilterAction" validate="false">
+      <forward name="success" path="/list.do" redirect="true"/>
+      <forward name="continue" path="/pages/filter.jsp"/>
+      <forward name="failure" path="/pages/filter.jsp"/>
+    </action>
+    <action path="/add" name="AddActionForm" type="org.jpos.ee.pm.struts.actions.AddAction" validate="false">
+      <forward name="success" path="/list.do" redirect="true"/>
+      <forward name="continue" path="/pages/ae.jsp"/>
+      <forward name="failure" path="/pages/ae.jsp"/>
+    </action>
+    <action path="/delete" type="org.jpos.ee.pm.struts.actions.DeleteAction">
+      <forward name="success" path="/list.do" redirect="true"/>
+      <forward name="failure" path="/pages/list.jsp" />
+    </action>
+    <action path="/login" name="LoginActionForm" type="org.jpos.ee.pm.struts.actions.LoginAction" validate="true" input="/pages/login.jsp" >
+      	<forward name="success" redirect="true" path="/pages/login.jsp"/>
+      	<forward name="failure" redirect="false" path="/pages/login.jsp"/>
+      	<forward name="changePassword" redirect="true" path="/pages/login.jsp"/>
+    </action>
+    <action path="/logout" type="org.jpos.ee.pm.struts.actions.LogoutAction">
+      	<forward name="success" redirect="true" path="/pages/logout.jsp"/>
+    </action>
+    <action path="/show" type="org.jpos.ee.pm.struts.actions.ShowAction" >
+    	<forward name="success" path="/pages/show.jsp" />
+	    <forward name="failure" path="/pages/show.jsp"/>
+    </action>
+    <action path="/edit" name="AddActionForm" type="org.jpos.ee.pm.struts.actions.EditAction" validate="false">
+      <forward name="success" path="/show.do" redirect="true"/>
+      <forward name="continue" path="/pages/ae.jsp"/>
+      <forward name="failure" path="/pages/ae.jsp"/>
+    </action>
+    <action path="/opers" type="org.jpos.ee.pm.struts.actions.OperAction" >
+    	<forward name="success" path="/pages/opers.jsp" />
+    </action>
+    <action path="/report" type="org.jpos.ee.pm.struts.actions.ReportAction">
+      <forward name="success" path="/pages/showreport.jsp"/>
+      <forward name="continue" path="/pages/filterreport.jsp"/>
+      <forward name="failure" path="/pages/filterreport.jsp"/>
+    </action>

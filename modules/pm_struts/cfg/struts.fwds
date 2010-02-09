@@ -1,0 +1,3 @@
+    <forward name="denied" path="/denied.jsp"/>
+    <forward name="failure" path="/error.jsp"/>
+    <forward name="login" path="/pages/login.jsp"/>

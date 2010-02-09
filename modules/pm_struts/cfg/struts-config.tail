@@ -1,0 +1,5 @@
+
+  </action-mappings>
+  <controller/>
+  <message-resources parameter="org/jpos/ee/ApplicationResource"/>
+</struts-config>

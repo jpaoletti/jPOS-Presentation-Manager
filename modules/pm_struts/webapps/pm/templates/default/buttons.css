@@ -1,0 +1,54 @@
+a.button {
+    display:block;
+    background-position: 6px;
+    background-repeat:no-repeat;
+    font-weight:bold;
+    font-family: 'Trebuchet MS', Tahoma, sans-serif;
+    text-decoration:none;
+    text-indent:20px;
+    color:#555555;
+    background-color:#EAEAD7;
+    border:#CCCCCC solid 1px;
+    min-width:75px;
+    height:20px;
+    margin: 0px 10px 10px 10px;
+    line-height:20px;
+    float:left;
+}
+a:hover {
+    background-color:#F3F3E9;
+    color:#737373;
+}
+/* -------------------- */
+/* CLASSES */
+/* -------------------- */
+.add {
+    background:url(img/add.gif) no-repeat 10px 8px;
+}
+.delete {
+    background:url(img/delete.gif) no-repeat 10px 8px;
+}
+.user {
+    background:url(img/user.gif) no-repeat 10px 8px;
+}
+.alert {
+    background:url(img/alert.gif) no-repeat 10px 8px;
+}
+.msg {
+    background:url(img/msg.gif) no-repeat 10px 8px;
+}
+.download {
+    background:url(img/download.gif) no-repeat 10px 8px;
+}
+.show {
+    background:url(img/show.gif) no-repeat 10px 8px;
+}
+.edit {
+    background:url(img/edit.gif) no-repeat 10px 8px;
+}
+.info {
+    background:url(img/info.gif) no-repeat 10px 8px;
+}
+.list {
+    background:url(img/list.gif) no-repeat 10px 8px;
+}
