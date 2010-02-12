@@ -72,7 +72,7 @@
 		</div>
 	</div>
 
-	<logic:present name="entity" property="highlights.highlights">
+	<logic:present name="entity" property="highlights">
 	<style>
 	<logic:iterate id="highlight" name="entity" property="highlights.highlights">
 		<logic:equal value="instance" name="highlight" property="scope">

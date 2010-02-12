@@ -61,9 +61,12 @@ public class PMListSupport {
 		Criteria c  = dbs.session().createCriteria(Class.forName(entity.getClazz()));
 		
 		if(pmlist!=null){
-			if(pmlist.getOrder()!= null && pmlist.getOrder().compareTo("")!=0){
-				if(pmlist.isDesc()) 	c.addOrder(Order.desc(pmlist.getOrder()));
-				else			c.addOrder(Order.asc (pmlist.getOrder()));
+			String order = pmlist.getOrder();
+			//This is a temporary patch until i found how to sort propertys
+			if(order!=null && order.contains(".")) order = order.substring(0, order.indexOf("."));
+			if(order!= null && order.compareTo("")!=0){
+				if(pmlist.isDesc()) 	c.addOrder(Order.desc(order));
+				else			c.addOrder(Order.asc (order));
 			}
 		}
 		if(entity.getListfilter() != null) {

@@ -50,10 +50,12 @@
 			</table>
 		</div>
 	</div>
-		<style>
+	<logic:present name="entity" property="highlights">
+	<style>
 	<logic:iterate id="highlight" name="entity" property="highlights.highlights">
 		.${highlight.field}_${highlight.value} { background-color: ${highlight.color}; }
 	</logic:iterate>
-	</style>	
+	</style>
+	</logic:present>	
 	<script type="text/javascript" src="${es.context_path}/js/highlight.js"></script>
 </pm:page>
