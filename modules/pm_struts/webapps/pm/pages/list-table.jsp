@@ -33,7 +33,9 @@
 				<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field" indexId="j">
 					<td align="${field.align}">
 						<logic:equal name="j" value="0">
-							<div class="operations" id="row_${i}"><div class="operationspopup" id="g_${i}">error</div>
+							<div class="operations" id="row_${i}"><div class="operationspopup" id="g_${i}">
+							<img src="${es.context_path}/templates/${es.pmservice.template}/images/loading.gif" alt="loading" />
+							</div>
 							<div class="trigger" style="width: ${field.width}px;">
 							<pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
 							</div>
