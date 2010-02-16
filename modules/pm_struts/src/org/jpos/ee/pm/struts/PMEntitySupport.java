@@ -77,12 +77,12 @@ public class PMEntitySupport extends EntitySupport implements Constants{
 	}
 	
 	/**Returns a PMList containing all the instance of the given entity with the given filter. Can be
-     * used in some complex converters
+     * used in some complex converters. Deprecated. Try to use entity.getList() instead.
      * @param db The DataBase
      * @param entity The entity
      * @param filter The filter
      * @return A list with the result values.
-     * */
+     * @deprecated */
     public PMList getItems(DB db, Entity entity, String filter){
         String q = "from "+entity.getClazz();
         if(filter != null && filter.trim().compareTo("")!=0) q = q+" where "+filter ;

@@ -20,6 +20,7 @@ package org.jpos.ee.pm.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**An Entity is the visual representation and operation over a class of a data model. One entity is 
@@ -115,6 +116,9 @@ public class Entity extends PMCoreObject {
 	/**A list of highlights.*/
 	private Highlights highlights;
 	
+	/**A getter for the list of instances. By default uses DBListGetter*/
+	private ListGetter listGetter;
+	
     
     /**Default constructor*/
     public Entity () {
@@ -141,6 +145,10 @@ public class Entity extends PMCoreObject {
     	if(extendzEntity != null)
     		r.addAll(getExtendzEntity().getAllFields());
     	return r;
+    }
+    
+    public List<?> getList(){
+    	return getListGetter().list(this);
     }
     
 	/**Getter for a field by its id
@@ -412,6 +420,21 @@ public class Entity extends PMCoreObject {
 	 */
 	public Highlights getHighlights() {
 		return highlights;
+	}
+
+	/**
+	 * @param listGetter the listGetter to set
+	 */
+	public void setListGetter(ListGetter listGetter) {
+		this.listGetter = listGetter;
+	}
+
+	/**
+	 * @return the listGetter
+	 */
+	public ListGetter getListGetter() {
+		if(listGetter == null) listGetter = new ListGetterDB();
+		return listGetter;
 	}
 	
 }

@@ -25,11 +25,12 @@
 <bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />
 <%
 	Entity e = es.getPmservice().getEntity(request.getParameter("entity"));
-	PMList list = es.getItems(es.getDb(),e,request.getParameter("filter"));
+	//PMList list = es.getItems(es.getDb(),e,request.getParameter("filter"));
+	List<?> list = e.getList();
 	request.setAttribute("collection", list);
 	Collection listv = (Collection)es.get(tmp_object, request.getParameter("f"));
 %>
-<logic:iterate id="o" name="collection" property="contents" type="java.lang.Object" indexId="i">
+<logic:iterate id="o" name="collection" type="java.lang.Object" indexId="i">
 	<bean:define id="checked" value="<%= (listv.contains(o))?"checked":"" %>" />
 	<input type="checkbox" ${checked} value="${param.entity}@${i}" id="f_${param.f}" name="f_${param.f}" />&nbsp;${o}<br/>
 </logic:iterate>
