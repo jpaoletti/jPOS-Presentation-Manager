@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */-->
- <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <pm:page title="login">
@@ -24,7 +24,11 @@
 			parent.location = "/";
 		</script>
 	</logic:present>
-	
+	<logic:present name="reload" scope="request">
+		<script type="text/javascript" charset="utf-8">
+			parent.location = "/";
+		</script>
+	</logic:present>
 	<logic:notPresent name="user">
 	<pm:login />
 	</logic:notPresent>

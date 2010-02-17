@@ -47,6 +47,7 @@ public abstract class ActionSupport extends Action implements Constants{
 	protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
 		rc.setDbs(new DBSupport(rc.getDB()));
         if (!rc.isUserOnLine() && checkUser()) {
+        	rc.getRequest().setAttribute("reload", 1);
             return rc.getMapping().findForward(STRUTS_LOGIN);
         }
         return null;
