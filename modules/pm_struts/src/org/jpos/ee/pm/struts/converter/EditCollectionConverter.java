@@ -45,7 +45,7 @@ public class EditCollectionConverter extends StrutsEditConverter {
 				PMEntitySupport es = PMEntitySupport.getInstance();
 				Entity e = es.getPmservice().getEntity(eid);
 				if(e==null) throw new ConverterException("Cannot find entity "+eid);
-				List<Object> list = es.getItems(es.getDb(), e, getConfig("filter")).getContents();
+				List<?> list = e.getList();
 				for (int i = 0; i < ss.length; i++) {
 					Integer x = Integer.parseInt(ss[i].split("@")[1]);
 					result.add(list.get(x));
