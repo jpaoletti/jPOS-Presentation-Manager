@@ -34,8 +34,8 @@ public class EditAction extends RowActionSupport{
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
     
-	protected boolean preExecute(PMContext ctx) throws PMException {
-		super.preExecute(ctx);
+	protected boolean prepare(PMContext ctx) throws PMException {
+		super.prepare(ctx);
 		if(ctx.getRequest().getParameter(FINISH)==null){
 			/*This point limite anidation of weak entities.*/
 			if(!ctx.isWeak()){

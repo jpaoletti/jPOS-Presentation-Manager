@@ -33,7 +33,7 @@ public class OperAction extends EntityActionSupport{
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-    protected boolean preExecute(PMContext ctx) throws PMException {
+    protected boolean prepare(PMContext ctx) throws PMException {
     	configureEntityContainer(ctx);
     	ctx.setOperation ( ctx.getEntity().getOperations().getOperation("list") );
     	ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());

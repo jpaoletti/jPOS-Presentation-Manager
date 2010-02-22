@@ -29,8 +29,8 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
 	
 	public boolean testSelectedExist(){ return true; }
 
-	protected boolean preExecute(PMContext ctx) throws PMException {
-		super.preExecute(ctx);
+	protected boolean prepare(PMContext ctx) throws PMException {
+		super.prepare(ctx);
 		
 		//If we get item param, we change the selected item on the container
 		String item = ctx.getParameter("item");

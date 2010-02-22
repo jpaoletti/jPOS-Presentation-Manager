@@ -35,8 +35,8 @@ import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMList;
 
 public class FilterAction extends FieldProcessingActionSupport {
-	protected boolean preExecute(PMContext ctx) throws PMException {
-		super.preExecute(ctx);
+	protected boolean prepare(PMContext ctx) throws PMException {
+		super.prepare(ctx);
 		if(ctx.getParameter(FINISH)==null){
 			if(ctx.getEntityContainer().getFilter()==null){
 				//Creates filter bean and put it in session

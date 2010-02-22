@@ -50,9 +50,9 @@ public class LoginAction extends EntityActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return false; }
 
-    protected boolean preExecute(PMContext ctx) throws PMException {
+    protected boolean prepare(PMContext ctx) throws PMException {
     	if(getPMService().isLoginRequired()){
-    		return super.preExecute(ctx);
+    		return super.prepare(ctx);
     	}else{
     		return true;
     	}

@@ -47,7 +47,7 @@ public abstract class ActionSupport extends Action implements Constants{
     /**Forces execute to check if any user is logged in*/
     protected boolean checkUser(){ 	return true;}
     
-	protected boolean preExecute(PMContext ctx) throws PMException {
+	protected boolean prepare(PMContext ctx) throws PMException {
 		if(checkUser() && ctx.getUser() == null){
 			ctx.getRequest().setAttribute("reload", 1);
 			throw new PMUnauthorizedException();
@@ -74,7 +74,7 @@ public abstract class ActionSupport extends Action implements Constants{
 		ctx.setForm(form);
 		ctx.getRequest().setAttribute(PM_CONTEXT, ctx);
 		try {
-			boolean step = preExecute(ctx);
+			boolean step = prepare(ctx);
 			if(step) excecute(ctx);
 			return mapping.findForward(SUCCESS);
 		} catch (PMForwardException e){

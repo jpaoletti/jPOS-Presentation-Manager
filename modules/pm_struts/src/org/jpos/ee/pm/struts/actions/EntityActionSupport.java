@@ -40,8 +40,8 @@ public abstract class EntityActionSupport extends ActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-    protected boolean preExecute(PMContext ctx) throws PMException {
-		super.preExecute(ctx);
+    protected boolean prepare(PMContext ctx) throws PMException {
+		super.prepare(ctx);
 		
         configureEntityContainer(ctx);
         

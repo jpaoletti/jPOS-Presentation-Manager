@@ -31,8 +31,8 @@ public class AddAction extends RowActionSupport {
 	
 	public boolean testSelectedExist() { return false;	}
 
-	protected boolean preExecute(PMContext ctx) throws PMException {
-		super.preExecute(ctx);
+	protected boolean prepare(PMContext ctx) throws PMException {
+		super.prepare(ctx);
 		if(ctx.getParameter(FINISH)==null){
 			//Creates bean and put it in session
 			Object obj;
