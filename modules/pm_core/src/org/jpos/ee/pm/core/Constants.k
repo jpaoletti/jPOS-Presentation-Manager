@@ -1,0 +1,18 @@
+	
+	public static final String PM_MAPPINGS = "PM_MAPPINGS";
+	public static final String PM_ACTION_FORM = "PM_ACTION_FORM"; 
+	public static final String PM_HTTP_REQUEST = "PM_HTTP_REQUEST";
+	public static final String PM_HTTP_RESPONSE = "PM_HTTP_RESPONSE";
+	public static final String PM_OPERATION = "PM_OPERATION"; 
+	public static final String PM_ENTITY_CONTAINER = "PM_ENTITY_CONTAINER";
+	public static final String PM_ERRORS = "PM_ERRORS";
+	public static final String PM_OWNER = "PM_OWNER";
+	public static final String PM_FIELD = "PM_FIELD";
+	public static final String PM_ENTITY_INSTANCE = "PM_ENTITY_INSTANCE";
+	public static final String PM_FIELD_VALUE = "PM_FIELD_VALUE";
+	public static final String PM_CONTEXT = "PM_CONTEXT";
+	public static final String PM_ENTITY_INSTANCE_WRAPPER = "PM_ENTITY_INSTANCE_WRAPPER";
+	public static final int DEFAULT_PAGE_SIZE = 10;
+	public static final String PM_LIST_ORDER = "PM_LIST_ORDER";
+	public static final boolean PM_LIST_ASC = true;
+	public static final String PM_EXTRA_DATA = "PM_EXTRA_DATA";
