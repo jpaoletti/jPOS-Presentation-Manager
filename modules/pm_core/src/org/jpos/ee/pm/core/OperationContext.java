@@ -18,9 +18,6 @@
 package org.jpos.ee.pm.core;
 
 
-import org.jpos.ee.DB;
-import org.jpos.ee.pm.security.SECUser;
-import org.jpos.ee.pm.struts.EntityContainer;
 
 /**This interface allows the programmer to defines some code to execute before or after any operation 
  * execution. if an entity is not persistent (look at {@link Entity#isPersistent()}) this is the place
@@ -28,20 +25,15 @@ import org.jpos.ee.pm.struts.EntityContainer;
  * */
 public interface OperationContext {
 	
-    /**This method is executed before trying to execute the main method of the operation 
-     * @param db The DataBase
-     * @param user The logged user
-     * @param entity_container The entity container
-     * @param obj The instance of the entity
+    /**This method is executed before trying to execute the main method of the operation, that is
+     * before opening any transaction. 
+     * @param ctx The context
      */
-    public void preExecute  (DB db, SECUser user, EntityContainer entity_container, EntityInstanceWrapper obj) throws Exception;
+    public void preExecute  (PMContext ctx) throws PMException;
 
     /**This method is executed after the main method of the operation.
-     * @param db The DataBase
-     * @param user The logged user
-     * @param entity_container The entity container
-     * @param obj The instance of the entity
+     * @param ctx The context
      */
-    public void postExecute (DB db, SECUser user, EntityContainer entity_container, EntityInstanceWrapper obj) throws Exception;
+    public void postExecute (PMContext ctx) throws PMException;
 }
 

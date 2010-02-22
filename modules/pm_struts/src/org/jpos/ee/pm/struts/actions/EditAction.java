@@ -17,9 +17,11 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.apache.struts.action.ActionForward;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.util.NameRegistrar.NotFoundException;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.struts.PMForwardException;
 
 public class EditAction extends RowActionSupport{
 
@@ -32,34 +34,30 @@ public class EditAction extends RowActionSupport{
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
     
-	protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
-		ActionForward af = super.preExecute(rc);
-		if(af != null) return af;
-		if(rc.getRequest().getParameter(FINISH)==null){
+	protected boolean preExecute(PMContext ctx) throws PMException {
+		super.preExecute(ctx);
+		if(ctx.getRequest().getParameter(FINISH)==null){
 			/*This point limite anidation of weak entities.*/
-			if(!rc.isWeak()){
-				clearModifiedOwnerCollection(rc);
+			if(!ctx.isWeak()){
+				clearModifiedOwnerCollection(ctx);
 			}
-			return rc.go();
+			throw new PMForwardException(CONTINUE);
 		}
-		if(rc.getSelected() == null){
-			rc.getErrorlist().put(ENTITY, "Entity instance not found");
-			return rc.fail();
+		if(ctx.getSelected() == null){
+			ctx.getErrors().add(new PMMessage(ENTITY, "pm.instance.not.found"));
+			throw new PMException();
 		}
-		for (Field f : rc.getEntity().getFields()) {
-        	proccessField(rc, f, rc.getSelected());
+		for (Field f : ctx.getEntity().getFields()) {
+        	proccessField(ctx, f, ctx.getSelected());
         }
-        if(!rc.getErrorlist().isEmpty()) return rc.fail();
-		return null;
+        if(!ctx.getErrors().isEmpty()) throw new PMException();
+		return true;
 	}
 	
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		if(rc.isWeak()){
-			
-		}else{
-			if(rc.getEntity().isPersistent())
-				rc.getDB().session().update(rc.getSelected().getInstance());
+	protected void doExecute(PMContext ctx) throws PMException {
+		if(!ctx.isWeak()){
+			if(ctx.getEntity().isPersistent())
+				ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
 		}
-		return rc.successful();
 	}
 }

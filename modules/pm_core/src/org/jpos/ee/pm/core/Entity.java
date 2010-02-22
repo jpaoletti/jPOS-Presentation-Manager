@@ -116,8 +116,8 @@ public class Entity extends PMCoreObject {
 	/**A list of highlights.*/
 	private Highlights highlights;
 	
-	/**A getter for the list of instances. By default uses DBListGetter*/
-	private ListGetter listGetter;
+	/** DataAcces, by default, DB*/
+	private DataAccess dataAccess;
 	
     
     /**Default constructor*/
@@ -147,8 +147,12 @@ public class Entity extends PMCoreObject {
     	return r;
     }
     
-    public List<?> getList(){
-    	return getListGetter().list(this);
+    public List<?> getList(PMContext ctx, EntityFilter filter) throws PMException{
+    	return getDataAccess().list(ctx,null, null);
+    }
+
+    public List<?> getList(PMContext ctx) throws PMException{
+    	return getDataAccess().list(ctx,null, null);
     }
     
 	/**Getter for a field by its id
@@ -423,18 +427,17 @@ public class Entity extends PMCoreObject {
 	}
 
 	/**
-	 * @param listGetter the listGetter to set
+	 * @param dataAccess the dataAccess to set
 	 */
-	public void setListGetter(ListGetter listGetter) {
-		this.listGetter = listGetter;
+	public void setDataAccess(DataAccess dataAccess) {
+		this.dataAccess = dataAccess;
 	}
 
 	/**
-	 * @return the listGetter
+	 * @return the dataAccess
 	 */
-	public ListGetter getListGetter() {
-		if(listGetter == null) listGetter = new ListGetterDB();
-		return listGetter;
+	public DataAccess getDataAccess() {
+		if(dataAccess == null) dataAccess = new DataAccessDB();
+		return dataAccess;
 	}
-	
 }

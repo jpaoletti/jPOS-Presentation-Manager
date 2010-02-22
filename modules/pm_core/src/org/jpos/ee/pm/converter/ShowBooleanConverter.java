@@ -17,10 +17,9 @@
  */
 package org.jpos.ee.pm.converter;
 
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**Converter for boolean.<br>
  * <pre>
@@ -38,15 +37,14 @@ import org.jpos.ee.pm.core.Operation;
  * */
 public class ShowBooleanConverter extends Converter {
 
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
-		return new Boolean ((String)value);
+	public Object build(PMContext ctx) throws ConverterException {
+		return new Boolean (ctx.getString(PM_FIELD_VALUE));
 	}
 	
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
 		try {
-			return ((Boolean) getValue(einstance.getInstance(), field)).booleanValue() ? getConfig("true-text", "Yes") : getConfig("false-text", "No");
+			EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+			return ((Boolean) getValue(einstance.getInstance(), (Field) ctx.get(PM_FIELD))).booleanValue() ? getConfig("true-text", "Yes") : getConfig("false-text", "No");
 		} catch (Exception e) {
 			throw new ConverterException("pm_core.converter.not.boolean");
 		}

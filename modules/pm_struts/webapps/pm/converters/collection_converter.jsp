@@ -26,7 +26,7 @@
 <%
 	Entity e = es.getPmservice().getEntity(request.getParameter("entity"));
 	//PMList list = es.getItems(es.getDb(),e,request.getParameter("filter"));
-	List<?> list = e.getList();
+	List<?> list = e.getList((PMContext)request.getAttribute(Constants.PM_CONTEXT));
 	request.setAttribute("collection", list);
 	Collection listv = (Collection)es.get(tmp_object, request.getParameter("f"));
 %>

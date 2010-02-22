@@ -17,70 +17,64 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.Map.Entry;
-
-import org.apache.struts.action.ActionMessage;
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
 
 public abstract class FieldProcessingActionSupport extends EntityActionSupport{
 	
-	protected void proccessField(RequestContainer rc, Field f, EntityInstanceWrapper wrapper) {
-			try {
-				//Object object = rc.getSelected();
-				if(getModifiedOwnerCollection(rc, f.getId())!=null){
-					PMEntitySupport.set(wrapper.getInstance(), f.getId(), getModifiedOwnerCollection(rc, f.getId()));					
-				}else{
-	                 String eid = "f_" + f.getId();
-	                 debug("Field id: "+eid);
-	                 String s = getParamValues(rc, eid, ";");
-	                 //debug("Field s: "+s);
-	                 int i = 0;	   
-	                 while(s != null){
-		                debug("Object to convert = "+s);
-		                if(!validateField(rc, f, wrapper, s)) return;
-		                try {
-		                    Object o = wrapper.getInstance(i);
-		                	Converter converter = f.getConverters().getConverterForOperation(rc.getOperation().getId());
-							Object converted = converter.build(rc.getEntity(), f, rc.getOperation(), wrapper, s);
-	                    	debug("Object converted = "+converted);
-	                    	PMEntitySupport.set(o, f.getId(), converted);
-		                } catch (IgnoreConvertionException e) {
-		 					//Do nothing, just ignore conversion.
-		  				}
-		  				i++;
-		  				s = getParamValues(rc, eid+"_"+i, ";");
-	                 }
-				}
-             } catch (Exception e) {
-            	 PMLogger.error(e);
-                 rc.getErrorlist().put(rc.getEntity().getId(), e.getMessage());
+	protected void proccessField(PMContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
+		//Object object = rc.getSelected();
+		if(getModifiedOwnerCollection(ctx, f.getId())!=null){
+			PMEntitySupport.set(wrapper.getInstance(), f.getId(), getModifiedOwnerCollection(ctx, f.getId()));					
+		}else{
+             String eid = "f_" + f.getId();
+             ctx.debug("Field id: "+eid);
+             String s = getParamValues(ctx, eid, ";");
+             //debug("Field s: "+s);
+             int i = 0;	   
+             while(s != null){
+                ctx.debug("Object to convert = "+s);
+                validateField(ctx, f, wrapper, s);
+                try {
+                    Object o = wrapper.getInstance(i);
+                	Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
+                	ctx.put(PM_FIELD, f);
+                	ctx.put(PM_FIELD_VALUE, s);
+                	ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
+                	Object converted = converter.build(ctx);
+					ctx.debug("Object converted = "+converted);
+                	PMEntitySupport.set(o, f.getId(), converted);
+                } catch (IgnoreConvertionException e) {
+ 					//Do nothing, just ignore conversion.
+  				}
+  				i++;
+  				s = getParamValues(ctx, eid+"_"+i, ";");
              }
+		}
 	}
 
-	private boolean validateField(RequestContainer rc, Field field, EntityInstanceWrapper wrapper, String s) {
+	private void validateField(PMContext ctx, Field field, EntityInstanceWrapper wrapper, String s) throws PMException {
 		if(field.getValidators()!= null){
 		     for (Validator fv : field.getValidators()) {
-		    	 ValidationResult vr = fv.validate(rc.getEntity(),field,wrapper.getInstance(),s);
-		    	 for(Entry<String, String> e :vr.getMessages().entrySet()){
-		    		 debug("Validation Result: "+e);
-		    		 rc.getErrors().add(e.getKey(), new ActionMessage(e.getValue(),field.getId()));
-		    	 }
-		    	 //rc.getErrorlist().putAll(vr.getMessages());
-		    	 if(! vr.isSuccessful()) return false;
+		    	 ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
+		    	 ctx.put(PM_FIELD, field) ;
+		    	 ctx.put(PM_FIELD_VALUE, s);
+		    	 ValidationResult vr = fv.validate(ctx);
+		    	 ctx.getErrors().addAll(vr.getMessages());
+		    	 if(! vr.isSuccessful()) throw new PMException();
 		     }
 		 }
-		return true;
 	}
 
-	private String getParamValues(RequestContainer rc, String name, String separator) {
-		String[] ss = rc.getRequest().getParameterValues(name);
+	private String getParamValues(PMContext ctx, String name, String separator) {
+		String[] ss = ctx.getRequest().getParameterValues(name);
 		if(ss!=null){
 			StringBuilder s = new StringBuilder();
 			if(ss!=null && ss.length > 0)s.append(ss[0]);

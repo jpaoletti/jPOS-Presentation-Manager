@@ -20,15 +20,16 @@ package org.jpos.ee.pm.struts;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.Operations;
 
-public class PMList {
+public class PMList implements Constants{
 	private Entity entity;
 	private List<Object> contents;
 	private Integer page;
-	private Integer pages;
-	private Integer total;
+	private Long pages;
+	private Long total;
 	private Integer rowsPerPage;
 	private String order;
 	private boolean desc;
@@ -45,7 +46,7 @@ public class PMList {
 		rowsPerPage = 10; //Default
 	}
 	
-	public PMList(List<Object> contents, Integer total) {
+	public PMList(List<Object> contents, Long total) {
 		super();
 		this.contents = contents;
 		rowsPerPage = 10; //Default
@@ -56,7 +57,7 @@ public class PMList {
 	public void setRowsPerPage(Integer rowsPerPage) {
 		this.rowsPerPage = rowsPerPage;
 		//this.page = 1;
-		this.pages = total / rowsPerPage + 1;
+		this.pages = new Long(total.longValue() / rowsPerPage + 1);
 	}
 	
 	public String getOrder() {
@@ -83,26 +84,22 @@ public class PMList {
 		this.contents = contents;
 	}
 	public Integer getPage() {
-		System.out.println(page);
 		return page;
 	}
 	public void setPage(Integer page) {
 		this.page = page;
 	}
-	public Integer getPages() {
+	public Long getPages() {
 		return pages;
 	}
-	public void setPages(Integer pages) {
+	public void setPages(Long pages) {
 		this.pages = pages;
 	}
-	public Integer getTotal() {
+	public Long getTotal() {
 		return total;
 	}
-	public void setTotal(Integer total) {
+	public void setTotal(Long total) {
 		this.total = total;
-		//this.page = 1;
-		//System.out.println(total);
-		//System.out.println(rowsPerPage);
 		this.pages = total / rowsPerPage;
 	}
 	public Integer getRowsPerPage() {
@@ -133,4 +130,11 @@ public class PMList {
 		return rowOperations;
 	}
 	
+	public Integer from(){
+		return (this.getPage()!=null)?(((getPage()-1) * getRowsPerPage())):0;
+	}
+	
+	public Integer rpp(){
+		return (getRowsPerPage()!=null)?getRowsPerPage():DEFAULT_PAGE_SIZE;
+	}
 }

@@ -18,14 +18,12 @@
 package org.jpos.ee.pm.converter;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**Converter for date.<br>
  * <pre>
@@ -42,66 +40,13 @@ import org.jpos.ee.pm.core.Operation;
  * */
 public class ShowDateConverter extends Converter {
     
-    public String toString (Object obj)  throws ConverterException{
-        return obj != null ? getDateFormat().format (obj) : null;
-    }
-
-    public Object fromString (String s)  throws ConverterException{
-        try {
-            if (s != null)
-                return getDateFormat().parse (s);
-        } catch (ParseException e) {
-        	throw new ConverterException("pm_core.converter.not.date");
-        }
-        return null;
-    }
-    
-    public String toEdit (Entity e, Object obj, Field f, String append)  throws ConverterException{
-        Object p = getNestedProperty (obj, f.getId());
-        StringBuilder sb = new StringBuilder ("<input");
-        if (append.length() > 0) {
-            sb.append (' ');
-            sb.append (append);
-        }
-        String id = "f_" + f.getId();
-        sb.append (" type='text' id='");
-        sb.append (id);
-        sb.append ("' name='");
-        sb.append (id);
-        if (p != null) {
-            sb.append ("' value='");
-            sb.append (toString(p));
-        }
-        sb.append ("' size='10' maxlength='10'");
-        if (!f.canUpdate())
-            sb.append (" disabled='true'");
-        sb.append ("/>");
-
-        if (f.canUpdate()) {
-            sb.append ("<script type='text/javascript'>");
-            sb.append ("$(document).ready(function() {");
-            sb.append ("$('#");
-            sb.append (id);
-            sb.append ("').datepicker({buttonImage: '/jposee/images/calendar.gif',buttonImageOnly: true, buttonText: '', showOn: 'both', speed: 'fast'");
-            String defaultDate = getConfig ("defaultDate");
-            if (defaultDate != null) {
-                sb.append (", defaultDate: ");
-                sb.append (defaultDate);
-            }
-            sb.append ("});");
-            sb.append ("});");
-            sb.append ("</script>");
-        }
-        return sb.toString();
-    }
-
-    public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+    public Object build(PMContext ctx) throws ConverterException {
     	throw new IgnoreConvertionException("");
 	}
 	
-    public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
+		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+		Field field = (Field) ctx.get(PM_FIELD);
     	Date o = (Date) getValue(einstance.getInstance(), field);
 		return getDateFormat().format(o);
 	}

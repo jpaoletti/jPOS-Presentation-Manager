@@ -18,19 +18,19 @@
 package org.jpos.ee.pm.struts.converter;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 public class EditBooleanConverter extends StrutsEditConverter {
 
-	public Object build(Entity entity, Field field, Operation operation, EntityInstanceWrapper einstance, Object value) throws ConverterException {
-		return new Boolean ((String)value);
+	public Object build(PMContext ctx) throws ConverterException {
+		return new Boolean (ctx.getString(PM_FIELD_VALUE));
 	}
 	
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
+		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+		Field field = (Field) ctx.get(PM_FIELD);
         Boolean p = (Boolean)getNestedProperty (einstance.getInstance(), field.getId());
         return super.visualize("boolean_converter.jsp?checked="+((p!=null && p.booleanValue())?"checked":""));
 	}

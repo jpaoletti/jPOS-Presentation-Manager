@@ -17,9 +17,9 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.apache.struts.action.ActionForward;
 import org.jpos.ee.pm.core.Operations;
-import org.jpos.util.NameRegistrar.NotFoundException;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 
 public class OperAction extends EntityActionSupport{
 	Operations operations;
@@ -33,16 +33,15 @@ public class OperAction extends EntityActionSupport{
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-    protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
-    	ActionForward r = null; //super.preExecute(rc);
-    	if(!configureEntityContainer(rc))return rc.fail();
-    	rc.setOperation ( rc.getEntity().getOperations().getOperation("list") );
-    	rc.getRequest().setAttribute(OPERATION, rc.getOperation());
-        operations = rc.getEntity().getOperations().getOperationsFor(rc.getOperation());
-        return r;
+    protected boolean preExecute(PMContext ctx) throws PMException {
+    	configureEntityContainer(ctx);
+    	ctx.setOperation ( ctx.getEntity().getOperations().getOperation("list") );
+    	ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
+        operations = ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation());
+        return true;
 	}
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		rc.getRequest().setAttribute(ITEM_OPERATIONS, operations.getOperationsForScope(SCOPE_ITEM));
-		return rc.successful();
+    
+    protected void doExecute(PMContext ctx)throws PMException{
+		ctx.getRequest().setAttribute(ITEM_OPERATIONS, operations.getOperationsForScope(SCOPE_ITEM));
 	}
 }

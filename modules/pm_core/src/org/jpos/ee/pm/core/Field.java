@@ -76,19 +76,23 @@ public class Field extends PMCoreObject{
     private String visualizeW(String s){
     	return getService().visualizationWrapper(s);
     }
-    
-    public String visualize(Entity entity, Operation operation, Object item, String extra) throws ConverterException{
+
+    // Entity entity, Operation operation, Object item, String extra
+    public String visualize(PMContext ctx) throws ConverterException{
     	//debug("Converting ["+operation.getId()+"]"+entity.getId()+"."+getId());
     	try {
         	if(getConverters()!= null){
-        		Converter c = getConverters().getConverterForOperation(operation.getId());
-        		if(c!= null) 
-        			return visualizeW((c.visualize(entity,this,operation,new EntityInstanceWrapper(item),extra)));
+        		Converter c = getConverters().getConverterForOperation(ctx.getOperation().getId());
+        		if(c!= null){
+        			ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
+        			ctx.put(PM_FIELD, this);
+        			return visualizeW(c.visualize(ctx));
+        		}
         	}
-        	return visualizeW(EntitySupport.getAsString(item, this.getId()));
+        	return visualizeW(EntitySupport.getAsString(ctx.get(PM_ENTITY_INSTANCE), this.getId()));
 		} catch (Exception e) {
 			PMLogger.error(e);
-			throw new ConverterException("Unable to convert "+entity.getId()+"."+getId());
+			throw new ConverterException("Unable to convert "+ctx.getEntity().getId()+"."+getId());
 		}
     }
     

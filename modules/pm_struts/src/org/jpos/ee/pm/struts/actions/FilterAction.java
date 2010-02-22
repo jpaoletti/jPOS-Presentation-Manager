@@ -23,73 +23,69 @@ package org.jpos.ee.pm.struts.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.struts.action.ActionForward;
 import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMList;
-import org.jpos.ee.pm.struts.PMListSupport;
-import org.jpos.util.NameRegistrar.NotFoundException;
 
 public class FilterAction extends FieldProcessingActionSupport {
-	protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
-		ActionForward r = super.preExecute(rc);
-		if(r != null) return r;
-		if(rc.getParameter(FINISH)==null){
-			if(rc.getEntity_container().getFilter()==null){
+	protected boolean preExecute(PMContext ctx) throws PMException {
+		super.preExecute(ctx);
+		if(ctx.getParameter(FINISH)==null){
+			if(ctx.getEntityContainer().getFilter()==null){
 				//Creates filter bean and put it in session
 				//Object filter;
 				try {
-					debug("Creating Filter Bean");
 					//filter = getPMService().getFactory().newInstance (rc.getEntity().getClazz());
 					EntityFilter filter = new EntityFilter();
 					EntityInstanceWrapper wrapper = new EntityInstanceWrapper();
-					int top = Integer.parseInt( rc.getOperation().getConfig("instances", "1") );
+					int top = Integer.parseInt( ctx.getOperation().getConfig("instances", "1") );
 					for(int i = 0 ; i < top; i++){
-						Object n1 = getPMService().getFactory().newInstance (rc.getEntity().getClazz());
+						Object n1 = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
 						wrapper.add(n1);
 					}
 					filter.setInstance(wrapper);
-					rc.getEntity_container().setFilter(filter);
+					ctx.getEntityContainer().setFilter(filter);
 				} catch (ConfigurationException e) {
 					PMLogger.error(e);
-					rc.getErrorlist().put(ENTITY, e.getMessage());
-					return rc.fail();
+					ctx.getErrors().add(new PMMessage(ENTITY, e.getMessage()));
+					throw new PMException();
 				}
 			}
-			return rc.go();
+			throw new PMForwardException(CONTINUE);
 		}else{
-			rc.getEntity_container().getFilter().getFilters().clear();
-			for (Field f : rc.getEntity().getFields()) {
-				proccessField(rc, f, rc.getEntity_container().getFilter().getInstance());
+			ctx.getEntityContainer().getFilter().getFilters().clear();
+			for (Field f : ctx.getEntity().getFields()) {
+				proccessField(ctx, f, ctx.getEntityContainer().getFilter().getInstance());
 	        }
-			rc.getEntity_container().getFilter().process(rc.getEntity());
+			ctx.getEntityContainer().getFilter().process(ctx.getEntity());
+			return true;
 		}
-		
-		return r;
 	}
 	
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		//Aca actualizo la lista con el filtro
-		PMListSupport pmls = new PMListSupport(rc.getDbs());
-		PMList pmlist = rc.getList();
+	protected void doExecute(PMContext ctx) throws PMException {
+		//PMListSupport pmls = new PMListSupport();
+		PMList pmlist = ctx.getList();
 		List<Object> contents = null;
-		Integer total = 0;
-		if(rc.getEntity().isPersistent()){
-			//we must get the list form the DB
-			//contents= pmls.getContentList(rc.getEntity(),pmls.buildFilterMap(rc.getEntity().getFields(), rc.getEntity_container().getFilter()), null);
-			contents= pmls.getContentList(rc.getEntity(),rc.getEntity_container().getFilter(), pmlist);
-	    	total= pmls.getTotal();
-	    }else{
+		Long total = new Long(0);
+		if(ctx.getEntity().isPersistent()){
+			ctx.put(PM_LIST_ORDER, pmlist.getOrder());
+			ctx.put(PM_LIST_ASC, !pmlist.isDesc());
+			contents = (List<Object>) ctx.getEntity().getDataAccess().list(ctx , pmlist.from(), pmlist.rpp());
+			total = ctx.getEntity().getDataAccess().count(ctx);
+		}else{
 			//An empty list that will be filled on an a list context
 			contents = new ArrayList<Object>();
 		}
-		PMList pmList = rc.getList();
+		PMList pmList = ctx.getList();
 		pmList.setContents(contents);
 		pmList.setTotal(total);
-		return rc.successful();
 	}
 
 }

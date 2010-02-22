@@ -17,10 +17,7 @@
  */
 package org.jpos.ee.pm.core;
 
-import java.util.List;
-
-public interface ListGetter {
-
-	public List<?> list(Entity entity);
+public class PMUnauthorizedException extends PMException {
+	private static final long serialVersionUID = -1484727708001646301L;
 
 }

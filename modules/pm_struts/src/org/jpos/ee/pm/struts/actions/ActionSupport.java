@@ -17,7 +17,7 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,76 +27,78 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.jpos.ee.Constants;
 import org.jpos.ee.DB;
-import org.jpos.ee.DBSupport;
-import org.jpos.ee.pm.security.SECUser;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.core.PMUnauthorizedException;
 import org.jpos.ee.pm.struts.PMEntitySupport;
+import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsService;
-import org.jpos.util.NameRegistrar;
-import org.jpos.util.NameRegistrar.NotFoundException;
 
 /**A super class for all actions with some helpers and generic stuff*/
 public abstract class ActionSupport extends Action implements Constants{
 
-    protected abstract ActionForward doExecute(RequestContainer rc)throws Exception;
+    protected abstract void doExecute(PMContext ctx)throws PMException;
     
     /**Forces execute to check if any user is logged in*/
     protected boolean checkUser(){ 	return true;}
     
-	protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
-		rc.setDbs(new DBSupport(rc.getDB()));
-        if (!rc.isUserOnLine() && checkUser()) {
-        	rc.getRequest().setAttribute("reload", 1);
-            return rc.getMapping().findForward(STRUTS_LOGIN);
-        }
-        return null;
+	protected boolean preExecute(PMContext ctx) throws PMException {
+		if(checkUser() && ctx.getUser() == null){
+			ctx.getRequest().setAttribute("reload", 1);
+			throw new PMUnauthorizedException();
+		}
+		if(!getPMService().ignoreDb()){
+			DB db = (DB)ctx.getSession().getAttribute(DB);
+			if(db == null) {
+				PMLogger.info("Database Access Created for session "+ctx.getSession().getId());
+				db = new DB(PMLogger.getLog());
+				db.open();
+				ctx.getSession().setAttribute(DB, db);
+			}
+			ctx.put(DB, db);
+		}
+		return true;
 	}
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)throws Exception {
-		
-		debug("Starting");
-		RequestContainer rc = new RequestContainer();
-		rc.setMapping(mapping);
-		rc.setForm(form);
-		rc.setRequest(request);
-		rc.setResponse(response);
-		rc.setErrors(new ActionErrors());
-		rc.setErrorlist(new HashMap<String, String>());
-		
-		debug("RC Built");
-		ActionForward r = preExecute(rc);
-		debug("Pre Execute Done: "+r);
-		r = excecute(rc,r);
-		debug("Execute Done: "+r);
-		if(rc.getErrors().size()>0){
-			debug(rc.getErrors().toString());
-			saveErrors(request, rc.getErrors());
+	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+		PMContext ctx = new PMContext();
+		ctx.setMapping(mapping);
+		ctx.setRequest(request);
+		ctx.setResponse(response);
+		ctx.setErrors(new ArrayList<PMMessage>());
+		ctx.setForm(form);
+		ctx.getRequest().setAttribute(PM_CONTEXT, ctx);
+		try {
+			boolean step = preExecute(ctx);
+			if(step) excecute(ctx);
+			return mapping.findForward(SUCCESS);
+		} catch (PMForwardException e){
+			return mapping.findForward(e.getKey());
+		} catch (PMUnauthorizedException e){
+			return mapping.findForward(STRUTS_LOGIN);
+		} catch (PMException e) {
+			PMLogger.error(e);
+			ActionErrors errors = new ActionErrors();
+			for(PMMessage msg : ctx.getErrors()){
+				errors.add(msg.getKey(), new ActionMessage(msg.getMessage(), msg.getArg0(), msg.getArg1(), msg.getArg2(), msg.getArg3()));
+			}
+			saveErrors(request, errors);
+			return mapping.findForward(FAILURE);
 		}
-		debug("Finish");
-    	return r;
 	}
 	
-	protected ActionForward excecute(RequestContainer rc, ActionForward r) throws Exception {
-		return null;
-	}
+	protected void excecute(PMContext ctx) throws PMException {}
 
-    protected PMStrutsService getPMService()throws NameRegistrar.NotFoundException{
-    	return (PMStrutsService) PMEntitySupport.staticPmservice();
-    }
-    
-	//TODO Make a better auditory system    
-	protected void logRevision (DB db, String ref, String info, SECUser author) {        
-		/*RevisionEntry re = new RevisionEntry();        
-		re.setDate (new Date());        
-		re.setInfo (info);
-		re.setAuthor (author);        
-		//re.setRef (ref);        
-		db.session().save (re);*/
-	}
-
-	protected void debug(String s){
-		System.out.println("["+this.getClass().getName()+"] DEBUG: "+s);
-	}
+    protected PMStrutsService getPMService()throws PMException{
+    	try {
+        	return (PMStrutsService) PMEntitySupport.staticPmservice();
+		} catch (Exception e) {
+			throw new PMException();
+		}
+    }   
 }

@@ -36,7 +36,7 @@ public class GeneralFilter implements Filter,Constants {
 	public void destroy() {
 	}
 
-	public void doFilter(ServletRequest request, ServletResponse arg1,FilterChain chain) throws IOException, ServletException {
+	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
 		Object o = req.getSession().getAttribute(ENTITY_SUPPORT);
 		if(o == null){
@@ -45,7 +45,7 @@ public class GeneralFilter implements Filter,Constants {
 			req.getSession().setAttribute(ENTITY_SUPPORT, es);
 		}
 		try {
-			chain.doFilter(request, arg1);
+			chain.doFilter(request, response);
 		} catch (ServletException e) {
 			PMLogger.error(e);
 			throw e;

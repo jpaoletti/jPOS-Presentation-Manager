@@ -19,15 +19,13 @@ package org.jpos.ee.pm.core;
 
 import java.util.List;
 
-import org.hibernate.Query;
-import org.jpos.ee.DB;
-import org.jpos.ee.DBSupport;
+import org.jpos.ee.Constants;
 
-public class ListGetterDB implements ListGetter {
-	public List<?> list(Entity entity){
-		DB db = DBSupport.getNewDB();
-		String q = "from "+entity.getClazz();
-        Query query  = db.session().createQuery (q);
-    	return query.list();
-	}
+public interface DataAccess extends Constants {
+	public Object 	getItem	(PMContext ctx, String property, String value);
+	public List<?>	list	(PMContext ctx, Integer from, Integer count) throws PMException;
+	public Long		count	(PMContext ctx) throws PMException;
+	public void 	delete	(PMContext ctx, Object object);
+	public void 	update	(PMContext ctx, Object instance);
+	public void 	add		(PMContext ctx, Object instance);
 }

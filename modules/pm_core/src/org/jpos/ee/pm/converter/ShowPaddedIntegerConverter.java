@@ -17,10 +17,9 @@
  */
 package org.jpos.ee.pm.converter;
 
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 import org.jpos.iso.ISOUtil;
 
 /**Converter for Integer that must be padded<br>
@@ -39,13 +38,13 @@ import org.jpos.iso.ISOUtil;
  * */
 public class ShowPaddedIntegerConverter extends Converter {
 	
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+	public Object build(PMContext ctx) throws ConverterException {
 		throw new IgnoreConvertionException("");
 	}
 
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
+		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+		Field field = (Field) ctx.get(PM_FIELD);
 		Integer i = (Integer) getValue(einstance.getInstance(), field);
 		
 		try {

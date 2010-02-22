@@ -21,16 +21,15 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMessage;
 import org.hibernate.Transaction;
+import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.Entity;
+import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.EntityContainer;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
-import org.jpos.util.NameRegistrar.NotFoundException;
 
 public abstract class EntityActionSupport extends ActionSupport {
 
@@ -41,143 +40,123 @@ public abstract class EntityActionSupport extends ActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-    protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
-		ActionForward r = super.preExecute(rc);
-		if(r != null) return r;
-        
-        if(!configureEntityContainer(rc))return rc.fail();
-        
-		String requrl = rc.getRequest().getRequestURL().toString();
-		rc.setOper_id(requrl.substring(requrl.lastIndexOf("/")+1, requrl.lastIndexOf(".")));
-		rc.setOperation((rc.getEntity()!=null)?rc.getEntity().getOperations().getOperation(rc.getOper_id()):null);
+    protected boolean preExecute(PMContext ctx) throws PMException {
+		super.preExecute(ctx);
 		
-		if(rc.getEntity() != null && rc.getEntity().getExtendz() != null){
-			Entity otherentity = getPMService().getEntity(rc.getEntity().getExtendz()); 
-			rc.getEntity().getFields().addAll(otherentity.getFields());
-			rc.getEntity().setExtendz(null); //we do this one time
+        configureEntityContainer(ctx);
+        
+		String requrl = ctx.getRequest().getRequestURL().toString();
+		String operationId = requrl.substring(requrl.lastIndexOf("/")+1, requrl.lastIndexOf("."));
+		ctx.setOperation((ctx.getEntity()!=null)?ctx.getEntity().getOperations().getOperation(operationId):null);
+		
+		if(ctx.getEntity() != null && ctx.getEntity().getExtendz() != null){
+			Entity otherentity = getPMService().getEntity(ctx.getEntity().getExtendz()); 
+			ctx.getEntity().getFields().addAll(otherentity.getFields());
+			ctx.getEntity().setExtendz(null); //we do this one time
 		}
 
 		//Its a weak entity, we get the owner entity for list reference
-		if(rc.getEntity() != null && rc.getEntity().getOwner() != null){
-			rc.setOwner(getEntityContainer(rc,rc.getEntity().getOwner().getEntity_id()));
-			if(rc.getOwner()== null) {
-				rc.getErrors().add(ENTITY, new ActionMessage("owner.not.exists"));
-				return rc.fail();
+		if(ctx.getEntity() != null && ctx.getEntity().getOwner() != null){
+			ctx.setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntity_id()));
+			if(ctx.getOwner()== null) {
+				ctx.getErrors().add(new PMMessage(ENTITY, "owner.not.exists"));
+				throw new PMException();
 			} 
 		}else{
-			rc.setOwner(null);
+			ctx.setOwner(null);
 		}
 		
-		rc.getRequest().setAttribute(OPERATION, rc.getOperation());
-        if(rc.getEntity_container() != null)
-        	rc.getSession().setAttribute(OPERATIONS, rc.getEntity().getOperations().getOperationsFor(rc.getOperation()));
+		ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
+        if(ctx.getEntityContainer() != null)
+        	ctx.getSession().setAttribute(OPERATIONS, ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation()));
         //TODO check entity-level permissions
-		return null;
+		return true;
 	}
     
-    protected ActionForward excecute(RequestContainer rc, ActionForward r) throws Exception {
+    protected void excecute(PMContext ctx) throws PMException {
     	
-    	if(rc.getOperation()!= null && rc.getOperation().getContext()!= null)
-    		rc.getOperation().getContext().preExecute(rc.getDB(), rc.getUser(), rc.getEntity_container(), rc.getSelected());
+    	if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
+    		ctx.getOperation().getContext().preExecute(ctx);
     	
-		if(r == null){
 			/* Validate de operation*/
-			if(validate(rc)) {
-				Transaction tx = null;
+			validate(ctx);
+			
+			DB db = (DB) ctx.get(DB);
+			Transaction tx = null;
+			try{
 				//If we have audithory we need the transaction.
-				if(!getPMService().ignoreDb() && (isAuditable(rc) || openTransaction())) 
-					tx = rc.getDB().beginTransaction();
-		        try {
-		        	/** EXCECUTES THE OPERATION **/
-					r = doExecute(rc);
-
-					if(r == rc.successful()){
-						if(rc.getOperation()!= null && rc.getOperation().getContext()!= null)
-							rc.getOperation().getContext().postExecute(rc.getDB(), rc.getUser(), rc.getEntity_container(), rc.getSelected());
-		
-						if(isAuditable(rc)){
-							logRevision (rc.getDB(), (rc.getEntity()!=null)?rc.getEntity().getId():null, rc.getOper_id(), rc.getUser());
-						}
-						if(tx != null)tx.commit();
-						r = rc.successful();
-					}else{
-						if(tx != null) tx.rollback();
-						return r;
-					}
-				} catch (PMException e) {
-					PMLogger.error(e);
-					if(tx != null) tx.rollback();
-					rc.getErrors().add(ENTITY, new ActionMessage(e.getKey()));
-					return rc.fail();
-				} catch (Exception e) {
-					PMLogger.error(e);
-					if(tx != null) tx.rollback();
-					rc.getErrorlist().put(ENTITY, e.getMessage());
-					return rc.fail();
-				}
-			}else
-				r =  rc.fail(); 
-		}		
-		return r;
+				if(!getPMService().ignoreDb() && (/*isAuditable(ctx) || */openTransaction())) 
+					tx = db.beginTransaction();
+	
+				/** EXCECUTES THE OPERATION **/
+				doExecute(ctx);
+	
+				if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
+					ctx.getOperation().getContext().postExecute(ctx);
+			
+					/*if(isAuditable(ctx)){
+						logRevision (ctx.getDB(), (ctx.getEntity()!=null)?ctx.getEntity().getId():null, ctx.getOper_id(), ctx.getUser());
+					}*/
+				if(tx != null)tx.commit();
+				tx = null;
+			}finally{
+				if(tx != null)tx.rollback();
+			} 
 	}
 
-    
-    
-	protected boolean isAuditable(RequestContainer rc){
-		return isAudited() && rc.getEntity()!= null && rc.getEntity().isAuditable();
+    protected boolean isAuditable(PMContext ctx){
+		return isAudited() && ctx.getEntity()!= null && ctx.getEntity().isAuditable();
 	}
 
-	protected boolean configureEntityContainer(RequestContainer rc) throws NotFoundException {
-		String pmid = rc.getRequest().getParameter(PM_ID);
+	protected boolean configureEntityContainer(PMContext ctx) throws PMException {
+		String pmid = ctx.getRequest().getParameter(PM_ID);
 		if(pmid==null) {
-			pmid=(String) rc.getSession().getAttribute(LAST_PM_ID);
+			pmid=(String) ctx.getSession().getAttribute(LAST_PM_ID);
 		}else{
-			rc.getSession().setAttribute(LAST_PM_ID,pmid);
+			ctx.getSession().setAttribute(LAST_PM_ID,pmid);
 		}
 		boolean fail = false;
-		rc.getRequest().setAttribute(PM_ID, pmid);
-        ActionMessage amue = new ActionMessage("unknow.entity",pmid);
+		ctx.getRequest().setAttribute(PM_ID, pmid);
 		if(pmid==null){
         	if(checkEntity()) {
-        		rc.getErrors().add(ENTITY,amue);
+        		ctx.getErrors().add(new PMMessage(ENTITY, "unknow.entity", pmid));
         		fail= true;
         	}
         }else{
-            rc.setEntity_container(rc.getEntityContainer(pmid));
-            if(rc.getEntity_container() == null){
-            	debug("Configurando container "+ pmid);
-            	rc.setEntity_container(getPMService().newEntityContainer(pmid));
-            	if(rc.getEntity_container() == null && checkEntity()) {
-            		rc.getErrors().add(ENTITY,amue);
+            ctx.setEntityContainer(ctx.getEntityContainer(pmid));
+            if(ctx.getEntityContainer() == null){
+            	ctx.setEntityContainer(getPMService().newEntityContainer(pmid));
+            	if(ctx.getEntityContainer() == null && checkEntity()) {
+            		ctx.getErrors().add(new PMMessage(ENTITY, "unknow.entity", pmid));
             		fail= true;
             	}
-            	rc.getSession().setAttribute(pmid, rc.getEntity_container());
+            	ctx.getSession().setAttribute(pmid, ctx.getEntityContainer());
             }
         }
         return !fail;
 	}
+	
 	/**
 	 * 
 	 */
-	private boolean validate(RequestContainer rc) {
-		if(rc.getOperation()!= null && rc.getOperation().getValidators()!= null){
-		    for (Validator ev : rc.getOperation().getValidators()) {
-		    	ev.setDb(rc.getDB());
-		    	ValidationResult vr = ev.validate(rc.getEntity(),null,rc.getSelected().getInstance(),null);
-		    	rc.getErrorlist().putAll(vr.getMessages());
-		   	 	if(!vr.isSuccessful()) return false;
+	private void validate(PMContext ctx) throws PMException {
+		if(ctx.getOperation()!= null && ctx.getOperation().getValidators()!= null){
+		    for (Validator ev : ctx.getOperation().getValidators()) {
+		    	ctx.put(PM_ENTITY_INSTANCE, ctx.getSelected().getInstance());
+		    	ValidationResult vr = ev.validate(ctx);
+		    	ctx.getErrors().addAll(vr.getMessages());
+		   	 	if(!vr.isSuccessful()) throw new PMException();
 		    }
 		}
-		return true;
 	}
 	
-	protected List<Object> getOwnerCollection(RequestContainer rc) {
-		return (List<Object>) rc.getEntitySupport().get(rc.getOwner().getSelected().getInstance(), rc.getEntity().getOwner().getEntity_property());
+	protected List<Object> getOwnerCollection(PMContext ctx) {
+		return (List<Object>) ctx.getEntitySupport().get(ctx.getOwner().getSelected().getInstance(), ctx.getEntity().getOwner().getEntity_property());
 	}
 
-	protected List<Object> getModifiedOwnerCollection(RequestContainer rc, String field) {
-		debug("getModifiedOwnerCollection("+field+")");
-		List<Object> collection = (List<Object>) rc.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
+	protected List<Object> getModifiedOwnerCollection(PMContext ctx, String field) {
+		ctx.debug("getModifiedOwnerCollection("+field+")");
+		List<Object> collection = (List<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
 		/*if(collection == null) {
 			collection = new ArrayList<Object>();
 			setModifiedOwnerCollection(field, collection);
@@ -185,22 +164,21 @@ public abstract class EntityActionSupport extends ActionSupport {
 		return collection;
 	}
 	
-	protected void setModifiedOwnerCollection(RequestContainer rc, String entity_property, Collection<Object> list) {
-		debug("setModifiedOwnerCollection("+entity_property+", "+list+")");
-		rc.getSession().setAttribute(entity_property+"_"+MODIFIED_OWNER_COLLECTION, list);
+	protected void setModifiedOwnerCollection(PMContext ctx, String entity_property, Collection<Object> list) {
+		ctx.getSession().setAttribute(entity_property+"_"+MODIFIED_OWNER_COLLECTION, list);
 	}
 
-	protected void clearModifiedOwnerCollection(RequestContainer rc) {
-		Enumeration<String> e = rc.getSession().getAttributeNames();
+	protected void clearModifiedOwnerCollection(PMContext ctx) {
+		Enumeration<String> e = ctx.getSession().getAttributeNames();
 		while(e.hasMoreElements()){
 			String s = e.nextElement();
 			if(s.endsWith(MODIFIED_OWNER_COLLECTION)){
-				rc.getSession().setAttribute(s, null);
+				ctx.getSession().setAttribute(s, null);
 			}
 		}
 	}
 	
-	protected EntityContainer getEntityContainer(RequestContainer rc, String eid) {
-		return (EntityContainer) rc.getRequest().getSession().getAttribute(EntityContainer.buildId(HASH, eid));
+	protected EntityContainer getEntityContainer(PMContext ctx, String eid) {
+		return (EntityContainer) ctx.getRequest().getSession().getAttribute(EntityContainer.buildId(HASH, eid));
 	}
 }

@@ -17,20 +17,21 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.apache.struts.action.ActionForward;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 
 public class DeleteAction extends RowActionSupport {
 
 	protected boolean openTransaction() {return true;}
 
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		if(rc.isWeak()){
-			getModifiedOwnerCollection(rc, rc.getEntity().getOwner().getEntity_property()).remove(rc.getSelected().getInstance());
+	protected void doExecute(PMContext ctx) throws PMException {
+		if(ctx.isWeak()){
+			getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntity_property()).remove(ctx.getSelected().getInstance());
 		}else{
-			if(rc.getEntity().isPersistent())
-				rc.getDB().session().delete(rc.getSelected().getInstance());
+			if(ctx.getEntity().isPersistent())
+				ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
 		}
-		rc.getEntity_container().setSelected(null);
-		return rc.successful();
+		ctx.getEntityContainer().setSelected(null);
 	}
+
 }

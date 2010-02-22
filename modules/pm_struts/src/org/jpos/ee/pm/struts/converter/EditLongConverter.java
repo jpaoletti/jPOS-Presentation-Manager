@@ -18,10 +18,7 @@
 package org.jpos.ee.pm.struts.converter;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**Converter for long <br>
  * Properties: currency and format
@@ -36,10 +33,9 @@ import org.jpos.ee.pm.core.Operation;
  * */
 public class EditLongConverter extends EditStringConverter {
 	
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+	public Object build(PMContext ctx) throws ConverterException{
 		try {
-            return Long.parseLong((String)value);
+            return Long.parseLong(ctx.getString(PM_FIELD_VALUE));
         } catch (NumberFormatException e) {
             return null;
         }
