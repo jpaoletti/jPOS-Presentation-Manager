@@ -22,22 +22,19 @@ import java.util.List;
 
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 
 public class EditCollectionConverter extends StrutsEditConverter {
 
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+	public Object build(PMContext ctx) throws ConverterException {
 		try{
 			String collection_class = getConfig("collection-class");
 			if(collection_class == null) throw new ConverterException("collection-class must be defined");
 			
 			Collection<Object> result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
-			String s = (String)value;
+			String s = ctx.getString(PM_FIELD_VALUE);
 			if(s.trim().compareTo("")==0) return result;
 			String[] ss = s.split(";");
 			if(ss.length > 0 ){
@@ -45,7 +42,8 @@ public class EditCollectionConverter extends StrutsEditConverter {
 				PMEntitySupport es = PMEntitySupport.getInstance();
 				Entity e = es.getPmservice().getEntity(eid);
 				if(e==null) throw new ConverterException("Cannot find entity "+eid);
-				List<?> list = e.getList();
+				//TODO change converter interface
+				List<?> list = e.getList(ctx);
 				for (int i = 0; i < ss.length; i++) {
 					Integer x = Integer.parseInt(ss[i].split("@")[1]);
 					result.add(list.get(x));
@@ -60,8 +58,7 @@ public class EditCollectionConverter extends StrutsEditConverter {
 		}
 	}
 
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
 		return super.visualize("collection_converter.jsp?filter="+getConfig("filter")+"&entity="+getConfig("entity"));
 	}
 

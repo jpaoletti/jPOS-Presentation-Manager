@@ -88,9 +88,9 @@ public class PMEntitySupport extends EntitySupport implements Constants{
         if(filter != null && filter.trim().compareTo("")!=0) q = q+" where "+filter ;
         Query query  = db.session().createQuery (q);
     	List<Object> contents = query.list();
-    	Integer total = 0;
+    	Long total = new Long(0);
     	if(contents != null){
-	    	total= contents.size();
+	    	total= new Long(contents.size());
     	}else{
     		contents = new ArrayList<Object>();
     	}

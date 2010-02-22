@@ -17,12 +17,14 @@
  */
 package org.jpos.ee.pm.core;
 
+import org.jpos.ee.Constants;
+
 
 /**This is the superclass of all the core objects of Presentation Manager and it provides some
  * helpers.
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
-public class PMCoreObject {
+public class PMCoreObject implements Constants{
 	private PMService service;
 
 	/**

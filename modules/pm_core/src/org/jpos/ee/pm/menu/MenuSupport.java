@@ -18,10 +18,9 @@
 
 package org.jpos.ee.pm.menu;
 
-import java.io.FileNotFoundException;
-
+import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMService;
-import org.jpos.ee.pm.security.SECUser;
+import org.jpos.ee.pm.security.core.PMSecurityUser;
 
 /**A helper class to get the associated menu of a user. It builds the full menu 
  * and makes a rebuild without the options the user has not permission to see. 
@@ -35,13 +34,17 @@ public class MenuSupport {
 	 * @param service The PMService for the menu.
 	 * @return The filtered menu associated to the permissions of the user.
 	 * */
-	public static Menu getMenu(SECUser user, PMService service) throws FileNotFoundException{
-		MenuBuilder mb = new MenuBuilder("cfg/pm.menu.xml", service);
-		Menu menu = cleanWithoutPerms(mb.menu, user);
-		return menu;
+	public static Menu getMenu(PMSecurityUser user, PMService service) throws PMException{
+		try {
+			MenuBuilder mb = new MenuBuilder("cfg/pm.menu.xml", service);
+			Menu menu = cleanWithoutPerms(mb.menu, user);
+			return menu;
+		} catch (Exception e) {
+			throw new PMException("pm_core.cant.load.menu");
+		}
 	}
 
-	private static Menu cleanWithoutPerms(Menu menu, SECUser user) {
+	private static Menu cleanWithoutPerms(Menu menu, PMSecurityUser user) {
 		if(menu.getPermission()==null || menu.getPermission().trim().compareTo("")==0 || user.hasPermission(menu.getPermission())){
 			if(menu instanceof MenuItem){
 				return menu;

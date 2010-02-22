@@ -18,14 +18,13 @@
 package org.jpos.ee.pm.struts.actions;
 
 /**Action for show operation. */
-import org.apache.struts.action.ActionForward;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 
 public class ShowAction extends RowActionSupport {
 
 	/**Makes the operation generate an audithory entry*/
 	protected boolean isAudited() {	return false; }
     
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		return rc.successful();
-	}
+	protected void doExecute(PMContext ctx) throws PMException {}
 }

@@ -18,21 +18,20 @@
 package org.jpos.ee.pm.struts.converter;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 public class EditStringConverter extends StrutsEditConverter {
 
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
-		return (value!=null)?value.toString():null;
+	public Object build(PMContext ctx) throws ConverterException {
+		Object value =  ctx.get(PM_FIELD_VALUE);
+		return (value !=null)?value.toString():null;
     }
 	
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
-		
+	public String visualize(PMContext ctx) throws ConverterException {
+		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+		Field field = (Field) ctx.get(PM_FIELD);
         Object p = getNestedProperty (einstance.getInstance(), field.getId());
 		return super.visualize("string_converter.jsp?value="+normalize((p==null)?"":p.toString()));
     }

@@ -17,64 +17,64 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.apache.struts.action.ActionForward;
 import org.hibernate.exception.ConstraintViolationException;
 import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMStrutsException;
-import org.jpos.util.NameRegistrar.NotFoundException;
 
 public class AddAction extends RowActionSupport {
 	
-	
 	public boolean testSelectedExist() { return false;	}
 
-	protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
-		ActionForward af = super.preExecute(rc);
-		if(af != null) return af;
-		if(rc.getParameter(FINISH)==null){
+	protected boolean preExecute(PMContext ctx) throws PMException {
+		super.preExecute(ctx);
+		if(ctx.getParameter(FINISH)==null){
 			//Creates bean and put it in session
 			Object obj;
 			try {
-				obj = getPMService().getFactory().newInstance (rc.getEntity().getClazz());
-				rc.getEntity_container().setSelected(new EntityInstanceWrapper(obj));
-				rc.getEntity_container().setSelectedNew(true);
-				return rc.go();
+				obj = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
+				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
+				ctx.getEntityContainer().setSelectedNew(true);
+				return false;
 			} catch (ConfigurationException e) {
 				PMLogger.error(e);
-				rc.getErrorlist().put(ENTITY, e.getMessage());
-				return rc.fail();
+				ctx.getErrors().add(new PMMessage(ENTITY,e.getMessage()));
+				throw new PMException();
 			}
 		}
-		if(rc.getSelected() == null){
-			rc.getErrorlist().put(ENTITY, "Entity instance not found");
-			return rc.fail();
+		if(ctx.getSelected() == null){
+			ctx.getErrors().add(new PMMessage(ENTITY, "pm.instance.not.found"));
+			throw new PMException();
 		}
-		for (Field f : rc.getEntity().getFields()) {
-        	proccessField(rc, f, rc.getSelected());
+		for (Field f : ctx.getEntity().getFields()) {
+        	proccessField(ctx, f, ctx.getSelected());
         }
-        if(!rc.getErrorlist().isEmpty() || !rc.getErrors().isEmpty()) return rc.fail();
-		return null;
+        if(!ctx.getErrors().isEmpty()) 
+        	throw new PMException();
+        
+        return true;
 	}
 
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		if(rc.isWeak()){
-			getModifiedOwnerCollection(rc, rc.getEntity().getOwner().getEntity_property()).add(rc.getSelected().getInstance());
-			String p = rc.getEntity().getOwner().getLocal_property();
+	protected void doExecute(PMContext ctx) throws PMException {
+		if(ctx.isWeak()){
+			getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntity_property()).add(ctx.getSelected().getInstance());
+			String p = ctx.getEntity().getOwner().getLocal_property();
 			if(p != null){
-				rc.getEntitySupport().set(rc.getSelected().getInstance(), p, rc.getOwner().getSelected());
+				ctx.getEntitySupport().set(ctx.getSelected().getInstance(), p, ctx.getOwner().getSelected());
 			}
 		}else{
 			try {
-				if(rc.getEntity().isPersistent())
-					rc.getDB().session().saveOrUpdate(rc.getSelected().getInstance());
+				if(ctx.getEntity().isPersistent())
+					ctx.getEntity().getDataAccess().add(ctx, ctx.getSelected().getInstance());
 			} catch (ConstraintViolationException e) {
 				throw new PMStrutsException("constraint.violation.exception");
 			}
 		}
-		return rc.successful();
 	}
 	
 	protected boolean openTransaction() {

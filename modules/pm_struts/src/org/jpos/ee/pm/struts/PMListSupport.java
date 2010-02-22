@@ -25,25 +25,27 @@ import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
-import org.hibernate.criterion.Restrictions;
-import org.jpos.ee.DBSupport;
+import org.jpos.ee.Constants;
+import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMMessage;
 
-public class PMListSupport {
-	public static final int DEFAULT_PAGE_SIZE = 10;
-	private DBSupport dbs;
+/**@deprecated*/
+public class PMListSupport implements Constants {
 	private Integer total;
 	private Integer rpp;
 
 
-	public List<Object> getContentList(Entity entity, EntityFilter filter, PMList pmlist) throws ClassNotFoundException{
-		Criteria list  = createCriteria(entity,filter,pmlist);
-		Criteria count = createCriteria(entity,filter,pmlist);
-		rpp = (pmlist!=null && pmlist.getRowsPerPage()!=null)?pmlist.getRowsPerPage():DEFAULT_PAGE_SIZE;
-		Integer fr= (pmlist!=null && pmlist.getPage()!=null)?(((pmlist.getPage()-1) * pmlist.getRowsPerPage())):0;
+	public List<Object> getContentList(PMContext ctx, Entity entity, EntityFilter filter, PMList pmlist) throws PMException{
+		Criteria list  = createCriteria(ctx, entity,filter,pmlist);
+		Criteria count = createCriteria(ctx, entity,filter,pmlist);
+		rpp = (pmlist!=null)?pmlist.rpp():DEFAULT_PAGE_SIZE;
+		Integer fr= (pmlist!=null)?pmlist.from():0;
 		
 		count.setProjection(Projections.rowCount());
 		list.setMaxResults(getRpp());
@@ -57,8 +59,16 @@ public class PMListSupport {
 		return list.list();
 	}
 	
-	protected Criteria createCriteria(Entity entity, EntityFilter filter, PMList pmlist) throws ClassNotFoundException{
-		Criteria c  = dbs.session().createCriteria(Class.forName(entity.getClazz()));
+	protected Criteria createCriteria(PMContext ctx, Entity entity, EntityFilter filter, PMList pmlist) throws PMException{
+		Criteria c;
+		DB db = (DB) ctx.get(DB);
+		try {
+			c = db.session().createCriteria(Class.forName(entity.getClazz()));
+		} catch (ClassNotFoundException e) {
+			//TODO finish
+			ctx.getErrors().add(new PMMessage(""));
+			throw new PMException();
+		}
 		
 		if(pmlist!=null){
 			String order = pmlist.getOrder();
@@ -81,22 +91,6 @@ public class PMListSupport {
 		return c;
 	}
 	
-	public Object getObject(Entity entity, String property, String value) throws ClassNotFoundException{
-		Criteria c = getDbs().session().createCriteria(Class.forName(entity.getClazz()));
-		c.setMaxResults(1);
-		c.add(Restrictions.sqlRestriction(property+"="+value));
-		return c.uniqueResult();
-	}
-	
-	public PMListSupport(DBSupport dbs) {
-		super();
-		this.dbs = dbs;
-	}
-
-	public DBSupport getDbs() {
-		return dbs;
-	}
-
 	public Integer getTotal() {
 		return total;
 	}

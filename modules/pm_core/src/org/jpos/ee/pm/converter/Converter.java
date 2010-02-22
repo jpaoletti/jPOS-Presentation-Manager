@@ -21,10 +21,9 @@ import java.util.Properties;
 
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
+import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**A converter is an object associated to a field that determine the way the field value
  * will be visualized and build from a visual representation to a value for a given 
@@ -46,33 +45,35 @@ import org.jpos.ee.pm.core.Operation;
  * </pre>
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  **/
-public abstract class Converter {
+public abstract class Converter implements Constants{
 	/**The operation id where the converter will be applied*/
 	private String operationId;
 	/**A properties object to get some extra configurations*/
 	private Properties properties;
     
 	/**This method transforms the given value into a String to visualize it
-	 * @param entity The entity
-	 * @param field The field
-	 * @param operation The operation in which the converter will be applied
-	 * @param einstance The entity instance just in case the value is affected for some other field in some specific situation 
-	 * @param extra Some extra information 
+	 * @param ctx The context.
+	 * 		Field: 			ctx.get(PM_FIELD);
+	 * 		F.Value:   		ctx.get(PM_FIELD_VALUE);
+	 * 		Inst.Wrapper	ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+	 * 		Entity:			ctx.getEntity();
+	 * 		Operation:		ctx.getOperation();
 	 * @return The string representation of the object 
 	 * @throws ConverterException*/
-	public abstract String visualize(Entity entity, Field field, Operation operation, EntityInstanceWrapper einstance, String extra) throws ConverterException;
+	public abstract String visualize(PMContext ctx) throws ConverterException;
 	
 	/**This method takes a specific format of the object from the visualization (usually a string) and
 	 * transforms it in the required object.
-	 * @param entity The entity
-	 * @param field The field
-	 * @param operation The operation in which the converter will be applied
-	 * @param einstance The entity instance just in case the value is affected for some other field in some specific situation
-	 * @param value The value from the visualization engine
+	 * @param ctx The context.
+	 * 		Field: 			ctx.get(PM_FIELD);
+	 * 		F.Value:   		ctx.get(PM_FIELD_VALUE);
+	 * 		Inst.Wrapper	ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+	 * 		Entity:			ctx.getEntity();
+	 * 		Operation:		ctx.getOperation();
 	 * @return The value to be set in the entity instance.
 	 * @throws ConverterException 
 	 * */
-	public abstract Object build(Entity entity, Field field, Operation operation, EntityInstanceWrapper einstance, Object value) throws ConverterException;
+	public abstract Object build(PMContext ctx) throws ConverterException;
 	
 	/**Getter for a specific property with a default value in case its not defined. 
 	 * Only works for string.

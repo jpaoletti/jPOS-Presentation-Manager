@@ -31,7 +31,7 @@ public class EntityFilter extends PMCoreObject {
 	public static final String __GE__ = "ge";
 	public static final String __NE__ = "ne";
 	private static final String __BETWEEN__ = "between";	
-	//There must be a way to generalice this without using hibernate but this is the simplest way for now
+	//There must be a way to generalize this without using hibernate but this is the simplest way for now
 	private List<Criterion> filters;
 	private EntityInstanceWrapper instance;
 	

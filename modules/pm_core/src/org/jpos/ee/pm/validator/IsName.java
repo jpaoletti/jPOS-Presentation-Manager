@@ -17,8 +17,9 @@
  */
 package org.jpos.ee.pm.validator;
 
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.Field;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMMessage;
 
 /**Validate that the field value is a valid name. Avaible properties are:
  * msg: the message to show when there is an invalid character. This should be a key for messages properties file
@@ -31,21 +32,24 @@ import org.jpos.ee.pm.core.Field;
 public class IsName extends ValidatorSupport {
 	
 	/**The validate method*/
-	public ValidationResult validate(Entity entity, Field field, Object entityvalue, String fieldvalue) {
+	public ValidationResult validate(PMContext ctx) {
 		ValidationResult res = new ValidationResult();
+		Field field = (Field)ctx.get(PM_FIELD);
+        String fieldvalue = (String) ctx.get(PM_FIELD_VALUE);
+		
 		res.setSuccessful(true);
-        if (!isName (fieldvalue)){
+		if (!isName (fieldvalue)){
         	res.setSuccessful(false);
-        	res.getMessages().put(field.getId(), get ("msg", "Invalid characters"));
+        	res.getMessages().add(new PMMessage(field.getId(), "msg", "Invalid characters"));
         }
         int len = fieldvalue.length();
         if (len > getInt ("max-length")){
         	res.setSuccessful(false);
-        	res.getMessages().put(field.getId(),get ("max-length-msg", "Too long"));
+        	res.getMessages().add(new PMMessage(field.getId(), "msg", "Too long"));
         }
         if (len < getInt ("min-length")){
         	res.setSuccessful(false);
-        	res.getMessages().put(field.getId(),get ("min-length-msg", "Too short"));
+        	res.getMessages().add(new PMMessage(field.getId(), "msg", "Too short"));
         }
         return res;
 	}

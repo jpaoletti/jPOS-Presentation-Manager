@@ -17,7 +17,9 @@
  */
 package org.jpos.ee.pm.converter;
 
-public class ConverterException extends Exception {
+import org.jpos.ee.pm.core.PMException;
+
+public class ConverterException extends PMException {
 	public ConverterException(String string) {
 		super(string);
 	}

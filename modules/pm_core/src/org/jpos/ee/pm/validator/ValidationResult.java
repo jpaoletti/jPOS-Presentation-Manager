@@ -16,23 +16,24 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jpos.ee.pm.validator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jpos.ee.pm.core.PMMessage;
 
 
 /**The result of a validation.
- * @author yero jeronimo.paoletti@gmail.com 
  */
 public class ValidationResult {
 	/**True when the validation was successful*/
 	private boolean successful;
 	/**Error messages. The key is the field id and the value is the error message*/
-	private Map<String,String> messages;
+	private List<PMMessage> messages;
 	
 	/**Default constructor*/
 	public ValidationResult() {
 		super();
-		setMessages(new HashMap<String, String>());
+		setMessages(new ArrayList<PMMessage>());
 	}
 
 	/**
@@ -52,14 +53,15 @@ public class ValidationResult {
 	/**
 	 * @param messages the messages to set
 	 */
-	public void setMessages(Map<String,String> messages) {
+	public void setMessages(List<PMMessage> messages) {
 		this.messages = messages;
 	}
 
 	/**
 	 * @return the messages
 	 */
-	public Map<String,String> getMessages() {
+	public List<PMMessage> getMessages() {
 		return messages;
-	}	
+	}
+
 }

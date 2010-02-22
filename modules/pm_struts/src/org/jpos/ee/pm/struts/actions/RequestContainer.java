@@ -35,12 +35,13 @@ import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Operation;
 import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.security.SECUser;
+import org.jpos.ee.pm.security.core.PMSecurityUser;
 import org.jpos.ee.pm.struts.EntityContainer;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMList;
 import org.jpos.ee.pm.struts.PMStrutsService;
 
+/**@deprecated*/
 public class RequestContainer implements Constants{
     private ActionMapping mapping;
     private ActionForm form;
@@ -160,8 +161,8 @@ public class RequestContainer implements Constants{
 	}
 	
     
-	public SECUser getUser(){
-    	SECUser user = (SECUser) getSession().getAttribute(USER);
+	public PMSecurityUser getUser(){
+		PMSecurityUser user = (PMSecurityUser) getSession().getAttribute(USER);
     	return user;
     }
     
@@ -185,7 +186,6 @@ public class RequestContainer implements Constants{
 		for (Map.Entry<String,String> me : errorlist.entrySet()) {
         	errors.add(me.getKey(), new ActionMessage("message",me.getValue()));
         }
-		System.out.println("ERRORS:" + errors);
 		return getMapping().findForward(FAILURE);
 	}
 
@@ -244,19 +244,7 @@ public class RequestContainer implements Constants{
 	public EntityContainer getOwner() {
 		return owner;
 	}
-	/**
-	 * @param oper_id the oper_id to set
-	 */
-	public void setOper_id(String oper_id) {
-		this.oper_id = oper_id;
-	}
-	/**
-	 * @return the oper_id
-	 */
-	public String getOper_id() {
-		return oper_id;
-	}
-	
+		
 	public Entity getEntity(){
     	if(getEntity_container() == null ) return null;
     	return getEntity_container().getEntity();

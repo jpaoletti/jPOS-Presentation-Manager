@@ -25,8 +25,9 @@ import java.text.SimpleDateFormat;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
+//TODO FInish this converter
 public class ShowTimestampConverter extends Converter {
     transient DateFormat df;
     
@@ -71,14 +72,14 @@ public class ShowTimestampConverter extends Converter {
         return df;
     }
 	
-    public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+    public Object build(PMContext ctx) throws ConverterException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-    public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
+		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+		Field field = (Field) ctx.get(PM_FIELD);
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -18,10 +18,7 @@
 package org.jpos.ee.pm.struts.converter;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**Converter for integer <br>
  * <pre>
@@ -35,10 +32,9 @@ import org.jpos.ee.pm.core.Operation;
  * */
 public class EditIntegerConverter extends EditStringConverter {
 	
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+	public Object build(PMContext ctx) throws ConverterException{
 		try {
-            return Integer.parseInt((String)value);
+            return Integer.parseInt(ctx.getString(PM_FIELD_VALUE));
         } catch (NumberFormatException e) {
             return null;
         }

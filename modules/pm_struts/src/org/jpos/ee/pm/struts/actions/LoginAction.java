@@ -21,23 +21,25 @@ import org.jpos.util.NameRegistrar.NotFoundException;
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.io.FileNotFoundException;
 import java.text.ParseException;
 
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.BLException;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.menu.Menu;
 import org.jpos.ee.pm.menu.MenuSupport;
-import org.jpos.ee.pm.security.SECException;
-import org.jpos.ee.pm.security.SECUser;
-import org.jpos.ee.pm.security.UserManager;
-import org.jpos.util.NameRegistrar.NotFoundException;
+import org.jpos.ee.pm.security.core.InvalidPasswordException;
+import org.jpos.ee.pm.security.core.PMSecurityConnector;
+import org.jpos.ee.pm.security.core.PMSecurityException;
+import org.jpos.ee.pm.security.core.PMSecurityService;
+import org.jpos.ee.pm.security.core.PMSecurityUser;
+import org.jpos.ee.pm.security.core.UserNotFoundException;
+import org.jpos.ee.pm.struts.PMForwardException;
 
 public class LoginAction extends EntityActionSupport {
-	private LoginActionForm f;
 
     /** Opens an hibernate transaction before doExecute*/
 	protected boolean openTransaction() { return false;	}
@@ -48,67 +50,50 @@ public class LoginAction extends EntityActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return false; }
 
-    protected ActionForward preExecute(RequestContainer rc) throws NotFoundException {
+    protected boolean preExecute(PMContext ctx) throws PMException {
     	if(getPMService().isLoginRequired()){
-    		return super.preExecute(rc);
+    		return super.preExecute(ctx);
     	}else{
-    		return null;
+    		return true;
     	}
     }
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		 int accessCount;
-
+	protected void doExecute(PMContext ctx) throws PMException {
 		 if(getPMService().isLoginRequired()){
-	        if (rc.getSession().getAttribute(ACCESS_COUNT) == null  )  {
-	        	rc.getSession().setAttribute(USER, null);
-	        	rc.getSession().setAttribute(MENU, null);
-	            accessCount = 1;        
-	        }  else {
-	            accessCount = (Integer)rc.getSession().getAttribute(ACCESS_COUNT);
-	        }
-	        f = (LoginActionForm) rc.getForm();
+        	ctx.getSession().setAttribute(USER, null);
+        	ctx.getSession().setAttribute(MENU, null);
 	        
-	         
-	         UserManager mgr = new UserManager (rc.getDB());
-	         try {
-	             // This is only used to return an user object to evaluate 
-	             // if the user is locked out.
-	             SECUser u = mgr.chechUserExistance(f.getUsername());
-	             mgr.checkUserLock(u);
-	             u = authenticate(rc,accessCount, mgr);
+	        try {
+	        	 PMSecurityUser u = authenticate(ctx);
 	
-	             debug("Login OK. User "+u);
-	             loadMenu(rc, u);
-	             //PMEntitySupport.getInstance().setDb(rc.getDB());
+	             loadMenu(ctx, u);
 	             
-	             if (u.isChangePassword()) {
-	             	return rc.getMapping().findForward("changepassword");		
-	             }
+	             if (u.isChangePassword())
+	            	 throw new PMForwardException("changepassword");		
 	             
-	             if(checkPasswordAge(u)) return rc.getMapping().findForward("changepassword");
-	                             		
-	             //response.sendRedirect (originalUri);
-	             return rc.successful();
-	         } catch (SECException e) {
+	             if(checkPasswordAge(u)) 
+	            	 throw new PMForwardException("changepassword");
+
+	         } catch (UserNotFoundException e) {
+		            ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_security.user.not.found"));
+		            throw new PMException();
+	         } catch (InvalidPasswordException e) {
+		            ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_security.password.invalid"));
+		            throw new PMException();
+	         } catch (Exception e) {
 	        	PMLogger.error(e);
-	         	accessCount++;
-	            rc.getSession().setAttribute(ACCESS_COUNT, new Integer(accessCount));
-	            rc.getErrors().add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage(e.getKey()));
-	            try {Thread.sleep (1000); } catch (InterruptedException ee) { } // security delay
-	            return rc.fail();
+	            ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.unespected.error"));
+	            throw new PMException();
 	         }
 	     }else{
-	    	 SECUser u = new SECUser();
+	    	 PMSecurityUser u = new PMSecurityUser();
 	    	 u.setName(" ");
-	    	 loadMenu(rc, u);
-	    	 return rc.successful();
+	    	 loadMenu(ctx, u);
 	     }
     }
-	private void loadMenu(RequestContainer rc, SECUser u)
-			throws FileNotFoundException, NotFoundException {
+	private void loadMenu(PMContext ctx, PMSecurityUser u) throws PMException{
 		Menu menu = MenuSupport.getMenu(u,getPMService());
-		 rc.getSession().setAttribute(USER, u);
-		 rc.getSession().setAttribute(MENU, menu);
+		 ctx.getSession().setAttribute(USER, u);
+		 ctx.getSession().setAttribute(MENU, menu);
 	}
 	/**
 	 * @param accessCount
@@ -118,18 +103,20 @@ public class LoginAction extends EntityActionSupport {
 	 * @return The user
 	 * @throws BLException
 	 */
-	private SECUser authenticate(RequestContainer rc, int accessCount, UserManager mgr) throws SECException {
-		SECUser u = null;
-		//try {
-        	String seed = rc.getSession().getId(); 
-		    u = mgr.getUserByNick (f.getUsername(), seed, f.getPassword());
-		/*} catch (InvalidPasswordException e) {
-			u = mgr.getUserByNick (f.getUsername());     
-		}*/
-		mgr.verifyUser(u);
+	private PMSecurityUser authenticate(PMContext ctx) throws PMSecurityException {
+		PMSecurityUser u = null;
+		LoginActionForm f = (LoginActionForm) ctx.getForm();
+    	String seed = ctx.getSession().getId();
+    	u = getConnector(ctx).authenticate(f.getUsername(), decrypt(f.getPassword(),seed));
 		return u;
 	}
+	private PMSecurityConnector getConnector(PMContext ctx) {
+    	return PMSecurityService.getService().getConnector(ctx);
+	}
 
+	private String decrypt(String password, String seed) {
+		return password;
+	}
 	/**
 	 * @param cfgMgr
 	 * @param u
@@ -137,7 +124,7 @@ public class LoginAction extends EntityActionSupport {
 	 * @return
 	 * @throws ParseException
 	 */
-	private boolean checkPasswordAge(SECUser u) throws ParseException {
+	private boolean checkPasswordAge(PMSecurityUser u) throws ParseException {
 		/*if (cfgMgr.hasProperty("PasswordAge")) {
 		    
 		    int passAge = cfgMgr.getInt("PasswordAge");

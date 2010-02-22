@@ -17,9 +17,7 @@
  */
 package org.jpos.ee.pm.validator;
 
-import org.jpos.ee.DB;
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.Field;
+import org.jpos.ee.pm.core.PMContext;
 
 /**This interface represents any validation that can be made to an entity instance or
  * to a specific field of an instance. Any operation may have one or more validators.  
@@ -38,16 +36,9 @@ import org.jpos.ee.pm.core.Field;
  * */
 public interface Validator {
     /**
-     * @param entity The entity object
-     * @param field The field to validate. Null if validating an entity.
-     * @param entityvalue The instances of the entity 
-     * @param fieldvalue The value of the field. Null if validating an entity.
+     * @param ctx The context
      * @return {@link ValidationResult}
      */
-	public ValidationResult validate(Entity entity, Field field, Object entityvalue, String fieldvalue); 
+	public ValidationResult validate(PMContext ctx); 
 
-	/**Setter to DataBase just in case we need a connection to validate.
-	 * @param db The DataBase
-	 */
-	public void setDb(DB db);
 }

@@ -21,6 +21,7 @@ import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**Converter for eventual null objects. This can be optimized to any object and not only for strings,
  * but it requires another converter. <br>
@@ -42,9 +43,8 @@ public class ShowNullConverter extends ShowStringConverter{
 		return (value!=null)?value.toString():null;
 	}
 
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
-		String o = super.visualize(entity, field, operation, einstance, extra);
+	public String visualize(PMContext ctx) throws ConverterException {
+		String o = super.visualize(ctx);
 		if(o == null)
 			return getConfig("null-value", "-");
 		else return o;

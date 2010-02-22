@@ -20,10 +20,10 @@ package org.jpos.ee.pm.struts.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.struts.action.ActionForward;
 import org.jpos.ee.pm.core.Operations;
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.struts.PMList;
-import org.jpos.ee.pm.struts.PMListSupport;
 
 public class ListAction extends EntityActionSupport {
 	
@@ -32,30 +32,30 @@ public class ListAction extends EntityActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-	protected ActionForward doExecute(RequestContainer rc) throws Exception {
-		ListActionForm f = (ListActionForm) rc.getForm();
-        configureList(rc,f);
-        boolean searchable = rc.getOperation().getConfig("searchable", "true").compareTo("true")==0;
-        boolean paginable = rc.getOperation().getConfig("paginable", "true").compareTo("true")==0;
-        rc.getRequest().setAttribute("searchable", searchable);
-        rc.getRequest().setAttribute("paginable", paginable);
-		return rc.successful();
+	protected void doExecute(PMContext ctx) throws PMException {
+		ListActionForm f = (ListActionForm) ctx.getForm();
+        configureList(ctx,f);
+        boolean searchable = ctx.getOperation().getConfig("searchable", "true").compareTo("true")==0;
+        boolean paginable = ctx.getOperation().getConfig("paginable", "true").compareTo("true")==0;
+        ctx.getRequest().setAttribute("searchable", searchable);
+        ctx.getRequest().setAttribute("paginable", paginable);
 	}
-	private void configureList(RequestContainer rc, ListActionForm f) throws ClassNotFoundException {
-		PMListSupport pmls = new PMListSupport(rc.getDbs());
+	
+	private void configureList(PMContext ctx, ListActionForm f) throws PMException {
+		//PMListSupport pmls = new PMListSupport();
 
 		List<Object> contents = null;
-		Integer total = 0;
+		long total = 0;
 		Integer rpp = 10;
 		
-		PMList pmlist = rc.getList();
+		PMList pmlist = ctx.getList();
 		if(pmlist == null){
 			pmlist = new PMList();
-            pmlist.setEntity(rc.getEntity());
-            Operations operations = (Operations) rc.getSession().getAttribute(OPERATIONS);
+            pmlist.setEntity(ctx.getEntity());
+            Operations operations = (Operations) ctx.getSession().getAttribute(OPERATIONS);
             pmlist.setOperations	(operations.getOperationsForScope(SCOPE_GRAL));
-            String sortfield = rc.getOperation().getConfig("sort-field");
-            String sortdirection = rc.getOperation().getConfig("sort-direction");
+            String sortfield = ctx.getOperation().getConfig("sort-field");
+            String sortdirection = ctx.getOperation().getConfig("sort-direction");
     		if(sortfield!=null){
     			pmlist.setOrder(sortfield);
     			if(sortdirection!=null && sortdirection.toLowerCase().compareTo("desc")==0)
@@ -63,45 +63,58 @@ public class ListAction extends EntityActionSupport {
     		}
 		}
 		
-		if(rc.getParameter(FINISH)!=null){
+		if(ctx.getParameter(FINISH)!=null){
 			pmlist.setOrder(f.getOrder());
 			pmlist.setDesc(f.isDesc());
 			pmlist.setPage(f.getPage());
 			pmlist.setRowsPerPage(f.getRowsPerPage());
 		}
 		
-		if(rc.isWeak()){
+		if(ctx.isWeak()){
 			//The list is the collection of the owner.
-			String entity_property = rc.getEntity().getOwner().getEntity_property();
-			List<Object> moc = getModifiedOwnerCollection(rc, entity_property);
+			String entity_property = ctx.getEntity().getOwner().getEntity_property();
+			List<Object> moc = getModifiedOwnerCollection(ctx, entity_property);
 			if(moc == null){
-				moc = getOwnerCollection(rc);
+				moc = getOwnerCollection(ctx);
 			}
 			if(moc != null)
 				contents = moc;
 			else
 				contents = new ArrayList<Object>();
-			setModifiedOwnerCollection(rc, entity_property, contents);
+			setModifiedOwnerCollection(ctx, entity_property, contents);
 			total = contents.size();
-		}else
-		if(rc.getEntity().isPersistent()){
+		}else{
+			if(ctx.getEntity().isPersistent()){
+				ctx.put(PM_LIST_ORDER, pmlist.getOrder());
+				ctx.put(PM_LIST_ASC, !pmlist.isDesc());
+				contents = (List<Object>) ctx.getEntity().getDataAccess().list(ctx, pmlist.from(), pmlist.rpp());
+				total = ctx.getEntity().getDataAccess().count(ctx);
+				rpp = pmlist.rpp();
+			}else{
+				//An empty list that will be filled on an a list context
+				contents = new ArrayList<Object>();
+			}
+		}
+			
+		/*if(ctx.getEntity().isPersistent()){
+			//TODO Make the filter something more generic
 			//we must get the list form the DB
-	        contents= pmls.getContentList(rc.getEntity(),rc.getEntity_container().getFilter(), pmlist);
+	        contents= pmls.getContentList(ctx, ctx.getEntity(),filter, pmlist);
 	    	total= pmls.getTotal();
 	    	rpp= pmls.getRpp();
 		}else{
 			//An empty list that will be filled on an a list context
-			contents = new ArrayList<Object>();
-		}
+			contents = (List<Object>) ctx.getEntity().getList(ctx, filter);
+		}*/
 		
-		debug("Contents: "+contents);
+		ctx.debug("Contents: "+contents);
         //if(pmList == null || !pmList.getEntity().equals(rc.getEntity())){
         //pmList = new PMList(contents,total);
-        rc.getEntity_container().setList(pmlist);
+        ctx.getEntityContainer().setList(pmlist);
         pmlist.setContents(contents);
 		pmlist.setTotal(total);
         
-        debug("pmList: "+pmlist);
+        ctx.debug("pmList: "+pmlist);
 		pmlist.setRowsPerPage	(rpp);
 	}
 }

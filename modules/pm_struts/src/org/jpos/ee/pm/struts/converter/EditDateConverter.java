@@ -23,10 +23,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**Converter for date.<br>
  * <pre>
@@ -43,9 +42,9 @@ import org.jpos.ee.pm.core.Operation;
  * */
 public class EditDateConverter extends StrutsEditConverter {
 
-    public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+    public Object build(PMContext ctx) throws ConverterException {
     	try {
+    		String value = ctx.getString(PM_FIELD_VALUE);
             if (value != null)
                 return getDateFormat().parse ((String)value);
         } catch (ParseException e) {
@@ -54,8 +53,9 @@ public class EditDateConverter extends StrutsEditConverter {
         return null;
 	}
 	
-    public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
+		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+		Field field = (Field) ctx.get(PM_FIELD);
     	Date o = (Date) getValue(einstance.getInstance(), field);
     	try{
     		return super.visualize("date_converter.jsp?value="+getDateFormat().format(o));

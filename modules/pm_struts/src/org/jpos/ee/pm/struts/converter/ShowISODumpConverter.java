@@ -19,23 +19,21 @@ package org.jpos.ee.pm.struts.converter;
 
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 import org.jpos.iso.ISOUtil;
 import org.mortbay.util.UrlEncoded;
 
 public class ShowISODumpConverter extends StrutsEditConverter {
 
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
+	public Object build(PMContext ctx) throws ConverterException {
 		throw new IgnoreConvertionException("");
     }
 	
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
-		
+	public String visualize(PMContext ctx) throws ConverterException {
+		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+		Field field = (Field) ctx.get(PM_FIELD);
         byte[] p = (byte[]) getNestedProperty (einstance.getInstance(), field.getId());
         if(p!=null) {
 			String string = ISOUtil.hexdump(p);//new String(p);

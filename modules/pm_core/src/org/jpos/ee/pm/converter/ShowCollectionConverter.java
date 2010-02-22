@@ -20,11 +20,10 @@ package org.jpos.ee.pm.converter;
 
 import java.util.Collection;
 
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
 
 /**Converter for a collection (1..* aggregation).<br>
@@ -39,14 +38,14 @@ import org.jpos.ee.pm.core.PMLogger;
  * */
 public class ShowCollectionConverter extends Converter {
 
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
-		return value;
+	public Object build(PMContext ctx) throws ConverterException {
+		return ctx.get(PM_FIELD_VALUE);
 	}
 
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra) throws ConverterException {
+	public String visualize(PMContext ctx) throws ConverterException {
 		try {
+			EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+			Field field = (Field) ctx.get(PM_FIELD);
 			Collection<?> list = (Collection<?>)EntitySupport.get(einstance.getInstance(), field.getId());
 			StringBuilder sb = new StringBuilder();
 			sb.append("<ul>");

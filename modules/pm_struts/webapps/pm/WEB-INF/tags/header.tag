@@ -13,7 +13,7 @@
 	<logic:present name="user">
 		<div id="userbox">
 		${user.name} &nbsp; |
-		&nbsp; <a href="javascript:loadPage('${es.context_path}/show.do?pmid=secuserprofile&identified=id:${user.id}');"><bean:message key="user.profile"/></a> &nbsp; |
+		&nbsp; <a href="javascript:loadPage('${es.context_path}/show.do?pmid=secuserprofile&identified=username:${user.username}');"><bean:message key="user.profile"/></a> &nbsp; |
 		&nbsp; <a href="${es.context_path}/logout.do" title="<bean:message key="logout"/>"><bean:message key="logout"/></a>
 		</div> 
 	</logic:present>

@@ -21,8 +21,6 @@ import java.util.Properties;
 
 import org.jpos.ee.Constants;
 import org.jpos.ee.DB;
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.Field;
 
 /**Helper class for {@link Validator}. Includes a DB object and a properties attribute to define
  * attributes in the configuration file.
@@ -46,9 +44,6 @@ public abstract class ValidatorSupport extends org.jpos.util.Validator implement
     /**The DataBase*/
 	protected DB db;
     
-	/**Inherited Validate method*/
-	public abstract ValidationResult validate(Entity entity, Field field, Object entityvalue, String fieldvalue);
-
     /**Helper for a property
      * @param name Property name
      * @return Property value*/
