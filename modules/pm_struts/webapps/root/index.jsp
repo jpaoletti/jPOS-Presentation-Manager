@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */-->
- <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<html>
+ <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+ <html>
  <head>
   <meta http-equiv="Refresh" content=0;URL=/pm>
  </head>
  <title>jPOS Extended Edition</title>
  <body bgcolor="#FFFFFF">
-  <h4>[Loading ...]</h4>
+  <h4><bean:message key="index.loading"/></h4>
  </body>
 </html>
 
