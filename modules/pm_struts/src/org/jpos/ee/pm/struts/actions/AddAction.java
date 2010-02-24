@@ -25,6 +25,7 @@ import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsException;
 
 public class AddAction extends RowActionSupport {
@@ -40,7 +41,7 @@ public class AddAction extends RowActionSupport {
 				obj = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
 				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
 				ctx.getEntityContainer().setSelectedNew(true);
-				return false;
+				throw new PMForwardException(CONTINUE);
 			} catch (ConfigurationException e) {
 				PMLogger.error(e);
 				ctx.getErrors().add(new PMMessage(ENTITY,e.getMessage()));
