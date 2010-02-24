@@ -84,7 +84,7 @@ public class Operation extends PMCoreObject {
 	 * @param other The id of the other operation
 	 * @return true if this operation is visible in the other*/
 	public boolean isVisibleIn(String other){
-		return ( getVisibleIn().compareTo("all")==0 || getVisibleIn().indexOf(other)!=-1);
+		return (getVisibleIn()==null || getVisibleIn().compareTo("all")==0 || getVisibleIn().indexOf(other)!=-1);
 	}
 
 	/**Redefines toString from object*/
