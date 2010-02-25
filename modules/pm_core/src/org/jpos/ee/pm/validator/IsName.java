@@ -40,16 +40,18 @@ public class IsName extends ValidatorSupport {
 		res.setSuccessful(true);
 		if (!isName (fieldvalue)){
         	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), "msg", "Invalid characters"));
+        	res.getMessages().add(new PMMessage(field.getId(), get("msg", "")));
         }
-        int len = fieldvalue.length();
-        if (len > getInt ("max-length")){
+        Integer len = fieldvalue.length();
+        Integer maxl = getInt ("max-length");
+		if (len > maxl){
         	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), "msg", "Too long"));
+        	res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", ""), len.toString(), maxl.toString()));
         }
-        if (len < getInt ("min-length")){
+        Integer minl = getInt ("min-length");
+		if (len < minl){
         	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), "msg", "Too short"));
+        	res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", ""), len.toString(), minl.toString()));
         }
         return res;
 	}
