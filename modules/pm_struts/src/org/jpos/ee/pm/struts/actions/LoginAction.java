@@ -1,24 +1,21 @@
 /*
- * jPOS Presentation Manager [http://jimport java.io.FileNotFoundException;
-import java.text.ParseException;
-
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMessage;
-import org.apache.struts.action.ActionMessages;
-import org.jpos.ee.BLException;
-import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.menu.Menu;
-import org.jpos.ee.pm.menu.MenuSupport;
-import org.jpos.ee.pm.security.SECException;
-import org.jpos.ee.pm.security.SECUser;
-import org.jpos.ee.pm.security.UserManager;
-import org.jpos.util.NameRegistrar.NotFoundException;
-  See the
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.jpos.ee.pm.struts.actions;
 
 import java.text.ParseException;
