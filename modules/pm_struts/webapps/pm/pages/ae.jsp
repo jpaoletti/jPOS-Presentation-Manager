@@ -46,7 +46,8 @@
 					<tr><td colspan="2"><html:errors/>&nbsp;</td></tr>
 				</tfoot>
 			</table>
-			<html:submit styleId="${entity.id}_submit" titleKey="submit"  />
+			<html:submit styleId="${entity.id}_submit"><pm:message key="pm.struts.form.submit"/></html:submit>
+			<html:reset styleId="${entity.id}_submit"><pm:message key="pm.struts.form.reset" /></html:reset>
 		</div>
 		</fieldset>
 		</html:form>
