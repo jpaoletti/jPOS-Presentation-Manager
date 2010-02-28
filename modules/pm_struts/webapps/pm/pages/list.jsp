@@ -71,6 +71,8 @@
 			<jsp:include page="list-sort.jsp" />
 		</div>
 	</div>
+	
+	<html:errors/>
 
 	<logic:present name="entity" property="highlights">
 	<style>
