@@ -37,6 +37,7 @@ import org.jpos.ee.pm.validator.Validator;
  *    <scope>general</scope>
  *    <showTitle>true</showTitle>
  *    <visibleIn>add list edit</visibleIn>
+ *    <confirm>true</confirm>
  *    <context class="some.operation.Context" />
  *    <validator class="some.validator.Validator1" />
  *    <validator class="some.validator.Validator2" />
@@ -70,6 +71,9 @@ public class Operation extends PMCoreObject {
 	
     /** Indicates if the entity's title is shown */
 	private Boolean showTitle;
+	
+	/** Indicate if a confirmation is needed before proceed.*/
+	private Boolean confirm;
 	
 	/**@see OperationContext*/
 	private OperationContext context;
@@ -218,5 +222,20 @@ public class Operation extends PMCoreObject {
 	public Boolean getShowTitle() {
 		if(showTitle==null)return true;
 		return showTitle;
+	}
+
+	/**
+	 * @param confirm the confirm to set
+	 */
+	public void setConfirm(Boolean confirm) {
+		this.confirm = confirm;
+	}
+
+	/**
+	 * @return the confirm
+	 */
+	public Boolean getConfirm() {
+		if(confirm == null) return false;
+		return confirm;
 	}
 }

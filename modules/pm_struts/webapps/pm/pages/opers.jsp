@@ -15,18 +15,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */-->
- <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
 <%@ page import="org.jpos.ee.pm.struts.PMEntitySupport"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <bean:define id="item_operations" 	name="item_operations" type="org.jpos.ee.pm.core.Operations" />
 <% es.putEntityInRequest(request);%>
-<logic:iterate id="op" indexId="i" name="item_operations" property="operations">
-	<logic:present name="op" property="url">
-		<bean:define id="furl" value="${op.url}" />
+<logic:iterate id="operation" indexId="i" name="item_operations" property="operations">
+	<pm:confirmation operation="${operation}" entity="${entity}" />
+	<logic:present name="operation" property="url">
+		<bean:define id="furl" value="${operation.url}" />
 	</logic:present>
-	<logic:notPresent name="op" property="url">
-		<bean:define id="furl" value="${es.context_path}/${op.id}.do?pmid=${entity.id}&item=${param.i}" />
+	<logic:notPresent name="operation" property="url">
+		<bean:define id="furl" value="${es.context_path}/${operation.id}.do?pmid=${entity.id}&item=${param.i}" />
 	</logic:notPresent>
-	<a href="${furl}"><img src="${es.context_path}/templates/${es.pmservice.template}/img/${op.id}.gif" alt="${op.id}" /></a>&nbsp;
+	<a href="${furl}" id="operation${operation.id}" ${onclick}><img src="${es.context_path}/templates/${es.pmservice.template}/img/${operation.id}.gif" alt="${operation.id}" /></a>&nbsp;
 </logic:iterate>
