@@ -24,9 +24,7 @@ import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMForwardException;
-import org.jpos.ee.pm.struts.PMStrutsException;
 
 public class AddAction extends RowActionSupport {
 	
@@ -44,13 +42,11 @@ public class AddAction extends RowActionSupport {
 				throw new PMForwardException(CONTINUE);
 			} catch (ConfigurationException e) {
 				PMLogger.error(e);
-				ctx.getErrors().add(new PMMessage(ENTITY,e.getMessage()));
-				throw new PMException();
+				throw new PMException("pm_core.unespected.error");
 			}
 		}
 		if(ctx.getSelected() == null){
-			ctx.getErrors().add(new PMMessage(ENTITY, "pm.instance.not.found"));
-			throw new PMException();
+			throw new PMException("pm.instance.not.found");
 		}
 		for (Field f : ctx.getEntity().getFields()) {
         	proccessField(ctx, f, ctx.getSelected());
@@ -73,7 +69,7 @@ public class AddAction extends RowActionSupport {
 				if(ctx.getEntity().isPersistent())
 					ctx.getEntity().getDataAccess().add(ctx, ctx.getSelected().getInstance());
 			} catch (ConstraintViolationException e) {
-				throw new PMStrutsException("constraint.violation.exception");
+				throw new PMException("constraint.violation.exception");
 			}
 		}
 	}

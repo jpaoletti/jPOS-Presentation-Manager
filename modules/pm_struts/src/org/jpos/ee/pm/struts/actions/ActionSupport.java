@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.Constants;
 import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.PMContext;
@@ -83,6 +84,7 @@ public abstract class ActionSupport extends Action implements Constants{
 			return mapping.findForward(STRUTS_LOGIN);
 		} catch (PMException e) {
 			PMLogger.error(e);
+			if(e.getKey()!=null) ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, e.getKey()));
 			ActionErrors errors = new ActionErrors();
 			for(PMMessage msg : ctx.getErrors()){
 				errors.add(msg.getKey(), new ActionMessage(msg.getMessage(), msg.getArg0(), msg.getArg1(), msg.getArg2(), msg.getArg3()));

@@ -20,7 +20,6 @@ package org.jpos.ee.pm.struts.actions;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMForwardException;
 
 public class EditAction extends RowActionSupport{
@@ -44,8 +43,7 @@ public class EditAction extends RowActionSupport{
 			throw new PMForwardException(CONTINUE);
 		}
 		if(ctx.getSelected() == null){
-			ctx.getErrors().add(new PMMessage(ENTITY, "pm.instance.not.found"));
-			throw new PMException();
+			throw new PMException("pm.instance.not.found");
 		}
 		for (Field f : ctx.getEntity().getFields()) {
         	proccessField(ctx, f, ctx.getSelected());

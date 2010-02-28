@@ -23,6 +23,7 @@ import java.util.List;
 import org.jpos.ee.pm.core.Operations;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMList;
 
 public class ListAction extends EntityActionSupport {
@@ -87,8 +88,13 @@ public class ListAction extends EntityActionSupport {
 			if(ctx.getEntity().isPersistent()){
 				ctx.put(PM_LIST_ORDER, pmlist.getOrder());
 				ctx.put(PM_LIST_ASC, !pmlist.isDesc());
-				contents = (List<Object>) ctx.getEntity().getDataAccess().list(ctx, pmlist.from(), pmlist.rpp());
-				total = ctx.getEntity().getDataAccess().count(ctx);
+				try {
+					contents = (List<Object>) ctx.getEntity().getDataAccess().list(ctx, pmlist.from(), pmlist.rpp());
+					total = ctx.getEntity().getDataAccess().count(ctx);
+				} catch (Exception e) {
+					PMLogger.error(e);
+					throw new PMException("pm.operation.cant.load.list");
+				}
 				rpp = pmlist.rpp();
 			}else{
 				//An empty list that will be filled on an a list context

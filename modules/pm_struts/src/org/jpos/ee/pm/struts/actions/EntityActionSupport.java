@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.List;
 
+import org.apache.struts.action.ActionMessages;
 import org.hibernate.Transaction;
 import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.Entity;
@@ -59,8 +60,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 		if(ctx.getEntity() != null && ctx.getEntity().getOwner() != null){
 			ctx.setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntity_id()));
 			if(ctx.getOwner()== null) {
-				ctx.getErrors().add(new PMMessage(ENTITY, "owner.not.exists"));
-				throw new PMException();
+				throw new PMException("owner.not.exists");
 			} 
 		}else{
 			ctx.setOwner(null);
@@ -119,7 +119,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 		ctx.getRequest().setAttribute(PM_ID, pmid);
 		if(pmid==null){
         	if(checkEntity()) {
-        		ctx.getErrors().add(new PMMessage(ENTITY, "unknow.entity", pmid));
+        		ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "unknow.entity", pmid));
         		fail= true;
         	}
         }else{
@@ -127,7 +127,7 @@ public abstract class EntityActionSupport extends ActionSupport {
             if(ctx.getEntityContainer() == null){
             	ctx.setEntityContainer(getPMService().newEntityContainer(pmid));
             	if(ctx.getEntityContainer() == null && checkEntity()) {
-            		ctx.getErrors().add(new PMMessage(ENTITY, "unknow.entity", pmid));
+            		ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "unknow.entity", pmid));
             		fail= true;
             	}
             	ctx.getSession().setAttribute(pmid, ctx.getEntityContainer());
