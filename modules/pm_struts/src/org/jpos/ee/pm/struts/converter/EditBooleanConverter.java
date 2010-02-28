@@ -25,13 +25,21 @@ import org.jpos.ee.pm.core.PMContext;
 public class EditBooleanConverter extends StrutsEditConverter {
 
 	public Object build(PMContext ctx) throws ConverterException {
-		return new Boolean (ctx.getString(PM_FIELD_VALUE));
+		String res = ctx.getString(PM_FIELD_VALUE);
+		if(res.compareTo("true")==0) return true;
+		if(res.compareTo("false")==0) return false;
+		return null;
 	}
 	
 	public String visualize(PMContext ctx) throws ConverterException {
 		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
 		Field field = (Field) ctx.get(PM_FIELD);
         Boolean p = (Boolean)getNestedProperty (einstance.getInstance(), field.getId());
-        return super.visualize("boolean_converter.jsp?checked="+((p!=null && p.booleanValue())?"checked":""));
+        boolean withnull = Boolean.parseBoolean( getConfig("with-null", "false") );
+        if(!withnull)
+        	return super.visualize("boolean_converter.jsp?checked="+((p!=null && p.booleanValue())?"checked":""));
+        else{
+        	return super.visualize("nboolean_converter.jsp?checked="+((p==null)?"null":(p.booleanValue())?"true":"false"));
+        }
 	}
 }
