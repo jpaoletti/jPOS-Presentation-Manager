@@ -22,7 +22,7 @@ import java.util.List;
 import org.jpos.ee.Constants;
 
 public interface DataAccess extends Constants {
-	public Object 	getItem	(PMContext ctx, String property, String value);
+	public Object 	getItem	(PMContext ctx, String property, String value) throws PMException;
 	public List<?>	list	(PMContext ctx, Integer from, Integer count) throws PMException;
 	public Long		count	(PMContext ctx) throws PMException;
 	public void 	delete	(PMContext ctx, Object object);

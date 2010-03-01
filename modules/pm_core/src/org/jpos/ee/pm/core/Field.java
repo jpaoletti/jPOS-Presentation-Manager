@@ -78,7 +78,7 @@ public class Field extends PMCoreObject{
     }
 
     // Entity entity, Operation operation, Object item, String extra
-    public String visualize(PMContext ctx) throws ConverterException{
+    public String visualize(PMContext ctx) throws PMException{
     	//debug("Converting ["+operation.getId()+"]"+entity.getId()+"."+getId());
     	try {
         	if(getConverters()!= null){

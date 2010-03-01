@@ -28,7 +28,7 @@ import org.jpos.ee.DB;
 
 public class DataAccessDB implements DataAccess {
 
-	public Object getItem(PMContext ctx, String property, String value) {
+	public Object getItem(PMContext ctx, String property, String value) throws PMException {
 		try {
 			DB db = (DB) ctx.get(DB);
 			Criteria c = db.session().createCriteria(Class.forName(ctx.getEntity().getClazz()));

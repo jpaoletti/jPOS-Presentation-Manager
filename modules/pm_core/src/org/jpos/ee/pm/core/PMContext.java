@@ -26,6 +26,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
 import org.jpos.ee.pm.struts.EntityContainer;
@@ -107,7 +108,8 @@ public class PMContext extends Context implements Constants{
 	}
 	
 	public PMEntitySupport getEntitySupport(){		
-		return (PMEntitySupport)getRequest().getSession().getAttribute(ENTITY_SUPPORT);	
+		PMEntitySupport r = (PMEntitySupport)getRequest().getSession().getAttribute(ENTITY_SUPPORT);
+		return r;	
 	}		
 	
 	/*public DB getDB(){
@@ -145,8 +147,13 @@ public class PMContext extends Context implements Constants{
 		return getMapping().findForward(DENIED);
 	}
 	
-	public EntityContainer getEntityContainer(String id){
-		return (EntityContainer) getSession().getAttribute(id);
+	public EntityContainer getEntityContainer(String id) throws PMException{
+		EntityContainer ec = (EntityContainer) getSession().getAttribute(id);
+		if(ec == null){
+			getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.entity.not.found", id));
+			throw new PMException();
+		}
+		return ec;
 	}
 	public String getParameter(String s) {
 		return getRequest().getParameter(s);
@@ -163,9 +170,27 @@ public class PMContext extends Context implements Constants{
 	}
 	/**
 	 * @return the entity_container
+	 * @throws PMException 
 	 */
-	public EntityContainer getEntityContainer() {
-		return (EntityContainer) get(PM_ENTITY_CONTAINER);
+	public EntityContainer getEntityContainer() throws PMException {
+		EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
+		if(entityContainer == null){
+			getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.entity.not.found", getPmId()));
+			throw new PMException();
+		}
+		return entityContainer;
+	}
+
+	private String getPmId() {
+		return (String) getRequest().getAttribute(PM_ID);
+	}
+	/**
+	 * @return the entity_container
+	 * @throws PMException 
+	 */
+	public boolean hasEntityContainer(){
+		EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
+		return entityContainer != null;
 	}
 	/**
 	 * @param operation the operation to set
@@ -192,12 +217,11 @@ public class PMContext extends Context implements Constants{
 		return (EntityContainer)get(PM_OWNER);
 	}
 	
-	public Entity getEntity(){
-    	if(getEntityContainer() == null ) return null;
+	public Entity getEntity()throws PMException{
     	return getEntityContainer().getEntity();
     }
 	
-	public PMList getList() {
+	public PMList getList() throws PMException{
 		return getEntityContainer().getList();
 	}
 	
@@ -205,12 +229,19 @@ public class PMContext extends Context implements Constants{
 		return getOwner() != null;
 	}
 
-	public EntityInstanceWrapper getSelected() {
+	public EntityInstanceWrapper getSelected() throws PMException{
 		return getEntityContainer().getSelected();
 	}
 	
 	public void debug(Object object){
 		System.out.println("["+this.getClass().getName()+"] DEBUG: "+object);
+	}
+	public boolean hasEntity() {
+		try {
+			return (hasEntityContainer() && getEntityContainer().getEntity() != null);
+		} catch (PMException e) {
+			return false;
+		}
 	}
 
 }

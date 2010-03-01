@@ -48,16 +48,16 @@ public abstract class EntityActionSupport extends ActionSupport {
         
 		String requrl = ctx.getRequest().getRequestURL().toString();
 		String operationId = requrl.substring(requrl.lastIndexOf("/")+1, requrl.lastIndexOf("."));
-		ctx.setOperation((ctx.getEntity()!=null)?ctx.getEntity().getOperations().getOperation(operationId):null);
+		ctx.setOperation((ctx.hasEntity())?ctx.getEntity().getOperations().getOperation(operationId):null);
 		
-		if(ctx.getEntity() != null && ctx.getEntity().getExtendz() != null){
+		if(ctx.hasEntity() && ctx.getEntity().getExtendz() != null){
 			Entity otherentity = getPMService().getEntity(ctx.getEntity().getExtendz()); 
 			ctx.getEntity().getFields().addAll(otherentity.getFields());
 			ctx.getEntity().setExtendz(null); //we do this one time
 		}
 
 		//Its a weak entity, we get the owner entity for list reference
-		if(ctx.getEntity() != null && ctx.getEntity().getOwner() != null){
+		if(ctx.hasEntity() && ctx.getEntity().getOwner() != null){
 			ctx.setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntity_id()));
 			if(ctx.getOwner()== null) {
 				throw new PMException("owner.not.exists");
@@ -67,7 +67,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 		}
 		
 		ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
-        if(ctx.getEntityContainer() != null)
+        if(ctx.hasEntityContainer())
         	ctx.getSession().setAttribute(OPERATIONS, ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation()));
         //TODO check entity-level permissions
 		return true;
@@ -104,8 +104,8 @@ public abstract class EntityActionSupport extends ActionSupport {
 			} 
 	}
 
-    protected boolean isAuditable(PMContext ctx){
-		return isAudited() && ctx.getEntity()!= null && ctx.getEntity().isAuditable();
+    protected boolean isAuditable(PMContext ctx) throws PMException{
+		return isAudited() && ctx.hasEntity() && ctx.getEntity().isAuditable();
 	}
 
 	protected boolean configureEntityContainer(PMContext ctx) throws PMException {
@@ -118,18 +118,16 @@ public abstract class EntityActionSupport extends ActionSupport {
 		boolean fail = false;
 		ctx.getRequest().setAttribute(PM_ID, pmid);
 		if(pmid==null){
-        	if(checkEntity()) {
-        		ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "unknow.entity", pmid));
-        		fail= true;
-        	}
+        	if(checkEntity()) ctx.getEntityContainer();
         }else{
-            ctx.setEntityContainer(ctx.getEntityContainer(pmid));
-            if(ctx.getEntityContainer() == null){
+        	try {
+                ctx.setEntityContainer(ctx.getEntityContainer(pmid));
+			} catch (PMException e){
+				ctx.getErrors().clear();
+			}
+            if(!ctx.hasEntityContainer()){
             	ctx.setEntityContainer(getPMService().newEntityContainer(pmid));
-            	if(ctx.getEntityContainer() == null && checkEntity()) {
-            		ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "unknow.entity", pmid));
-            		fail= true;
-            	}
+            	if( checkEntity() ) ctx.getEntityContainer();
             	ctx.getSession().setAttribute(pmid, ctx.getEntityContainer());
             }
         }
@@ -150,7 +148,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 		}
 	}
 	
-	protected List<Object> getOwnerCollection(PMContext ctx) {
+	protected List<Object> getOwnerCollection(PMContext ctx) throws PMException {
 		return (List<Object>) ctx.getEntitySupport().get(ctx.getOwner().getSelected().getInstance(), ctx.getEntity().getOwner().getEntity_property());
 	}
 
