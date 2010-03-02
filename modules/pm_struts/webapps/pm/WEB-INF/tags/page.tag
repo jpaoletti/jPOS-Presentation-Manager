@@ -20,7 +20,7 @@
 <script type="text/javascript" src="${es.context_path}/js/jquery.js"></script>
 <script type="text/javascript" src="${es.context_path}/js/jquery.dataTables.js"></script>
 <script type="text/javascript" src="${es.context_path}/js/jqueryslidemenu.js"></script>
-<script type="text/javascript" src="${es.context_path}/js/httprequest.js"></script>
+<script type="text/javascript" src="${es.context_path}/js/misc.js"></script>
 <!-- 
 <link rel="shortcut icon" href="${cp}/styles/images/ico.ico"> 
 -->
