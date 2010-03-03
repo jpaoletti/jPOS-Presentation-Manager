@@ -54,8 +54,11 @@ public class EditAction extends RowActionSupport{
 	
 	protected void doExecute(PMContext ctx) throws PMException {
 		if(!ctx.isWeak()){
-			if(ctx.getEntity().isPersistent())
+			if(ctx.getEntity().isPersistent()){
+				ctx.debug("Updating '"+ctx.getEntity().getId()+"' to Data Access");
 				ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
+			}
 		}
 	}
+	
 }

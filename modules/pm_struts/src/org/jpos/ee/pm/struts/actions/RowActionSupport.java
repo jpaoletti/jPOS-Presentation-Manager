@@ -18,6 +18,7 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
@@ -38,11 +39,11 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
 			Integer index = Integer.parseInt(item);
 			ctx.debug("Row index: "+ index);
 			if(index != null){
-				List <Object> al;
+				List <Object> al = new ArrayList<Object>();
 				if(ctx.isWeak())
-					al = getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntity_property());
+					al.addAll(getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()));
 				else
-					al = ctx.getList().getContents();
+					al.addAll(ctx.getList().getContents());
 				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(al.get(index)));
 			}
 		}else{
@@ -67,5 +68,5 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
 	       	throw new PMException();
 		}else
 			return true;
-	}	
+	}
 }

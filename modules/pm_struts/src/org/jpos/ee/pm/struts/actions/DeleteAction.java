@@ -26,7 +26,7 @@ public class DeleteAction extends RowActionSupport {
 
 	protected void doExecute(PMContext ctx) throws PMException {
 		if(ctx.isWeak()){
-			getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntity_property()).remove(ctx.getSelected().getInstance());
+			getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).remove(ctx.getSelected().getInstance());
 		}else{
 			if(ctx.getEntity().isPersistent())
 				ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());

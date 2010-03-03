@@ -18,12 +18,15 @@
 package org.jpos.ee.pm.struts.actions;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.Operations;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMList;
 
 public class ListAction extends EntityActionSupport {
@@ -73,16 +76,25 @@ public class ListAction extends EntityActionSupport {
 		
 		if(ctx.isWeak()){
 			//The list is the collection of the owner.
-			String entity_property = ctx.getEntity().getOwner().getEntity_property();
-			List<Object> moc = getModifiedOwnerCollection(ctx, entity_property);
+			String entity_property = ctx.getEntity().getOwner().getEntityProperty();
+			Collection<Object> moc = getModifiedOwnerCollection(ctx, entity_property);
+			ctx.debug("MOC: "+moc);
 			if(moc == null){
 				moc = getOwnerCollection(ctx);
 			}
-			if(moc != null)
-				contents = moc;
-			else
-				contents = new ArrayList<Object>();
-			setModifiedOwnerCollection(ctx, entity_property, contents);
+			ctx.debug("MOC2: "+moc);
+			contents = new ArrayList<Object>();
+			try {
+				Collection<Object> result;
+				String collection_class = ctx.getEntity().getOwner().getEntityCollectionClass();
+				ctx.debug("Collection Class: "+collection_class);
+				result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class );
+				if(moc != null)	result.addAll(moc);
+				setModifiedOwnerCollection(ctx, entity_property, result);
+				contents.addAll(result);
+			} catch (ConfigurationException e) {
+				PMLogger.error(e);
+			}
 			total = contents.size();
 		}else{
 			if(ctx.getEntity().isPersistent()){
@@ -101,21 +113,8 @@ public class ListAction extends EntityActionSupport {
 				contents = new ArrayList<Object>();
 			}
 		}
-			
-		/*if(ctx.getEntity().isPersistent()){
-			//TODO Make the filter something more generic
-			//we must get the list form the DB
-	        contents= pmls.getContentList(ctx, ctx.getEntity(),filter, pmlist);
-	    	total= pmls.getTotal();
-	    	rpp= pmls.getRpp();
-		}else{
-			//An empty list that will be filled on an a list context
-			contents = (List<Object>) ctx.getEntity().getList(ctx, filter);
-		}*/
 		
 		ctx.debug("Contents: "+contents);
-        //if(pmList == null || !pmList.getEntity().equals(rc.getEntity())){
-        //pmList = new PMList(contents,total);
         ctx.getEntityContainer().setList(pmlist);
         pmlist.setContents(contents);
 		pmlist.setTotal(total);

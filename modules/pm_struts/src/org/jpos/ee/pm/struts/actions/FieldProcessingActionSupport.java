@@ -17,6 +17,8 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.Collection;
+
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
@@ -31,8 +33,16 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
 	
 	protected void proccessField(PMContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
 		//Object object = rc.getSelected();
-		if(getModifiedOwnerCollection(ctx, f.getId())!=null){
-			PMEntitySupport.set(wrapper.getInstance(), f.getId(), getModifiedOwnerCollection(ctx, f.getId()));					
+		Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
+		if(moc!=null){
+			Object obj = wrapper.getInstance();
+			Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(obj, f.getId());
+			if(collection==null) {
+				PMEntitySupport.set(obj, f.getId(), moc);
+			}else{
+				collection.clear();
+				collection.addAll(moc);
+			}
 		}else{
              String eid = "f_" + f.getId();
              ctx.debug("Field id: "+eid);
