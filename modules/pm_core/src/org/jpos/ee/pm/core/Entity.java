@@ -89,11 +89,12 @@ public class Entity extends PMCoreObject {
     
     /**Defines an owner to the entity. It makes this entity "weak".<br/>
      * {@code
-     * <owner>
-     *   <entity_id>owner_entity_id</entity_id>
-     *   <entity_property>owner entity field id</entity_property>
-     *   <local_property>field idto owner</local_property>
-     * </owner>}
+	 *  <owner>
+	 *     <entityId>owner_entity_id</entityId>
+	 *     <entityProperty>owner_property</entityProperty>
+	 *     <localProperty>local_pointer_to_owner</localProperty>
+	 *     <entityCollectionClass></entityCollectionClass>
+	 *  </owner>
      * @see EntityOwner*/
     private EntityOwner owner;
     
@@ -119,6 +120,7 @@ public class Entity extends PMCoreObject {
 	/** DataAcces, by default, DB*/
 	private DataAccess dataAccess;
 	
+	private List<Entity> weaks;
     
     /**Default constructor*/
     public Entity () {
@@ -440,4 +442,19 @@ public class Entity extends PMCoreObject {
 		if(dataAccess == null) dataAccess = new DataAccessDB();
 		return dataAccess;
 	}
+
+	/**
+	 * @param weaks the weaks to set
+	 */
+	public void setWeaks(List<Entity> weaks) {
+		this.weaks = weaks;
+	}
+
+	/**
+	 * @return the weaks
+	 */
+	public List<Entity> getWeaks() {
+		return weaks;
+	}
+
 }
