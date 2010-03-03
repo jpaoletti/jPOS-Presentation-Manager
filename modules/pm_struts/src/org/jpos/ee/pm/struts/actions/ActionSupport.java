@@ -56,10 +56,14 @@ public abstract class ActionSupport extends Action implements Constants{
 		if(!getPMService().ignoreDb()){
 			DB db = (DB)ctx.getSession().getAttribute(DB);
 			if(db == null) {
-				PMLogger.info("Database Access Created for session "+ctx.getSession().getId());
-				db = new DB(PMLogger.getLog());
-				db.open();
-				ctx.getSession().setAttribute(DB, db);
+				try {
+					db = new DB(PMLogger.getLog());
+					db.open();
+					ctx.getSession().setAttribute(DB, db);
+					PMLogger.info("Database Access Created for session "+ctx.getSession().getId());
+				} catch (Exception e) {
+					throw new PMException("pm.struts.cant.access.db");
+				}
 			}
 			ctx.put(DB, db);
 		}
