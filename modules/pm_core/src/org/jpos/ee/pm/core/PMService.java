@@ -18,7 +18,9 @@
 package org.jpos.ee.pm.core;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jpos.ee.Constants;
@@ -78,24 +80,8 @@ public class PMService extends QBeanSupport implements Constants{
 			setIgnoreDb(false);
 		}
 		
-		//buildParameterGetter();
-		
         NameRegistrar.register (getCustomName(), this);
     }
-
-	/*private void buildParameterGetter() {
-		try {
-			String pg = cfg.get("parameter-getter");
-			if(pg != null)
-				parameterGetter = (ParameterGetter) EntitySupport.newObjectOf(pg);
-		} catch (Exception e) {
-			PMLogger.error(e);
-		}
-		if(parameterGetter==null){
-			PMLogger.error("Error getting ParameterGetter. Using default XML");
-			parameterGetter = new ParameterGetterXML();
-		}
-	}*/
 
 	private void loadLocations() {
 		MenuItemLocationsParser parser = new MenuItemLocationsParser("cfg/pm.locations.xml");
@@ -127,7 +113,17 @@ public class PMService extends QBeanSupport implements Constants{
         }
         entities = m;
 	}
-    
+	
+	protected List<Entity> weakEntities(Entity e) {
+		List<Entity> res = new ArrayList<Entity>();
+		for(Entity entity : getEntities().values()){
+			if(entity.getOwner() != null && entity.getOwner().getEntityId().compareTo(e.getId())==0){
+				res.add(entity);
+			}
+		}
+		if(res.isEmpty()) return null; else return res;
+	}
+
 	public Map<Object,Entity> getEntities() {
         return entities;
     }
@@ -210,14 +206,5 @@ public class PMService extends QBeanSupport implements Constants{
 	 */
 	public String getContact() {
 		return contact;
-	}
-
-	/*public void setParameterGetter(ParameterGetter parameterGetter) {
-		this.parameterGetter = parameterGetter;
-	}
-
-	public ParameterGetter getParameterGetter() {
-		return parameterGetter;
-	}*/
-	
+	}	
 }
