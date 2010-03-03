@@ -40,6 +40,7 @@ public class PMStrutsService extends PMService implements Constants{
 	public EntityContainer newEntityContainer(String sid){
     	Entity e = lookupEntity(sid);
     	if(e == null) return null;
+    	e.setWeaks(weakEntities(e));
 		return new EntityContainer(e, HASH);
     }
     
