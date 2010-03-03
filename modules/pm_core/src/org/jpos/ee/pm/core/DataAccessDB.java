@@ -31,7 +31,7 @@ public class DataAccessDB implements DataAccess {
 	public Object getItem(PMContext ctx, String property, String value) throws PMException {
 		try {
 			DB db = (DB) ctx.get(DB);
-			Criteria c = db.session().createCriteria(Class.forName(ctx.getEntity().getClazz()));
+			Criteria c = db.session().createCriteria(Class.forName(getEntity(ctx).getClazz()));
 			c.setMaxResults(1);
 			c.add(Restrictions.sqlRestriction(property+"="+value));
 			return c.uniqueResult();
@@ -40,9 +40,16 @@ public class DataAccessDB implements DataAccess {
 		}
 	}
 
+	private Entity getEntity(PMContext ctx) throws PMException {
+		if(ctx.get(PM_ENTITY)==null)
+			return ctx.getEntity();
+		else
+			return (Entity) ctx.get(PM_ENTITY);
+	}
+
 	public List<?> list(PMContext ctx, Integer from , Integer count) throws PMException {
 		EntityFilter filter = ctx.getEntityContainer().getFilter();
-		Criteria list  = createCriteria(ctx, ctx.getEntity() ,filter);
+		Criteria list  = createCriteria(ctx, getEntity(ctx) ,filter);
 		if(count !=null) list.setMaxResults(count);
 		if(from !=null)  list.setFirstResult(from);
 		return list.list();
@@ -65,7 +72,7 @@ public class DataAccessDB implements DataAccess {
 
 	public Long count(PMContext ctx) throws PMException {
 		EntityFilter filter = ctx.getEntityContainer().getFilter();
-		Criteria count = createCriteria(ctx, ctx.getEntity() ,filter);
+		Criteria count = createCriteria(ctx, getEntity(ctx) ,filter);
 		count.setProjection(Projections.rowCount());
 		count.setMaxResults(1);
 		return new Long((Integer) count.uniqueResult());

@@ -16,3 +16,4 @@
 	public static final String PM_LIST_ORDER = "PM_LIST_ORDER";
 	public static final boolean PM_LIST_ASC = true;
 	public static final String PM_EXTRA_DATA = "PM_EXTRA_DATA";
+	public static final String PM_ENTITY = "PM_ENTITY";

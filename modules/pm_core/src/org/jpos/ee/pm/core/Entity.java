@@ -154,6 +154,7 @@ public class Entity extends PMCoreObject {
     }
 
     public List<?> getList(PMContext ctx) throws PMException{
+    	ctx.put(PM_ENTITY, this);
     	return getDataAccess().list(ctx,null, null);
     }
     
