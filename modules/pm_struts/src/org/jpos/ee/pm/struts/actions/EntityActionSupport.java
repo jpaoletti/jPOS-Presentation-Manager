@@ -19,15 +19,13 @@ package org.jpos.ee.pm.struts.actions;
 
 import java.util.Collection;
 import java.util.Enumeration;
-import java.util.List;
 
-import org.apache.struts.action.ActionMessages;
 import org.hibernate.Transaction;
 import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.EntityContainer;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
@@ -58,7 +56,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 
 		//Its a weak entity, we get the owner entity for list reference
 		if(ctx.hasEntity() && ctx.getEntity().getOwner() != null){
-			ctx.setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntity_id()));
+			ctx.setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntityId()));
 			if(ctx.getOwner()== null) {
 				throw new PMException("owner.not.exists");
 			} 
@@ -97,7 +95,12 @@ public abstract class EntityActionSupport extends ActionSupport {
 					/*if(isAuditable(ctx)){
 						logRevision (ctx.getDB(), (ctx.getEntity()!=null)?ctx.getEntity().getId():null, ctx.getOper_id(), ctx.getUser());
 					}*/
-				if(tx != null)tx.commit();
+				try {
+					if(tx != null)tx.commit();
+				} catch (Exception e) {
+					PMLogger.error(e);
+					throw new PMException("pm.struts.cannot.commit.txn");
+				}
 				tx = null;
 			}finally{
 				if(tx != null)tx.rollback();
@@ -148,13 +151,13 @@ public abstract class EntityActionSupport extends ActionSupport {
 		}
 	}
 	
-	protected List<Object> getOwnerCollection(PMContext ctx) throws PMException {
-		return (List<Object>) ctx.getEntitySupport().get(ctx.getOwner().getSelected().getInstance(), ctx.getEntity().getOwner().getEntity_property());
+	protected Collection<Object> getOwnerCollection(PMContext ctx) throws PMException {
+		return (Collection<Object>) ctx.getEntitySupport().get(ctx.getOwner().getSelected().getInstance(), ctx.getEntity().getOwner().getEntityProperty());
 	}
 
-	protected List<Object> getModifiedOwnerCollection(PMContext ctx, String field) {
+	protected Collection<Object> getModifiedOwnerCollection(PMContext ctx, String field) {
 		ctx.debug("getModifiedOwnerCollection("+field+")");
-		List<Object> collection = (List<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
+		Collection<Object> collection = (Collection<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
 		/*if(collection == null) {
 			collection = new ArrayList<Object>();
 			setModifiedOwnerCollection(field, collection);
@@ -162,8 +165,9 @@ public abstract class EntityActionSupport extends ActionSupport {
 		return collection;
 	}
 	
-	protected void setModifiedOwnerCollection(PMContext ctx, String entity_property, Collection<Object> list) {
-		ctx.getSession().setAttribute(entity_property+"_"+MODIFIED_OWNER_COLLECTION, list);
+	protected void setModifiedOwnerCollection(PMContext ctx, String field, Collection<Object> list) {
+		ctx.debug("setModifiedOwnerCollection("+field+")");
+		ctx.getSession().setAttribute(field+"_"+MODIFIED_OWNER_COLLECTION, list);
 	}
 
 	protected void clearModifiedOwnerCollection(PMContext ctx) {
