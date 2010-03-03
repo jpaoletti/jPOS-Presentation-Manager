@@ -43,8 +43,8 @@ public class DataAccessDB implements DataAccess {
 	public List<?> list(PMContext ctx, Integer from , Integer count) throws PMException {
 		EntityFilter filter = ctx.getEntityContainer().getFilter();
 		Criteria list  = createCriteria(ctx, ctx.getEntity() ,filter);
-		list.setMaxResults(count);
-		list.setFirstResult(from);
+		if(count !=null) list.setMaxResults(count);
+		if(from !=null)  list.setFirstResult(from);
 		return list.list();
 	}
 
@@ -83,7 +83,7 @@ public class DataAccessDB implements DataAccess {
 		}
 		
 		String order = ctx.getString(PM_LIST_ORDER);
-		boolean asc = (Boolean) ctx.get(PM_LIST_ASC);
+		boolean asc = (ctx.get(PM_LIST_ASC)==null)?true:(Boolean) ctx.get(PM_LIST_ASC);
 		//This is a temporary patch until i found how to sort propertys
 		if(order!=null && order.contains(".")) order = order.substring(0, order.indexOf("."));
 		if(order!= null && order.compareTo("")!=0){
