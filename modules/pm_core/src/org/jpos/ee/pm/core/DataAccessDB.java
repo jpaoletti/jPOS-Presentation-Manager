@@ -48,7 +48,8 @@ public class DataAccessDB implements DataAccess {
 	}
 
 	public List<?> list(PMContext ctx, Integer from , Integer count) throws PMException {
-		EntityFilter filter = ctx.getEntityContainer().getFilter();
+		//We use the filter only if the entity we use is the container one.
+		EntityFilter filter = (getEntity(ctx).equals(ctx.getEntity()))?ctx.getEntityContainer().getFilter():null;
 		Criteria list  = createCriteria(ctx, getEntity(ctx) ,filter);
 		if(count !=null) list.setMaxResults(count);
 		if(from !=null)  list.setFirstResult(from);
