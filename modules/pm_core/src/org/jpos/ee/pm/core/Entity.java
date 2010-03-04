@@ -150,12 +150,18 @@ public class Entity extends PMCoreObject {
     }
     
     public List<?> getList(PMContext ctx, EntityFilter filter) throws PMException{
-    	return getDataAccess().list(ctx,null, null);
+    	return getList(ctx,null, null);
     }
 
     public List<?> getList(PMContext ctx) throws PMException{
+    	return getList(ctx,null, null);
+    }
+    
+    public List<?> getList(PMContext ctx, Integer from, Integer count) throws PMException{
     	ctx.put(PM_ENTITY, this);
-    	return getDataAccess().list(ctx,null, null);
+    	List<?> list = getDataAccess().list(ctx,from, count);
+    	ctx.put(PM_ENTITY, null);
+		return list;
     }
     
 	/**Getter for a field by its id
@@ -458,4 +464,26 @@ public class Entity extends PMCoreObject {
 		return weaks;
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Entity))
+			return false;
+		Entity other = (Entity) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
 }
