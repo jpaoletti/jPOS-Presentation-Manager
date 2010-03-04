@@ -101,7 +101,7 @@ public class ListAction extends EntityActionSupport {
 				ctx.put(PM_LIST_ORDER, pmlist.getOrder());
 				ctx.put(PM_LIST_ASC, !pmlist.isDesc());
 				try {
-					contents = (List<Object>) ctx.getEntity().getDataAccess().list(ctx, pmlist.from(), pmlist.rpp());
+					contents = (List<Object>) ctx.getEntity().getList(ctx, pmlist.from(), pmlist.rpp());
 					total = ctx.getEntity().getDataAccess().count(ctx);
 				} catch (Exception e) {
 					PMLogger.error(e);

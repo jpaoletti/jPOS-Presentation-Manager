@@ -77,7 +77,7 @@ public class FilterAction extends FieldProcessingActionSupport {
 		if(ctx.getEntity().isPersistent()){
 			ctx.put(PM_LIST_ORDER, pmlist.getOrder());
 			ctx.put(PM_LIST_ASC, !pmlist.isDesc());
-			contents = (List<Object>) ctx.getEntity().getDataAccess().list(ctx , pmlist.from(), pmlist.rpp());
+			contents = (List<Object>) ctx.getEntity().getList(ctx , pmlist.from(), pmlist.rpp());
 			total = ctx.getEntity().getDataAccess().count(ctx);
 		}else{
 			//An empty list that will be filled on an a list context
