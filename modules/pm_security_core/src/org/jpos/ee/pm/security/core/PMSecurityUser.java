@@ -187,4 +187,8 @@ public class PMSecurityUser{
 	public List<PMSecurityProfile> getProfiles() {
 		return profiles;
 	}
+
+	public String toString() {
+		return name;
+	}
 }
