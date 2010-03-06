@@ -83,9 +83,11 @@ public abstract class EntityActionSupport extends ActionSupport {
 			Transaction tx = null;
 			try{
 				//If we have audithory we need the transaction.
-				if(!getPMService().ignoreDb() && (/*isAuditable(ctx) || */openTransaction())) 
+				if(!getPMService().ignoreDb() && (/*isAuditable(ctx) || */openTransaction())){
 					tx = db.beginTransaction();
-	
+					ctx.debug("Started Transaction "+tx.hashCode());
+				}
+					
 				/** EXCECUTES THE OPERATION **/
 				doExecute(ctx);
 	
@@ -96,15 +98,24 @@ public abstract class EntityActionSupport extends ActionSupport {
 						logRevision (ctx.getDB(), (ctx.getEntity()!=null)?ctx.getEntity().getId():null, ctx.getOper_id(), ctx.getUser());
 					}*/
 				try {
-					if(tx != null)tx.commit();
+					if(tx != null){
+						ctx.debug("Commiting Transaction "+tx.hashCode());
+						tx.commit();
+					}
 				} catch (Exception e) {
 					PMLogger.error(e);
 					throw new PMException("pm.struts.cannot.commit.txn");
 				}
 				tx = null;
 			}finally{
-				if(tx != null)tx.rollback();
-			} 
+				if(tx != null){
+					ctx.debug("Rolling Back Transaction "+tx.hashCode());
+					tx.rollback();
+					//I have to reopen session or some hibernate exceptions will break next operations
+					db.close();
+					db.open();
+				}
+			}
 	}
 
     protected boolean isAuditable(PMContext ctx) throws PMException{
