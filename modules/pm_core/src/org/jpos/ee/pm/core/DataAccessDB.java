@@ -47,10 +47,9 @@ public class DataAccessDB implements DataAccess {
 			return (Entity) ctx.get(PM_ENTITY);
 	}
 
-	public List<?> list(PMContext ctx, Integer from , Integer count) throws PMException {
+	public List<?> list(PMContext ctx, EntityFilter filter, Integer from , Integer count) throws PMException {
 		//We use the filter only if the entity we use is the container one.
-		EntityFilter filter = (getEntity(ctx).equals(ctx.getEntity()))?ctx.getEntityContainer().getFilter():null;
-		Criteria list  = createCriteria(ctx, getEntity(ctx) ,filter);
+		Criteria list = createCriteria(ctx, getEntity(ctx) ,filter);
 		if(count !=null) list.setMaxResults(count);
 		if(from !=null)  list.setFirstResult(from);
 		return list.list();
@@ -100,7 +99,7 @@ public class DataAccessDB implements DataAccess {
 		}
 		
 		if(entity.getListfilter() != null) {
-			c.add(entity.getListfilter().getListCriteria());
+			c.add((Criterion) entity.getListfilter().getListFilter(ctx));
 		}
 		
 		if(filter != null){

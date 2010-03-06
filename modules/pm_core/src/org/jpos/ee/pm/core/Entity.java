@@ -150,16 +150,17 @@ public class Entity extends PMCoreObject {
     }
     
     public List<?> getList(PMContext ctx, EntityFilter filter) throws PMException{
-    	return getList(ctx,null, null);
+    	return getList(ctx,filter, null, null);
     }
 
     public List<?> getList(PMContext ctx) throws PMException{
-    	return getList(ctx,null, null);
+    	EntityFilter filter = (this.equals(ctx.getEntity()))?ctx.getEntityContainer().getFilter():null;
+		return getList(ctx,filter,null, null);
     }
     
-    public List<?> getList(PMContext ctx, Integer from, Integer count) throws PMException{
+    public List<?> getList(PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException{
     	ctx.put(PM_ENTITY, this);
-    	List<?> list = getDataAccess().list(ctx,from, count);
+    	List<?> list = getDataAccess().list(ctx,filter,from, count);
     	ctx.put(PM_ENTITY, null);
 		return list;
     }
