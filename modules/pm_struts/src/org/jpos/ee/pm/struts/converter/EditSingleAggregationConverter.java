@@ -21,9 +21,28 @@ import java.util.List;
 
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.Entity;
+import org.jpos.ee.pm.core.EntitySupport;
+import org.jpos.ee.pm.core.ListFilter;
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
+
+/**Converter for integer <br>
+ * <pre>
+ * {@code
+ * <converter class="org.jpos.ee.pm.converter.EditSingleAggregationConverter">
+ * 	<operationId>edit</operationId>
+ *     	<properties>
+ *     		<property name="entity" 	value="the_other_entity" />
+ *     		<property name="with-null" 	value="true" />
+ *     		<property name="filter" 	value="field1=v1 , field2=v2" />
+ * 		</properties>
+ * </converter>
+ * }
+ * </pre>
+ * @author J.Paoletti jeronimo.paoletti@gmail.com
+ * */
 
 public class EditSingleAggregationConverter extends StrutsEditConverter {
 
@@ -33,16 +52,39 @@ public class EditSingleAggregationConverter extends StrutsEditConverter {
 			if(s.trim().compareTo("")==0) return null;
 			Integer x = Integer.parseInt(s);
 			if(x==-1) return null;
+			
 			String eid = getConfig("entity");
-			PMEntitySupport es = PMEntitySupport.getInstance();
-			Entity e = es.getPmservice().getEntity(eid);
-			if(e==null) throw new ConverterException("Cannot find entity "+eid);
-			List<?> list = e.getList(ctx);
+			String f = getConfig("filter");
+			
+			List<?> list = getList(eid, f , ctx);
 			return list.get(x);
 		} catch (Exception e1) {
 			PMLogger.error(e1);
 			throw new ConverterException("Cannot convert single aggregation");
 		}
+	}
+
+	public static List<?> getList(String eid, String f, PMContext ctx) throws ConverterException,
+			PMException {
+		
+		ListFilter filter = null;
+		
+		try {
+			if(f!=null)	filter = (ListFilter) EntitySupport.newObjectOf(f);
+		} catch (Exception e1) {}
+		
+		PMEntitySupport es = PMEntitySupport.getInstance();
+		Entity e = es.getPmservice().getEntity(eid);
+		List<?> list = null;
+		if(e==null) throw new ConverterException("Cannot find entity "+eid);
+		synchronized (e) {
+			ListFilter tmp = e.getListfilter();
+			e.setListfilter(filter);
+			ctx.debug("Filter: "+filter);
+			list = e.getList(ctx,null,null,null);
+			e.setListfilter(tmp);
+		}
+		return list;
 	}
 
 	public String visualize(PMContext ctx) throws ConverterException {

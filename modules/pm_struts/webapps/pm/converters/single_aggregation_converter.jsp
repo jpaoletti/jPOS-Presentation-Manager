@@ -15,6 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */-->
+<%@page import="org.jpos.ee.pm.struts.converter.EditSingleAggregationConverter"%>
 <%@page contentType="text/html; charset=ISO-8859-1" %>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
@@ -25,9 +26,8 @@
 <bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
 <bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />
 <%
-	Entity e = es.getPmservice().getEntity(request.getParameter("entity"));
-	List<?> list = e.getList((PMContext)request.getAttribute(Constants.PM_CONTEXT));
-	request.setAttribute("collection", list);
+	PMContext ctx = (PMContext)request.getAttribute(Constants.PM_CONTEXT);
+	request.setAttribute("collection", EditSingleAggregationConverter.getList(request.getParameter("entity"), request.getParameter("filter") , ctx));
 	Object selected = (Object)es.get(tmp_object, request.getParameter("f"));
 %>
 <select size="1" id="f_${param.f}" name="f_${param.f}">
