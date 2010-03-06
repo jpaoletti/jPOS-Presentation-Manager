@@ -17,11 +17,10 @@
  */
 package org.jpos.ee.pm.core;
 
-import org.hibernate.criterion.Criterion;
 
 /**An interface that filters the data shown by an entity.
  * @author jpaoletti
  * */
 public interface ListFilter {
-    public Criterion getListCriteria();
+    public Object getListFilter(PMContext ctx);
 }
