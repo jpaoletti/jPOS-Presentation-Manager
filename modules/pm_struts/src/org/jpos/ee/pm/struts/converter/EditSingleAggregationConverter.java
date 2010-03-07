@@ -69,10 +69,10 @@ public class EditSingleAggregationConverter extends StrutsEditConverter {
 		
 		ListFilter filter = null;
 		
-		try {
-			if(f!=null)	filter = (ListFilter) EntitySupport.newObjectOf(f);
-		} catch (Exception e1) {}
-		
+		if( f != null && f.compareTo("null") != 0) {
+			filter = (ListFilter) EntitySupport.newObjectOf(f);
+		}
+				
 		PMEntitySupport es = PMEntitySupport.getInstance();
 		Entity e = es.getPmservice().getEntity(eid);
 		List<?> list = null;
