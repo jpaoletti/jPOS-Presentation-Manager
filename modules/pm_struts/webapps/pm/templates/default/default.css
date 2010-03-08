@@ -109,6 +109,10 @@ img {
     width:auto;
 }
 
+.operationspopup{
+float:left;
+}
+
 #page-container{
     position: relative;
     min-height: 100%;
@@ -200,7 +204,7 @@ img {
 #content {
 	margin: 0 auto;
 	padding: 20px 0;
-	padding-bottom: 60px;
+	padding-bottom: 15px;
 }
 
 /* Content > Main */
@@ -414,10 +418,8 @@ img {
     position: fixed;
     top: 17%;
     left: 50%;
-    
     margin-left: -300px;
     width: 600px;
-    
     background-color: #EEE;
     color: #333;
     border: 1px solid black;
