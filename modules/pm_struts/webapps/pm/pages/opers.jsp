@@ -31,5 +31,5 @@
 	<logic:notPresent name="operation" property="url">
 		<bean:define id="furl" value="${es.context_path}/${operation.id}.do?pmid=${entity.id}&item=${param.i}" />
 	</logic:notPresent>
-	<a href="${furl}" id="operation${operation.id}" ${onclick}><img src="${es.context_path}/templates/${es.pmservice.template}/img/${operation.id}.gif" alt="${operation.id}" /></a>&nbsp;
-</logic:iterate>
+	<a href="${furl}" id="operation${operation.id}" ${onclick}><img src="${es.context_path}/templates/${es.pmservice.template}/img/${operation.id}.gif" alt="${operation.id}" /></a>
+</logic:iterate> &nbsp;
