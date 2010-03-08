@@ -31,8 +31,9 @@
 			<logic:iterate id="item" name="contents" indexId="i">
 			<tr>
 				<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field" indexId="j">
-					<td align="${field.align}">
 						<logic:equal name="j" value="0">
+						<td style="text-align:${field.align};">
+						<span style="white-space: nowrap;" >
 							<div class="operations" id="row_${i}"><div class="operationspopup" id="g_${i}">
 							<img src="${es.context_path}/templates/${es.pmservice.template}/images/loading.gif" alt="loading" />
 							</div>
@@ -44,10 +45,11 @@
 								var operationdiv = $('#row_'+"${i}");
 								var grupodiv = $('#g_'+"${i}");
 								grupodiv.load('opers.do?pmid='+"${pmid}"+'&i='+"${i}");
-								configurePopup(operationdiv);
 							</script>
+						</span>
 						</logic:equal>
 						<logic:notEqual name="j" value="0">
+						<td align="${field.align}">
 							<pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
 						</logic:notEqual>
 					</td>
