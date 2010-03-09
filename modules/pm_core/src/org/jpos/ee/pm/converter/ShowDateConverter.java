@@ -48,7 +48,7 @@ public class ShowDateConverter extends Converter {
 		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
 		Field field = (Field) ctx.get(PM_FIELD);
     	Date o = (Date) getValue(einstance.getInstance(), field);
-		return getDateFormat().format(o);
+		return (o==null)?"":getDateFormat().format(o);
 	}
     public DateFormat getDateFormat() {
         DateFormat df = new SimpleDateFormat (getConfig("format", "MM/dd/yyyy"));
