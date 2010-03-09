@@ -21,15 +21,12 @@ import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMMessage;
 
-/**Validate that the field value is a valid name. Avaible properties are:
+/**Validate that the field value is a valid name, so it cant use special characters. 
+ * Properties are:
  * msg: the message to show when there is an invalid character. This should be a key for messages properties file
- * max-length: maximum length of the string
- * max-length-msg: message to show if the name is too long
- * min-length: minimum length of the string
- * min-length-msg:  message to show if the name is too short
  * 
- * @author yero jeronimo.paoletti@gmail.com */
-public class IsName extends ValidatorSupport {
+ * @author jpaoletti jeronimo.paoletti@gmail.com */
+public class IsNameValidator extends ValidatorSupport {
 	
 	/**The validate method*/
 	public ValidationResult validate(PMContext ctx) {
@@ -42,18 +39,6 @@ public class IsName extends ValidatorSupport {
         	res.setSuccessful(false);
         	res.getMessages().add(new PMMessage(field.getId(), get("msg", "")));
         }
-        Integer len = fieldvalue.length();
-        Integer maxl = getInt ("max-length");
-		if (len > maxl){
-        	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", ""), len.toString(), maxl.toString()));
-        }
-        Integer minl = getInt ("min-length");
-		if (len < minl){
-        	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", ""), len.toString(), minl.toString()));
-        }
         return res;
 	}
 }
-
