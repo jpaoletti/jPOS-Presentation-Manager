@@ -20,19 +20,26 @@ package org.jpos.ee.pm.converter;
 import java.util.List;
 import java.util.Properties;
 
+import org.jpos.ee.pm.core.PMCoreObject;
+import org.jpos.ee.pm.core.PMService;
+
 /**Collection of converters*/
-public class Converters {
+public class Converters extends PMCoreObject{
 	private List<Converter> converters;
 
 	public Converter getConverterForOperation(String operId){
 		if(getConverters() != null)
 		for(Converter converter : getConverters()){
-			if(converter.getOperationId().compareTo(operId) == 0)
+			if(converter.getOperations().compareToIgnoreCase("all")==0)
+				return converter;
+			if(converter.getOperations().contains(operId))
 				return converter;
 		}
-		Converter c = new ShowStringConverter(); //default
-		c.setOperationId(operId);
-		c.setProperties(new Properties());
+		Converter c = new GenericConverter();
+		c.setService(getService());
+		Properties properties = new Properties();
+		properties.put("filename", "cfg/converters/show.tostring.converter");
+		c.setProperties(properties);
 		return c;
 	}
 	
@@ -48,5 +55,13 @@ public class Converters {
 	 */
 	public List<Converter> getConverters() {
 		return converters;
+	}
+
+	@Override
+	public void setService(PMService service) {
+		super.setService(service);
+		if(getConverters()!=null)
+			for(Converter c: getConverters()) 
+				if(c!=null)c.setService(service);
 	}
 }

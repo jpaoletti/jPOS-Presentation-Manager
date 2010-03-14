@@ -57,6 +57,8 @@ public class EntityParser {
         xstream.useAttributeFor(Highlight.class, "value");
         xstream.useAttributeFor(Highlight.class, "scope");
         
+        xstream.useAttributeFor(Converter.class, "operations");
+        
         xstream.addImplicitCollection(Entity.class, "fields", Field.class);
         xstream.addImplicitCollection(Converters.class, "converters", Converter.class);
         //xstream.addImplicitCollection(Entity.class, "relations", Relation.class);

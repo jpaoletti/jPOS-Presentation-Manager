@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<generic-converter>
+	<visualize>
+		return value.toString();
+	</visualize>
+	<build>
+		throw new IgnoreConvertionException("");
+	</build>
+</generic-converter>

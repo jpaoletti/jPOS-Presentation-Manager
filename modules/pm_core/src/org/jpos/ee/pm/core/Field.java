@@ -18,10 +18,12 @@
 package org.jpos.ee.pm.core;
 
 import java.util.ArrayList;
+import java.util.Properties;
 
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.converter.Converters;
+import org.jpos.ee.pm.converter.GenericConverter;
 import org.jpos.ee.pm.validator.Validator;
 
 /**A Field represents an attribute of the represented entity. 
@@ -72,29 +74,39 @@ public class Field extends PMCoreObject{
         multiEditable=false;
         defaultValue="";
     }
-    
-    private String visualizeW(String s){
-    	return getService().visualizationWrapper(s);
-    }
 
-    // Entity entity, Operation operation, Object item, String extra
     public String visualize(PMContext ctx) throws PMException{
-    	//debug("Converting ["+operation.getId()+"]"+entity.getId()+"."+getId());
+    	debug("Converting ["+ctx.getOperation().getId()+"]"+ctx.getEntity().getId()+"."+getId());
     	try {
+    		Converter c = null;
         	if(getConverters()!= null){
-        		Converter c = getConverters().getConverterForOperation(ctx.getOperation().getId());
-        		if(c!= null){
-        			ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
-        			ctx.put(PM_FIELD, this);
-        			return visualizeW(c.visualize(ctx));
-        		}
+        		c = getConverters().getConverterForOperation(ctx.getOperation().getId());
         	}
-        	return visualizeW(EntitySupport.getAsString(ctx.get(PM_ENTITY_INSTANCE), this.getId()));
+    		if(c == null){
+    			c = new GenericConverter();
+    			c.setService(getService());
+    			Properties properties = new Properties();
+    			properties.put("filename", "cfg/converters/show.tostring.converter");
+				c.setProperties(properties);
+    		}
+    		ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
+    		ctx.put(PM_FIELD, this);
+    		return getService().visualizationWrapper(c.visualize(ctx));
 		} catch (Exception e) {
 			PMLogger.error(e);
 			throw new ConverterException("Unable to convert "+ctx.getEntity().getId()+"."+getId());
 		}
     }
+    
+	/**Set also converters service
+	 * @see org.jpos.ee.pm.core.PMCoreObject#setService(org.jpos.ee.pm.core.PMService)
+	 */
+	public void setService(PMService service) {
+		super.setService(service);
+		getConverters().setService(service);
+	}
+
+
     
 	public int compareTo(Field o) {
 		return getId().compareTo(o.getId());

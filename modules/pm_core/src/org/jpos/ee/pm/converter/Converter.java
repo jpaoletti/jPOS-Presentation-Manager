@@ -24,6 +24,9 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMCoreObject;
+import org.jpos.iso.ISOException;
+import org.jpos.iso.ISOUtil;
 
 /**A converter is an object associated to a field that determine the way the field value
  * will be visualized and build from a visual representation to a value for a given 
@@ -33,8 +36,8 @@ import org.jpos.ee.pm.core.PMContext;
  * <field>
  *     ...
  *     <converters>
- *         <converter class="some.converter.Class">
- *            <operationId>add</operationId>
+ *         <converter class="some.converter.Class" debug="true" operations="oper1 oper2">
+ *            <!-- A properties object to get some extra configurations -->
  *            <properties>
  *                <property name="propname" value="propvalue" />
  *            </properties>
@@ -45,12 +48,9 @@ import org.jpos.ee.pm.core.PMContext;
  * </pre>
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  **/
-public abstract class Converter implements Constants{
-	/**The operation id where the converter will be applied*/
-	private String operationId;
-	/**A properties object to get some extra configurations*/
+public class Converter extends PMCoreObject implements Constants{
+	private String operations;
 	private Properties properties;
-    
 	/**This method transforms the given value into a String to visualize it
 	 * @param ctx The context.
 	 * 		Field: 			ctx.get(PM_FIELD);
@@ -60,7 +60,9 @@ public abstract class Converter implements Constants{
 	 * 		Operation:		ctx.getOperation();
 	 * @return The string representation of the object 
 	 * @throws ConverterException*/
-	public abstract String visualize(PMContext ctx) throws ConverterException;
+	public String visualize(PMContext ctx) throws ConverterException{
+		throw new IgnoreConvertionException();
+	}
 	
 	/**This method takes a specific format of the object from the visualization (usually a string) and
 	 * transforms it in the required object.
@@ -73,14 +75,16 @@ public abstract class Converter implements Constants{
 	 * @return The value to be set in the entity instance.
 	 * @throws ConverterException 
 	 * */
-	public abstract Object build(PMContext ctx) throws ConverterException;
-	
+	public Object build(PMContext ctx) throws ConverterException{
+		throw new IgnoreConvertionException();
+	}
 	/**Getter for a specific property with a default value in case its not defined. 
 	 * Only works for string.
 	 * @param name Property name
 	 * @param def Default value
 	 * @return Property value only if its a string */
     public String getConfig (String name, String def) {
+    	debug("Converter.getConfig("+name+","+def+")");
         if (properties != null) {
             Object obj = properties.get (name);
             if (obj instanceof String)
@@ -122,19 +126,6 @@ public abstract class Converter implements Constants{
         }
         return null;
     }
-	
-	/**
-	 * @param operationId the operationId to set
-	 */
-	public void setOperationId(String operationId) {
-		this.operationId = operationId;
-	}
-	/**
-	 * @return the operationId
-	 */
-	public String getOperationId() {
-		return operationId;
-	}
 	/**
 	 * @return the properties
 	 */
@@ -146,5 +137,44 @@ public abstract class Converter implements Constants{
 	 */
 	public void setProperties(Properties properties) {
 		this.properties = properties;
+	}
+
+	/**
+	 * @param operations the operations to set
+	 */
+	public void setOperations(String operations) {
+		this.operations = operations;
+	}
+
+	/**
+	 * @return the operations
+	 */
+	public String getOperations() {
+		if(operations==null) return "all";
+		return operations;
+	}
+	
+	/**Visualization with some standard properties. */
+	public String visualize(Object obj, String extra) throws ConverterException{
+		Integer pad =0;
+		String padc = getConfig("pad-count","0");
+		try {
+			pad = Integer.parseInt(padc);
+		} catch (Exception e) {}
+		char padch = getConfig("pad-char"," ").charAt(0);
+		String padd = getConfig("pad-direction","left");
+		
+		String prefix = getConfig("prefix");
+		String suffix = getConfig("suffix");
+		String res = obj != null ? obj.toString() : "";
+		try {
+			if(padd.compareToIgnoreCase("left")==0)
+				res = ISOUtil.padleft(res, pad, padch);
+			else
+				res = ISOUtil.padright(res, pad, padch);
+		} catch (ISOException e) {}
+		if(prefix!=null) res = prefix + res;
+		if(suffix!=null) res = res+suffix;
+		return res;	
 	}
 }
