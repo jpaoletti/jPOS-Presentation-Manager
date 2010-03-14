@@ -18,6 +18,7 @@
 package org.jpos.ee.pm.core;
 
 import org.jpos.ee.Constants;
+import org.jpos.util.Log;
 
 
 /**This is the superclass of all the core objects of Presentation Manager and it provides some
@@ -26,6 +27,7 @@ import org.jpos.ee.Constants;
  * */
 public class PMCoreObject implements Constants{
 	private PMService service;
+    private Boolean debug;
 
 	/**
 	 * @param service the service to set
@@ -42,6 +44,25 @@ public class PMCoreObject implements Constants{
 	}
 	
 	public void debug(String s){
-		PMLogger.debug(this,s);
+		if(getDebug()) PMLogger.debug(this,s);
+	}
+
+	/**
+	 * @param debug the debug to set
+	 */
+	public void setDebug(Boolean debug) {
+		this.debug = debug;
+	}
+
+	/**
+	 * @return the debug
+	 */
+	public Boolean getDebug() {
+		if(debug==null) return false;
+		return debug;
+	}
+	
+	public Log getLog(){
+		return PMLogger.getLog();
 	}
 }

@@ -50,6 +50,8 @@ public class EntityParser {
         xstream.alias ("highlights", Highlights.class);
         xstream.alias ("highlight", Highlight.class);
         
+        xstream.useAttributeFor(PMCoreObject.class, 	"debug");
+        
         xstream.useAttributeFor(Highlight.class, "field");
         xstream.useAttributeFor(Highlight.class, "color");
         xstream.useAttributeFor(Highlight.class, "value");
