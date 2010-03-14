@@ -24,5 +24,13 @@ public class ConverterException extends PMException {
 		super(string);
 	}
 
+	public ConverterException(Exception e) {
+		super(e);
+	}
+
+	public ConverterException() {
+		super();
+	}
+
 	private static final long serialVersionUID = 6940226004619692335L;
 }

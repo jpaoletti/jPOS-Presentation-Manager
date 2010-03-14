@@ -23,4 +23,8 @@ public class IgnoreConvertionException extends ConverterException {
 	public IgnoreConvertionException(String string) {
 		super(string);
 	}
+
+	public IgnoreConvertionException() {
+		super();
+	}
 }
