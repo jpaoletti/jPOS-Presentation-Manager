@@ -217,14 +217,14 @@ public class Entity extends PMCoreObject {
     }
 
     public String toString() {
-        return super.toString() + "[id='" + id + "']";
-    }
-    
-    /**This method fills the extendsFields variable with the parent Fields.
+		return "Entity (" + id + ") " + clazz;
+	}
+
+	/**This method fills the extendsFields variable with the parent Fields.
      * If some field is redefined, parent field is ignored
-     * @param eentity The parent entity given by PM engine*/
-    public void fillFields(Entity eentity) {
-        for (Field field : eentity.getAllFields()) {
+     * @param entity The parent entity given by PM engine*/
+    public void fillFields(Entity entity) {
+        for (Field field : entity.getAllFields()) {
             if (!containsField(field.getId())) {
                 getFields().add(field);
             }

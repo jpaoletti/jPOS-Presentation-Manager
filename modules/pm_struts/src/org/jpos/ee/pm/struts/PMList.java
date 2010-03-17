@@ -36,11 +36,21 @@ public class PMList implements Constants{
 	private Operations operations;
 	private Operations rowOperations;
 	
+	
+	
 	public List<Integer> getPageRange(){
 		List<Integer> r = new ArrayList<Integer>();
 		for(int i = 1 ; i <= getPages() ; i++) r.add(i);
 		return r;
 	}
+	
+	
+	public String toString() {
+		return "PMList [entity=" + entity + ", page=" + page + ", pages="
+				+ pages + ", total=" + total + ", rowsPerPage=" + rowsPerPage
+				+ ", order=" + order + ", desc=" + desc + "]";
+	}
+	
 	public PMList(){
 		this.page = 1;
 		rowsPerPage = 10; //Default
