@@ -233,9 +233,6 @@ public class PMContext extends Context implements Constants{
 		return getEntityContainer().getSelected();
 	}
 	
-	public void debug(Object object){
-		System.out.println("["+this.getClass().getName()+"] DEBUG: "+object);
-	}
 	public boolean hasEntity() {
 		try {
 			return (hasEntityContainer() && getEntityContainer().getEntity() != null);

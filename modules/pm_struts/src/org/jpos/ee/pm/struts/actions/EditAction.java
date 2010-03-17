@@ -20,6 +20,7 @@ package org.jpos.ee.pm.struts.actions;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMForwardException;
 
 public class EditAction extends RowActionSupport{
@@ -55,7 +56,7 @@ public class EditAction extends RowActionSupport{
 	protected void doExecute(PMContext ctx) throws PMException {
 		if(!ctx.isWeak()){
 			if(ctx.getEntity().isPersistent()){
-				ctx.debug("Updating '"+ctx.getEntity().getId()+"' to Data Access");
+				PMLogger.debug(this,"Updating '"+ctx.getEntity().getId()+"' to Data Access");
 				ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
 			}
 		}

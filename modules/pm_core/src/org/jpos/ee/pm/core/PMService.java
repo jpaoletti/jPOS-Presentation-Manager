@@ -43,6 +43,9 @@ public class PMService extends QBeanSupport implements Constants{
     //private ParameterGetter parameterGetter;
     
     protected void initService() throws Exception {
+		PMLogger.setLog(getLog());
+		PMLogger.setDebug(cfg.getBoolean("debug"));
+		
         getLog().info ("Entity Manager activated");
         EntityParser parser = new EntityParser();
         loadEntities(parser);
@@ -79,7 +82,7 @@ public class PMService extends QBeanSupport implements Constants{
 		} catch (Exception e) {
 			setIgnoreDb(false);
 		}
-		
+				
         NameRegistrar.register (getCustomName(), this);
     }
 

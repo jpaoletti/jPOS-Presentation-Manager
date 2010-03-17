@@ -25,6 +25,7 @@ import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
@@ -45,12 +46,11 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
 			}
 		}else{
              String eid = "f_" + f.getId();
-             ctx.debug("Field id: "+eid);
              String s = getParamValues(ctx, eid, ";");
-             //debug("Field s: "+s);
+             PMLogger.debug(this,"Field ["+eid + "] "+s);
              int i = 0;	   
              while(s != null){
-                ctx.debug("Object to convert = "+s);
+            	 PMLogger.debug(this,"Object to convert: "+s);
                 validateField(ctx, f, wrapper, s);
                 try {
                     Object o = wrapper.getInstance(i);
@@ -59,7 +59,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
                 	ctx.put(PM_FIELD_VALUE, s);
                 	ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
                 	Object converted = converter.build(ctx);
-					ctx.debug("Object converted = "+converted);
+                	PMLogger.debug(this,"Object converted: "+converted);
                 	PMEntitySupport.set(o, f.getId(), converted);
                 } catch (IgnoreConvertionException e) {
  					//Do nothing, just ignore conversion.

@@ -75,21 +75,20 @@ public class ListAction extends EntityActionSupport {
 		}
 		
 		if(ctx.isWeak()){
+			PMLogger.debug(this,"Listing weak entity");
 			//The list is the collection of the owner.
 			String entity_property = ctx.getEntity().getOwner().getEntityProperty();
 			Collection<Object> moc = getModifiedOwnerCollection(ctx, entity_property);
-			ctx.debug("MOC: "+moc);
 			if(moc == null){
 				moc = getOwnerCollection(ctx);
 			}
-			ctx.debug("MOC2: "+moc);
 			contents = new ArrayList<Object>();
 			try {
 				Collection<Object> result;
 				String collection_class = ctx.getEntity().getOwner().getEntityCollectionClass();
-				ctx.debug("Collection Class: "+collection_class);
 				result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class );
 				if(moc != null)	result.addAll(moc);
+				PMLogger.debug(this,"Setting modified owner collection: "+result);
 				setModifiedOwnerCollection(ctx, entity_property, result);
 				contents.addAll(result);
 			} catch (ConfigurationException e) {
@@ -114,12 +113,12 @@ public class ListAction extends EntityActionSupport {
 			}
 		}
 		
-		ctx.debug("Contents: "+contents);
+		PMLogger.debug(this,"List Contents: "+contents);
         ctx.getEntityContainer().setList(pmlist);
         pmlist.setContents(contents);
 		pmlist.setTotal(total);
         
-        ctx.debug("pmList: "+pmlist);
+		PMLogger.debug(this,"Resulting list: "+pmlist);
 		pmlist.setRowsPerPage	(rpp);
 	}
 }

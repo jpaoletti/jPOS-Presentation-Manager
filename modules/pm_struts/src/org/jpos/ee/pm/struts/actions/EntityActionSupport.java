@@ -85,7 +85,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 				//If we have audithory we need the transaction.
 				if(!getPMService().ignoreDb() && (/*isAuditable(ctx) || */openTransaction())){
 					tx = db.beginTransaction();
-					ctx.debug("Started Transaction "+tx.hashCode());
+					PMLogger.debug(this,"Started Transaction "+tx.hashCode());
 				}
 					
 				/** EXCECUTES THE OPERATION **/
@@ -99,7 +99,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 					}*/
 				try {
 					if(tx != null){
-						ctx.debug("Commiting Transaction "+tx.hashCode());
+						PMLogger.debug(this,"Commiting Transaction "+tx.hashCode());
 						tx.commit();
 					}
 				} catch (Exception e) {
@@ -109,7 +109,7 @@ public abstract class EntityActionSupport extends ActionSupport {
 				tx = null;
 			}finally{
 				if(tx != null){
-					ctx.debug("Rolling Back Transaction "+tx.hashCode());
+					PMLogger.debug(this,"Rolling Back Transaction "+tx.hashCode());
 					tx.rollback();
 					//I have to reopen session or some hibernate exceptions will break next operations
 					db.close();
@@ -167,7 +167,6 @@ public abstract class EntityActionSupport extends ActionSupport {
 	}
 
 	protected Collection<Object> getModifiedOwnerCollection(PMContext ctx, String field) {
-		ctx.debug("getModifiedOwnerCollection("+field+")");
 		Collection<Object> collection = (Collection<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
 		/*if(collection == null) {
 			collection = new ArrayList<Object>();
@@ -177,7 +176,6 @@ public abstract class EntityActionSupport extends ActionSupport {
 	}
 	
 	protected void setModifiedOwnerCollection(PMContext ctx, String field, Collection<Object> list) {
-		ctx.debug("setModifiedOwnerCollection("+field+")");
 		ctx.getSession().setAttribute(field+"_"+MODIFIED_OWNER_COLLECTION, list);
 	}
 

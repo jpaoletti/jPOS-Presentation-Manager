@@ -28,11 +28,14 @@ import org.jpos.util.Logger;
  *  
  * */
 public class PMLogger {
+	private static Log _log;
+	private static boolean debug;
 	
 	/**Internal getter for pm logger
 	 * @return The PM logger*/
 	public static Log getLog(){
-		return Log.getLog ("pm-logger", "presentation-manager");
+		//return Log.getLog ("pm-logger", "presentation-manager");
+		return _log;
 	}
 	
 	/**Generate an info entry on the local logger*/
@@ -56,8 +59,23 @@ public class PMLogger {
 		Logger.log(evt);
 	}
 
-	public static void debug(Object invoquer, String s) {
-		System.out.println("["+invoquer.getClass().getName()+"] DEBUG: "+s);		
+	public static void debug(Object invoquer, Object msg) {
+		if(!debug) return;
+		LogEvent evt = getLog().createDebug();
+		evt.addMessage("["+invoquer.getClass().getName()+"]");
+		evt.addMessage(msg);
+		Logger.log(evt);
 	}
 
+	public static void setLog(Log log) {
+		_log = log;		
+	}
+
+	public static boolean isDebug() {
+		return debug;
+	}
+
+	public static void setDebug(boolean debug) {
+		PMLogger.debug = debug;
+	}
 }

@@ -24,6 +24,7 @@ import java.util.List;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 
 public abstract class RowActionSupport extends FieldProcessingActionSupport {
@@ -37,7 +38,7 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
 		String item = ctx.getParameter("item");
 		if(item!=null && item.trim().compareTo("") != 0){
 			Integer index = Integer.parseInt(item);
-			ctx.debug("Row index: "+ index);
+			PMLogger.debug(this,"Getting row index: "+ index);
 			if(index != null){
 				List <Object> al = new ArrayList<Object>();
 				if(ctx.isWeak())
@@ -49,17 +50,18 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
 		}else{
 			String identified = ctx.getParameter("identified");
 			if(identified!=null && identified.trim().compareTo("") != 0){
-				ctx.debug("Row identified by: "+identified);
+				PMLogger.debug(this,"Getting row identified by: "+identified);
 				String[] ss = identified.split(":");
 				//TODO Throw exception when the size of this is not 2
-				if(ss.length != 2) ctx.debug("Ivalid row identifier!");
+				if(ss.length != 2) PMLogger.error ("Ivalid row identifier!");
 				else{
 					String prop = ss[0];
 					String value= ss[1];
-					ctx.getEntityContainer().setSelected(new EntityInstanceWrapper( ctx.getEntity().getDataAccess().getItem(ctx, prop, value) ));
+					EntityInstanceWrapper wrapper = new EntityInstanceWrapper( ctx.getEntity().getDataAccess().getItem(ctx, prop, value) );
+					ctx.getEntityContainer().setSelected(wrapper);
 				}
 			}else{
-				ctx.debug("Row Selection ignored");
+				PMLogger.debug(this,"Row Selection ignored");
 			}
 		}
 		

@@ -41,7 +41,7 @@ public class AddAction extends RowActionSupport {
 				obj = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
 				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
 				ctx.getEntityContainer().setSelectedNew(true);
-				ctx.debug("Cleaning weak collections");
+				PMLogger.debug(this,"Cleaning weak collections");
 				if(ctx.getEntity().getWeaks()!=null){
 					for(Entity e : ctx.getEntity().getWeaks()){
 						setModifiedOwnerCollection(ctx, e.getOwner().getEntityProperty(), null);
@@ -76,7 +76,7 @@ public class AddAction extends RowActionSupport {
 		}else{
 			try {
 				if(ctx.getEntity().isPersistent()){
-					ctx.debug("Saving '"+ctx.getEntity().getId()+"' to Data Access");
+					PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
 					ctx.getEntity().getDataAccess().add(ctx, instance);
 				}
 			} catch (ConstraintViolationException e) {

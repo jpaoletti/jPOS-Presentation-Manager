@@ -80,7 +80,6 @@ public class EditSingleAggregationConverter extends StrutsEditConverter {
 		synchronized (e) {
 			ListFilter tmp = e.getListfilter();
 			e.setListfilter(filter);
-			ctx.debug("Filter: "+filter);
 			list = e.getList(ctx,null,null,null);
 			e.setListfilter(tmp);
 		}
