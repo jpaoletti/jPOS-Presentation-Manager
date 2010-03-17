@@ -22,7 +22,7 @@ import org.jpos.ee.pm.core.PMContext;
 
 public class EditPasswordConverter extends EditStringConverter {
 
-	@Override
+	
 	public String visualize(PMContext ctx) throws ConverterException {
 		return super.visualize("password_converter.jsp?");
 	}
