@@ -1,7 +1,6 @@
 <!ENTITY % xhtml1-lat1 SYSTEM "xhtml1-lat1.ent">  %xhtml1-lat1;
-<!ELEMENT monitor ( id, name, source, formatter, delay, max ) >
+<!ELEMENT monitor ( id, source, formatter, delay, max ) >
 <!ELEMENT id (#PCDATA) >
-<!ELEMENT clazz (#PCDATA) >
 
 <!ELEMENT formatter (EMPTY) >
 <!ATTLIST formatter class 		CDATA #REQUIRED>

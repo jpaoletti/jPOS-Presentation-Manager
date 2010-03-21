@@ -2,7 +2,6 @@
 <!DOCTYPE entity SYSTEM "cfg/monitor.dtd">  
 <monitor>
     <id>q2</id>
-    <name>Q2 monitor</name>
     <source class="org.jpos.ee.pm.core.monitor.FileMonitorSource" >
         <properties>
             <property name="filename" value="log/q2.log" />

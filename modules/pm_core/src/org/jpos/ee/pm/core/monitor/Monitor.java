@@ -29,9 +29,6 @@ public class Monitor extends PMCoreObject{
 	/**The id of the monitor. Must be unique*/
 	private String id;
 	
-	/**A descriptive name for the monitor*/
-	private String name;
-	
 	/**The source of the monitor information
 	 * @see MonitorSource*/
 	private MonitorSource source;
@@ -62,20 +59,6 @@ public class Monitor extends PMCoreObject{
 	 */
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	/**
