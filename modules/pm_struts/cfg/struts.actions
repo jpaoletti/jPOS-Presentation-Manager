@@ -40,3 +40,9 @@
       <forward name="continue" path="/pages/filterreport.jsp"/>
       <forward name="failure" path="/pages/filterreport.jsp"/>
     </action>
+      <action path="/monitor" type="org.jpos.ee.pm.struts.actions.MonitorAction">
+      <forward name="success" path="/pages/monitor.jsp" redirect="true"/>
+      <forward name="failure" path="/pages/monitor.jsp" />
+      <forward name="monitor_cont" path="/pages/monitor_cont.jsp" />      
+    </action>
+    

@@ -1,0 +1,42 @@
+<!--/*
+ * jPOS Project [http://jpos.org]
+ * Copyright (C) 2000-2010 Alejandro P. Revilla
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */-->
+<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+<bean:define id="es"                name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
+<pm:page title="titles.monitor">
+    <div class="boxed">
+        <pm:title key="pm.monitor.${monitor.id}" key_operation="operation.monitor"/>
+    </div>
+    <div id="con" class="boxed monitor_window monitor_${monitor.id}">
+        <pre id="line_container"> </pre>
+    </div>
+    <html:errors />
+    <script src="../js/jquery-plugin-arte.js" type="text/javascript"></script>
+        <script type="text/javascript">
+        $(document).ready(function(){
+            $.arte({'ajax_url':'${es.context_path}/monitor.do?continue=true', 'on_success':update_field, 'time':'${monitor.delay}' }).start();
+        });
+        function update_field(data){
+            $("#line_container").text($("#line_container").text()+data);
+            $("#con").animate({ scrollTop: $("#con").attr("scrollHeight") - $('#con').height() }, 1000);
+        }
+        </script>
+</pm:page>

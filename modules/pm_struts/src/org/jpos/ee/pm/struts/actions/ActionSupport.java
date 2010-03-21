@@ -98,7 +98,9 @@ public abstract class ActionSupport extends Action implements Constants{
 		}
 	}
 	
-	protected void excecute(PMContext ctx) throws PMException {}
+	protected void excecute(PMContext ctx) throws PMException {
+		doExecute(ctx);
+	}
 
     protected PMStrutsService getPMService()throws PMException{
     	try {

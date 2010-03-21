@@ -29,3 +29,6 @@
 	public static final String LAST_PM_ID 	= "last_pmid";
 	public static String HASH = "abcde54321poiuy96356abcde54321poiuy96356";
 	public static final String MODIFIED_OWNER_COLLECTION = "moc";
+	public static final String PM_MONITOR_CONTINUE = "PM_MONITOR_CONTINUE";
+	public static final String PM_MONITOR  = "PM_MONITOR";
+	

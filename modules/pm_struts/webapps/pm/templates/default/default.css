@@ -435,3 +435,11 @@ float:left;
      position: absolute;
      top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
 }
+
+.monitor_window{
+    height: 80%; 
+    overflow: auto; 
+    border: 1px solid black;
+    background-color: #ECF8E0;
+    color:navy;
+}
