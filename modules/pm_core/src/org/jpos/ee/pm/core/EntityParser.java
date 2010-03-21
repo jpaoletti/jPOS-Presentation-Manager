@@ -21,6 +21,7 @@ import java.io.FileReader;
 
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.Converters;
+import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.validator.Validator;
 
 import com.thoughtworks.xstream.XStream;
@@ -49,6 +50,7 @@ public class EntityParser {
         xstream.alias ("converter", Converter.class);
         xstream.alias ("highlights", Highlights.class);
         xstream.alias ("highlight", Highlight.class);
+        xstream.alias ("monitor", Monitor.class);
         
         xstream.useAttributeFor(PMCoreObject.class, 	"debug");
         
@@ -69,27 +71,32 @@ public class EntityParser {
         xstream.addImplicitCollection(Operation.class, "validators", Validator.class);
         
 	}
-	
+
 	/**Parse an entity configuration file
 	 * @param filename The file name
 	 * @return The obtained entity*/
 	public Entity parseEntityFile(String filename) throws FileNotFoundException{
 		return (Entity) xstream.fromXML (new FileReader (filename));
 	}
-	
+
+	/**Parse a monitor configuration file
+	 * @param filename The file name
+	 * @return The obtained monitor*/
+	public Monitor parseMonitorFile(String filename) throws FileNotFoundException{
+		return (Monitor) xstream.fromXML (new FileReader (filename));
+	}
+
 	/**Parse an operations file
 	 * @param filename The file name
 	 * @return The operations*/
 	public Operations parseOperationsFile(String filename) throws FileNotFoundException{
 		return (Operations) xstream.fromXML (new FileReader (filename));
 	}
-	
-	
+
 	/**
 	 * @return the parser
 	 */
 	public XStream getXstream() {
 		return xstream;
-	}
-	
+	}	
 }

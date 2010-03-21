@@ -1,6 +1,6 @@
 /*
- * jPOS Presentation Manager [http://jpospm.blogspot.com]
- * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
+ * jPOS Project [http://jpos.org]
+ * Copyright (C) 2000-2010 Alejandro P. Revilla
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
@@ -24,14 +24,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.jpos.ee.Constants;
+import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 import org.jpos.ee.pm.menu.MenuItemLocationsParser;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.util.NameRegistrar;
 
+/**Presentation Manager service bean.
+  * 
+  * @author jpaoletti jeronimo.paoletti@gmail.com
+  * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+  * */
 public class PMService extends QBeanSupport implements Constants{
     protected Map<Object,Entity> entities;
     protected Map<String,MenuItemLocation> locations;
+	private Map<Object, Monitor> monitors;
     private String template;
     private String appversion;
     private boolean loginRequired;
@@ -40,7 +47,6 @@ public class PMService extends QBeanSupport implements Constants{
     private String subtitle;
     private String logo;
     private String contact;
-    //private ParameterGetter parameterGetter;
     
     protected void initService() throws Exception {
 		PMLogger.setLog(getLog());
@@ -49,6 +55,7 @@ public class PMService extends QBeanSupport implements Constants{
         getLog().info ("Entity Manager activated");
         EntityParser parser = new EntityParser();
         loadEntities(parser);
+        loadMonitors(parser);
         loadLocations();
         template = cfg.get("template");
         if(template==null || template.compareTo("")==0) template="default";
@@ -85,6 +92,20 @@ public class PMService extends QBeanSupport implements Constants{
 				
         NameRegistrar.register (getCustomName(), this);
     }
+
+	private void loadMonitors(EntityParser parser) throws FileNotFoundException {
+		Map<Object,Monitor> result = new HashMap<Object,Monitor>();
+        String[] ss = cfg.getAll ("monitor");
+        for (Integer i=0; i<ss.length; i++) {
+        	Monitor m = parser.parseMonitorFile(ss[i]);
+            result.put (m.getId(), m);
+            result.put (i, m);
+            m.setService(this);
+            m.getSource().init();
+            getLog().info (m.toString());
+        }
+        setMonitors(result);
+	}
 
 	private void loadLocations() {
 		MenuItemLocationsParser parser = new MenuItemLocationsParser("cfg/pm.locations.xml");
@@ -135,6 +156,9 @@ public class PMService extends QBeanSupport implements Constants{
         if(e.getExtendz() != null && e.getExtendzEntity() == null)
         	e.setExtendzEntity(this.getEntity(e.getExtendz()));
 		return e;
+    }
+    public Monitor getMonitor (String id) {
+		return getMonitors().get (id);
     }
 	public String getTemplate() {
 		return template;
@@ -209,5 +233,19 @@ public class PMService extends QBeanSupport implements Constants{
 	 */
 	public String getContact() {
 		return contact;
-	}	
+	}
+
+	/**
+	 * @param monitors the monitors to set
+	 */
+	public void setMonitors(Map<Object, Monitor> monitors) {
+		this.monitors = monitors;
+	}
+
+	/**
+	 * @return the monitors
+	 */
+	public Map<Object, Monitor> getMonitors() {
+		return monitors;
+	}
 }
