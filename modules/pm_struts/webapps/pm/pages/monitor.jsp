@@ -35,8 +35,15 @@
             $.arte({'ajax_url':'${es.context_path}/monitor.do?continue=true', 'on_success':update_field, 'time':'${monitor.delay}' }).start();
         });
         function update_field(data){
-            $("#line_container").text($("#line_container").text()+data);
-            $("#con").animate({ scrollTop: $("#con").attr("scrollHeight") - $('#con').height() }, 1000);
+            var cleanup = ${monitor.cleanup};
+            if(data.trim().length > 0){
+            	if(cleanup){
+                    $("#line_container").text(data);
+                }else{
+                    $("#line_container").text($("#line_container").text()+data);
+                }
+                $("#con").animate({ scrollTop: $("#con").attr("scrollHeight") - $('#con').height() }, 1000);
+            }
         }
         </script>
 </pm:page>

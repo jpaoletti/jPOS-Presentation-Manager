@@ -1,5 +1,5 @@
 <!ENTITY % xhtml1-lat1 SYSTEM "xhtml1-lat1.ent">  %xhtml1-lat1;
-<!ELEMENT monitor ( id, source, formatter, delay, max ) >
+<!ELEMENT monitor ( id, source, formatter, delay, max?, cleanup?, all? ) >
 <!ELEMENT id (#PCDATA) >
 
 <!ELEMENT formatter (EMPTY) >
@@ -14,3 +14,5 @@
     
 <!ELEMENT delay (#PCDATA) >
 <!ELEMENT max (#PCDATA) >
+<!ELEMENT cleanup (#PCDATA) >
+<!ELEMENT all (#PCDATA) >

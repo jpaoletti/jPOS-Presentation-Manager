@@ -44,7 +44,12 @@ public class MonitorWatcher {
 	}
 	
 	public List<String> getNewLines() throws Exception{
-		List<MonitorLine> lines = getMonitor().getSource().getLinesFrom(actual);
+		List<MonitorLine> lines;
+		if(getMonitor().getAll()){
+			lines = getMonitor().getSource().getLinesFrom(null);
+		}else{
+			lines = getMonitor().getSource().getLinesFrom(actual);
+		}
 		List<String> result = new ArrayList<String>();
 		for (MonitorLine line : lines) {
 			result.add(getMonitor().getFormatter().format(line));

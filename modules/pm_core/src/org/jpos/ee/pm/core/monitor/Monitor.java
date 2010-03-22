@@ -43,6 +43,12 @@ public class Monitor extends PMCoreObject{
 	/**Maximum number of lines displayed at a time*/
 	private Integer max;
 	
+	/**Clean up after each refresh*/
+	private Boolean cleanup;
+	
+	/**Ignore actual and always get everything*/
+	private Boolean all;
+	
 	public MonitorWatcher newWatcher(){
 		return new MonitorWatcher(this);
 	}
@@ -117,6 +123,35 @@ public class Monitor extends PMCoreObject{
 	public Integer getMax() {
 		if(max==null) return 100;
 		return max;
-	} 
-	
+	}
+
+	/**
+	 * @param cleanup the cleanup to set
+	 */
+	public void setCleanup(Boolean cleanup) {
+		this.cleanup = cleanup;
+	}
+
+	/**
+	 * @return the cleanup
+	 */
+	public Boolean getCleanup() {
+		if(cleanup==null) return false;
+		return cleanup;
+	}
+
+	/**
+	 * @param all the all to set
+	 */
+	public void setAll(Boolean all) {
+		this.all = all;
+	}
+
+	/**
+	 * @return the all
+	 */
+	public Boolean getAll() {
+		if(all == null) return false;
+		return all;
+	}
 }
