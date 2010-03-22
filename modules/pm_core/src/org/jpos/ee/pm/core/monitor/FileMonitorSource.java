@@ -43,8 +43,7 @@ public class FileMonitorSource extends MonitorSource {
                 in = new BufferedReader (new FileReader(getFilename()));
                 
                 Integer startLine = (actual==null)?0:(Integer) actual;
-                System.out.println("Actual: "+startLine);
-				//read to startLine
+                //read to startLine
                 while(currentLineNo<startLine+1 ) {
                         if (in.readLine()==null) throw new IOException("File too small");
                         currentLineNo++;
@@ -57,8 +56,7 @@ public class FileMonitorSource extends MonitorSource {
                 	l.setId(currentLineNo);
                 	l.setValue(line);
                 	result.add(l);
-                	//System.out.println("!---> "+line);
-                    currentLineNo++;
+                	currentLineNo++;
                     line = in.readLine();
                 }
         } finally {
@@ -82,7 +80,6 @@ public class FileMonitorSource extends MonitorSource {
                 i++;
                 line = in.readLine();
         	}
-        	System.out.println("!! "+result.getValue());
         } finally {
         	try { if (in!=null) in.close(); } catch(IOException ignore) {}
         }

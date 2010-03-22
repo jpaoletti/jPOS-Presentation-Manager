@@ -34,7 +34,6 @@ public class MonitorAction extends ActionSupport {
 			ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm.struts.error.monitor.not.found", pmid));
 			throw new PMException();
 		}
-		PMLogger.debug(this, "Monitor: "+monitor);
 		ctx.put(PM_MONITOR, monitor);		
 		return true;
 	}

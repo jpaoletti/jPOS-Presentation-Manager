@@ -49,7 +49,7 @@ public class MonitorWatcher {
 		for (MonitorLine line : lines) {
 			result.add(getMonitor().getFormatter().format(line));
 		}
-		actual = (lines.size()==0)?null:lines.get(lines.size()-1).getId();
+		actual = (lines.size()==0)?actual:lines.get(lines.size()-1).getId();
 		return result;
 	}
 
