@@ -1,0 +1,22 @@
+<?xml version='1.0' ?>
+<!DOCTYPE entity SYSTEM "cfg/monitor.dtd">  
+<monitor>
+    <id>status</id>
+    <source class="org.jpos.ee.pm.core.monitor.SQLMonitorSource" >
+        <properties>
+	        <property name="query"             value="SELECT id, name, state, detail, lastTick, timeout, timeoutState FROM status" />
+	        <property name="last-line-query"   value="SELECT id, name, state, detail, lastTick, timeout, timeoutState FROM status" />
+            <property name="id-column"         value="0" />
+        </properties>
+    </source>
+    <formatter class="org.jpos.ee.pm.core.monitor.BasicObjectArrayFormatter">
+        <properties>
+            <property name="pads" value="[0,R, ,20] # [1,R, ,40] # [2,R, ,2] # [3,R, ,75]"/>
+            <property name="separator" value=" | " />
+        </properties>
+    </formatter>
+    <delay>3000</delay>
+    <max>100</max>
+    <cleanup>true</cleanup>
+    <all>true</all>
+</monitor>
