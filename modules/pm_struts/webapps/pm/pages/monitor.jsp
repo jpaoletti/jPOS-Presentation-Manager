@@ -32,7 +32,7 @@
     <script src="../js/jquery-plugin-arte.js" type="text/javascript"></script>
         <script type="text/javascript">
         $(document).ready(function(){
-            $.arte({'ajax_url':'${es.context_path}/monitor.do?continue=true', 'on_success':update_field, 'time':'${monitor.delay}' }).start();
+            $.arte({'ajax_url':'${es.context_path}/monitor.do?pmid=${monitor.id}&continue=true', 'on_success':update_field, 'time':'${monitor.delay}' }).start();
         });
         function update_field(data){
             var cleanup = ${monitor.cleanup};
