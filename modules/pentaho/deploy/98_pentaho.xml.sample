@@ -1,0 +1,5 @@
+<pentaho>
+	<property name="user" value ="demo" />
+	<property name="password" value ="demo" />
+	<property name="url" value ="http://localhost:8082/pentaho" />
+</pentaho>
