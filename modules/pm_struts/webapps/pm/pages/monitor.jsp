@@ -26,7 +26,7 @@
         <pm:title key="pm.monitor.${monitor.id}" key_operation="operation.monitor"/>
     </div>
     <div id="con" class="boxed monitor_window monitor_${monitor.id}">
-        <pre id="line_container"> </pre>
+        <div id='line_container' > </div>
     </div>
     <html:errors />
     <script src="../js/jquery-plugin-arte.js" type="text/javascript"></script>
@@ -37,11 +37,10 @@
         function update_field(data){
             var cleanup = ${monitor.cleanup};
             if(data.trim().length > 0){
-            	if(cleanup){
-                    $("#line_container").text(data);
-                }else{
-                    $("#line_container").text($("#line_container").text()+data);
-                }
+                var res =  "<pre style='WHITE-SPACE: pre'>";
+                if(!cleanup) res = res+$("#line_container").html();
+                res=res+data+"</pre>";
+                $("#line_container").html(res);
                 $("#con").animate({ scrollTop: $("#con").attr("scrollHeight") - $('#con').height() }, 1000);
             }
         }
