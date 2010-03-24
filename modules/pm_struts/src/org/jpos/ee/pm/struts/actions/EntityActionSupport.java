@@ -141,8 +141,15 @@ public abstract class EntityActionSupport extends ActionSupport {
 			}
             if(!ctx.hasEntityContainer()){
             	ctx.setEntityContainer(getPMService().newEntityContainer(pmid));
-            	if( checkEntity() ) ctx.getEntityContainer();
-            	ctx.getSession().setAttribute(pmid, ctx.getEntityContainer());
+            	if( checkEntity() ) {
+            		ctx.getSession().setAttribute(pmid, ctx.getEntityContainer());
+            	}else{
+            		try {
+            			ctx.getSession().setAttribute(pmid, ctx.getEntityContainer());
+					} catch (Exception e) {
+						ctx.getErrors().clear();
+					}
+            	}
             }
         }
         return !fail;
