@@ -9,9 +9,10 @@ import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.monitor.Monitor;
-import org.jpos.ee.pm.core.monitor.MonitorWatcher;
+import org.jpos.ee.pm.core.monitor.MonitorObserver;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMForwardException;
+import org.jpos.ee.pm.struts.StrutsMonitorObserver;
 
 public class MonitorAction extends ActionSupport {
 
@@ -45,20 +46,14 @@ public class MonitorAction extends ActionSupport {
 		synchronized (ctx.getSession()) {
 			boolean kontinue = (Boolean) ctx.get(PM_MONITOR_CONTINUE);
 			Monitor monitor = (Monitor) ctx.get(PM_MONITOR);
-			MonitorWatcher watcher = (MonitorWatcher)ctx.getSession().getAttribute(PM_MONITOR_WATCHER);
+			MonitorObserver watcher = (MonitorObserver)ctx.getSession().getAttribute(PM_MONITOR_WATCHER);
 			List<String> lines = new ArrayList<String>();
 			if(!kontinue || watcher==null){
-				watcher = monitor.newWatcher();
-				try {
-					lines.add(watcher.startWatching());
-				} catch (Exception e) {
-					PMLogger.error(e);
-					lines.add("ERROR");
-				}
+				watcher = new StrutsMonitorObserver(monitor);
 				ctx.getSession().setAttribute(PM_MONITOR_WATCHER, watcher);
 			}else{
 				try {
-					lines.addAll( watcher.getNewLines() );
+					lines.addAll( watcher.getLines() );
 				} catch (Exception e) {
 					PMLogger.error(e);
 					lines.add("ERROR C");
