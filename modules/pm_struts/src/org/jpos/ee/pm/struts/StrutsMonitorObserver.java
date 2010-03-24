@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.core.monitor.MonitorObserver;
 
@@ -62,7 +61,6 @@ public class StrutsMonitorObserver extends MonitorObserver {
 		timer.purge();
 		schedule();
 		List<String> lines = super.getLines();
-		PMLogger.debug(this, "Getting Lines "+lines);
 		return lines;
 	}	
 }

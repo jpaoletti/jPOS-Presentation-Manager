@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMService;
 
 /** A monitor that watch something showing his status.
@@ -60,16 +59,12 @@ public class Monitor extends Observable implements Runnable{
 	
 	public Monitor() {
 		super();
-		PMLogger.debug(this, "New Monitor");
 	}
 
 	public synchronized void addObserver(Observer o) {
-		PMLogger.debug(this, "New observer for "+getId());
 		super.addObserver(o);
 		//Interrupts the sleeping Monitor
-		PMLogger.debug(this, "Observers: "+countObservers());
 		if(countObservers()==1){
-			PMLogger.debug(this, "Interrupting monitor "+thread);
 			thread.interrupt();
 		}
 	}
@@ -77,33 +72,25 @@ public class Monitor extends Observable implements Runnable{
 	private Object actual = null;
 
 	public void run() {
-		System.out.println("Starting monitor thread");
 		while(true){
-			System.out.println( "Monitor "+getId());
-				if(countObservers()==0){
+			if(countObservers()==0){
+				try {
+					Thread.sleep(Long.MAX_VALUE);
+				} catch (InterruptedException e) {}
+			}else{
+				startWatching();
+				while(countObservers()>0){
+					getNewLines();
 					try {
-						System.out.println( "Sleeping monitor "+Thread.currentThread());
-						Thread.sleep(Long.MAX_VALUE);
-					} catch (InterruptedException e) {
-						//an observer come to watch
-						System.out.println( "Interrupted monitor "+getId());
-					}
-				}else{
-					startWatching();
-					while(countObservers()>0){
-						getNewLines();
-						try {
-							Thread.sleep(getDelay());
-						} catch (InterruptedException e) {
-						}
-					}
+						Thread.sleep(getDelay());
+					} catch (InterruptedException e) {}
 				}
+			}
 		}
 	}
 	
 	public void startWatching(){
 		try {
-			PMLogger.debug(this, "Starting monitor "+getId());
 			MonitorLine line = getSource().getLastLine();
 			actual = (line!=null)?line.getId():null;
 			if(line!=null)
@@ -114,7 +101,6 @@ public class Monitor extends Observable implements Runnable{
 	}
 	
 	public void getNewLines(){
-		PMLogger.debug(this, "Refreshing monitor "+getId());
 		List<String> result = new ArrayList<String>();
 		try {
 			List<MonitorLine> lines;
@@ -123,13 +109,11 @@ public class Monitor extends Observable implements Runnable{
 			}else{
 				lines = getSource().getLinesFrom(actual);
 			}
-			PMLogger.debug(this, "Lines: "+lines);
 			if(lines.size() > 0){
 				for (MonitorLine line : lines) {
 					result.add(getFormatter().format(line));
 				}
 				actual = lines.get(lines.size()-1).getId();
-				PMLogger.debug(this, "Notify Observers");
 				setChanged();
 				notifyObservers(result);
 			}

@@ -42,7 +42,6 @@ public class MonitorObserver implements Observer{
 	}
 	
 	public void update(Observable o, Object arg) {
-		PMLogger.debug(this, "Updating observer " + arg);
 		if(arg instanceof String)
 			lines.add((String) arg);
 		if(arg instanceof List<?>)
