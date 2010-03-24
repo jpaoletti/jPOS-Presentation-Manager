@@ -17,7 +17,13 @@
  */
 package org.jpos.ee.pm.core.monitor;
 
-import org.jpos.ee.pm.core.PMCoreObject;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMService;
 
 /** A monitor that watch something showing his status.
  * 
@@ -25,7 +31,10 @@ import org.jpos.ee.pm.core.PMCoreObject;
  * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
-public class Monitor extends PMCoreObject{
+public class Monitor extends Observable implements Runnable{
+	private PMService service;
+	private Thread thread;
+    
 	/**The id of the monitor. Must be unique*/
 	private String id;
 	
@@ -49,8 +58,84 @@ public class Monitor extends PMCoreObject{
 	/**Ignore actual and always get everything*/
 	private Boolean all;
 	
-	public MonitorWatcher newWatcher(){
-		return new MonitorWatcher(this);
+	public Monitor() {
+		super();
+		PMLogger.debug(this, "New Monitor");
+	}
+
+	public synchronized void addObserver(Observer o) {
+		PMLogger.debug(this, "New observer for "+getId());
+		super.addObserver(o);
+		//Interrupts the sleeping Monitor
+		PMLogger.debug(this, "Observers: "+countObservers());
+		if(countObservers()==1){
+			PMLogger.debug(this, "Interrupting monitor "+thread);
+			thread.interrupt();
+		}
+	}
+
+	private Object actual = null;
+
+	public void run() {
+		System.out.println("Starting monitor thread");
+		while(true){
+			System.out.println( "Monitor "+getId());
+				if(countObservers()==0){
+					try {
+						System.out.println( "Sleeping monitor "+Thread.currentThread());
+						Thread.sleep(Long.MAX_VALUE);
+					} catch (InterruptedException e) {
+						//an observer come to watch
+						System.out.println( "Interrupted monitor "+getId());
+					}
+				}else{
+					startWatching();
+					while(countObservers()>0){
+						getNewLines();
+						try {
+							Thread.sleep(getDelay());
+						} catch (InterruptedException e) {
+						}
+					}
+				}
+		}
+	}
+	
+	public void startWatching(){
+		try {
+			PMLogger.debug(this, "Starting monitor "+getId());
+			MonitorLine line = getSource().getLastLine();
+			actual = (line!=null)?line.getId():null;
+			if(line!=null)
+				notifyObservers(getFormatter().format(line));
+		} catch (Exception e) {
+			notifyObservers(e);
+		}		
+	}
+	
+	public void getNewLines(){
+		PMLogger.debug(this, "Refreshing monitor "+getId());
+		List<String> result = new ArrayList<String>();
+		try {
+			List<MonitorLine> lines;
+			if(getAll()){
+				lines = getSource().getLinesFrom(null);
+			}else{
+				lines = getSource().getLinesFrom(actual);
+			}
+			PMLogger.debug(this, "Lines: "+lines);
+			if(lines.size() > 0){
+				for (MonitorLine line : lines) {
+					result.add(getFormatter().format(line));
+				}
+				actual = lines.get(lines.size()-1).getId();
+				PMLogger.debug(this, "Notify Observers");
+				setChanged();
+				notifyObservers(result);
+			}
+		} catch (Exception e) {
+			notifyObservers(e);
+		}
 	}
 
 	/**
@@ -153,5 +238,33 @@ public class Monitor extends PMCoreObject{
 	public Boolean getAll() {
 		if(all == null) return false;
 		return all;
+	}
+
+	/**
+	 * @param service the service to set
+	 */
+	public void setService(PMService service) {
+		this.service = service;
+	}
+
+	/**
+	 * @return the service
+	 */
+	public PMService getService() {
+		return service;
+	}
+
+	/**
+	 * @param thread the thread to set
+	 */
+	public void setThread(Thread thread) {
+		this.thread = thread;
+	}
+
+	/**
+	 * @return the thread
+	 */
+	public Thread getThread() {
+		return thread;
 	}
 }

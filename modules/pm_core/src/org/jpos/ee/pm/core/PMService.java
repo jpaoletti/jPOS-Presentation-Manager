@@ -98,11 +98,14 @@ public class PMService extends QBeanSupport implements Constants{
         String[] ss = cfg.getAll ("monitor");
         for (Integer i=0; i<ss.length; i++) {
         	Monitor m = parser.parseMonitorFile(ss[i]);
-            result.put (m.getId(), m);
+        	result.put (m.getId(), m);
             result.put (i, m);
             m.setService(this);
             m.getSource().init();
             getLog().info (m.toString());
+            Thread thread = new Thread(m);
+            m.setThread(thread);
+			thread.start();
         }
         setMonitors(result);
 	}

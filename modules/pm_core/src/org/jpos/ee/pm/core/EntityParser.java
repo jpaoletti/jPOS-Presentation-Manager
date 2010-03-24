@@ -83,7 +83,7 @@ public class EntityParser {
 	 * @param filename The file name
 	 * @return The obtained monitor*/
 	public Monitor parseMonitorFile(String filename) throws FileNotFoundException{
-		return (Monitor) xstream.fromXML (new FileReader (filename));
+		return (Monitor) xstream.fromXML (new FileReader (filename), new Monitor());
 	}
 
 	/**Parse an operations file

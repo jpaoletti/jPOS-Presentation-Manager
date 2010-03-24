@@ -19,43 +19,39 @@ package org.jpos.ee.pm.core.monitor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-/** A Watcher is a monitor instance of a monitor that keep the state of
- * the watching process so it can return the lines considered as "new" since
- * the last lines the caller obtained.
+import org.jpos.ee.pm.core.PMLogger;
+
+/** This class is an observer of the monitor.
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
  * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
-public class MonitorWatcher {
+public class MonitorObserver implements Observer{
 	private Monitor monitor;
-	private Object actual = null;
+	private List<String> lines;
 	
-	public MonitorWatcher(Monitor monitor) {
+	public MonitorObserver(Monitor monitor) {
 		super();
 		this.setMonitor(monitor);
-	}
-
-	public String startWatching() throws Exception{
-		MonitorLine line = getMonitor().getSource().getLastLine();
-		actual = (line!=null)?line.getId():null;
-		return getMonitor().getFormatter().format(line);
+		monitor.addObserver(this);
+		setLines(new ArrayList<String>());
 	}
 	
-	public List<String> getNewLines() throws Exception{
-		List<MonitorLine> lines;
-		if(getMonitor().getAll()){
-			lines = getMonitor().getSource().getLinesFrom(null);
-		}else{
-			lines = getMonitor().getSource().getLinesFrom(actual);
+	public void update(Observable o, Object arg) {
+		PMLogger.debug(this, "Updating observer " + arg);
+		if(arg instanceof String)
+			lines.add((String) arg);
+		if(arg instanceof List<?>)
+			lines.addAll((List<String>) arg);
+		if(arg instanceof Exception){
+			Exception e = (Exception)arg;
+			PMLogger.error(e);
+			lines.add(e.getMessage());
 		}
-		List<String> result = new ArrayList<String>();
-		for (MonitorLine line : lines) {
-			result.add(getMonitor().getFormatter().format(line));
-		}
-		actual = (lines.size()==0)?actual:lines.get(lines.size()-1).getId();
-		return result;
 	}
 
 	public void setMonitor(Monitor monitor) {
@@ -64,6 +60,23 @@ public class MonitorWatcher {
 
 	public Monitor getMonitor() {
 		return monitor;
+	}
+
+	/**
+	 * @param lines the lines to set
+	 */
+	public void setLines(List<String> lines) {
+		this.lines = lines;
+	}
+
+	/**
+	 * @return the lines and clear them for next time
+	 */
+	public List<String> getLines() {
+		List<String> res = new ArrayList<String>();
+		res.addAll(lines);
+		lines.clear();
+		return res;
 	}
 
 }
