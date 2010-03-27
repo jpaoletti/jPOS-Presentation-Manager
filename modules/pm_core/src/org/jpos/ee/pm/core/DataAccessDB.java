@@ -109,4 +109,10 @@ public class DataAccessDB implements DataAccess {
 		}
 		return c;
 	}
+
+	public Object refresh(PMContext ctx, Object o) {
+		DB db = (DB) ctx.get(DB);
+		db.session().refresh(o);
+		return o;
+	}
 }

@@ -45,7 +45,9 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
 					al.addAll(getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()));
 				else
 					al.addAll(ctx.getList().getContents());
-				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(al.get(index)));
+				Object o = al.get(index);
+				ctx.getEntity().getDataAccess().refresh(ctx,o);
+				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(o));
 			}
 		}else{
 			String identified = ctx.getParameter("identified");

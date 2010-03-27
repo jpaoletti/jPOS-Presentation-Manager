@@ -28,4 +28,5 @@ public interface DataAccess extends Constants {
 	public void 	delete	(PMContext ctx, Object object);
 	public void 	update	(PMContext ctx, Object instance);
 	public void 	add		(PMContext ctx, Object instance);
+	public Object 	refresh	(PMContext ctx, Object o) throws PMException;
 }
