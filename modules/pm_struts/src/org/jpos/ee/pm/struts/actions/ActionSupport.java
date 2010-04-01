@@ -17,8 +17,6 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.ArrayList;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,7 +28,6 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.Constants;
-import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
@@ -53,31 +50,13 @@ public abstract class ActionSupport extends Action implements Constants{
 			ctx.getRequest().setAttribute("reload", 1);
 			throw new PMUnauthorizedException();
 		}
-		if(!getPMService().ignoreDb()){
-			DB db = (DB)ctx.getSession().getAttribute(DB);
-			if(db == null) {
-				try {
-					db = new DB(PMLogger.getLog());
-					db.open();
-					ctx.getSession().setAttribute(DB, db);
-					PMLogger.info("Database Access Created for session "+ctx.getSession().getId());
-				} catch (Exception e) {
-					throw new PMException("pm.struts.cant.access.db");
-				}
-			}
-			ctx.put(DB, db);
-		}
 		return true;
 	}
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		PMContext ctx = new PMContext();
+		PMContext ctx = (PMContext) request.getAttribute(PM_CONTEXT);
 		ctx.setMapping(mapping);
-		ctx.setRequest(request);
-		ctx.setResponse(response);
-		ctx.setErrors(new ArrayList<PMMessage>());
 		ctx.setForm(form);
-		ctx.getRequest().setAttribute(PM_CONTEXT, ctx);
 		try {
 			boolean step = prepare(ctx);
 			if(step) excecute(ctx);

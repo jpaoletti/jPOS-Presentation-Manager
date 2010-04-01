@@ -18,6 +18,7 @@
 package org.jpos.ee.pm.struts.actions;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -26,10 +27,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.jpos.ee.Constants;
+import org.jpos.ee.DB;
+import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMEntitySupport;
+
+import com.pat.coba.manager.LogManager;
 
 public class GeneralFilter implements Filter,Constants {
 
@@ -38,17 +45,43 @@ public class GeneralFilter implements Filter,Constants {
 
 	public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
 		HttpServletRequest req = (HttpServletRequest)request;
-		Object o = req.getSession().getAttribute(ENTITY_SUPPORT);
+		PMEntitySupport o = (PMEntitySupport) req.getSession().getAttribute(ENTITY_SUPPORT);
 		if(o == null){
 			PMEntitySupport es = PMEntitySupport.getInstance();
 			es.setContext_path(req.getContextPath());
 			req.getSession().setAttribute(ENTITY_SUPPORT, es);
 		}
+		PMContext ctx = new PMContext();
+		ctx.setRequest((HttpServletRequest) request);
+		ctx.setResponse((HttpServletResponse) response);
+		ctx.setErrors(new ArrayList<PMMessage>());
+		ctx.getRequest().setAttribute(PM_CONTEXT, ctx);
+		
 		try {
+			connectToDB(ctx);
+			
 			chain.doFilter(request, response);
 		} catch (ServletException e) {
 			PMLogger.error(e);
 			throw e;
+		}finally{
+			if(ctx.get(DB)!=null){
+				((DB)ctx.get(DB)).close();
+			}
+		}
+	}
+
+	private void connectToDB(PMContext ctx) throws ServletException {
+		if(PMEntitySupport.staticPmservice()!=null && !PMEntitySupport.staticPmservice().ignoreDb()){
+			try {
+				DB db = new DB(PMLogger.getLog());
+				db.open();
+				ctx.getSession().setAttribute(DB, db);
+				ctx.put(DB, db);
+			} catch (Exception e) {
+				LogManager.error("No se pudo acceder a la Base de Datos");
+				throw new ServletException(e);
+			}
 		}
 	}
 
