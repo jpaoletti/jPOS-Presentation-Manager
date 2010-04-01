@@ -5,7 +5,7 @@
 
 <!ATTLIST entity 
 			id CDATA #REQUIRED
-		   	clazz CDATA>
+		   	clazz CDATA #REQUIRED >
 
 <!ELEMENT listfilter (EMPTY) >
 <!ATTLIST listfilter class 		CDATA #REQUIRED>
@@ -24,17 +24,17 @@
 
 <!ATTLIST operation 
 			id CDATA #REQUIRED
-		   	enabled CDATA
-		   	scope CDATA
-		   	visibleIn CDATA>
+		   	enabled CDATA #IMPLIED
+		   	scope CDATA #IMPLIED
+		   	visibleIn CDATA #IMPLIED >
 
 <!ELEMENT context ( EMPTY ) >
 <!ATTLIST context class 		CDATA #REQUIRED>
 <!ELEMENT text (#PCDATA) >
 <!ELEMENT icon (#PCDATA) >
 <!ELEMENT enabled (#PCDATA) >
-<!ELEMENT scope (#PCDATA) > <!-- all, row-->
-<!ELEMENT visibleIn (#PCDATA) > <!-- Indicate the operations where the defined operation will be shown -->
+<!ELEMENT scope (#PCDATA) > 
+<!ELEMENT visibleIn (#PCDATA) >
 <!ELEMENT url (#PCDATA) >
 
 <!ELEMENT validators (validator*) >
@@ -44,9 +44,9 @@
 
 <!ATTLIST operation 
 			id CDATA #REQUIRED
-		   	display CDATA
-		   	width CDATA
-		   	align CDATA>
+		   	display CDATA #IMPLIED
+		   	width CDATA #IMPLIED
+		   	align CDATA #IMPLIED>
 
 <!ELEMENT display (#PCDATA) >
 <!ELEMENT maxLength (#PCDATA)>
@@ -55,13 +55,13 @@
 <!ELEMENT converter (properties?)>
 <!ATTLIST converter 
 			class 		CDATA #REQUIRED
-			operations  CDATA #REQUIRED>
+			operations  CDATA #REQUIRED >
 <!ELEMENT field-validator (properties?)>
 <!ELEMENT properties (property*)>
 <!ELEMENT property ( EMPTY )>
 <!ATTLIST property 
       name 		CDATA #REQUIRED
-      value 	CDATA #REQUIRED>
+      value 	CDATA #REQUIRED >
 <!ELEMENT listfilter (#PCDATA)>
 <!ELEMENT showToList (#PCDATA)>
 <!ELEMENT align (#PCDATA)>
