@@ -3,6 +3,10 @@
 <!ELEMENT id (#PCDATA) >
 <!ELEMENT clazz (#PCDATA) >
 
+<!ATTLIST entity 
+			id CDATA #REQUIRED
+		   	clazz CDATA>
+
 <!ELEMENT listfilter (EMPTY) >
 <!ATTLIST listfilter class 		CDATA #REQUIRED>
 
@@ -16,7 +20,14 @@
 <!ELEMENT local_property (#PCDATA) >
 
 <!ELEMENT operations (operation*) >
-<!ELEMENT operation (id, text?, icon?, enabled?, scope?, visibleIn?, url?, context?, validators?, properties?) >
+<!ELEMENT operation (id, enabled?, scope?, visibleIn?, url?, context?, validators?, properties?) >
+
+<!ATTLIST operation 
+			id CDATA #REQUIRED
+		   	enabled CDATA
+		   	scope CDATA
+		   	visibleIn CDATA>
+
 <!ELEMENT context ( EMPTY ) >
 <!ATTLIST context class 		CDATA #REQUIRED>
 <!ELEMENT text (#PCDATA) >
@@ -29,14 +40,22 @@
 <!ELEMENT validators (validator*) >
 <!ELEMENT validator (#PCDATA) >
 
-<!ELEMENT field (id, display?, clazz, width?, align?, sortable?, searchable?, searchCriteria?, multiEditable?, maxLength?, converter?, field-validator*) >
-<!ELEMENT display (#PCDATA) > <!--Operations where the field is displayed, could be "all" -->
-<!ELEMENT sortable (#PCDATA)>
+<!ELEMENT field (id, display?, width?, align?, searchCriteria?, multiEditable?, maxLength?, converters?, field-validator*) >
+
+<!ATTLIST operation 
+			id CDATA #REQUIRED
+		   	display CDATA
+		   	width CDATA
+		   	align CDATA>
+
+<!ELEMENT display (#PCDATA) >
 <!ELEMENT maxLength (#PCDATA)>
-<!ELEMENT searchable (#PCDATA)>
 <!ELEMENT width (#PCDATA)>
+<!ELEMENT converters (converter*)>
 <!ELEMENT converter (properties?)>
-<!ATTLIST converter class 		CDATA #REQUIRED>
+<!ATTLIST converter 
+			class 		CDATA #REQUIRED
+			operations  CDATA #REQUIRED>
 <!ELEMENT field-validator (properties?)>
 <!ELEMENT properties (property*)>
 <!ELEMENT property ( EMPTY )>
