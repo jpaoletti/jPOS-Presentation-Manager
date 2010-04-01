@@ -27,7 +27,7 @@ public class EditAction extends RowActionSupport{
 
 	/** Opens an hibernate transaction before doExecute*/
 	protected boolean openTransaction() { return true;	}
-	/**Makes the operation generate an audithory entry*/
+	/**Makes the operation generate an auditory entry*/
 	protected boolean isAudited() {	return true; }
     /**Forces execute to check if any user is logged in*/
     protected boolean checkUser(){ 	return true;}
