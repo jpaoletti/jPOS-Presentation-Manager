@@ -39,12 +39,28 @@ public class EntityParser {
 		super();
         xstream = new XStream(new JDomDriver());
         xstream.alias ("entity", Entity.class);
+        
+        xstream.useAttributeFor(Entity.class, "id");
+        xstream.useAttributeFor(Entity.class, "clazz");
+        
         xstream.alias ("field", Field.class);
+        
+        xstream.useAttributeFor(Field.class, "id");
+        xstream.useAttributeFor(Field.class, "display");
+        xstream.useAttributeFor(Field.class, "align");
+        xstream.useAttributeFor(Field.class, "width");
+        
         //xstream.alias ("relation", Relation.class);
         xstream.alias ("field-validator", Validator.class);
         xstream.alias ("validator", Validator.class);
         xstream.alias ("operations", Operations.class);
         xstream.alias ("operation", Operation.class);
+        
+        xstream.useAttributeFor(Operation.class, "id");
+        xstream.useAttributeFor(Operation.class, "enabled");
+        xstream.useAttributeFor(Operation.class, "scope");
+        xstream.useAttributeFor(Operation.class, "visibleIn");
+        
         xstream.alias ("owner", EntityOwner.class);
         xstream.alias ("converters", Converters.class);
         xstream.alias ("converter", Converter.class);

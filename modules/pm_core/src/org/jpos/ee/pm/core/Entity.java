@@ -30,9 +30,7 @@ import java.util.Map;
  * {@code
  * <?xml version='1.0' ?>
  * <!DOCTYPE entity SYSTEM "cfg/entity.dtd">
- * <entity>
- *     <id>entity_id</id>
- *     <clazz>the.entity.Class</clazz>
+ * <entity id="entity_id" clazz="the.entity.Class" >
  *     <auditable>false</auditable>
  *     <persistent>true</persistent>
  *     ...
@@ -51,12 +49,10 @@ import java.util.Map;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class Entity extends PMCoreObject {
-    /**Represents the entity id. This must me unique.
-     * <br/>{@code <id>entity_id</id>}*/
+    /**Represents the entity id. This must me unique.*/
     private String id;
     
-    /**The full name of the class represented by the entity.
-     * <br/>{@code <clazz>entity_class</clazz>}*/
+    /**The full name of the class represented by the entity.*/
     private String clazz;
     
     /**A filter for the list of instances of the entity.

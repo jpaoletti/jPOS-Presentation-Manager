@@ -31,8 +31,7 @@ import org.jpos.ee.pm.validator.Validator;
  * <h2>Simple entity configuration file</h2>
  * <pre>
  * {@code
- * <field>
- *     <id>some_id</id>
+ * <field id="id" display="all | some_operations" align="right | left | center" width="xxxx" />
  *     ....
  * </field>
  * }
@@ -42,13 +41,6 @@ import org.jpos.ee.pm.validator.Validator;
 public class Field extends PMCoreObject{
 	/**The id of the field, there must be a getter and a setter for this name on the represented entity.*/
 	private String id;
-	
-	/**A descriptive name*/
-	//private String name;
-	
-	/**A short name
-	 * @deprecated*/
-	private String shortName;
 	
 	/**The width of the field value*/
 	private String width;

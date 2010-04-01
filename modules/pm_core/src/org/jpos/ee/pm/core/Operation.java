@@ -31,12 +31,8 @@ import org.jpos.ee.pm.validator.Validator;
  * 
  * <pre>
  * {@code
- * <operation>
- *    <id>some_id</id>
- *    <enabled>true</enabled>
- *    <scope>general</scope>
+ * <operation id="some_id" enabled="true" scope="general | item" visibleIn="all | add list edit">
  *    <showTitle>true</showTitle>
- *    <visibleIn>add list edit</visibleIn>
  *    <confirm>true</confirm>
  *    <context class="some.operation.Context" />
  *    <validator class="some.validator.Validator1" />
