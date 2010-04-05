@@ -47,6 +47,7 @@ public class PMService extends QBeanSupport implements Constants{
     private String subtitle;
     private String logo;
     private String contact;
+    private String defaultDataAccess;
     
     protected void initService() throws Exception {
 		PMLogger.setLog(getLog());
@@ -59,6 +60,8 @@ public class PMService extends QBeanSupport implements Constants{
         loadLocations();
         template = cfg.get("template");
         if(template==null || template.compareTo("")==0) template="default";
+        
+        defaultDataAccess = cfg.get("default-data-access", "org.jpos.ee.pm.core.DataAccessDB");
         
         appversion = cfg.get("appversion");
         if(appversion==null || appversion.compareTo("")==0) appversion="1.0.0";
@@ -250,5 +253,19 @@ public class PMService extends QBeanSupport implements Constants{
 	 */
 	public Map<Object, Monitor> getMonitors() {
 		return monitors;
+	}
+
+	/**
+	 * @param defaultDataAccess the defaultDataAccess to set
+	 */
+	public void setDefaultDataAccess(String defaultDataAccess) {
+		this.defaultDataAccess = defaultDataAccess;
+	}
+
+	/**
+	 * @return the defaultDataAccess
+	 */
+	public String getDefaultDataAccess() {
+		return defaultDataAccess;
 	}
 }

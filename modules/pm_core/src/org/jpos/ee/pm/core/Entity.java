@@ -443,7 +443,12 @@ public class Entity extends PMCoreObject {
 	 * @return the dataAccess
 	 */
 	public DataAccess getDataAccess() {
-		if(dataAccess == null) dataAccess = new DataAccessDB();
+		if(dataAccess == null)
+			try {
+				dataAccess = (DataAccess) Class.forName(getService().getDefaultDataAccess()).newInstance();
+			} catch (Exception e) {
+				PMLogger.error(e);
+			}
 		return dataAccess;
 	}
 
