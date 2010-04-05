@@ -1,0 +1,8 @@
+!.gitignore
+*~
+manual/.*
+manual/document.*
+!manual/document.tex
+manual/tmp
+manual/out
+
