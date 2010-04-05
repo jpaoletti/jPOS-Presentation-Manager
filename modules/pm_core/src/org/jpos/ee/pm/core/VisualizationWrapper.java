@@ -19,28 +19,23 @@ package org.jpos.ee.pm.core;
 
 import java.util.Map;
 
-import org.jpos.ee.DB;
-
 /**This class provides a way to add read only fields to any operation of an entity. A programmer can subclass 
  * this class to add visualization functionality such as balances, counters or any complex or simple function
  * that requires more than a getter.<br/>
  * 
  * Not yet implemented
  *    
- * @author yero jeronimo.paoletti@gmail.com
+ * @author jpaoletti jeronimo.paoletti@gmail.com
  *  
  * */
 public abstract class VisualizationWrapper {
-	/** A database connection to get any information*/
-	private DB db;
-	
 	/** A map with the calculated values of the field*/	
 	private Map<String,Object> values;
 
 	/**This abstract method must be defined for each implementation and must
 	 * fill the values map.
 	 * @param object The entity instance to get any data required for calculation*/
-	public abstract void load(Object object);
+	public abstract void load(PMContext ctx,  Object object);
 	
 	/**This function is automatically invoked to get the values configured in the entity 
 	 * configuration file
@@ -50,19 +45,5 @@ public abstract class VisualizationWrapper {
 	 * */
 	public Object get(String name){
 		return values.get(name);
-	}
-	
-	/** Setter for db field. This method is invoked automatically by the PM engine
-	 * @param db the db to set
-	 */
-	public void setDb(DB db) {
-		this.db = db;
-	}
-
-	/**A getter for the database
-	 * @return the db
-	 */
-	public DB getDb() {
-		return db;
 	}
 }

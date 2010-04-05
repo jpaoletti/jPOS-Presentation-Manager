@@ -17,7 +17,6 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
@@ -74,13 +73,9 @@ public class AddAction extends RowActionSupport {
 				EntitySupport.set(instance, p, ctx.getOwner().getSelected().getInstance());
 			}
 		}else{
-			try {
-				if(ctx.getEntity().isPersistent()){
-					PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
-					ctx.getEntity().getDataAccess().add(ctx, instance);
-				}
-			} catch (ConstraintViolationException e) {
-				throw new PMException("constraint.violation.exception");
+			if(ctx.getEntity().isPersistent()){
+				PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
+				ctx.getEntity().getDataAccess().add(ctx, instance);
 			}
 		}
 	}

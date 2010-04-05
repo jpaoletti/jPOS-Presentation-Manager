@@ -17,20 +17,14 @@
  */
 package org.jpos.ee.pm.struts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.Query;
 import org.jpos.ee.Constants;
-import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntitySupport;
 
 public class PMEntitySupport extends EntitySupport implements Constants{
 	private String context_path;
-	private DB db;
 	private static PMEntitySupport instance;
 	
 	/*Singleton getter*/
@@ -76,29 +70,7 @@ public class PMEntitySupport extends EntitySupport implements Constants{
 		return r;
 	}
 	
-	/**Returns a PMList containing all the instance of the given entity with the given filter. Can be
-     * used in some complex converters. Deprecated. Try to use entity.getList() instead.
-     * @param db The DataBase
-     * @param entity The entity
-     * @param filter The filter
-     * @return A list with the result values.
-     * @deprecated */
-    public PMList getItems(DB db, Entity entity, String filter){
-        String q = "from "+entity.getClazz();
-        if(filter != null && filter.trim().compareTo("")!=0) q = q+" where "+filter ;
-        Query query  = db.session().createQuery (q);
-    	List<Object> contents = query.list();
-    	Long total = new Long(0);
-    	if(contents != null){
-	    	total= new Long(contents.size());
-    	}else{
-    		contents = new ArrayList<Object>();
-    	}
-        PMList r= new PMList(contents,total);
-        r.setEntity(entity);
-        return r;
-    }
-
+	
 	public void setContext_path(String context_path) {
 		this.context_path = context_path;
 	}
@@ -106,15 +78,4 @@ public class PMEntitySupport extends EntitySupport implements Constants{
 	public String getContext_path() {
 		return context_path;
 	}
-
-	public void setDb(DB db) {
-		this.db = db;
-	}
-
-	public DB getDb() {
-		if(db == null) db = new DB();
-		db.open();
-		return db;
-	}
-	
 }
