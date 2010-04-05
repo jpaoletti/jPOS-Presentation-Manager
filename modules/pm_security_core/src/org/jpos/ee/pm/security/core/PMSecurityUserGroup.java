@@ -21,8 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
-
 public class PMSecurityUserGroup implements Serializable{
 	private static final long serialVersionUID = 8383915466636478529L;
 	private String id;
@@ -89,17 +87,28 @@ public class PMSecurityUserGroup implements Serializable{
 	}
 	
 	public int hashCode() {
-		return getName().hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
 	}
 
-	public boolean equals(Object other) {
-        if ( !(other instanceof PMSecurityUserGroup) ) return false;
-        PMSecurityUserGroup castOther = (PMSecurityUserGroup) other;
-        return new EqualsBuilder()
-            .append(this.getName(), castOther.getName())
-            .isEquals();
-    }
-	
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PMSecurityUserGroup other = (PMSecurityUserGroup) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
 	public PMSecurityPermission getPermission (String name) {
     	for(PMSecurityPermission p : getPermissions()){
     		if(name!=null && p!=null && name.compareTo(p.getName()) == 0) return p;
