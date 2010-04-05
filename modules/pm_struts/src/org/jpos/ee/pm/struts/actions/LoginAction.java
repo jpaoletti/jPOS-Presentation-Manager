@@ -18,10 +18,7 @@
 
 package org.jpos.ee.pm.struts.actions;
 
-import java.text.ParseException;
-
 import org.apache.struts.action.ActionMessages;
-import org.jpos.ee.BLException;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
@@ -65,9 +62,6 @@ public class LoginAction extends EntityActionSupport {
 	             loadMenu(ctx, u);
 	             
 	             if (u.isChangePassword())
-	            	 throw new PMForwardException("changepassword");		
-	             
-	             if(checkPasswordAge(u)) 
 	            	 throw new PMForwardException("changepassword");
 
 	         } catch (UserNotFoundException e) {
@@ -114,37 +108,4 @@ public class LoginAction extends EntityActionSupport {
 	private String decrypt(String password, String seed) {
 		return password;
 	}
-	/**
-	 * @param cfgMgr
-	 * @param u
-	 * @param originalUri
-	 * @return
-	 * @throws ParseException
-	 */
-	private boolean checkPasswordAge(PMSecurityUser u) throws ParseException {
-		/*if (cfgMgr.hasProperty("PasswordAge")) {
-		    
-		    int passAge = cfgMgr.getInt("PasswordAge");
-		    if (passAge != 0) {
-		        
-		        Calendar cal = Calendar.getInstance();          
-		        Calendar calPassExpired = Calendar.getInstance();              
-		        DateFormat df = DateFormat.getDateTimeInstance();                                                                                               
-
-		        if (u.hasProperty("PasswordChanged")) {
-		        
-		            calPassExpired.setTime (df.parse(u.get("PasswordChanged")));                           
-		            calPassExpired.add(Calendar.DAY_OF_WEEK, passAge);         
-		                                        
-		            if (cal.after(calPassExpired)) {
-		                    return true;		   
-		            }
-		        }                        
-		    }                                        
-		}*/
-		return false;
-	}
-
-
-	
 }

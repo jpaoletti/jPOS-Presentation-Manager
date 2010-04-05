@@ -36,8 +36,6 @@ import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 
-import com.pat.coba.manager.LogManager;
-
 public class GeneralFilter implements Filter,Constants {
 
 	public void destroy() {
@@ -79,7 +77,7 @@ public class GeneralFilter implements Filter,Constants {
 				ctx.getSession().setAttribute(DB, db);
 				ctx.put(DB, db);
 			} catch (Exception e) {
-				LogManager.error("No se pudo acceder a la Base de Datos");
+				PMLogger.error("No se pudo acceder a la Base de Datos");
 				throw new ServletException(e);
 			}
 		}
