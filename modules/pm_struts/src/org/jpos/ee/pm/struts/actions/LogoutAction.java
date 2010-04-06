@@ -29,15 +29,15 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
 
 public class LogoutAction extends Action implements Constants{
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-			HttpServletRequest request, HttpServletResponse response)throws Exception {
-		
-		request.getSession().invalidate();
-		PMEntitySupport es = PMEntitySupport.getInstance();
-		es.setContext_path(request.getContextPath());
-		request.getSession().setAttribute(ENTITY_SUPPORT, es);
-		return mapping.findForward(SUCCESS);
-	}
-	
+    public ActionForward execute(ActionMapping mapping, ActionForm form,
+            HttpServletRequest request, HttpServletResponse response)throws Exception {
+        
+        request.getSession().invalidate();
+        PMEntitySupport es = PMEntitySupport.getInstance();
+        es.setContext_path(request.getContextPath());
+        request.getSession().setAttribute(ENTITY_SUPPORT, es);
+        return mapping.findForward(SUCCESS);
+    }
+    
 
 }

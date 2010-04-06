@@ -23,22 +23,22 @@ import org.jpos.ee.pm.core.PMException;
 
 public class ShowAction extends RowActionSupport {
 
-	/**Makes the operation generate an audithory entry*/
-	protected boolean isAudited() {	return false; }
+    /**Makes the operation generate an audithory entry*/
+    protected boolean isAudited() {    return false; }
     
-	protected boolean prepare(PMContext ctx) throws PMException {
-		super.prepare(ctx);
-		if(ctx.getRequest().getParameter(FINISH)==null){
-			/*This point limite anidation of weak entities.*/
-			if(!ctx.isWeak()){
-				clearModifiedOwnerCollection(ctx);
-			}
-		}
-		if(ctx.getSelected() == null){
-			throw new PMException("pm.instance.not.found");
-		}
-		return true;
-	}
-	
-	protected void doExecute(PMContext ctx) throws PMException {}
+    protected boolean prepare(PMContext ctx) throws PMException {
+        super.prepare(ctx);
+        if(ctx.getRequest().getParameter(FINISH)==null){
+            /*This point limite anidation of weak entities.*/
+            if(!ctx.isWeak()){
+                clearModifiedOwnerCollection(ctx);
+            }
+        }
+        if(ctx.getSelected() == null){
+            throw new PMException("pm.instance.not.found");
+        }
+        return true;
+    }
+    
+    protected void doExecute(PMContext ctx) throws PMException {}
 }

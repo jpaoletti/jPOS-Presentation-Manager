@@ -31,71 +31,71 @@ import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
 
 public abstract class FieldProcessingActionSupport extends EntityActionSupport{
-	
-	protected void proccessField(PMContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
-		//Object object = rc.getSelected();
-		Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
-		if(moc!=null){
-			Object obj = wrapper.getInstance();
-			Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(obj, f.getId());
-			if(collection==null) {
-				PMEntitySupport.set(obj, f.getId(), moc);
-			}else{
-				collection.clear();
-				collection.addAll(moc);
-			}
-		}else{
+    
+    protected void proccessField(PMContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
+        //Object object = rc.getSelected();
+        Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
+        if(moc!=null){
+            Object obj = wrapper.getInstance();
+            Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(obj, f.getId());
+            if(collection==null) {
+                PMEntitySupport.set(obj, f.getId(), moc);
+            }else{
+                collection.clear();
+                collection.addAll(moc);
+            }
+        }else{
              String eid = "f_" + f.getId();
              String s = getParamValues(ctx, eid, ";");
              PMLogger.debug(this,"Field ["+eid + "] "+s);
-             int i = 0;	   
+             int i = 0;       
              while(s != null){
-            	 PMLogger.debug(this,"Object to convert: "+s);
+                 PMLogger.debug(this,"Object to convert: "+s);
                 validateField(ctx, f, wrapper, s);
                 try {
                     Object o = wrapper.getInstance(i);
-                	Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
-                	ctx.put(PM_FIELD, f);
-                	ctx.put(PM_FIELD_VALUE, s);
-                	ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
-                	Object converted = converter.build(ctx);
-                	PMLogger.debug(this,"Object converted: "+converted);
-                	PMEntitySupport.set(o, f.getId(), converted);
+                    Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
+                    ctx.put(PM_FIELD, f);
+                    ctx.put(PM_FIELD_VALUE, s);
+                    ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
+                    Object converted = converter.build(ctx);
+                    PMLogger.debug(this,"Object converted: "+converted);
+                    PMEntitySupport.set(o, f.getId(), converted);
                 } catch (IgnoreConvertionException e) {
- 					//Do nothing, just ignore conversion.
-  				}
-  				i++;
-  				s = getParamValues(ctx, eid+"_"+i, ";");
+                     //Do nothing, just ignore conversion.
+                  }
+                  i++;
+                  s = getParamValues(ctx, eid+"_"+i, ";");
              }
-		}
-	}
+        }
+    }
 
-	private void validateField(PMContext ctx, Field field, EntityInstanceWrapper wrapper, String s) throws PMException {
-		if(field.getValidators()!= null){
-		     for (Validator fv : field.getValidators()) {
-		    	 ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
-		    	 ctx.put(PM_FIELD, field) ;
-		    	 ctx.put(PM_FIELD_VALUE, s);
-		    	 ValidationResult vr = fv.validate(ctx);
-		    	 ctx.getErrors().addAll(vr.getMessages());
-		    	 if(! vr.isSuccessful()) throw new PMException();
-		     }
-		 }
-	}
+    private void validateField(PMContext ctx, Field field, EntityInstanceWrapper wrapper, String s) throws PMException {
+        if(field.getValidators()!= null){
+             for (Validator fv : field.getValidators()) {
+                 ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
+                 ctx.put(PM_FIELD, field) ;
+                 ctx.put(PM_FIELD_VALUE, s);
+                 ValidationResult vr = fv.validate(ctx);
+                 ctx.getErrors().addAll(vr.getMessages());
+                 if(! vr.isSuccessful()) throw new PMException();
+             }
+         }
+    }
 
-	private String getParamValues(PMContext ctx, String name, String separator) {
-		String[] ss = ctx.getRequest().getParameterValues(name);
-		if(ss!=null){
-			StringBuilder s = new StringBuilder();
-			if(ss!=null && ss.length > 0)s.append(ss[0]);
-			
-			//In this case we have a multivalue input
-			for (int i = 1; i < ss.length; i++) {
-				 s.append(separator);
-				 s.append(ss[i]);
-			}
-			return s.toString();
-		}else
-			return null;
-	}
+    private String getParamValues(PMContext ctx, String name, String separator) {
+        String[] ss = ctx.getRequest().getParameterValues(name);
+        if(ss!=null){
+            StringBuilder s = new StringBuilder();
+            if(ss!=null && ss.length > 0)s.append(ss[0]);
+            
+            //In this case we have a multivalue input
+            for (int i = 1; i < ss.length; i++) {
+                 s.append(separator);
+                 s.append(ss[i]);
+            }
+            return s.toString();
+        }else
+            return null;
+    }
 }

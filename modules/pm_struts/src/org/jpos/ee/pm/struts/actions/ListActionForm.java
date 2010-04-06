@@ -22,59 +22,59 @@ import java.util.List;
 import org.apache.struts.action.ActionForm;
 
 public class ListActionForm extends ActionForm {
-	private static final long serialVersionUID = -7853709292363297456L;
-	private Integer page;
-	private String ftype;
-	private List<String> ffields;
-	private List<String> fvalues;
-	private Integer rowsPerPage;
-	private String order;
-	private boolean desc;
-	
-	public ListActionForm() {
-		super();
-	}
-	
-	public String getOrder() {
-		return order;
-	}
-	public void setOrder(String order) {
-		this.order = order;
-	}
-	public boolean isDesc() {
-		return desc;
-	}
-	public void setDesc(boolean desc) {
-		this.desc = desc;
-	}
-	public Integer getPage() {
-		return page;
-	}
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-	public Integer getRowsPerPage() {
-		return rowsPerPage;
-	}
-	public void setRowsPerPage(Integer rowsPerPage) {
-		this.rowsPerPage = rowsPerPage;
-	}
-	public String getFtype() {
-		return ftype;
-	}
-	public void setFtype(String ftype) {
-		this.ftype = ftype;
-	}
-	public List<String> getFfields() {
-		return ffields;
-	}
-	public void setFfields(List<String> ffields) {
-		this.ffields = ffields;
-	}
-	public List<String> getFvalues() {
-		return fvalues;
-	}
-	public void setFvalues(List<String> fvalues) {
-		this.fvalues = fvalues;
-	}
+    private static final long serialVersionUID = -7853709292363297456L;
+    private Integer page;
+    private String ftype;
+    private List<String> ffields;
+    private List<String> fvalues;
+    private Integer rowsPerPage;
+    private String order;
+    private boolean desc;
+    
+    public ListActionForm() {
+        super();
+    }
+    
+    public String getOrder() {
+        return order;
+    }
+    public void setOrder(String order) {
+        this.order = order;
+    }
+    public boolean isDesc() {
+        return desc;
+    }
+    public void setDesc(boolean desc) {
+        this.desc = desc;
+    }
+    public Integer getPage() {
+        return page;
+    }
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+    public Integer getRowsPerPage() {
+        return rowsPerPage;
+    }
+    public void setRowsPerPage(Integer rowsPerPage) {
+        this.rowsPerPage = rowsPerPage;
+    }
+    public String getFtype() {
+        return ftype;
+    }
+    public void setFtype(String ftype) {
+        this.ftype = ftype;
+    }
+    public List<String> getFfields() {
+        return ffields;
+    }
+    public void setFfields(List<String> ffields) {
+        this.ffields = ffields;
+    }
+    public List<String> getFvalues() {
+        return fvalues;
+    }
+    public void setFvalues(List<String> fvalues) {
+        this.fvalues = fvalues;
+    }
 }

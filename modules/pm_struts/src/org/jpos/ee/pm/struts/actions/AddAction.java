@@ -28,59 +28,59 @@ import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMForwardException;
 
 public class AddAction extends RowActionSupport {
-	
-	public boolean testSelectedExist() { return false;	}
+    
+    public boolean testSelectedExist() { return false;    }
 
-	protected boolean prepare(PMContext ctx) throws PMException {
-		super.prepare(ctx);
-		if(ctx.getParameter(FINISH)==null){
-			//Creates bean and put it in session
-			Object obj;
-			try {
-				obj = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
-				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
-				ctx.getEntityContainer().setSelectedNew(true);
-				PMLogger.debug(this,"Cleaning weak collections");
-				if(ctx.getEntity().getWeaks()!=null){
-					for(Entity e : ctx.getEntity().getWeaks()){
-						setModifiedOwnerCollection(ctx, e.getOwner().getEntityProperty(), null);
-					}
-				}
-				throw new PMForwardException(CONTINUE);
-			} catch (ConfigurationException e) {
-				PMLogger.error(e);
-				throw new PMException("pm_core.unespected.error");
-			}
-		}
-		if(ctx.getSelected() == null){
-			throw new PMException("pm.instance.not.found");
-		}
-		for (Field f : ctx.getEntity().getFields()) {
-        	proccessField(ctx, f, ctx.getSelected());
+    protected boolean prepare(PMContext ctx) throws PMException {
+        super.prepare(ctx);
+        if(ctx.getParameter(FINISH)==null){
+            //Creates bean and put it in session
+            Object obj;
+            try {
+                obj = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
+                ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
+                ctx.getEntityContainer().setSelectedNew(true);
+                PMLogger.debug(this,"Cleaning weak collections");
+                if(ctx.getEntity().getWeaks()!=null){
+                    for(Entity e : ctx.getEntity().getWeaks()){
+                        setModifiedOwnerCollection(ctx, e.getOwner().getEntityProperty(), null);
+                    }
+                }
+                throw new PMForwardException(CONTINUE);
+            } catch (ConfigurationException e) {
+                PMLogger.error(e);
+                throw new PMException("pm_core.unespected.error");
+            }
+        }
+        if(ctx.getSelected() == null){
+            throw new PMException("pm.instance.not.found");
+        }
+        for (Field f : ctx.getEntity().getFields()) {
+            proccessField(ctx, f, ctx.getSelected());
         }
         if(!ctx.getErrors().isEmpty()) 
-        	throw new PMException();
+            throw new PMException();
         
         return true;
-	}
+    }
 
-	protected void doExecute(PMContext ctx) throws PMException {
-		Object instance = ctx.getSelected().getInstance();
-		if(ctx.isWeak()){
-			getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).add(instance);
-			String p = ctx.getEntity().getOwner().getLocalProperty();
-			if(p != null){
-				EntitySupport.set(instance, p, ctx.getOwner().getSelected().getInstance());
-			}
-		}else{
-			if(ctx.getEntity().isPersistent()){
-				PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
-				ctx.getEntity().getDataAccess().add(ctx, instance);
-			}
-		}
-	}
-	
-	protected boolean openTransaction() {
-		return true;
-	}
+    protected void doExecute(PMContext ctx) throws PMException {
+        Object instance = ctx.getSelected().getInstance();
+        if(ctx.isWeak()){
+            getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).add(instance);
+            String p = ctx.getEntity().getOwner().getLocalProperty();
+            if(p != null){
+                EntitySupport.set(instance, p, ctx.getOwner().getSelected().getInstance());
+            }
+        }else{
+            if(ctx.getEntity().isPersistent()){
+                PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
+                ctx.getEntity().getDataAccess().add(ctx, instance);
+            }
+        }
+    }
+    
+    protected boolean openTransaction() {
+        return true;
+    }
 }

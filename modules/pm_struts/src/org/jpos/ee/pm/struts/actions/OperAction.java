@@ -22,26 +22,26 @@ import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 
 public class OperAction extends EntityActionSupport{
-	Operations operations;
-	
+    Operations operations;
+    
     /**Opens an hibernate transaction before doExecute*/
-	protected boolean openTransaction() { return false;	}
-	/**Makes the operation generate an audithory entry*/
-	protected boolean isAudited() {	return false; }
+    protected boolean openTransaction() { return false;    }
+    /**Makes the operation generate an audithory entry*/
+    protected boolean isAudited() {    return false; }
     /**Forces execute to check if any user is logged in*/
-    protected boolean checkUser(){ 	return true;}
+    protected boolean checkUser(){     return true;}
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
     protected boolean prepare(PMContext ctx) throws PMException {
-    	configureEntityContainer(ctx);
-    	ctx.setOperation ( ctx.getEntity().getOperations().getOperation("list") );
-    	ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
+        configureEntityContainer(ctx);
+        ctx.setOperation ( ctx.getEntity().getOperations().getOperation("list") );
+        ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
         operations = ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation());
         return true;
-	}
+    }
     
     protected void doExecute(PMContext ctx)throws PMException{
-		ctx.getRequest().setAttribute(ITEM_OPERATIONS, operations.getOperationsForScope(SCOPE_ITEM));
-	}
+        ctx.getRequest().setAttribute(ITEM_OPERATIONS, operations.getOperationsForScope(SCOPE_ITEM));
+    }
 }

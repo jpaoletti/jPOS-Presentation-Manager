@@ -22,16 +22,16 @@ import org.jpos.ee.pm.core.PMException;
 
 public class DeleteAction extends RowActionSupport {
 
-	protected boolean openTransaction() {return true;}
+    protected boolean openTransaction() {return true;}
 
-	protected void doExecute(PMContext ctx) throws PMException {
-		if(ctx.isWeak()){
-			getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).remove(ctx.getSelected().getInstance());
-		}else{
-			if(ctx.getEntity().isPersistent())
-				ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
-		}
-		ctx.getEntityContainer().setSelected(null);
-	}
+    protected void doExecute(PMContext ctx) throws PMException {
+        if(ctx.isWeak()){
+            getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).remove(ctx.getSelected().getInstance());
+        }else{
+            if(ctx.getEntity().isPersistent())
+                ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
+        }
+        ctx.getEntityContainer().setSelected(null);
+    }
 
 }

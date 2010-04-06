@@ -20,9 +20,9 @@ package org.jpos.ee.pm.struts;
 import org.jpos.ee.pm.core.PMException;
 
 public class PMStrutsException extends PMException {
-	private static final long serialVersionUID = -1685585143991954053L;
+    private static final long serialVersionUID = -1685585143991954053L;
 
-	public PMStrutsException(String key) {
-		super(key);
-	}
+    public PMStrutsException(String key) {
+        super(key);
+    }
 }

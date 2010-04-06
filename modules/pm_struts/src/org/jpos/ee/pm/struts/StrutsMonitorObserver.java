@@ -35,32 +35,32 @@ import org.jpos.ee.pm.core.monitor.MonitorObserver;
  * 
  * */
 public class StrutsMonitorObserver extends MonitorObserver {
-	private Timer timer;
+    private Timer timer;
 
-	public StrutsMonitorObserver(Monitor monitor) {
-		super(monitor);
-		schedule();
-	}
+    public StrutsMonitorObserver(Monitor monitor) {
+        super(monitor);
+        schedule();
+    }
 
-	private void schedule() {
-		timer = new Timer();
-		TimerTask task = new TimerTask() {
-			public void run() {
-				getMonitor().deleteObserver(self());
-			}
-		};
-		timer.schedule(task, getMonitor().getDelay()*3);
-	}
+    private void schedule() {
+        timer = new Timer();
+        TimerTask task = new TimerTask() {
+            public void run() {
+                getMonitor().deleteObserver(self());
+            }
+        };
+        timer.schedule(task, getMonitor().getDelay()*3);
+    }
 
-	protected StrutsMonitorObserver self(){
-		return this;
-	}
+    protected StrutsMonitorObserver self(){
+        return this;
+    }
 
-	public synchronized List<String> getLines() {
-		timer.cancel();
-		timer.purge();
-		schedule();
-		List<String> lines = super.getLines();
-		return lines;
-	}	
+    public synchronized List<String> getLines() {
+        timer.cancel();
+        timer.purge();
+        schedule();
+        List<String> lines = super.getLines();
+        return lines;
+    }    
 }

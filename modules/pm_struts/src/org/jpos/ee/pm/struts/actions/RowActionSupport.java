@@ -28,49 +28,49 @@ import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 
 public abstract class RowActionSupport extends FieldProcessingActionSupport {
-	
-	public boolean testSelectedExist(){ return true; }
+    
+    public boolean testSelectedExist(){ return true; }
 
-	protected boolean prepare(PMContext ctx) throws PMException {
-		super.prepare(ctx);
-		
-		//If we get item param, we change the selected item on the container
-		String item = ctx.getParameter("item");
-		if(item!=null && item.trim().compareTo("") != 0){
-			Integer index = Integer.parseInt(item);
-			PMLogger.debug(this,"Getting row index: "+ index);
-			if(index != null){
-				List <Object> al = new ArrayList<Object>();
-				if(ctx.isWeak())
-					al.addAll(getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()));
-				else
-					al.addAll(ctx.getList().getContents());
-				Object o = al.get(index);
-				ctx.getEntity().getDataAccess().refresh(ctx,o);
-				ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(o));
-			}
-		}else{
-			String identified = ctx.getParameter("identified");
-			if(identified!=null && identified.trim().compareTo("") != 0){
-				PMLogger.debug(this,"Getting row identified by: "+identified);
-				String[] ss = identified.split(":");
-				//TODO Throw exception when the size of this is not 2
-				if(ss.length != 2) PMLogger.error ("Ivalid row identifier!");
-				else{
-					String prop = ss[0];
-					String value= ss[1];
-					EntityInstanceWrapper wrapper = new EntityInstanceWrapper( ctx.getEntity().getDataAccess().getItem(ctx, prop, value) );
-					ctx.getEntityContainer().setSelected(wrapper);
-				}
-			}else{
-				PMLogger.debug(this,"Row Selection ignored");
-			}
-		}
-		
-		if(testSelectedExist() && ctx.getEntityContainer().getSelected() == null){
-			ctx.getErrors().add(new PMMessage(ENTITY , "unknow.item"));
-	       	throw new PMException();
-		}else
-			return true;
-	}
+    protected boolean prepare(PMContext ctx) throws PMException {
+        super.prepare(ctx);
+        
+        //If we get item param, we change the selected item on the container
+        String item = ctx.getParameter("item");
+        if(item!=null && item.trim().compareTo("") != 0){
+            Integer index = Integer.parseInt(item);
+            PMLogger.debug(this,"Getting row index: "+ index);
+            if(index != null){
+                List <Object> al = new ArrayList<Object>();
+                if(ctx.isWeak())
+                    al.addAll(getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()));
+                else
+                    al.addAll(ctx.getList().getContents());
+                Object o = al.get(index);
+                ctx.getEntity().getDataAccess().refresh(ctx,o);
+                ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(o));
+            }
+        }else{
+            String identified = ctx.getParameter("identified");
+            if(identified!=null && identified.trim().compareTo("") != 0){
+                PMLogger.debug(this,"Getting row identified by: "+identified);
+                String[] ss = identified.split(":");
+                //TODO Throw exception when the size of this is not 2
+                if(ss.length != 2) PMLogger.error ("Ivalid row identifier!");
+                else{
+                    String prop = ss[0];
+                    String value= ss[1];
+                    EntityInstanceWrapper wrapper = new EntityInstanceWrapper( ctx.getEntity().getDataAccess().getItem(ctx, prop, value) );
+                    ctx.getEntityContainer().setSelected(wrapper);
+                }
+            }else{
+                PMLogger.debug(this,"Row Selection ignored");
+            }
+        }
+        
+        if(testSelectedExist() && ctx.getEntityContainer().getSelected() == null){
+            ctx.getErrors().add(new PMMessage(ENTITY , "unknow.item"));
+               throw new PMException();
+        }else
+            return true;
+    }
 }

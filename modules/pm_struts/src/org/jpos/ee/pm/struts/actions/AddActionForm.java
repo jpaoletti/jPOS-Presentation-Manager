@@ -18,23 +18,23 @@
 package org.jpos.ee.pm.struts.actions;
 
 public class AddActionForm {
-	private String finish;
-	private Object object;
+    private String finish;
+    private Object object;
 
-	public void setFinish(String finish) {
-		this.finish = finish;
-	}
+    public void setFinish(String finish) {
+        this.finish = finish;
+    }
 
-	public String getFinish() {
-		return finish;
-	}
+    public String getFinish() {
+        return finish;
+    }
 
-	public void setObject(Object object) {
-		this.object = object;
-	}
+    public void setObject(Object object) {
+        this.object = object;
+    }
 
-	public Object getObject() {
-		return object;
-	}
+    public Object getObject() {
+        return object;
+    }
 
 }

@@ -26,43 +26,43 @@ import org.jpos.util.Log;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class PMCoreObject implements Constants{
-	private PMService service;
+    private PMService service;
     private Boolean debug;
 
-	/**
-	 * @param service the service to set
-	 */
-	public void setService(PMService service) {
-		this.service = service;
-	}
+    /**
+     * @param service the service to set
+     */
+    public void setService(PMService service) {
+        this.service = service;
+    }
 
-	/**
-	 * @return the service
-	 */
-	public PMService getService() {
-		return service;
-	}
-	
-	public void debug(String s){
-		if(getDebug()) PMLogger.debug(this,s);
-	}
+    /**
+     * @return the service
+     */
+    public PMService getService() {
+        return service;
+    }
+    
+    public void debug(String s){
+        if(getDebug()) PMLogger.debug(this,s);
+    }
 
-	/**
-	 * @param debug the debug to set
-	 */
-	public void setDebug(Boolean debug) {
-		this.debug = debug;
-	}
+    /**
+     * @param debug the debug to set
+     */
+    public void setDebug(Boolean debug) {
+        this.debug = debug;
+    }
 
-	/**
-	 * @return the debug
-	 */
-	public Boolean getDebug() {
-		if(debug==null) return false;
-		return debug;
-	}
-	
-	public Log getLog(){
-		return PMLogger.getLog();
-	}
+    /**
+     * @return the debug
+     */
+    public Boolean getDebug() {
+        if(debug==null) return false;
+        return debug;
+    }
+    
+    public Log getLog(){
+        return PMLogger.getLog();
+    }
 }

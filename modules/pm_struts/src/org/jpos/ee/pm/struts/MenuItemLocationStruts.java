@@ -22,28 +22,28 @@ import org.jpos.ee.pm.menu.MenuItemLocation;
 
 public class MenuItemLocationStruts implements MenuItemLocation{
 
-	public Object build(MenuItem item, Object ... params) {
-		MenuItemContext context = new MenuItemContext();
-		StringBuilder sb = new StringBuilder("<a href=");
-		String link = buildLink(item, params);
-		if(item.isEmbed()){
-			sb.append("javascript:loadPage('");
-			sb.append(link);			
-			sb.append("')");
-		}else{
-			sb.append("'");
-			sb.append(link);
-			sb.append("'");
-		}
-		sb.append(">");
-		context.setPrefix(sb.toString());
-		context.setValue(item.getText());
-		context.setSufix("</a>");		
-		return context;
-	}
+    public Object build(MenuItem item, Object ... params) {
+        MenuItemContext context = new MenuItemContext();
+        StringBuilder sb = new StringBuilder("<a href=");
+        String link = buildLink(item, params);
+        if(item.isEmbed()){
+            sb.append("javascript:loadPage('");
+            sb.append(link);            
+            sb.append("')");
+        }else{
+            sb.append("'");
+            sb.append(link);
+            sb.append("'");
+        }
+        sb.append(">");
+        context.setPrefix(sb.toString());
+        context.setValue(item.getText());
+        context.setSufix("</a>");        
+        return context;
+    }
 
-	protected String buildLink(MenuItem item, Object... params) {
-		String link = ((!item.isExternal())?(String)params[0]:"")+item.getLocation_value();
-		return link;
-	}
+    protected String buildLink(MenuItem item, Object... params) {
+        String link = ((!item.isExternal())?(String)params[0]:"")+item.getLocation_value();
+        return link;
+    }
 }

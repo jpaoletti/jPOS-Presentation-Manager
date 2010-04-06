@@ -24,35 +24,35 @@ import org.jpos.ee.pm.core.PMService;
 
 public class PMStrutsService extends PMService implements Constants{
     
-	/**Visualization wrapper. If there is no converter then I use this "void".
-	 * If the string is a struts url (jsp or do) the I return it as is. Otherwise
-	 * I asume that the text must be shown in void converter as a plain text.
-	 * */
+    /**Visualization wrapper. If there is no converter then I use this "void".
+     * If the string is a struts url (jsp or do) the I return it as is. Otherwise
+     * I asume that the text must be shown in void converter as a plain text.
+     * */
     public String visualizationWrapper(String s){
-    	if(s==null)return "void.jsp?text=";
-    	if(s.contains(".jsp?") || s.contains(".do?"))
-    		return s;
-    	else
-    		return "void.jsp?text="+s;
+        if(s==null)return "void.jsp?text=";
+        if(s.contains(".jsp?") || s.contains(".do?"))
+            return s;
+        else
+            return "void.jsp?text="+s;
     }
 
     /**Create and fill a new Entity Container */
-	public EntityContainer newEntityContainer(String sid){
-    	Entity e = lookupEntity(sid);
-    	if(e == null) return null;
-    	e.setWeaks(weakEntities(e));
-		return new EntityContainer(e, HASH);
+    public EntityContainer newEntityContainer(String sid){
+        Entity e = lookupEntity(sid);
+        if(e == null) return null;
+        e.setWeaks(weakEntities(e));
+        return new EntityContainer(e, HASH);
     }
     
-	/**Looks for an Entity with the given id*/
+    /**Looks for an Entity with the given id*/
     private Entity lookupEntity(String sid) {
-		for(Integer i = 0 ; i < getEntities().size() ; i++){
-			Entity e = getEntities().get(i);
-			if(e!=null && sid.compareTo(EntityContainer.buildId(HASH, e.getId())) == 0){
-				return getEntity(e.getId());
-			}
-		}
-		return null;
-	}
+        for(Integer i = 0 ; i < getEntities().size() ; i++){
+            Entity e = getEntities().get(i);
+            if(e!=null && sid.compareTo(EntityContainer.buildId(HASH, e.getId())) == 0){
+                return getEntity(e.getId());
+            }
+        }
+        return null;
+    }
     
 }

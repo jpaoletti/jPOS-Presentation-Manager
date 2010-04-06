@@ -26,39 +26,39 @@ import org.apache.struts.action.ActionMessage;
 import org.jpos.util.Validator;
 
 public class LoginActionForm extends ActionForm {
-	private static final long serialVersionUID = 959334757634953090L;
-	private String username;
-	private String password;
-	private boolean remember;
-	
-	public ActionErrors validate(ActionMapping mapping,HttpServletRequest request) {
-		ActionErrors errors = new ActionErrors();
-		if(username == null || username.compareTo("") == 0)
-			errors.add("username",new ActionMessage("login.username.null"));
-		if(password == null || password.compareTo("") == 0)
-			errors.add("password",new ActionMessage("login.password.null"));
-		
+    private static final long serialVersionUID = 959334757634953090L;
+    private String username;
+    private String password;
+    private boolean remember;
+    
+    public ActionErrors validate(ActionMapping mapping,HttpServletRequest request) {
+        ActionErrors errors = new ActionErrors();
+        if(username == null || username.compareTo("") == 0)
+            errors.add("username",new ActionMessage("login.username.null"));
+        if(password == null || password.compareTo("") == 0)
+            errors.add("password",new ActionMessage("login.password.null"));
+        
         if (username!= null && !Validator.isName (username)) 
-        	errors.add("username",new ActionMessage("login.username.invalid"));
+            errors.add("username",new ActionMessage("login.username.invalid"));
 
         return errors;
-	}
-	public String getUsername() {
-		return username;
-	}
-	public void setUsername(String username) {
-		this.username = username;
-	}
-	public String getPassword() {
-		return password;
-	}
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	public void setRemember(boolean remember) {
-		this.remember = remember;
-	}
-	public boolean getRemember() {
-		return remember;
-	}
+    }
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+    public void setRemember(boolean remember) {
+        this.remember = remember;
+    }
+    public boolean getRemember() {
+        return remember;
+    }
 }
