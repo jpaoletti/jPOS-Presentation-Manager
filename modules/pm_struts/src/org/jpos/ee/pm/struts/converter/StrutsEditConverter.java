@@ -22,7 +22,7 @@ import org.jpos.ee.pm.converter.ConverterException;
 
 public abstract class StrutsEditConverter extends Converter {
 
-	protected String visualize(String s) throws ConverterException {
+    protected String visualize(String s) throws ConverterException {
         return s;
-	}
+    }
 }

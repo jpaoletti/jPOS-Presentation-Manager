@@ -25,7 +25,7 @@ package org.jpos.ee.pm.menu;
  * @author jpaoletti
  */
 public class MenuItem extends Menu{
-	/**Indicates if the item must be considered as not a part of the PM engine.*/
+    /**Indicates if the item must be considered as not a part of the PM engine.*/
     private boolean external;
     
     /**Indicates if the item is show embed in the PM engine or not.
@@ -45,68 +45,68 @@ public class MenuItem extends Menu{
         setEmbed(true);
     }
 
-	/**
-	 * @param embed the embed to set
-	 */
-	public void setEmbed(boolean embed) {
-		this.embed = embed;
-	}
+    /**
+     * @param embed the embed to set
+     */
+    public void setEmbed(boolean embed) {
+        this.embed = embed;
+    }
 
-	/**
-	 * @return the embed
-	 */
-	public boolean isEmbed() {
-		return embed;
-	}
+    /**
+     * @return the embed
+     */
+    public boolean isEmbed() {
+        return embed;
+    }
 
-	/**
-	 * @param external the external to set
-	 */
-	public void setExternal(boolean external) {
-		this.external = external;
-	}
+    /**
+     * @param external the external to set
+     */
+    public void setExternal(boolean external) {
+        this.external = external;
+    }
 
-	/**
-	 * @return the external
-	 */
-	public boolean isExternal() {
-		return external;
-	}
+    /**
+     * @return the external
+     */
+    public boolean isExternal() {
+        return external;
+    }
 
-	/**
-	 * @param location the location to set
-	 */
-	public void setLocation(MenuItemLocation location) {
-		this.location = location;
-	}
+    /**
+     * @param location the location to set
+     */
+    public void setLocation(MenuItemLocation location) {
+        this.location = location;
+    }
 
-	/**
-	 * @return the location
-	 */
-	public MenuItemLocation getLocation() {
-		return location;
-	}
+    /**
+     * @return the location
+     */
+    public MenuItemLocation getLocation() {
+        return location;
+    }
 
-	/**
-	 * @param location_value the location_value to set
-	 */
-	public void setLocation_value(String location_value) {
-		this.location_value = location_value;
-	}
+    /**
+     * @param location_value the location_value to set
+     */
+    public void setLocation_value(String location_value) {
+        this.location_value = location_value;
+    }
 
-	/**
-	 * @return the location_value
-	 */
-	public String getLocation_value() {
-		return location_value;
-	}
+    /**
+     * @return the location_value
+     */
+    public String getLocation_value() {
+        return location_value;
+    }
 
-	/**Recover from the service the location object and set it and the value to
-	 * this item.
-	 * @param location The id to look into the conficuration file pm.locations.xml
-	 * @param value The location value*/
-	public void parseLocation(String location, String value) {
+    /**Recover from the service the location object and set it and the value to
+     * this item.
+     * @param location The id to look into the conficuration file pm.locations.xml
+     * @param value The location value*/
+    public void parseLocation(String location, String value) {
         setLocation_value(value);
         setLocation(getService().getLocation(location)); 
-	}	
+    }    
 }

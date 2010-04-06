@@ -30,11 +30,11 @@ import java.util.List;
  * 
  * */
 public class FileMonitorSource extends MonitorSource {
-	private String filename;
+    private String filename;
 
-	public List<MonitorLine> getLinesFrom(Object actual) throws Exception {
-		//TODO Enhance line retrieve to get last lines directly
-		String line = null;
+    public List<MonitorLine> getLinesFrom(Object actual) throws Exception {
+        //TODO Enhance line retrieve to get last lines directly
+        String line = null;
         Integer currentLineNo = 0;
         List<MonitorLine> result = new ArrayList<MonitorLine>(); 
 
@@ -52,50 +52,50 @@ public class FileMonitorSource extends MonitorSource {
                 //read until endLine
                 line = in.readLine();
                 while(line != null ) {
-                	MonitorLine l = new MonitorLine();
-                	l.setId(currentLineNo);
-                	l.setValue(line);
-                	result.add(l);
-                	currentLineNo++;
+                    MonitorLine l = new MonitorLine();
+                    l.setId(currentLineNo);
+                    l.setValue(line);
+                    result.add(l);
+                    currentLineNo++;
                     line = in.readLine();
                 }
         } finally {
-        	try { if (in!=null) in.close(); } catch(IOException ignore) {}
+            try { if (in!=null) in.close(); } catch(IOException ignore) {}
         }
         return result;
-	}
-	
-	public MonitorLine getLastLine() throws Exception {
-		String line = null;
+    }
+    
+    public MonitorLine getLastLine() throws Exception {
+        String line = null;
         MonitorLine result = new MonitorLine(); 
 
         BufferedReader in = null;
         try {
-        	in = new BufferedReader (new FileReader(getFilename()));
+            in = new BufferedReader (new FileReader(getFilename()));
             int i=0;
-        	line = in.readLine();
-        	while(line != null ) {
-        		result.setId(i);
-        		result.setValue(line);
+            line = in.readLine();
+            while(line != null ) {
+                result.setId(i);
+                result.setValue(line);
                 i++;
                 line = in.readLine();
-        	}
+            }
         } finally {
-        	try { if (in!=null) in.close(); } catch(IOException ignore) {}
+            try { if (in!=null) in.close(); } catch(IOException ignore) {}
         }
         return result;
-	}
+    }
 
 
-	public void init() {
-		setFilename(getConfig("filename"));
-	}
+    public void init() {
+        setFilename(getConfig("filename"));
+    }
 
-	public void setFilename(String filename) {
-		this.filename = filename;
-	}
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 
-	public String getFilename() {
-		return filename;
-	}
+    public String getFilename() {
+        return filename;
+    }
 }

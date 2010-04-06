@@ -49,42 +49,42 @@ import org.jpos.iso.ISOUtil;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  **/
 public class Converter extends PMCoreObject implements Constants{
-	private String operations;
-	private Properties properties;
-	/**This method transforms the given value into a String to visualize it
-	 * @param ctx The context.
-	 * 		Field: 			ctx.get(PM_FIELD);
-	 * 		F.Value:   		ctx.get(PM_FIELD_VALUE);
-	 * 		Inst.Wrapper	ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-	 * 		Entity:			ctx.getEntity();
-	 * 		Operation:		ctx.getOperation();
-	 * @return The string representation of the object 
-	 * @throws ConverterException*/
-	public String visualize(PMContext ctx) throws ConverterException{
-		throw new IgnoreConvertionException();
-	}
-	
-	/**This method takes a specific format of the object from the visualization (usually a string) and
-	 * transforms it in the required object.
-	 * @param ctx The context.
-	 * 		Field: 			ctx.get(PM_FIELD);
-	 * 		F.Value:   		ctx.get(PM_FIELD_VALUE);
-	 * 		Inst.Wrapper	ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-	 * 		Entity:			ctx.getEntity();
-	 * 		Operation:		ctx.getOperation();
-	 * @return The value to be set in the entity instance.
-	 * @throws ConverterException 
-	 * */
-	public Object build(PMContext ctx) throws ConverterException{
-		throw new IgnoreConvertionException();
-	}
-	/**Getter for a specific property with a default value in case its not defined. 
-	 * Only works for string.
-	 * @param name Property name
-	 * @param def Default value
-	 * @return Property value only if its a string */
+    private String operations;
+    private Properties properties;
+    /**This method transforms the given value into a String to visualize it
+     * @param ctx The context.
+     *         Field:             ctx.get(PM_FIELD);
+     *         F.Value:           ctx.get(PM_FIELD_VALUE);
+     *         Inst.Wrapper    ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+     *         Entity:            ctx.getEntity();
+     *         Operation:        ctx.getOperation();
+     * @return The string representation of the object 
+     * @throws ConverterException*/
+    public String visualize(PMContext ctx) throws ConverterException{
+        throw new IgnoreConvertionException();
+    }
+    
+    /**This method takes a specific format of the object from the visualization (usually a string) and
+     * transforms it in the required object.
+     * @param ctx The context.
+     *         Field:             ctx.get(PM_FIELD);
+     *         F.Value:           ctx.get(PM_FIELD_VALUE);
+     *         Inst.Wrapper    ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+     *         Entity:            ctx.getEntity();
+     *         Operation:        ctx.getOperation();
+     * @return The value to be set in the entity instance.
+     * @throws ConverterException 
+     * */
+    public Object build(PMContext ctx) throws ConverterException{
+        throw new IgnoreConvertionException();
+    }
+    /**Getter for a specific property with a default value in case its not defined. 
+     * Only works for string.
+     * @param name Property name
+     * @param def Default value
+     * @return Property value only if its a string */
     public String getConfig (String name, String def) {
-    	debug("Converter.getConfig("+name+","+def+")");
+        debug("Converter.getConfig("+name+","+def+")");
         if (properties != null) {
             Object obj = properties.get (name);
             if (obj instanceof String)
@@ -104,9 +104,9 @@ public class Converter extends PMCoreObject implements Constants{
      * @param einstance The entity instance
      * @param field The field
      * @return The field value on the entity instance*/
-	protected Object getValue(Object einstance, Field field) {
-		return getNestedProperty(einstance, field.getId());
-	}
+    protected Object getValue(Object einstance, Field field) {
+        return getNestedProperty(einstance, field.getId());
+    }
     
     /**Getter for a nested property in the given object.
      * @param obj The object
@@ -126,55 +126,55 @@ public class Converter extends PMCoreObject implements Constants{
         }
         return null;
     }
-	/**
-	 * @return the properties
-	 */
-	public Properties getProperties() {
-		return properties;
-	}
-	/**
-	 * @param properties the properties to set
-	 */
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
+    /**
+     * @return the properties
+     */
+    public Properties getProperties() {
+        return properties;
+    }
+    /**
+     * @param properties the properties to set
+     */
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 
-	/**
-	 * @param operations the operations to set
-	 */
-	public void setOperations(String operations) {
-		this.operations = operations;
-	}
+    /**
+     * @param operations the operations to set
+     */
+    public void setOperations(String operations) {
+        this.operations = operations;
+    }
 
-	/**
-	 * @return the operations
-	 */
-	public String getOperations() {
-		if(operations==null) return "all";
-		return operations;
-	}
-	
-	/**Visualization with some standard properties. */
-	public String visualize(Object obj, String extra) throws ConverterException{
-		Integer pad =0;
-		String padc = getConfig("pad-count","0");
-		try {
-			pad = Integer.parseInt(padc);
-		} catch (Exception e) {}
-		char padch = getConfig("pad-char"," ").charAt(0);
-		String padd = getConfig("pad-direction","left");
-		
-		String prefix = getConfig("prefix");
-		String suffix = getConfig("suffix");
-		String res = obj != null ? obj.toString() : "";
-		try {
-			if(padd.compareToIgnoreCase("left")==0)
-				res = ISOUtil.padleft(res, pad, padch);
-			else
-				res = ISOUtil.padright(res, pad, padch);
-		} catch (ISOException e) {}
-		if(prefix!=null) res = prefix + res;
-		if(suffix!=null) res = res+suffix;
-		return res;	
-	}
+    /**
+     * @return the operations
+     */
+    public String getOperations() {
+        if(operations==null) return "all";
+        return operations;
+    }
+    
+    /**Visualization with some standard properties. */
+    public String visualize(Object obj, String extra) throws ConverterException{
+        Integer pad =0;
+        String padc = getConfig("pad-count","0");
+        try {
+            pad = Integer.parseInt(padc);
+        } catch (Exception e) {}
+        char padch = getConfig("pad-char"," ").charAt(0);
+        String padd = getConfig("pad-direction","left");
+        
+        String prefix = getConfig("prefix");
+        String suffix = getConfig("suffix");
+        String res = obj != null ? obj.toString() : "";
+        try {
+            if(padd.compareToIgnoreCase("left")==0)
+                res = ISOUtil.padleft(res, pad, padch);
+            else
+                res = ISOUtil.padright(res, pad, padch);
+        } catch (ISOException e) {}
+        if(prefix!=null) res = prefix + res;
+        if(suffix!=null) res = res+suffix;
+        return res;    
+    }
 }

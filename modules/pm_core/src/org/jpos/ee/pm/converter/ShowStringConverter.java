@@ -37,23 +37,23 @@ import org.jpos.ee.pm.core.PMContext;
  * */
 public class ShowStringConverter extends Converter {
 
-	public Object build(PMContext ctx) throws ConverterException{
-		throw new IgnoreConvertionException("");
-	}
+    public Object build(PMContext ctx) throws ConverterException{
+        throw new IgnoreConvertionException("");
+    }
 
-	public String visualize(Object obj, String extra) throws ConverterException{
-		String prefix = getConfig("prefix");
-		String suffix = getConfig("suffix");
-		String res = obj != null ? obj.toString() : "";
-		if(prefix!=null) res = prefix + res;
-		if(suffix!=null) res = res+suffix;
-		return res;
-		
-	}
-	public String visualize(PMContext ctx) throws ConverterException {
-		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-		Field field = (Field) ctx.get(PM_FIELD);
-		Object o = getValue(einstance.getInstance(), field);
-		return visualize(o, ctx.getString(PM_EXTRA_DATA));
-	}
+    public String visualize(Object obj, String extra) throws ConverterException{
+        String prefix = getConfig("prefix");
+        String suffix = getConfig("suffix");
+        String res = obj != null ? obj.toString() : "";
+        if(prefix!=null) res = prefix + res;
+        if(suffix!=null) res = res+suffix;
+        return res;
+        
+    }
+    public String visualize(PMContext ctx) throws ConverterException {
+        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        Field field = (Field) ctx.get(PM_FIELD);
+        Object o = getValue(einstance.getInstance(), field);
+        return visualize(o, ctx.getString(PM_EXTRA_DATA));
+    }
 }

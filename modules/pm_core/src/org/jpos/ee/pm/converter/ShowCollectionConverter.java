@@ -38,27 +38,27 @@ import org.jpos.ee.pm.core.PMLogger;
  * */
 public class ShowCollectionConverter extends Converter {
 
-	public Object build(PMContext ctx) throws ConverterException {
-		return ctx.get(PM_FIELD_VALUE);
-	}
+    public Object build(PMContext ctx) throws ConverterException {
+        return ctx.get(PM_FIELD_VALUE);
+    }
 
-	public String visualize(PMContext ctx) throws ConverterException {
-		try {
-			EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-			Field field = (Field) ctx.get(PM_FIELD);
-			Collection<?> list = (Collection<?>)EntitySupport.get(einstance.getInstance(), field.getId());
-			StringBuilder sb = new StringBuilder();
-			sb.append("<ul>");
-			for(Object o:list){
-				sb.append("<li>");
-				sb.append(o.toString());
-				sb.append("</li>");
-			}
-			sb.append("</ul>");
-			return sb.toString();
-		} catch (Exception e1) {
-			PMLogger.error(e1);
-			throw new ConverterException("pm_core.converter.not.collection");
-		}
-	}
+    public String visualize(PMContext ctx) throws ConverterException {
+        try {
+            EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+            Field field = (Field) ctx.get(PM_FIELD);
+            Collection<?> list = (Collection<?>)EntitySupport.get(einstance.getInstance(), field.getId());
+            StringBuilder sb = new StringBuilder();
+            sb.append("<ul>");
+            for(Object o:list){
+                sb.append("<li>");
+                sb.append(o.toString());
+                sb.append("</li>");
+            }
+            sb.append("</ul>");
+            return sb.toString();
+        } catch (Exception e1) {
+            PMLogger.error(e1);
+            throw new ConverterException("pm_core.converter.not.collection");
+        }
+    }
 }

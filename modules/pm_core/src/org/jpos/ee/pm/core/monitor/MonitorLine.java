@@ -25,19 +25,19 @@ package org.jpos.ee.pm.core.monitor;
  * 
  * */
 public class MonitorLine {
-	private Object id;
-	private Object value;
-	
-	public void setId(Object id) {
-		this.id = id;
-	}
-	public Object getId() {
-		return id;
-	}
-	public void setValue(Object value) {
-		this.value = value;
-	}
-	public Object getValue() {
-		return value;
-	}
+    private Object id;
+    private Object value;
+    
+    public void setId(Object id) {
+        this.id = id;
+    }
+    public Object getId() {
+        return id;
+    }
+    public void setValue(Object value) {
+        this.value = value;
+    }
+    public Object getValue() {
+        return value;
+    }
 }

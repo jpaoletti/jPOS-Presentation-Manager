@@ -23,43 +23,43 @@ import org.jpos.util.NameRegistrar;
 import org.jpos.util.NameRegistrar.NotFoundException;
 
 public class PMSecurityService extends QBeanSupport {
-	private PMSecurityConnector connector;
-	
-	public static PMSecurityService getService(){
-		try {
-			return (PMSecurityService) NameRegistrar.get(getCustomName());
-		} catch (NotFoundException e) {
-			return null;
-		}
-	}
-	
+    private PMSecurityConnector connector;
+    
+    public static PMSecurityService getService(){
+        try {
+            return (PMSecurityService) NameRegistrar.get(getCustomName());
+        } catch (NotFoundException e) {
+            return null;
+        }
+    }
+    
     protected void initService() throws Exception {
         getLog().info ("Security Manager activated");
         try {
             connector = (PMSecurityConnector) Class.forName(cfg.get("connector")).newInstance();
             connector.setService(this);
-		} catch (Exception e) {
-			getLog().error("Cannot load security connector", e);
-		}
+        } catch (Exception e) {
+            getLog().error("Cannot load security connector", e);
+        }
         NameRegistrar.register (getCustomName(), this);
     }
     
     public static String getCustomName() {
-		return "security-manager";
-	}
+        return "security-manager";
+    }
 
-	/**
-	 * @param connector the connector to set
-	 */
-	public void setConnector(PMSecurityConnector connector) {
-		this.connector = connector;
-	}
+    /**
+     * @param connector the connector to set
+     */
+    public void setConnector(PMSecurityConnector connector) {
+        this.connector = connector;
+    }
 
-	/**
-	 * @return the connector
-	 */
-	public PMSecurityConnector getConnector(PMContext ctx) {
-		if(connector != null) connector.setContext(ctx);
-		return connector;
-	}
+    /**
+     * @return the connector
+     */
+    public PMSecurityConnector getConnector(PMContext ctx) {
+        if(connector != null) connector.setContext(ctx);
+        return connector;
+    }
 }

@@ -28,14 +28,14 @@ import org.jpos.ee.pm.core.PMContext;
 
 public class ShowLocalizedStringConverter extends ShowStringConverter{
 
-	public Object build(PMContext ctx) throws ConverterException{
-		throw new IgnoreConvertionException("");
-	}
+    public Object build(PMContext ctx) throws ConverterException{
+        throw new IgnoreConvertionException("");
+    }
 
-	public String visualize(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, String extra)
-			throws ConverterException {
-		String s = (String) getNestedProperty (einstance.getInstance(), field.getId());
-		return super.visualize("localized_string_converter.jsp?value="+s,extra);
-	}
+    public String visualize(Entity entity, Field field, Operation operation,
+            EntityInstanceWrapper einstance, String extra)
+            throws ConverterException {
+        String s = (String) getNestedProperty (einstance.getInstance(), field.getId());
+        return super.visualize("localized_string_converter.jsp?value="+s,extra);
+    }
 }

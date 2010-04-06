@@ -25,43 +25,43 @@ import org.jpos.ee.pm.core.PMService;
 
 /**Collection of converters*/
 public class Converters extends PMCoreObject{
-	private List<Converter> converters;
+    private List<Converter> converters;
 
-	public Converter getConverterForOperation(String operId){
-		if(getConverters() != null)
-		for(Converter converter : getConverters()){
-			if(converter.getOperations().compareToIgnoreCase("all")==0)
-				return converter;
-			if(converter.getOperations().contains(operId))
-				return converter;
-		}
-		Converter c = new GenericConverter();
-		c.setService(getService());
-		Properties properties = new Properties();
-		properties.put("filename", "cfg/converters/show.tostring.converter");
-		c.setProperties(properties);
-		return c;
-	}
-	
-	/**
-	 * @param converters the converters to set
-	 */
-	public void setConverters(List<Converter> converters) {
-		this.converters = converters;
-	}
+    public Converter getConverterForOperation(String operId){
+        if(getConverters() != null)
+        for(Converter converter : getConverters()){
+            if(converter.getOperations().compareToIgnoreCase("all")==0)
+                return converter;
+            if(converter.getOperations().contains(operId))
+                return converter;
+        }
+        Converter c = new GenericConverter();
+        c.setService(getService());
+        Properties properties = new Properties();
+        properties.put("filename", "cfg/converters/show.tostring.converter");
+        c.setProperties(properties);
+        return c;
+    }
+    
+    /**
+     * @param converters the converters to set
+     */
+    public void setConverters(List<Converter> converters) {
+        this.converters = converters;
+    }
 
-	/**
-	 * @return the converters
-	 */
-	public List<Converter> getConverters() {
-		return converters;
-	}
+    /**
+     * @return the converters
+     */
+    public List<Converter> getConverters() {
+        return converters;
+    }
 
-	
-	public void setService(PMService service) {
-		super.setService(service);
-		if(getConverters()!=null)
-			for(Converter c: getConverters()) 
-				if(c!=null)c.setService(service);
-	}
+    
+    public void setService(PMService service) {
+        super.setService(service);
+        if(getConverters()!=null)
+            for(Converter c: getConverters()) 
+                if(c!=null)c.setService(service);
+    }
 }

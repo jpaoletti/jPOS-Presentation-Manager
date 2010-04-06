@@ -39,21 +39,21 @@ import org.jpos.ee.pm.validator.Validator;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class Field extends PMCoreObject{
-	/**The id of the field, there must be a getter and a setter for this name on the represented entity.*/
-	private String id;
-	
-	/**The width of the field value*/
-	private String width;
-	private String display;
-	private int size;
-	private int maxLength;
-	/**@deprecated*/
-	private boolean sortable;
-	/**@deprecated*/
-	private boolean searchable;
+    /**The id of the field, there must be a getter and a setter for this name on the represented entity.*/
+    private String id;
+    
+    /**The width of the field value*/
+    private String width;
+    private String display;
+    private int size;
+    private int maxLength;
+    /**@deprecated*/
+    private boolean sortable;
+    /**@deprecated*/
+    private boolean searchable;
     private ArrayList<Validator> validators;
-	private Converters converters;
-	/**@deprecated*/
+    private Converters converters;
+    /**@deprecated*/
     private String searchCriteria; 
     private String defaultValue;   
     private String align; //left right center          
@@ -68,52 +68,52 @@ public class Field extends PMCoreObject{
     }
 
     public String visualize(PMContext ctx) throws PMException{
-    	debug("Converting ["+ctx.getOperation().getId()+"]"+ctx.getEntity().getId()+"."+getId());
-    	try {
-    		Converter c = null;
-        	if(getConverters()!= null){
-        		c = getConverters().getConverterForOperation(ctx.getOperation().getId());
-        	}
-    		if(c == null){
-    			c = new GenericConverter();
-    			c.setService(getService());
-    			Properties properties = new Properties();
-    			properties.put("filename", "cfg/converters/show.tostring.converter");
-				c.setProperties(properties);
-    		}
-    		ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
-    		ctx.put(PM_FIELD, this);
-    		return getService().visualizationWrapper(c.visualize(ctx));
-		} catch (Exception e) {
-			PMLogger.error(e);
-			throw new ConverterException("Unable to convert "+ctx.getEntity().getId()+"."+getId());
-		}
+        debug("Converting ["+ctx.getOperation().getId()+"]"+ctx.getEntity().getId()+"."+getId());
+        try {
+            Converter c = null;
+            if(getConverters()!= null){
+                c = getConverters().getConverterForOperation(ctx.getOperation().getId());
+            }
+            if(c == null){
+                c = new GenericConverter();
+                c.setService(getService());
+                Properties properties = new Properties();
+                properties.put("filename", "cfg/converters/show.tostring.converter");
+                c.setProperties(properties);
+            }
+            ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
+            ctx.put(PM_FIELD, this);
+            return getService().visualizationWrapper(c.visualize(ctx));
+        } catch (Exception e) {
+            PMLogger.error(e);
+            throw new ConverterException("Unable to convert "+ctx.getEntity().getId()+"."+getId());
+        }
     }
     
-	/**Set also converters service
-	 * @see org.jpos.ee.pm.core.PMCoreObject#setService(org.jpos.ee.pm.core.PMService)
-	 */
-	public void setService(PMService service) {
-		super.setService(service);
-		getConverters().setService(service);
-	}
+    /**Set also converters service
+     * @see org.jpos.ee.pm.core.PMCoreObject#setService(org.jpos.ee.pm.core.PMService)
+     */
+    public void setService(PMService service) {
+        super.setService(service);
+        getConverters().setService(service);
+    }
 
 
     
-	public int compareTo(Field o) {
-		return getId().compareTo(o.getId());
-	}
+    public int compareTo(Field o) {
+        return getId().compareTo(o.getId());
+    }
     
     public ArrayList<Validator> getValidators() {
-		return validators;
-	}
+        return validators;
+    }
 
 
-	public void setValidators(ArrayList<Validator> validators) {
-		this.validators = validators;
-	}
+    public void setValidators(ArrayList<Validator> validators) {
+        this.validators = validators;
+    }
 
-	public void setId (String id) {
+    public void setId (String id) {
         this.id = id;
     }
     public String getId() {
@@ -252,29 +252,29 @@ public class Field extends PMCoreObject{
     }
 
 
-	public void setWidth(String width) {
-		this.width = width;
-	}
+    public void setWidth(String width) {
+        this.width = width;
+    }
 
 
-	public String getWidth() {
-		return width;
-	}
+    public String getWidth() {
+        return width;
+    }
 
-	/**
-	 * @param converters the converters to set
-	 */
-	public void setConverters(Converters converters) {
-		this.converters = converters;
-	}
+    /**
+     * @param converters the converters to set
+     */
+    public void setConverters(Converters converters) {
+        this.converters = converters;
+    }
 
-	/**
-	 * @return the converters
-	 */
-	public Converters getConverters() {
-		if(converters==null) converters = new Converters();
-		return converters;
-	}
+    /**
+     * @return the converters
+     */
+    public Converters getConverters() {
+        if(converters==null) converters = new Converters();
+        return converters;
+    }
 
 
 }

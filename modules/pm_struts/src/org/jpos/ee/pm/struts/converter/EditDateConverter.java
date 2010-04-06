@@ -43,50 +43,50 @@ import org.jpos.ee.pm.core.PMContext;
 public class EditDateConverter extends EditStringConverter {
 
     public Object build(PMContext ctx) throws ConverterException {
-    	try {
-    		String value = ctx.getString(PM_FIELD_VALUE);
+        try {
+            String value = ctx.getString(PM_FIELD_VALUE);
             if (value != null)
                 return getDateFormat().parse ((String)value);
         } catch (ParseException e) {
             //PMLogger.error(e);
         }
         return null;
-	}
-	
-	public String visualize(PMContext ctx) throws ConverterException {
-		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-		Field field = (Field) ctx.get(PM_FIELD);
-    	Date o = (Date) getValue(einstance.getInstance(), field);
-    	try{
-    		return super.visualize("date_converter.jsp?format="+normalize(javaToJavascriptDateFormat( getFormatString()) )+"&value="+getDateFormat().format(o));
-    	}catch (Exception e) {
-    		return super.visualize("date_converter.jsp?format="+normalize(javaToJavascriptDateFormat( getFormatString()) )+"&value=");
-		}
-	}
+    }
+    
+    public String visualize(PMContext ctx) throws ConverterException {
+        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        Field field = (Field) ctx.get(PM_FIELD);
+        Date o = (Date) getValue(einstance.getInstance(), field);
+        try{
+            return super.visualize("date_converter.jsp?format="+normalize(javaToJavascriptDateFormat( getFormatString()) )+"&value="+getDateFormat().format(o));
+        }catch (Exception e) {
+            return super.visualize("date_converter.jsp?format="+normalize(javaToJavascriptDateFormat( getFormatString()) )+"&value=");
+        }
+    }
     
     public DateFormat getDateFormat() {
         DateFormat df = new SimpleDateFormat (getFormatString());
         return df;
     }
 
-	private String getFormatString() {
-		return getConfig("format", "MM/dd/yyyy");
-	}
-	
-	private String javaToJavascriptDateFormat(String s){
-		/*
-		 * The format can be combinations of the following:
-		 * d - day of month (no leading zero)
-		 * dd - day of month (two digit)
-		 * D - day name short
-		 * DD - day name long
-		 * m - month of year (no leading zero)
-		 * mm - month of year (two digit)
-		 * M - month name short
-		 * MM - month name long
-		 * y - year (two digit)
-		 * yy - year (four digit)
-		 */
-		return s.replaceAll("yy", "y").replace('M', 'm');
-	}
+    private String getFormatString() {
+        return getConfig("format", "MM/dd/yyyy");
+    }
+    
+    private String javaToJavascriptDateFormat(String s){
+        /*
+         * The format can be combinations of the following:
+         * d - day of month (no leading zero)
+         * dd - day of month (two digit)
+         * D - day name short
+         * DD - day name long
+         * m - month of year (no leading zero)
+         * mm - month of year (two digit)
+         * M - month name short
+         * MM - month name long
+         * y - year (two digit)
+         * yy - year (four digit)
+         */
+        return s.replaceAll("yy", "y").replace('M', 'm');
+    }
 }

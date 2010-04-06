@@ -20,17 +20,17 @@ package org.jpos.ee.pm.converter;
 import org.jpos.ee.pm.core.PMException;
 
 public class ConverterException extends PMException {
-	public ConverterException(String string) {
-		super(string);
-	}
+    public ConverterException(String string) {
+        super(string);
+    }
 
-	public ConverterException(Exception e) {
-		super(e);
-	}
+    public ConverterException(Exception e) {
+        super(e);
+    }
 
-	public ConverterException() {
-		super();
-	}
+    public ConverterException() {
+        super();
+    }
 
-	private static final long serialVersionUID = 6940226004619692335L;
+    private static final long serialVersionUID = 6940226004619692335L;
 }

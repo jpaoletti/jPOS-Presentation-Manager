@@ -45,156 +45,156 @@ import org.jpos.ee.pm.validator.Validator;
  * */
 
 public class Operation extends PMCoreObject {
-	/**The operation Id. Must be unique and only one word */
-	private String id;
-	
-	/**Determine if the operation is enabled or not.*/
-	private boolean enabled;
-	
-	/**Scope of the operation. Possibles values are:
-	 * <dl>
-	 * <dd> general </dd><dt>A general scope operation affects all the instances of the entity or none of them. </dt>
-	 * <dd> item </dd><dt>An item scope operation affects only one instance.</dt>
-	 * </dl>
-	 * */
-	private String scope;
-	
-	/**A String with other operations id separated by blanks where this operation will be shown*/
-	private String visibleIn;
-	
-	/**If defined, its a direct link to a fixed URL*/
-	private String url;
-	
+    /**The operation Id. Must be unique and only one word */
+    private String id;
+    
+    /**Determine if the operation is enabled or not.*/
+    private boolean enabled;
+    
+    /**Scope of the operation. Possibles values are:
+     * <dl>
+     * <dd> general </dd><dt>A general scope operation affects all the instances of the entity or none of them. </dt>
+     * <dd> item </dd><dt>An item scope operation affects only one instance.</dt>
+     * </dl>
+     * */
+    private String scope;
+    
+    /**A String with other operations id separated by blanks where this operation will be shown*/
+    private String visibleIn;
+    
+    /**If defined, its a direct link to a fixed URL*/
+    private String url;
+    
     /** Indicates if the entity's title is shown */
-	private Boolean showTitle;
-	
-	/** Indicate if a confirmation is needed before proceed.*/
-	private Boolean confirm;
-	
-	/**@see OperationContext*/
-	private OperationContext context;
-	
-	/**A list of validators for the operation.*/
-	private ArrayList<Validator> validators;
-	
-	/**A properties object to get some extra configurations*/
-	private Properties properties;
-	
-	/**Determine if this operation is visible in another. 
-	 * @param other The id of the other operation
-	 * @return true if this operation is visible in the other*/
-	public boolean isVisibleIn(String other){
-		return (getVisibleIn()==null || getVisibleIn().compareTo("all")==0 || getVisibleIn().indexOf(other)!=-1);
-	}
+    private Boolean showTitle;
+    
+    /** Indicate if a confirmation is needed before proceed.*/
+    private Boolean confirm;
+    
+    /**@see OperationContext*/
+    private OperationContext context;
+    
+    /**A list of validators for the operation.*/
+    private ArrayList<Validator> validators;
+    
+    /**A properties object to get some extra configurations*/
+    private Properties properties;
+    
+    /**Determine if this operation is visible in another. 
+     * @param other The id of the other operation
+     * @return true if this operation is visible in the other*/
+    public boolean isVisibleIn(String other){
+        return (getVisibleIn()==null || getVisibleIn().compareTo("all")==0 || getVisibleIn().indexOf(other)!=-1);
+    }
 
-	/**Redefines toString from object*/
-	public String toString() {
-		return getId();
-	}
+    /**Redefines toString from object*/
+    public String toString() {
+        return getId();
+    }
 
-	/**
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
+    /**
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	/**
-	 * @return the enabled
-	 */
-	public boolean isEnabled() {
-		return enabled;
-	}
+    /**
+     * @return the enabled
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
 
-	/**
-	 * @param enabled the enabled to set
-	 */
-	public void setEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    /**
+     * @param enabled the enabled to set
+     */
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	/**
-	 * @return the scope
-	 */
-	public String getScope() {
-		return scope;
-	}
+    /**
+     * @return the scope
+     */
+    public String getScope() {
+        return scope;
+    }
 
-	/**
-	 * @param scope the scope to set
-	 */
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
+    /**
+     * @param scope the scope to set
+     */
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
 
-	/**
-	 * @return the visibleIn
-	 */
-	public String getVisibleIn() {
-		return visibleIn;
-	}
+    /**
+     * @return the visibleIn
+     */
+    public String getVisibleIn() {
+        return visibleIn;
+    }
 
-	/**
-	 * @param visibleIn the visibleIn to set
-	 */
-	public void setVisibleIn(String visibleIn) {
-		this.visibleIn = visibleIn;
-	}
+    /**
+     * @param visibleIn the visibleIn to set
+     */
+    public void setVisibleIn(String visibleIn) {
+        this.visibleIn = visibleIn;
+    }
 
-	/**
-	 * @return the url
-	 */
-	public String getUrl() {
-		return url;
-	}
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
 
-	/**
-	 * @param url the url to set
-	 */
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    /**
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	/**
-	 * @return the context
-	 */
-	public OperationContext getContext() {
-		return context;
-	}
+    /**
+     * @return the context
+     */
+    public OperationContext getContext() {
+        return context;
+    }
 
-	/**
-	 * @param context the context to set
-	 */
-	public void setContext(OperationContext context) {
-		this.context = context;
-	}
+    /**
+     * @param context the context to set
+     */
+    public void setContext(OperationContext context) {
+        this.context = context;
+    }
 
-	/**
-	 * @return the validators
-	 */
-	public ArrayList<Validator> getValidators() {
-		return validators;
-	}
+    /**
+     * @return the validators
+     */
+    public ArrayList<Validator> getValidators() {
+        return validators;
+    }
 
-	/**
-	 * @param validators the validators to set
-	 */
-	public void setValidators(ArrayList<Validator> validators) {
-		this.validators = validators;
-	}
-	
-	/**Getter for a specific property with a default value in case its not defined. 
-	 * Only works for string.
-	 * @param name Property name
-	 * @param def Default value
-	 * @return Property value only if its a string */
+    /**
+     * @param validators the validators to set
+     */
+    public void setValidators(ArrayList<Validator> validators) {
+        this.validators = validators;
+    }
+    
+    /**Getter for a specific property with a default value in case its not defined. 
+     * Only works for string.
+     * @param name Property name
+     * @param def Default value
+     * @return Property value only if its a string */
     public String getConfig (String name, String def) {
         if (properties != null) {
             Object obj = properties.get (name);
@@ -211,27 +211,27 @@ public class Operation extends PMCoreObject {
         return getConfig (name, null);
     }
 
-	public void setShowTitle(Boolean showTitle) {
-		this.showTitle = showTitle;
-	}
+    public void setShowTitle(Boolean showTitle) {
+        this.showTitle = showTitle;
+    }
 
-	public Boolean getShowTitle() {
-		if(showTitle==null)return true;
-		return showTitle;
-	}
+    public Boolean getShowTitle() {
+        if(showTitle==null)return true;
+        return showTitle;
+    }
 
-	/**
-	 * @param confirm the confirm to set
-	 */
-	public void setConfirm(Boolean confirm) {
-		this.confirm = confirm;
-	}
+    /**
+     * @param confirm the confirm to set
+     */
+    public void setConfirm(Boolean confirm) {
+        this.confirm = confirm;
+    }
 
-	/**
-	 * @return the confirm
-	 */
-	public Boolean getConfirm() {
-		if(confirm == null) return false;
-		return confirm;
-	}
+    /**
+     * @return the confirm
+     */
+    public Boolean getConfirm() {
+        if(confirm == null) return false;
+        return confirm;
+    }
 }

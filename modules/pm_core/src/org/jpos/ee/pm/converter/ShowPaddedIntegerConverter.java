@@ -37,20 +37,20 @@ import org.jpos.iso.ISOUtil;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class ShowPaddedIntegerConverter extends Converter {
-	
-	public Object build(PMContext ctx) throws ConverterException {
-		throw new IgnoreConvertionException("");
-	}
+    
+    public Object build(PMContext ctx) throws ConverterException {
+        throw new IgnoreConvertionException("");
+    }
 
-	public String visualize(PMContext ctx) throws ConverterException {
-		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-		Field field = (Field) ctx.get(PM_FIELD);
-		Integer i = (Integer) getValue(einstance.getInstance(), field);
-		
-		try {
-			return ISOUtil.zeropad(i.toString(), Integer.parseInt(getConfig("count","3")));
-		} catch (Exception e) {
-			return i.toString();
-		}
-	}
+    public String visualize(PMContext ctx) throws ConverterException {
+        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        Field field = (Field) ctx.get(PM_FIELD);
+        Integer i = (Integer) getValue(einstance.getInstance(), field);
+        
+        try {
+            return ISOUtil.zeropad(i.toString(), Integer.parseInt(getConfig("count","3")));
+        } catch (Exception e) {
+            return i.toString();
+        }
+    }
 }

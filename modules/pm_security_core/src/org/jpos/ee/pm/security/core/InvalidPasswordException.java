@@ -18,6 +18,6 @@
 package org.jpos.ee.pm.security.core;
 
 public class InvalidPasswordException extends PMSecurityException {
-	private static final long serialVersionUID = 7548517732552851015L;
+    private static final long serialVersionUID = 7548517732552851015L;
 
 }

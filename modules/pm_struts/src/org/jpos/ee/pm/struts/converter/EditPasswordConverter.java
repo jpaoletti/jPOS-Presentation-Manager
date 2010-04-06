@@ -22,8 +22,8 @@ import org.jpos.ee.pm.core.PMContext;
 
 public class EditPasswordConverter extends EditStringConverter {
 
-	
-	public String visualize(PMContext ctx) throws ConverterException {
-		return super.visualize("password_converter.jsp?");
-	}
+    
+    public String visualize(PMContext ctx) throws ConverterException {
+        return super.visualize("password_converter.jsp?");
+    }
 }

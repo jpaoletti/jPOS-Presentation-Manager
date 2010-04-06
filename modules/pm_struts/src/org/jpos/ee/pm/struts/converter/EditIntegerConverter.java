@@ -31,12 +31,12 @@ import org.jpos.ee.pm.core.PMContext;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class EditIntegerConverter extends EditStringConverter {
-	
-	public Object build(PMContext ctx) throws ConverterException{
-		try {
+    
+    public Object build(PMContext ctx) throws ConverterException{
+        try {
             return Integer.parseInt(ctx.getString(PM_FIELD_VALUE));
         } catch (NumberFormatException e) {
             return null;
         }
-	}
+    }
 }

@@ -5,8 +5,8 @@ import org.jpos.ee.pm.struts.MenuItemLocationStruts;
 
 public class MenuItemLocationPentaho extends MenuItemLocationStruts {
 
-	protected String buildLink(MenuItem item, Object... params) {
-		String link = PentahoQBean.getService().getUrl()+item.getLocation_value();
-		return link;
-	}
+    protected String buildLink(MenuItem item, Object... params) {
+        String link = PentahoQBean.getService().getUrl()+item.getLocation_value();
+        return link;
+    }
 }

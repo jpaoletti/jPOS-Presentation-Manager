@@ -22,11 +22,11 @@ import org.jpos.ee.pm.core.PMContext;
 
 public class ShowPasswordConverter extends Converter {
 
-	public Object build(PMContext ctx) throws ConverterException {
-		throw new IgnoreConvertionException("");
-	}
+    public Object build(PMContext ctx) throws ConverterException {
+        throw new IgnoreConvertionException("");
+    }
 
-	public String visualize(PMContext ctx) throws ConverterException {
-		return "**********************";
-	}
+    public String visualize(PMContext ctx) throws ConverterException {
+        return "**********************";
+    }
 }

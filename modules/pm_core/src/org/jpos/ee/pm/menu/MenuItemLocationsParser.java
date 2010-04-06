@@ -34,61 +34,61 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  */
 public class MenuItemLocationsParser extends DefaultHandler{
-	private String conf;
-	private Map<String,MenuItemLocation> locations;
-	
+    private String conf;
+    private Map<String,MenuItemLocation> locations;
+    
     public MenuItemLocationsParser (String conf) {
         this.setConf(conf);
         init();
     }
     
-	private void init() {
-		locations = new HashMap<String, MenuItemLocation>();
-		parseConfig();		
-	}
-	
-	private void parseConfig() {
-		try {
-	        SAXParserFactory dbf = SAXParserFactory.newInstance();
+    private void init() {
+        locations = new HashMap<String, MenuItemLocation>();
+        parseConfig();        
+    }
+    
+    private void parseConfig() {
+        try {
+            SAXParserFactory dbf = SAXParserFactory.newInstance();
             SAXParser db = dbf.newSAXParser();
             db.parse(conf,this);
-		}catch(Exception e) {
-			PMLogger.error(e);
-		}
+        }catch(Exception e) {
+            PMLogger.error(e);
+        }
     }
-	
+    
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-    	if(qName.compareTo("location") == 0){
-    		String id = attributes.getValue("id");
-    		String clazz = attributes.getValue("class");
-    		try {
-        		locations.put(id, (MenuItemLocation) EntitySupport.newObjectOf(clazz));
-        		PMLogger.info("Added location: "+id+" ["+clazz+"]");
-			} catch (Exception e) {
-        		PMLogger.warn("Unable to add location: "+id+" ["+clazz+"]");
-				PMLogger.error(e);
-			}
-    	}
+        if(qName.compareTo("location") == 0){
+            String id = attributes.getValue("id");
+            String clazz = attributes.getValue("class");
+            try {
+                locations.put(id, (MenuItemLocation) EntitySupport.newObjectOf(clazz));
+                PMLogger.info("Added location: "+id+" ["+clazz+"]");
+            } catch (Exception e) {
+                PMLogger.warn("Unable to add location: "+id+" ["+clazz+"]");
+                PMLogger.error(e);
+            }
+        }
     }
     
 
-	/**
-	 * @param conf the conf to set
-	 */
-	public void setConf(String conf) {
-		this.conf = conf;
-	}
-	/**
-	 * @return the conf
-	 */
-	public String getConf() {
-		return conf;
-	}
+    /**
+     * @param conf the conf to set
+     */
+    public void setConf(String conf) {
+        this.conf = conf;
+    }
+    /**
+     * @return the conf
+     */
+    public String getConf() {
+        return conf;
+    }
 
-	/**
-	 * @return the locations
-	 */
-	public Map<String,MenuItemLocation> getLocations() {
-		return locations;
-	}
+    /**
+     * @return the locations
+     */
+    public Map<String,MenuItemLocation> getLocations() {
+        return locations;
+    }
 }

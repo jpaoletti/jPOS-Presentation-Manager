@@ -33,9 +33,9 @@ import org.jpos.ee.pm.core.PMCoreObject;
  * <!DOCTYPE entity SYSTEM "menu.dtd">
  * <menu>
  *     <menu-list text="xxxx" perm="xxxx">
- *     		<menu-item text="xxxx" perm="xxxx">
- *     		...
- *     		</menu-item>
+ *             <menu-item text="xxxx" perm="xxxx">
+ *             ...
+ *             </menu-item>
  *     </menu-list>
  *     <menu-list>
  *     ...
@@ -46,47 +46,47 @@ import org.jpos.ee.pm.core.PMCoreObject;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public abstract class Menu extends PMCoreObject{
-	/**Descriptive text*/
-	private  String text;
-	/**Parent in menu tree. Only null in the root element*/
+    /**Descriptive text*/
+    private  String text;
+    /**Parent in menu tree. Only null in the root element*/
     private  MenuList parent;
     /**Permission needed to access to this item. It also hides any child */
     private  String permission;
     
-	/**
-	 * @param parent the parent to set
-	 */
-	public void setParent(MenuList parent) {
-		this.parent = parent;
-	}
-	/**
-	 * @return the parent
-	 */
-	public MenuList getParent() {
-		return parent;
-	}
-	/**
-	 * @param text the text to set
-	 */
-	public void setText(String text) {
-		this.text = text;
-	}
-	/**
-	 * @return the text
-	 */
-	public String getText() {
-		return text;
-	}
-	/**
-	 * @param permission the permission to set
-	 */
-	public void setPermission(String permission) {
-		this.permission = permission;
-	}
-	/**
-	 * @return the permission
-	 */
-	public String getPermission() {
-		return permission;
-	}
+    /**
+     * @param parent the parent to set
+     */
+    public void setParent(MenuList parent) {
+        this.parent = parent;
+    }
+    /**
+     * @return the parent
+     */
+    public MenuList getParent() {
+        return parent;
+    }
+    /**
+     * @param text the text to set
+     */
+    public void setText(String text) {
+        this.text = text;
+    }
+    /**
+     * @return the text
+     */
+    public String getText() {
+        return text;
+    }
+    /**
+     * @param permission the permission to set
+     */
+    public void setPermission(String permission) {
+        this.permission = permission;
+    }
+    /**
+     * @return the permission
+     */
+    public String getPermission() {
+        return permission;
+    }
 }

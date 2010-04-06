@@ -29,26 +29,26 @@ import org.jpos.ee.pm.core.PMMessage;
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com */
 public class LengthValidator extends ValidatorSupport {
-	
-	/**The validate method*/
-	public ValidationResult validate(PMContext ctx) {
-		ValidationResult res = new ValidationResult();
-		Field field = (Field)ctx.get(PM_FIELD);
+    
+    /**The validate method*/
+    public ValidationResult validate(PMContext ctx) {
+        ValidationResult res = new ValidationResult();
+        Field field = (Field)ctx.get(PM_FIELD);
         String fieldvalue = (String) ctx.get(PM_FIELD_VALUE);
         
         res.setSuccessful(true);
         
-		Integer len = fieldvalue.length();
+        Integer len = fieldvalue.length();
         Integer maxl = getInt ("max-length");
-		if (len > maxl){
-        	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", ""), len.toString(), maxl.toString()));
+        if (len > maxl){
+            res.setSuccessful(false);
+            res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", ""), len.toString(), maxl.toString()));
         }
         Integer minl = getInt ("min-length");
-		if (len < minl){
-        	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", ""), len.toString(), minl.toString()));
+        if (len < minl){
+            res.setSuccessful(false);
+            res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", ""), len.toString(), minl.toString()));
         }
         return res;
-	}
+    }
 }

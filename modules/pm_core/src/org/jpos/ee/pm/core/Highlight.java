@@ -19,62 +19,62 @@ package org.jpos.ee.pm.core;
 
 /***/
 public class Highlight {
-	/***/
-	private String field;
-	/***/
-	private String value;
-	/***/
-	private String color;
-	/**instance: all the item. property: only the value */
-	private String scope;
-		
-	/**
-	 * @param scope the scope to set
-	 */
-	public void setScope(String scope) {
-		this.scope = scope;
-	}
-	/**
-	 * @return the scope
-	 */
-	public String getScope() {
-		return scope;
-	}
-	
-	/**
-	 * @param value the value to set
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
-	/**
-	 * @return the value
-	 */
-	public String getValue() {
-		return value;
-	}
-	/**
-	 * @param color the color to set
-	 */
-	public void setColor(String color) {
-		this.color = color;
-	}
-	/**
-	 * @return the color
-	 */
-	public String getColor() {
-		return color;
-	}
-	/**
-	 * @param field the field to set
-	 */
-	public void setField(String field) {
-		this.field = field;
-	}
-	/**
-	 * @return the field
-	 */
-	public String getField() {
-		return field;
-	}	
+    /***/
+    private String field;
+    /***/
+    private String value;
+    /***/
+    private String color;
+    /**instance: all the item. property: only the value */
+    private String scope;
+        
+    /**
+     * @param scope the scope to set
+     */
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+    /**
+     * @return the scope
+     */
+    public String getScope() {
+        return scope;
+    }
+    
+    /**
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+    /**
+     * @return the value
+     */
+    public String getValue() {
+        return value;
+    }
+    /**
+     * @param color the color to set
+     */
+    public void setColor(String color) {
+        this.color = color;
+    }
+    /**
+     * @return the color
+     */
+    public String getColor() {
+        return color;
+    }
+    /**
+     * @param field the field to set
+     */
+    public void setField(String field) {
+        this.field = field;
+    }
+    /**
+     * @return the field
+     */
+    public String getField() {
+        return field;
+    }    
 }

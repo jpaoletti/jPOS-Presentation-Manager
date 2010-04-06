@@ -53,18 +53,18 @@ public class MenuBuilder extends DefaultHandler{
 
     private MenuList parseConfig(String conf) {
         SAXParserFactory dbf = SAXParserFactory.newInstance();
-		try {
+        try {
             SAXParser db = dbf.newSAXParser();
             db.parse(conf,this);
             return menu;
-		}catch(Exception e) {
-			PMLogger.error(e);
-		}
+        }catch(Exception e) {
+            PMLogger.error(e);
+        }
         return null;
     }
 
     public void characters(char[] ch, int start, int length) throws SAXException {
-    	value = new String(ch, start, length);
+        value = new String(ch, start, length);
     }
 
     public void startDocument() throws SAXException {
@@ -73,23 +73,23 @@ public class MenuBuilder extends DefaultHandler{
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-    	String s = attributes.getValue("text");
-    	String s2 = attributes.getValue("perm");
-	    if(qName.compareTo("menu-list") == 0) processList(s,s2); else
-	    if(qName.compareTo("menu-item") == 0) processItem(s,s2);
-	    if(qName.compareTo("path") == 0)      value = null;
-	    if(qName.compareTo("external") == 0)  value = null;
-	    if(qName.compareTo("location") == 0){       
-	    	value = null;
-	    	item.parseLocation(attributes.getValue("id"), attributes.getValue("value"));
-	    }
-	    if(qName.compareTo("embed") == 0)     value = null;
+        String s = attributes.getValue("text");
+        String s2 = attributes.getValue("perm");
+        if(qName.compareTo("menu-list") == 0) processList(s,s2); else
+        if(qName.compareTo("menu-item") == 0) processItem(s,s2);
+        if(qName.compareTo("path") == 0)      value = null;
+        if(qName.compareTo("external") == 0)  value = null;
+        if(qName.compareTo("location") == 0){       
+            value = null;
+            item.parseLocation(attributes.getValue("id"), attributes.getValue("value"));
+        }
+        if(qName.compareTo("embed") == 0)     value = null;
     }
   
     public void endElement(String uri, String localName, String qName) throws SAXException {
-    	if(qName.compareTo("menu-list") == 0) if(menu.getParent()!= null) menu = menu.getParent();
-	    if(qName.compareTo("external") == 0)  item.setExternal(value.compareTo("true")==0);
-	    if(qName.compareTo("embed") == 0)  	  item.setEmbed(value.compareTo("true")==0);
+        if(qName.compareTo("menu-list") == 0) if(menu.getParent()!= null) menu = menu.getParent();
+        if(qName.compareTo("external") == 0)  item.setExternal(value.compareTo("true")==0);
+        if(qName.compareTo("embed") == 0)        item.setEmbed(value.compareTo("true")==0);
     }
 
     private void processItem(String text, String perm) {

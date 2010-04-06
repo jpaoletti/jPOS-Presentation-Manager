@@ -20,20 +20,20 @@ package org.jpos.ee.pm.core;
 import java.util.List;
 
 public class Highlights {
-	/**A list of highlights.*/
-	private List<Highlight> highlights;
+    /**A list of highlights.*/
+    private List<Highlight> highlights;
 
-	/**
-	 * @param highlights the highlights to set
-	 */
-	public void setHighlights(List<Highlight> highlights) {
-		this.highlights = highlights;
-	}
+    /**
+     * @param highlights the highlights to set
+     */
+    public void setHighlights(List<Highlight> highlights) {
+        this.highlights = highlights;
+    }
 
-	/**
-	 * @return the highlights
-	 */
-	public List<Highlight> getHighlights() {
-		return highlights;
-	}
+    /**
+     * @return the highlights
+     */
+    public List<Highlight> getHighlights() {
+        return highlights;
+    }
 }

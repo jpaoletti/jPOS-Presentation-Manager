@@ -27,18 +27,18 @@ import org.mortbay.util.UrlEncoded;
 
 public class ShowISODumpConverter extends StrutsEditConverter {
 
-	public Object build(PMContext ctx) throws ConverterException {
-		throw new IgnoreConvertionException("");
+    public Object build(PMContext ctx) throws ConverterException {
+        throw new IgnoreConvertionException("");
     }
-	
-	public String visualize(PMContext ctx) throws ConverterException {
-		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-		Field field = (Field) ctx.get(PM_FIELD);
+    
+    public String visualize(PMContext ctx) throws ConverterException {
+        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        Field field = (Field) ctx.get(PM_FIELD);
         byte[] p = (byte[]) getNestedProperty (einstance.getInstance(), field.getId());
         if(p!=null) {
-			String string = ISOUtil.hexdump(p);//new String(p);
-			return super.visualize("isodump_converter.jsp?value="+UrlEncoded.encodeString(string));
-		} else
-        	return super.visualize("isodump_converter.jsp?value=-");
+            String string = ISOUtil.hexdump(p);//new String(p);
+            return super.visualize("isodump_converter.jsp?value="+UrlEncoded.encodeString(string));
+        } else
+            return super.visualize("isodump_converter.jsp?value=-");
     }
 }

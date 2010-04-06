@@ -28,40 +28,40 @@ import org.jpos.ee.pm.security.core.PMSecurityUser;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class MenuSupport {
-	
-	/**Builds the menu for the user.
-	 * @param user The user
-	 * @param service The PMService for the menu.
-	 * @return The filtered menu associated to the permissions of the user.
-	 * */
-	public static Menu getMenu(PMSecurityUser user, PMService service) throws PMException{
-		try {
-			MenuBuilder mb = new MenuBuilder("cfg/pm.menu.xml", service);
-			Menu menu = cleanWithoutPerms(mb.menu, user);
-			return menu;
-		} catch (Exception e) {
-			throw new PMException("pm_core.cant.load.menu");
-		}
-	}
+    
+    /**Builds the menu for the user.
+     * @param user The user
+     * @param service The PMService for the menu.
+     * @return The filtered menu associated to the permissions of the user.
+     * */
+    public static Menu getMenu(PMSecurityUser user, PMService service) throws PMException{
+        try {
+            MenuBuilder mb = new MenuBuilder("cfg/pm.menu.xml", service);
+            Menu menu = cleanWithoutPerms(mb.menu, user);
+            return menu;
+        } catch (Exception e) {
+            throw new PMException("pm_core.cant.load.menu");
+        }
+    }
 
-	private static Menu cleanWithoutPerms(Menu menu, PMSecurityUser user) {
-		if(menu.getPermission()==null || menu.getPermission().trim().compareTo("")==0 || user.hasPermission(menu.getPermission())){
-			if(menu instanceof MenuItem){
-				return menu;
-			}else{
-				MenuList ml = new MenuList();
-				ml.setText(menu.getText());
-				ml.setPermission(menu.getPermission());
-				ml.setParent(menu.getParent());
-				ml.setService(menu.getService());
-				for(Menu m : ((MenuList)menu).getSubmenus() ){
-					Menu m2 = cleanWithoutPerms(m, user);
-					if(m2 != null) ml.add(m2);
-				}
-				return ml;
-			}
-		}else{
-			return null;
-		}
-	}
+    private static Menu cleanWithoutPerms(Menu menu, PMSecurityUser user) {
+        if(menu.getPermission()==null || menu.getPermission().trim().compareTo("")==0 || user.hasPermission(menu.getPermission())){
+            if(menu instanceof MenuItem){
+                return menu;
+            }else{
+                MenuList ml = new MenuList();
+                ml.setText(menu.getText());
+                ml.setPermission(menu.getPermission());
+                ml.setParent(menu.getParent());
+                ml.setService(menu.getService());
+                for(Menu m : ((MenuList)menu).getSubmenus() ){
+                    Menu m2 = cleanWithoutPerms(m, user);
+                    if(m2 != null) ml.add(m2);
+                }
+                return ml;
+            }
+        }else{
+            return null;
+        }
+    }
 }

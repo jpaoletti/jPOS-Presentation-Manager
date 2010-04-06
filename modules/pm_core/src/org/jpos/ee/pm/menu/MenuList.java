@@ -34,22 +34,22 @@ public class MenuList extends Menu{
      * @param m The submenu to add
      * @return The same added menu.*/
     public Menu add(Menu m){
-    	submenus.add(m);
+        submenus.add(m);
         m.setParent(this);
         return m;
     }
 
-	/**
-	 * @return the submenus
-	 */
-	public Vector<Menu> getSubmenus() {
-		return submenus;
-	}
+    /**
+     * @return the submenus
+     */
+    public Vector<Menu> getSubmenus() {
+        return submenus;
+    }
 
-	/**
-	 * @param submenus the submenus to set
-	 */
-	public void setSubmenus(Vector<Menu> submenus) {
-		this.submenus = submenus;
-	}
+    /**
+     * @param submenus the submenus to set
+     */
+    public void setSubmenus(Vector<Menu> submenus) {
+        this.submenus = submenus;
+    }
 }

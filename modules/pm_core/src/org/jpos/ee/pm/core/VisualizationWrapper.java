@@ -29,21 +29,21 @@ import java.util.Map;
  *  
  * */
 public abstract class VisualizationWrapper {
-	/** A map with the calculated values of the field*/	
-	private Map<String,Object> values;
+    /** A map with the calculated values of the field*/    
+    private Map<String,Object> values;
 
-	/**This abstract method must be defined for each implementation and must
-	 * fill the values map.
-	 * @param object The entity instance to get any data required for calculation*/
-	public abstract void load(PMContext ctx,  Object object);
-	
-	/**This function is automatically invoked to get the values configured in the entity 
-	 * configuration file
-	 * 
-	 * @param name The name of the requested value 
-	 * @return The value for the given field name
-	 * */
-	public Object get(String name){
-		return values.get(name);
-	}
+    /**This abstract method must be defined for each implementation and must
+     * fill the values map.
+     * @param object The entity instance to get any data required for calculation*/
+    public abstract void load(PMContext ctx,  Object object);
+    
+    /**This function is automatically invoked to get the values configured in the entity 
+     * configuration file
+     * 
+     * @param name The name of the requested value 
+     * @return The value for the given field name
+     * */
+    public Object get(String name){
+        return values.get(name);
+    }
 }

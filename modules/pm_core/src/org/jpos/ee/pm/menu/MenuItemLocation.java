@@ -23,10 +23,10 @@ package org.jpos.ee.pm.menu;
  *   
  * <pre>
  * {@code
- *     	<menu-item text="xxxx" perm="xxxx">
- *     		<location id="some_location_id" value="some_value" />
- *     		...
- *     	</menu-item>
+ *         <menu-item text="xxxx" perm="xxxx">
+ *             <location id="some_location_id" value="some_value" />
+ *             ...
+ *         </menu-item>
  * }
  * </pre>
  * 
@@ -51,5 +51,5 @@ package org.jpos.ee.pm.menu;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public interface MenuItemLocation {
-	public Object build(MenuItem item, Object ... params);
+    public Object build(MenuItem item, Object ... params);
 }

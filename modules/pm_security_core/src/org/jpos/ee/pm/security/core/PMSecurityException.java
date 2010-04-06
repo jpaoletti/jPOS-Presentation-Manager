@@ -18,6 +18,6 @@
 package org.jpos.ee.pm.security.core;
 
 public class PMSecurityException extends Exception {
-	private static final long serialVersionUID = 436149144383856197L;
+    private static final long serialVersionUID = 436149144383856197L;
 
 }

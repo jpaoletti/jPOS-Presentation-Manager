@@ -28,37 +28,37 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
 
 public class EditCollectionConverter extends StrutsEditConverter {
 
-	public Object build(PMContext ctx) throws ConverterException {
-		try{
-			String collection_class = getConfig("collection-class");
-			if(collection_class == null) throw new ConverterException("collection-class must be defined");
-			
-			Collection<Object> result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
-			String s = ctx.getString(PM_FIELD_VALUE);
-			if(s.trim().compareTo("")==0) return result;
-			String[] ss = s.split(";");
-			if(ss.length > 0 ){
-				String eid = ss[0].split("@")[0];
-				PMEntitySupport es = PMEntitySupport.getInstance();
-				Entity e = es.getPmservice().getEntity(eid);
-				if(e==null) throw new ConverterException("Cannot find entity "+eid);
-				List<?> list = e.getList(ctx);
-				for (int i = 0; i < ss.length; i++) {
-					Integer x = Integer.parseInt(ss[i].split("@")[1]);
-					result.add(list.get(x));
-				}
-			}
-			return result;
-		} catch (ConverterException e2) {
-			throw e2;
-		} catch (Exception e1) {
-			PMLogger.error(e1);
-			throw new ConverterException("Cannot convert collection");
-		}
-	}
+    public Object build(PMContext ctx) throws ConverterException {
+        try{
+            String collection_class = getConfig("collection-class");
+            if(collection_class == null) throw new ConverterException("collection-class must be defined");
+            
+            Collection<Object> result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
+            String s = ctx.getString(PM_FIELD_VALUE);
+            if(s.trim().compareTo("")==0) return result;
+            String[] ss = s.split(";");
+            if(ss.length > 0 ){
+                String eid = ss[0].split("@")[0];
+                PMEntitySupport es = PMEntitySupport.getInstance();
+                Entity e = es.getPmservice().getEntity(eid);
+                if(e==null) throw new ConverterException("Cannot find entity "+eid);
+                List<?> list = e.getList(ctx);
+                for (int i = 0; i < ss.length; i++) {
+                    Integer x = Integer.parseInt(ss[i].split("@")[1]);
+                    result.add(list.get(x));
+                }
+            }
+            return result;
+        } catch (ConverterException e2) {
+            throw e2;
+        } catch (Exception e1) {
+            PMLogger.error(e1);
+            throw new ConverterException("Cannot convert collection");
+        }
+    }
 
-	public String visualize(PMContext ctx) throws ConverterException {
-		return super.visualize("collection_converter.jsp?filter="+getConfig("filter")+"&entity="+getConfig("entity"));
-	}
+    public String visualize(PMContext ctx) throws ConverterException {
+        return super.visualize("collection_converter.jsp?filter="+getConfig("filter")+"&entity="+getConfig("entity"));
+    }
 
 }

@@ -27,18 +27,18 @@ import org.jpos.ee.pm.core.PMMessage;
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com */
 public class IsNameValidator extends ValidatorSupport {
-	
-	/**The validate method*/
-	public ValidationResult validate(PMContext ctx) {
-		ValidationResult res = new ValidationResult();
-		Field field = (Field)ctx.get(PM_FIELD);
+    
+    /**The validate method*/
+    public ValidationResult validate(PMContext ctx) {
+        ValidationResult res = new ValidationResult();
+        Field field = (Field)ctx.get(PM_FIELD);
         String fieldvalue = (String) ctx.get(PM_FIELD_VALUE);
-		
-		res.setSuccessful(true);
-		if (!isName (fieldvalue)){
-        	res.setSuccessful(false);
-        	res.getMessages().add(new PMMessage(field.getId(), get("msg", "")));
+        
+        res.setSuccessful(true);
+        if (!isName (fieldvalue)){
+            res.setSuccessful(false);
+            res.getMessages().add(new PMMessage(field.getId(), get("msg", "")));
         }
         return res;
-	}
+    }
 }

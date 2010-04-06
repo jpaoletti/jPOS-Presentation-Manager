@@ -28,54 +28,54 @@ import org.jpos.util.Logger;
  *  
  * */
 public class PMLogger {
-	private static Log _log;
-	private static boolean debug;
-	
-	/**Internal getter for pm logger
-	 * @return The PM logger*/
-	public static Log getLog(){
-		//return Log.getLog ("pm-logger", "presentation-manager");
-		return _log;
-	}
-	
-	/**Generate an info entry on the local logger*/
-	public static void info(Object o){
-	    LogEvent evt = getLog().createInfo();
-	    evt.addMessage(o);
-		Logger.log(evt);
-	}
+    private static Log _log;
+    private static boolean debug;
+    
+    /**Internal getter for pm logger
+     * @return The PM logger*/
+    public static Log getLog(){
+        //return Log.getLog ("pm-logger", "presentation-manager");
+        return _log;
+    }
+    
+    /**Generate an info entry on the local logger*/
+    public static void info(Object o){
+        LogEvent evt = getLog().createInfo();
+        evt.addMessage(o);
+        Logger.log(evt);
+    }
 
-	/**Generate a warn entry on the local logger*/
-	public static void warn(Object o){
-	    LogEvent evt = getLog().createWarn();
-	    evt.addMessage(o);
-		Logger.log(evt);
-	}
+    /**Generate a warn entry on the local logger*/
+    public static void warn(Object o){
+        LogEvent evt = getLog().createWarn();
+        evt.addMessage(o);
+        Logger.log(evt);
+    }
 
-	/**Generate an error entry on the local logger*/
-	public static void error(Object o){
-	    LogEvent evt = getLog().createError();
-	    evt.addMessage(o);
-		Logger.log(evt);
-	}
+    /**Generate an error entry on the local logger*/
+    public static void error(Object o){
+        LogEvent evt = getLog().createError();
+        evt.addMessage(o);
+        Logger.log(evt);
+    }
 
-	public static void debug(Object invoquer, Object msg) {
-		if(!debug) return;
-		LogEvent evt = getLog().createDebug();
-		evt.addMessage("["+invoquer.getClass().getName()+"]");
-		evt.addMessage(msg);
-		Logger.log(evt);
-	}
+    public static void debug(Object invoquer, Object msg) {
+        if(!debug) return;
+        LogEvent evt = getLog().createDebug();
+        evt.addMessage("["+invoquer.getClass().getName()+"]");
+        evt.addMessage(msg);
+        Logger.log(evt);
+    }
 
-	public static void setLog(Log log) {
-		_log = log;		
-	}
+    public static void setLog(Log log) {
+        _log = log;        
+    }
 
-	public static boolean isDebug() {
-		return debug;
-	}
+    public static boolean isDebug() {
+        return debug;
+    }
 
-	public static void setDebug(boolean debug) {
-		PMLogger.debug = debug;
-	}
+    public static void setDebug(boolean debug) {
+        PMLogger.debug = debug;
+    }
 }

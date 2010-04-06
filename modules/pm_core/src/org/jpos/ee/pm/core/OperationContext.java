@@ -24,7 +24,7 @@ package org.jpos.ee.pm.core;
  * to put code to give "life" to the operations over the entity.
  * */
 public interface OperationContext {
-	
+    
     /**This method is executed before trying to execute the main method of the operation, that is
      * before opening any transaction. 
      * @param ctx The context

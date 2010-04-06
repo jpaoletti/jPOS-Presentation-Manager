@@ -31,51 +31,51 @@ import org.jpos.ee.pm.core.PMLogger;
  * 
  * */
 public class MonitorObserver implements Observer{
-	private Monitor monitor;
-	private List<String> lines;
-	
-	public MonitorObserver(Monitor monitor) {
-		super();
-		this.setMonitor(monitor);
-		monitor.addObserver(this);
-		setLines(new ArrayList<String>());
-	}
-	
-	public void update(Observable o, Object arg) {
-		if(arg instanceof String)
-			lines.add((String) arg);
-		if(arg instanceof List<?>)
-			lines.addAll((List<String>) arg);
-		if(arg instanceof Exception){
-			Exception e = (Exception)arg;
-			PMLogger.error(e);
-			lines.add(e.getMessage());
-		}
-	}
+    private Monitor monitor;
+    private List<String> lines;
+    
+    public MonitorObserver(Monitor monitor) {
+        super();
+        this.setMonitor(monitor);
+        monitor.addObserver(this);
+        setLines(new ArrayList<String>());
+    }
+    
+    public void update(Observable o, Object arg) {
+        if(arg instanceof String)
+            lines.add((String) arg);
+        if(arg instanceof List<?>)
+            lines.addAll((List<String>) arg);
+        if(arg instanceof Exception){
+            Exception e = (Exception)arg;
+            PMLogger.error(e);
+            lines.add(e.getMessage());
+        }
+    }
 
-	public void setMonitor(Monitor monitor) {
-		this.monitor = monitor;
-	}
+    public void setMonitor(Monitor monitor) {
+        this.monitor = monitor;
+    }
 
-	public Monitor getMonitor() {
-		return monitor;
-	}
+    public Monitor getMonitor() {
+        return monitor;
+    }
 
-	/**
-	 * @param lines the lines to set
-	 */
-	public void setLines(List<String> lines) {
-		this.lines = lines;
-	}
+    /**
+     * @param lines the lines to set
+     */
+    public void setLines(List<String> lines) {
+        this.lines = lines;
+    }
 
-	/**
-	 * @return the lines and clear them for next time
-	 */
-	public List<String> getLines() {
-		List<String> res = new ArrayList<String>();
-		res.addAll(lines);
-		lines.clear();
-		return res;
-	}
+    /**
+     * @return the lines and clear them for next time
+     */
+    public List<String> getLines() {
+        List<String> res = new ArrayList<String>();
+        res.addAll(lines);
+        lines.clear();
+        return res;
+    }
 
 }

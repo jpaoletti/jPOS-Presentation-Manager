@@ -38,7 +38,7 @@ import org.jpos.ee.Constants;
  * @author yero jeronimo.paoletti@gmail.com
  * */
 public abstract class ValidatorSupport extends org.jpos.util.Validator implements Validator, Constants{
-	/**The properties*/
+    /**The properties*/
     private Properties properties;
      
     /**Helper for a property
@@ -60,18 +60,18 @@ public abstract class ValidatorSupport extends org.jpos.util.Validator implement
         return Integer.parseInt(get(name, "0").trim());
     }
 
-	/**
-	 * @return the properties
-	 */
-	public Properties getProperties() {
-		return properties;
-	}
+    /**
+     * @return the properties
+     */
+    public Properties getProperties() {
+        return properties;
+    }
 
-	/**
-	 * @param properties the properties to set
-	 */
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
+    /**
+     * @param properties the properties to set
+     */
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 
 }

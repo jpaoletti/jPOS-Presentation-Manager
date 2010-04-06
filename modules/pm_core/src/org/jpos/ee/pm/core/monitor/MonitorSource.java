@@ -27,27 +27,27 @@ import java.util.Properties;
  * 
  * */
 public abstract class MonitorSource {
-	private Properties properties;
+    private Properties properties;
 
-	public abstract void init();
-	public abstract List<MonitorLine> getLinesFrom(Object actual) throws Exception;
-	public abstract MonitorLine getLastLine() throws Exception ;
+    public abstract void init();
+    public abstract List<MonitorLine> getLinesFrom(Object actual) throws Exception;
+    public abstract MonitorLine getLastLine() throws Exception ;
 
-	public void setProperties(Properties properties) {
-		this.properties = properties;
-	}
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
 
-	public Properties getProperties() {
-		return properties;
-	}
-	
-	/**Getter for a specific property with a default value in case its not defined. 
-	 * Only works for string.
-	 * @param name Property name
-	 * @param def Default value
-	 * @return Property value only if its a string */
+    public Properties getProperties() {
+        return properties;
+    }
+    
+    /**Getter for a specific property with a default value in case its not defined. 
+     * Only works for string.
+     * @param name Property name
+     * @param def Default value
+     * @return Property value only if its a string */
     public String getConfig (String name, String def) {
-    	if (properties != null) {
+        if (properties != null) {
             Object obj = properties.get (name);
             if (obj instanceof String)
                 return obj.toString();

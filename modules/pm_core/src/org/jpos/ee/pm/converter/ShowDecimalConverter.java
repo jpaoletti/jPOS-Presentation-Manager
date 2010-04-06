@@ -43,22 +43,22 @@ import org.jpos.ee.pm.core.Operation;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class ShowDecimalConverter extends ShowStringConverter {
-	
-	public Object build(Entity entity, Field field, Operation operation,
-			EntityInstanceWrapper einstance, Object value) throws ConverterException {
-		throw new IgnoreConvertionException("");
-	}
+    
+    public Object build(Entity entity, Field field, Operation operation,
+            EntityInstanceWrapper einstance, Object value) throws ConverterException {
+        throw new IgnoreConvertionException("");
+    }
 
-	public String visualize(Entity entity, Field field, Operation operation,EntityInstanceWrapper einstance, String extra) throws ConverterException {
-		BigDecimal o = null;
-		try{
-			o = (BigDecimal) getValue(einstance.getInstance(),field);
-		}catch (Exception e) {}
-		NumberFormat formatter = new DecimalFormat(getConfig("format", "#0.00"));
-		if(o==null)
-			return getConfig("null-value","0.00");
-		else
-			return visualize(formatter.format(o),extra);
-	}
+    public String visualize(Entity entity, Field field, Operation operation,EntityInstanceWrapper einstance, String extra) throws ConverterException {
+        BigDecimal o = null;
+        try{
+            o = (BigDecimal) getValue(einstance.getInstance(),field);
+        }catch (Exception e) {}
+        NumberFormat formatter = new DecimalFormat(getConfig("format", "#0.00"));
+        if(o==null)
+            return getConfig("null-value","0.00");
+        else
+            return visualize(formatter.format(o),extra);
+    }
 }
 

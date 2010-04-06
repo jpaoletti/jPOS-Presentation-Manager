@@ -18,6 +18,6 @@
 package org.jpos.ee.pm.security.core;
 
 public class InvalidUserException extends PMSecurityException {
-	private static final long serialVersionUID = -76492462156754591L;
+    private static final long serialVersionUID = -76492462156754591L;
 
 }

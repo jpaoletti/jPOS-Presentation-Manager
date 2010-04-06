@@ -22,13 +22,13 @@ import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.PMContext;
 
 public class EditCompositionConverter extends StrutsEditConverter{
-	
-	public Object build(PMContext ctx) throws ConverterException {
-		throw new IgnoreConvertionException("");
-	}
+    
+    public Object build(PMContext ctx) throws ConverterException {
+        throw new IgnoreConvertionException("");
+    }
 
-	public String visualize(PMContext ctx) throws ConverterException {
-		return super.visualize("composition_converter.jsp?weakid="+getConfig("weak-entity"));
-	}
-	
+    public String visualize(PMContext ctx) throws ConverterException {
+        return super.visualize("composition_converter.jsp?weakid="+getConfig("weak-entity"));
+    }
+    
 }

@@ -42,54 +42,54 @@ public class GenericConverter extends Converter{
     private String visualize;
     private String build;
 
-	
-	public String visualize(PMContext ctx) throws ConverterException {
-		try {
-			Interpreter bsh = getBsh();
-			EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-			Field field = (Field) ctx.get(PM_FIELD);
-			Object o = getValue(einstance.getInstance(), field);
-			bsh.set("value", o);
-			bsh.set("converter", this);
-			debug("Generic Converter Visualize value: "+o);
-			if(o==null) return getConfig("null-value","-");
-			String result = bsh.eval (visualize).toString();
-			return visualize(result, ctx.getString(PM_EXTRA_DATA));
-		} catch (EvalError e) {
-			getLog().error("BSH Interpreter Evaluation", e);
-		}
-		return null;
-	}
+    
+    public String visualize(PMContext ctx) throws ConverterException {
+        try {
+            Interpreter bsh = getBsh();
+            EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+            Field field = (Field) ctx.get(PM_FIELD);
+            Object o = getValue(einstance.getInstance(), field);
+            bsh.set("value", o);
+            bsh.set("converter", this);
+            debug("Generic Converter Visualize value: "+o);
+            if(o==null) return getConfig("null-value","-");
+            String result = bsh.eval (visualize).toString();
+            return visualize(result, ctx.getString(PM_EXTRA_DATA));
+        } catch (EvalError e) {
+            getLog().error("BSH Interpreter Evaluation", e);
+        }
+        return null;
+    }
 
-	
-	public Object build(PMContext ctx) throws ConverterException {
-		try {
-			Interpreter bsh = getBsh();
-			bsh.set("value", ctx.get(PM_FIELD_VALUE));
-			return bsh.eval (build);
-		} catch (EvalError e) {
-			getLog().error("BSH Interpreter Evaluation", e);
-		}
-		return null;
-	}
-	
+    
+    public Object build(PMContext ctx) throws ConverterException {
+        try {
+            Interpreter bsh = getBsh();
+            bsh.set("value", ctx.get(PM_FIELD_VALUE));
+            return bsh.eval (build);
+        } catch (EvalError e) {
+            getLog().error("BSH Interpreter Evaluation", e);
+        }
+        return null;
+    }
+    
 
-	public GenericConverter() {
-		super();
-	}
+    public GenericConverter() {
+        super();
+    }
 
-	private Interpreter getBsh() {
-		if(bsh == null){
-			try {
-				this.filename = getConfig("filename");
-		        readFile(filename);
-				bsh = initBSH();
-			} catch (Exception e) {
-				getLog().error("BSH Interpreter Creation", e);
-			}
-		}
-		return bsh;
-	}
+    private Interpreter getBsh() {
+        if(bsh == null){
+            try {
+                this.filename = getConfig("filename");
+                readFile(filename);
+                bsh = initBSH();
+            } catch (Exception e) {
+                getLog().error("BSH Interpreter Creation", e);
+            }
+        }
+        return bsh;
+    }
     
     /**
      * Parse the field descriptions from an XML file.
@@ -144,7 +144,7 @@ public class GenericConverter extends Converter{
         return reader;
     }
     
-	public String getDescription () {
+    public String getDescription () {
         StringBuilder sb = new StringBuilder();
         sb.append (getClass().getName());
         if (filename != null) {
@@ -164,10 +164,10 @@ public class GenericConverter extends Converter{
         return bsh;
     }
 
-	public class GenericContentHandler extends DefaultHandler{
-    	private String value;
+    public class GenericContentHandler extends DefaultHandler{
+        private String value;
         public void startDocument(){
-        	
+            
         }
 
         public void endDocument() throws SAXException{
@@ -177,18 +177,18 @@ public class GenericConverter extends Converter{
         }
         
         public void characters(char[] ch, int start, int length) throws SAXException {
-        	value = new String(ch);
-		}
+            value = new String(ch);
+        }
 
-		public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
-			
+        public void startElement(String namespaceURI, String localName, String qName, Attributes atts) throws SAXException {
+            
         }
         
         public void endElement(String namespaceURI, String localName, String qName){
                 if(localName.compareTo("visualize")==0)
-                	visualize = value;
+                    visualize = value;
                 if(localName.compareTo("build")==0)
-                	build = value;        
+                    build = value;        
         }
 
         // ErrorHandler Methods

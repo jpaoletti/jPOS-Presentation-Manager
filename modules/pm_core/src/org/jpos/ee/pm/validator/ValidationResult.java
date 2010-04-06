@@ -25,43 +25,43 @@ import org.jpos.ee.pm.core.PMMessage;
 /**The result of a validation.
  */
 public class ValidationResult {
-	/**True when the validation was successful*/
-	private boolean successful;
-	/**Error messages. The key is the field id and the value is the error message*/
-	private List<PMMessage> messages;
-	
-	/**Default constructor*/
-	public ValidationResult() {
-		super();
-		setMessages(new ArrayList<PMMessage>());
-	}
+    /**True when the validation was successful*/
+    private boolean successful;
+    /**Error messages. The key is the field id and the value is the error message*/
+    private List<PMMessage> messages;
+    
+    /**Default constructor*/
+    public ValidationResult() {
+        super();
+        setMessages(new ArrayList<PMMessage>());
+    }
 
-	/**
-	 * @param successful the successful to set
-	 */
-	public void setSuccessful(boolean successful) {
-		this.successful = successful;
-	}
+    /**
+     * @param successful the successful to set
+     */
+    public void setSuccessful(boolean successful) {
+        this.successful = successful;
+    }
 
-	/**
-	 * @return the successful
-	 */
-	public boolean isSuccessful() {
-		return successful;
-	}
+    /**
+     * @return the successful
+     */
+    public boolean isSuccessful() {
+        return successful;
+    }
 
-	/**
-	 * @param messages the messages to set
-	 */
-	public void setMessages(List<PMMessage> messages) {
-		this.messages = messages;
-	}
+    /**
+     * @param messages the messages to set
+     */
+    public void setMessages(List<PMMessage> messages) {
+        this.messages = messages;
+    }
 
-	/**
-	 * @return the messages
-	 */
-	public List<PMMessage> getMessages() {
-		return messages;
-	}
+    /**
+     * @return the messages
+     */
+    public List<PMMessage> getMessages() {
+        return messages;
+    }
 
 }

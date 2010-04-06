@@ -32,12 +32,12 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
  * <pre>
  * {@code
  * <converter class="org.jpos.ee.pm.converter.EditSingleAggregationConverter">
- * 	<operationId>edit</operationId>
- *     	<properties>
- *     		<property name="entity" 	value="the_other_entity" />
- *     		<property name="with-null" 	value="true" />
- *     		<property name="filter" 	value="field1=v1 , field2=v2" />
- * 		</properties>
+ *     <operationId>edit</operationId>
+ *         <properties>
+ *             <property name="entity"     value="the_other_entity" />
+ *             <property name="with-null"     value="true" />
+ *             <property name="filter"     value="field1=v1 , field2=v2" />
+ *         </properties>
  * </converter>
  * }
  * </pre>
@@ -46,50 +46,50 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
 
 public class EditSingleAggregationConverter extends StrutsEditConverter {
 
-	public Object build(PMContext ctx) throws ConverterException {
-		try{
-			String s = ctx.getString(PM_FIELD_VALUE);
-			if(s.trim().compareTo("")==0) return null;
-			Integer x = Integer.parseInt(s);
-			if(x==-1) return null;
-			
-			String eid = getConfig("entity");
-			String f = getConfig("filter");
-			
-			List<?> list = getList(eid, f , ctx);
-			return list.get(x);
-		} catch (Exception e1) {
-			PMLogger.error(e1);
-			throw new ConverterException("Cannot convert single aggregation");
-		}
-	}
+    public Object build(PMContext ctx) throws ConverterException {
+        try{
+            String s = ctx.getString(PM_FIELD_VALUE);
+            if(s.trim().compareTo("")==0) return null;
+            Integer x = Integer.parseInt(s);
+            if(x==-1) return null;
+            
+            String eid = getConfig("entity");
+            String f = getConfig("filter");
+            
+            List<?> list = getList(eid, f , ctx);
+            return list.get(x);
+        } catch (Exception e1) {
+            PMLogger.error(e1);
+            throw new ConverterException("Cannot convert single aggregation");
+        }
+    }
 
-	public static List<?> getList(String eid, String f, PMContext ctx) throws ConverterException,
-			PMException {
-		
-		ListFilter filter = null;
-		
-		if( f != null && f.compareTo("null") != 0) {
-			filter = (ListFilter) EntitySupport.newObjectOf(f);
-		}
-				
-		PMEntitySupport es = PMEntitySupport.getInstance();
-		Entity e = es.getPmservice().getEntity(eid);
-		List<?> list = null;
-		if(e==null) throw new ConverterException("Cannot find entity "+eid);
-		synchronized (e) {
-			ListFilter tmp = e.getListfilter();
-			e.setListfilter(filter);
-			list = e.getList(ctx,null,null,null);
-			e.setListfilter(tmp);
-		}
-		return list;
-	}
+    public static List<?> getList(String eid, String f, PMContext ctx) throws ConverterException,
+            PMException {
+        
+        ListFilter filter = null;
+        
+        if( f != null && f.compareTo("null") != 0) {
+            filter = (ListFilter) EntitySupport.newObjectOf(f);
+        }
+                
+        PMEntitySupport es = PMEntitySupport.getInstance();
+        Entity e = es.getPmservice().getEntity(eid);
+        List<?> list = null;
+        if(e==null) throw new ConverterException("Cannot find entity "+eid);
+        synchronized (e) {
+            ListFilter tmp = e.getListfilter();
+            e.setListfilter(filter);
+            list = e.getList(ctx,null,null,null);
+            e.setListfilter(tmp);
+        }
+        return list;
+    }
 
-	public String visualize(PMContext ctx) throws ConverterException {
-		String wn = getConfig("with-null", "false");
-		boolean withNull= (wn==null || wn.compareTo("true")!=0)?false:true;
-		return super.visualize("single_aggregation_converter.jsp?filter="+getConfig("filter")+"&entity="+getConfig("entity")+"&with_null="+withNull);
-	}
+    public String visualize(PMContext ctx) throws ConverterException {
+        String wn = getConfig("with-null", "false");
+        boolean withNull= (wn==null || wn.compareTo("true")!=0)?false:true;
+        return super.visualize("single_aggregation_converter.jsp?filter="+getConfig("filter")+"&entity="+getConfig("entity")+"&with_null="+withNull);
+    }
 
 }

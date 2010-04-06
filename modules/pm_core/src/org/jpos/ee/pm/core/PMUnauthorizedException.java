@@ -18,6 +18,6 @@
 package org.jpos.ee.pm.core;
 
 public class PMUnauthorizedException extends PMException {
-	private static final long serialVersionUID = -1484727708001646301L;
+    private static final long serialVersionUID = -1484727708001646301L;
 
 }

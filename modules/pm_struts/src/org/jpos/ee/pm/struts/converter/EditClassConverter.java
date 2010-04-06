@@ -26,26 +26,26 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
 
 public class EditClassConverter  extends StrutsEditConverter{
 
-	public Object build(PMContext ctx) throws ConverterException {
-		Object value = ctx.get(PM_FIELD_VALUE);
-		if(value ==null) return null;
-		String s = (String) value;
-		if(s.compareTo("")==0)return null;
-		try {
-			return EntitySupport.newObjectOf(s);
-		} catch (Exception e) {
-			throw new ConverterException(e.getMessage());
-		}
-	}
+    public Object build(PMContext ctx) throws ConverterException {
+        Object value = ctx.get(PM_FIELD_VALUE);
+        if(value ==null) return null;
+        String s = (String) value;
+        if(s.compareTo("")==0)return null;
+        try {
+            return EntitySupport.newObjectOf(s);
+        } catch (Exception e) {
+            throw new ConverterException(e.getMessage());
+        }
+    }
 
-	public String visualize(PMContext ctx) throws ConverterException {
-		EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-		Field field = (Field) ctx.get(PM_FIELD);
-		String s = "";
-		try {
-			s = PMEntitySupport.get(einstance.getInstance(), field.getId()).getClass().getName();
-		} catch (Exception e) {
-		}
-		return super.visualize("string_converter.jsp?value="+s);
-	}
+    public String visualize(PMContext ctx) throws ConverterException {
+        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        Field field = (Field) ctx.get(PM_FIELD);
+        String s = "";
+        try {
+            s = PMEntitySupport.get(einstance.getInstance(), field.getId()).getClass().getName();
+        } catch (Exception e) {
+        }
+        return super.visualize("string_converter.jsp?value="+s);
+    }
 }

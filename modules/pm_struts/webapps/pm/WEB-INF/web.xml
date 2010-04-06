@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE web-app
-	PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-	"http://java.sun.com/dtd/web-app_2_3.dtd">
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -9,14 +9,14 @@
     version="2.4">
     
     <filter>
-	    <filter-name>GeneralFilter</filter-name>
-    	<filter-class>org.jpos.ee.pm.struts.actions.GeneralFilter</filter-class>
+        <filter-name>GeneralFilter</filter-name>
+        <filter-class>org.jpos.ee.pm.struts.actions.GeneralFilter</filter-class>
     </filter>
     
     <filter-mapping>
-   		<filter-name>GeneralFilter</filter-name>
-   		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+           <filter-name>GeneralFilter</filter-name>
+           <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>action</servlet-name>
@@ -40,14 +40,14 @@
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
     <session-config>
-	    <session-timeout>300</session-timeout>
+        <session-timeout>300</session-timeout>
     </session-config>
     <error-page>
-    	<error-code>500</error-code>
+        <error-code>500</error-code>
         <location>/500.jsp</location>
     </error-page>
     <error-page>
-    	<error-code>404</error-code>
+        <error-code>404</error-code>
         <location>/404.jsp</location>
     </error-page>
 </web-app>
