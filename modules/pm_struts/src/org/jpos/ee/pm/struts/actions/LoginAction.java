@@ -32,6 +32,7 @@ import org.jpos.ee.pm.security.core.PMSecurityService;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
 import org.jpos.ee.pm.security.core.UserNotFoundException;
 import org.jpos.ee.pm.struts.PMForwardException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class LoginAction extends EntityActionSupport {
 
@@ -44,14 +45,14 @@ public class LoginAction extends EntityActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return false; }
 
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         if(getPMService().isLoginRequired()){
             return super.prepare(ctx);
         }else{
             return true;
         }
     }
-    protected void doExecute(PMContext ctx) throws PMException {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
          if(getPMService().isLoginRequired()){
             ctx.getSession().setAttribute(USER, null);
             ctx.getSession().setAttribute(MENU, null);
@@ -81,7 +82,7 @@ public class LoginAction extends EntityActionSupport {
              loadMenu(ctx, u);
          }
     }
-    private void loadMenu(PMContext ctx, PMSecurityUser u) throws PMException{
+    private void loadMenu(PMStrutsContext ctx, PMSecurityUser u) throws PMException{
         Menu menu = MenuSupport.getMenu(u,getPMService());
          ctx.getSession().setAttribute(USER, u);
          ctx.getSession().setAttribute(MENU, menu);
@@ -94,7 +95,7 @@ public class LoginAction extends EntityActionSupport {
      * @return The user
      * @throws BLException
      */
-    private PMSecurityUser authenticate(PMContext ctx) throws PMSecurityException {
+    private PMSecurityUser authenticate(PMStrutsContext ctx) throws PMSecurityException {
         PMSecurityUser u = null;
         LoginActionForm f = (LoginActionForm) ctx.getForm();
         String seed = ctx.getSession().getId();

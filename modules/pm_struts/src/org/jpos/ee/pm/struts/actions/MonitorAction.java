@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.struts.action.ActionMessages;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
@@ -12,6 +11,7 @@ import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.core.monitor.MonitorObserver;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMForwardException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.struts.StrutsMonitorObserver;
 
 public class MonitorAction extends ActionSupport {
@@ -19,7 +19,7 @@ public class MonitorAction extends ActionSupport {
     private static final String PM_MONITOR_WATCHER = "pm.monitor.watcher";
     protected boolean checkUser(){     return false;}
 
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         synchronized (ctx.getSession()) {
             super.prepare(ctx);
             String c = ctx.getParameter("continue");
@@ -42,7 +42,7 @@ public class MonitorAction extends ActionSupport {
         }
     }
     
-    protected void doExecute(PMContext ctx) throws PMException {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
         synchronized (ctx.getSession()) {
             boolean kontinue = (Boolean) ctx.get(PM_MONITOR_CONTINUE);
             Monitor monitor = (Monitor) ctx.get(PM_MONITOR);

@@ -30,11 +30,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jpos.ee.Constants;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.PMService;
 import org.jpos.ee.pm.struts.PMEntitySupport;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class GeneralFilter implements Filter,Constants {
 
@@ -51,11 +51,12 @@ public class GeneralFilter implements Filter,Constants {
             es.setContext_path(req.getContextPath());
             req.getSession().setAttribute(ENTITY_SUPPORT, es);
         }
-        PMContext ctx = new PMContext();
+        PMStrutsContext ctx = new PMStrutsContext();
         ctx.setRequest((HttpServletRequest) request);
         ctx.setResponse((HttpServletResponse) response);
         ctx.setErrors(new ArrayList<PMMessage>());
         ctx.getRequest().setAttribute(PM_CONTEXT, ctx);
+        ctx.put(USER, ctx.getSession().getAttribute(USER));
         
         try {
             pmservice.getPersistenceManager().init(ctx);

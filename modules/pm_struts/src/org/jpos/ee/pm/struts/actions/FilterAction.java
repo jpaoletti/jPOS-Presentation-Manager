@@ -27,15 +27,15 @@ import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMList;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class FilterAction extends FieldProcessingActionSupport {
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         if(ctx.getParameter(FINISH)==null){
             if(ctx.getEntityContainer().getFilter()==null){
@@ -69,7 +69,7 @@ public class FilterAction extends FieldProcessingActionSupport {
         }
     }
     
-    protected void doExecute(PMContext ctx) throws PMException {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
         //PMListSupport pmls = new PMListSupport();
         PMList pmlist = ctx.getList();
         List<Object> contents = null;

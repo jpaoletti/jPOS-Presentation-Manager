@@ -21,7 +21,6 @@ public class DBPersistenceManager implements PersistenceManager {
         try {
             DB db = new DB(PMLogger.getLog());
             db.open();
-            ctx.getSession().setAttribute(PM_DB, db);
             ctx.put(PM_DB, db);
         } catch (Exception e) {
             PMLogger.error(e);

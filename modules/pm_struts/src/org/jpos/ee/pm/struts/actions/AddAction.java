@@ -22,16 +22,16 @@ import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMForwardException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class AddAction extends RowActionSupport {
     
     public boolean testSelectedExist() { return false;    }
 
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         if(ctx.getParameter(FINISH)==null){
             //Creates bean and put it in session
@@ -64,7 +64,7 @@ public class AddAction extends RowActionSupport {
         return true;
     }
 
-    protected void doExecute(PMContext ctx) throws PMException {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
         Object instance = ctx.getSelected().getInstance();
         if(ctx.isWeak()){
             getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).add(instance);

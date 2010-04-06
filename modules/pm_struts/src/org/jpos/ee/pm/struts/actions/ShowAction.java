@@ -18,15 +18,15 @@
 package org.jpos.ee.pm.struts.actions;
 
 /**Action for show operation. */
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class ShowAction extends RowActionSupport {
 
     /**Makes the operation generate an audithory entry*/
     protected boolean isAudited() {    return false; }
     
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         if(ctx.getRequest().getParameter(FINISH)==null){
             /*This point limite anidation of weak entities.*/
@@ -40,5 +40,5 @@ public class ShowAction extends RowActionSupport {
         return true;
     }
     
-    protected void doExecute(PMContext ctx) throws PMException {}
+    protected void doExecute(PMStrutsContext ctx) throws PMException {}
 }

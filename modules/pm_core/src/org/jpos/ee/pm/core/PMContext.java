@@ -19,14 +19,6 @@ package org.jpos.ee.pm.core;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
 import org.jpos.ee.pm.struts.EntityContainer;
@@ -38,207 +30,107 @@ import org.jpos.transaction.Context;
 /**An extension of the org.jpos.transaction.Context class with some helpers
  * for PM.*/
 public class PMContext extends Context implements Constants{
-	
-	/**
-	 * @return the mapping
-	 */
-	public ActionMapping getMapping() {
-		return (ActionMapping)get(PM_MAPPINGS);
-	}
-	/**
-	 * @param mapping the mapping to set
-	 */
-	public void setMapping(ActionMapping mapping) {
-		put(PM_MAPPINGS, mapping);
-	}
-	/**
-	 * @return the form
-	 */
-	public ActionForm getForm() {
-		return (ActionForm) get(PM_ACTION_FORM);
-	}
-	/**
-	 * @param form the form to set
-	 */
-	public void setForm(ActionForm form) {
-		put(PM_ACTION_FORM, form);
-	}
-	
-	/**
-	 * @return the request
-	 */
-	public HttpServletRequest getRequest() {
-		return (HttpServletRequest)get(PM_HTTP_REQUEST);
-	}
-	/**
-	 * @param request the request to set
-	 */
-	public void setRequest(HttpServletRequest request) {
-		put(PM_HTTP_REQUEST, request);
-	}
-	
-	/**
-	 * @return the response
-	 */
-	public HttpServletResponse getResponse() {
-		return (HttpServletResponse) get(PM_HTTP_RESPONSE);
-	}
-	/**
-	 * @param response the response to set
-	 */
-	public void setResponse(HttpServletResponse response) {
-		put(PM_HTTP_RESPONSE,response);
-	}
-
-	/**
-	 * @return the errors
-	 */
-	public List<PMMessage> getErrors() {
-		return (List<PMMessage>) get(PM_ERRORS);
-	}
-	/**
-	 * @param errors the errors to set
-	 */
-	public void setErrors(List<PMMessage> errors) {
-		put(PM_ERRORS,errors);
-	}
-	
-	public HttpSession getSession(){
-		return getRequest().getSession();
-	}
-	
-	public PMEntitySupport getEntitySupport(){		
-		PMEntitySupport r = (PMEntitySupport)getRequest().getSession().getAttribute(ENTITY_SUPPORT);
-		return r;	
-	}		
-	
-	/*public DB getDB(){
-		if(getPMService().ignoreDb()) return null;
-		DB db = (DB)getSession().getAttribute(DB);
-		if(db == null) {
-			PMLogger.info("Database Access Created");
-			db = new DB(PMLogger.getLog());
-			db.open();
-			getSession().setAttribute(DB, db);
-		}
-		return db;
-	}*/
-	
     
-	public PMSecurityUser getUser(){
-		PMSecurityUser user = (PMSecurityUser) getSession().getAttribute(USER);
-    	return user;
+
+    /**
+     * @return the errors
+     */
+    public List<PMMessage> getErrors() {
+        return (List<PMMessage>) get(PM_ERRORS);
+    }
+    /**
+     * @param errors the errors to set
+     */
+    public void setErrors(List<PMMessage> errors) {
+        put(PM_ERRORS,errors);
     }
     
-	public boolean isUserOnLine() {
-		return (getUser() != null);
-	}
-	
-	/* ActionForwards Helpers */
-	public ActionForward successful() {
-		return getMapping().findForward(SUCCESS);
-	}
-	
-	public ActionForward go() {
-		return getMapping().findForward(CONTINUE);
-	}
-
-	public ActionForward deny() {
-		return getMapping().findForward(DENIED);
-	}
-	
-	public EntityContainer getEntityContainer(String id) throws PMException{
-		EntityContainer ec = (EntityContainer) getSession().getAttribute(id);
-		if(ec == null){
-			getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.entity.not.found", id));
-			throw new PMException();
-		}
-		return ec;
-	}
-	public String getParameter(String s) {
-		return getRequest().getParameter(s);
-	}
-
-    protected PMStrutsService getPMService(){    	
-    	return (PMStrutsService) PMEntitySupport.staticPmservice();
+    public PMSecurityUser getUser(){
+        PMSecurityUser user = (PMSecurityUser) get(USER);
+        return user;
     }
-	/**
-	 * @param entityContainer the entity_container to set
-	 */
-	public void setEntityContainer(EntityContainer entityContainer) {
-		put(PM_ENTITY_CONTAINER,entityContainer);
-	}
-	/**
-	 * @return the entity_container
-	 * @throws PMException 
-	 */
-	public EntityContainer getEntityContainer() throws PMException {
-		EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
-		if(entityContainer == null){
-			getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.entity.not.found", getPmId()));
-			throw new PMException();
-		}
-		return entityContainer;
-	}
-
-	private String getPmId() {
-		return (String) getRequest().getAttribute(PM_ID);
-	}
-	/**
-	 * @return the entity_container
-	 * @throws PMException 
-	 */
-	public boolean hasEntityContainer(){
-		EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
-		return entityContainer != null;
-	}
-	/**
-	 * @param operation the operation to set
-	 */
-	public void setOperation(Operation operation) {
-		put(PM_OPERATION,operation);
-	}
-	/**
-	 * @return the operation
-	 */
-	public Operation getOperation() {
-		return (Operation)get(PM_OPERATION);
-	}
-	/**
-	 * @param owner the owner to set
-	 */
-	public void setOwner(EntityContainer owner) {
-		put(PM_OWNER,owner);
-	}
-	/**
-	 * @return the owner
-	 */
-	public EntityContainer getOwner() {
-		return (EntityContainer)get(PM_OWNER);
-	}
-	
-	public Entity getEntity()throws PMException{
-    	return getEntityContainer().getEntity();
+    
+    public boolean isUserOnLine() {
+        return (getUser() != null);
     }
-	
-	public PMList getList() throws PMException{
-		return getEntityContainer().getList();
-	}
-	
-	public boolean isWeak(){
-		return getOwner() != null;
-	}
+    
+    
+    protected PMStrutsService getPMService(){        
+        return (PMStrutsService) PMEntitySupport.staticPmservice();
+    }
+    /**
+     * @param entityContainer the entity_container to set
+     */
+    public void setEntityContainer(EntityContainer entityContainer) {
+        put(PM_ENTITY_CONTAINER,entityContainer);
+    }
+    /**
+     * @return the entity_container
+     * @throws PMException 
+     */
+    public EntityContainer getEntityContainer() throws PMException {
+        EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
+        if(entityContainer == null){
+            throw new PMException("pm_core.entity.not.found");
+        }
+        return entityContainer;
+    }
 
-	public EntityInstanceWrapper getSelected() throws PMException{
-		return getEntityContainer().getSelected();
-	}
-	
-	public boolean hasEntity() {
-		try {
-			return (hasEntityContainer() && getEntityContainer().getEntity() != null);
-		} catch (PMException e) {
-			return false;
-		}
-	}
+    /**
+     * @return the entity_container
+     * @throws PMException 
+     */
+    public boolean hasEntityContainer(){
+        EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
+        return entityContainer != null;
+    }
+    /**
+     * @param operation the operation to set
+     */
+    public void setOperation(Operation operation) {
+        put(PM_OPERATION,operation);
+    }
+    /**
+     * @return the operation
+     */
+    public Operation getOperation() {
+        return (Operation)get(PM_OPERATION);
+    }
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(EntityContainer owner) {
+        put(PM_OWNER,owner);
+    }
+    /**
+     * @return the owner
+     */
+    public EntityContainer getOwner() {
+        return (EntityContainer)get(PM_OWNER);
+    }
+    
+    public Entity getEntity()throws PMException{
+        return getEntityContainer().getEntity();
+    }
+    
+    public PMList getList() throws PMException{
+        return getEntityContainer().getList();
+    }
+    
+    public boolean isWeak(){
+        return getOwner() != null;
+    }
+
+    public EntityInstanceWrapper getSelected() throws PMException{
+        return getEntityContainer().getSelected();
+    }
+    
+    public boolean hasEntity() {
+        try {
+            return (hasEntityContainer() && getEntityContainer().getEntity() != null);
+        } catch (PMException e) {
+            return false;
+        }
+    }
 
 }

@@ -28,24 +28,24 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.Constants;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.PMUnauthorizedException;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMForwardException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.struts.PMStrutsService;
 
 /**A super class for all actions with some helpers and generic stuff*/
 public abstract class ActionSupport extends Action implements Constants{
 
-    protected abstract void doExecute(PMContext ctx)throws PMException;
+    protected abstract void doExecute(PMStrutsContext ctx)throws PMException;
     
     /**Forces execute to check if any user is logged in*/
     protected boolean checkUser(){     return true;}
     
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         if(checkUser() && ctx.getUser() == null){
             ctx.getRequest().setAttribute("reload", 1);
             throw new PMUnauthorizedException();
@@ -54,7 +54,7 @@ public abstract class ActionSupport extends Action implements Constants{
     }
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-        PMContext ctx = (PMContext) request.getAttribute(PM_CONTEXT);
+    	PMStrutsContext ctx = (PMStrutsContext) request.getAttribute(PM_CONTEXT);
         ctx.setMapping(mapping);
         ctx.setForm(form);
         try {
@@ -77,7 +77,7 @@ public abstract class ActionSupport extends Action implements Constants{
         }
     }
     
-    protected void excecute(PMContext ctx) throws PMException {
+    protected void excecute(PMStrutsContext ctx) throws PMException {
         doExecute(ctx);
     }
 

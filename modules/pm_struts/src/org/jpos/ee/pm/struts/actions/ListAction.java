@@ -23,11 +23,11 @@ import java.util.List;
 
 import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.Operations;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMList;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class ListAction extends EntityActionSupport {
     
@@ -36,7 +36,7 @@ public class ListAction extends EntityActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-    protected void doExecute(PMContext ctx) throws PMException {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
         ListActionForm f = (ListActionForm) ctx.getForm();
         configureList(ctx,f);
         boolean searchable = ctx.getOperation().getConfig("searchable", "true").compareTo("true")==0;
@@ -45,7 +45,7 @@ public class ListAction extends EntityActionSupport {
         ctx.getRequest().setAttribute("paginable", paginable);
     }
     
-    private void configureList(PMContext ctx, ListActionForm f) throws PMException {
+    private void configureList(PMStrutsContext ctx, ListActionForm f) throws PMException {
         //PMListSupport pmls = new PMListSupport();
 
         List<Object> contents = null;

@@ -22,16 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public abstract class RowActionSupport extends FieldProcessingActionSupport {
     
     public boolean testSelectedExist(){ return true; }
 
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         
         //If we get item param, we change the selected item on the container

@@ -18,10 +18,10 @@
 package org.jpos.ee.pm.struts.actions;
 
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMForwardException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class EditAction extends RowActionSupport{
 
@@ -34,7 +34,7 @@ public class EditAction extends RowActionSupport{
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
     
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         if(ctx.getRequest().getParameter(FINISH)==null){
             /*This point limite anidation of weak entities.*/
@@ -53,7 +53,7 @@ public class EditAction extends RowActionSupport{
         return true;
     }
     
-    protected void doExecute(PMContext ctx) throws PMException {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
         if(!ctx.isWeak()){
             if(ctx.getEntity().isPersistent()){
                 PMLogger.debug(this,"Updating '"+ctx.getEntity().getId()+"' to Data Access");

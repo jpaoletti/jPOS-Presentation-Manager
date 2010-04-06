@@ -27,6 +27,7 @@ import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMService;
 import org.jpos.ee.pm.struts.EntityContainer;
 import org.jpos.ee.pm.struts.PMEntitySupport;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
 
@@ -39,7 +40,7 @@ public abstract class EntityActionSupport extends ActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         
         configureEntityContainer(ctx);
@@ -71,7 +72,7 @@ public abstract class EntityActionSupport extends ActionSupport {
         return true;
     }
     
-    protected void excecute(PMContext ctx) throws PMException {
+    protected void excecute(PMStrutsContext ctx) throws PMException {
         
         if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
             ctx.getOperation().getContext().preExecute(ctx);
@@ -123,7 +124,7 @@ public abstract class EntityActionSupport extends ActionSupport {
         return isAudited() && ctx.hasEntity() && ctx.getEntity().isAuditable();
     }
 
-    protected boolean configureEntityContainer(PMContext ctx) throws PMException {
+    protected boolean configureEntityContainer(PMStrutsContext ctx) throws PMException {
         String pmid = ctx.getRequest().getParameter(PM_ID);
         if(pmid==null) {
             pmid=(String) ctx.getSession().getAttribute(LAST_PM_ID);
@@ -170,11 +171,11 @@ public abstract class EntityActionSupport extends ActionSupport {
         }
     }
     
-    protected Collection<Object> getOwnerCollection(PMContext ctx) throws PMException {
+    protected Collection<Object> getOwnerCollection(PMStrutsContext ctx) throws PMException {
         return (Collection<Object>) ctx.getEntitySupport().get(ctx.getOwner().getSelected().getInstance(), ctx.getEntity().getOwner().getEntityProperty());
     }
 
-    protected Collection<Object> getModifiedOwnerCollection(PMContext ctx, String field) {
+    protected Collection<Object> getModifiedOwnerCollection(PMStrutsContext ctx, String field) {
         Collection<Object> collection = (Collection<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
         /*if(collection == null) {
             collection = new ArrayList<Object>();
@@ -183,11 +184,11 @@ public abstract class EntityActionSupport extends ActionSupport {
         return collection;
     }
     
-    protected void setModifiedOwnerCollection(PMContext ctx, String field, Collection<Object> list) {
+    protected void setModifiedOwnerCollection(PMStrutsContext ctx, String field, Collection<Object> list) {
         ctx.getSession().setAttribute(field+"_"+MODIFIED_OWNER_COLLECTION, list);
     }
 
-    protected void clearModifiedOwnerCollection(PMContext ctx) {
+    protected void clearModifiedOwnerCollection(PMStrutsContext ctx) {
         Enumeration<String> e = ctx.getSession().getAttributeNames();
         while(e.hasMoreElements()){
             String s = e.nextElement();
@@ -197,7 +198,7 @@ public abstract class EntityActionSupport extends ActionSupport {
         }
     }
     
-    protected EntityContainer getEntityContainer(PMContext ctx, String eid) {
+    protected EntityContainer getEntityContainer(PMStrutsContext ctx, String eid) {
         return (EntityContainer) ctx.getRequest().getSession().getAttribute(EntityContainer.buildId(HASH, eid));
     }
 }

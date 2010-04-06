@@ -17,14 +17,14 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class DeleteAction extends RowActionSupport {
 
     protected boolean openTransaction() {return true;}
 
-    protected void doExecute(PMContext ctx) throws PMException {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
         if(ctx.isWeak()){
             getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).remove(ctx.getSelected().getInstance());
         }else{

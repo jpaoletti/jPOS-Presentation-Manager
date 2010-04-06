@@ -18,8 +18,8 @@
 package org.jpos.ee.pm.struts.actions;
 
 import org.jpos.ee.pm.core.Operations;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class OperAction extends EntityActionSupport{
     Operations operations;
@@ -33,7 +33,7 @@ public class OperAction extends EntityActionSupport{
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-    protected boolean prepare(PMContext ctx) throws PMException {
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
         configureEntityContainer(ctx);
         ctx.setOperation ( ctx.getEntity().getOperations().getOperation("list") );
         ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
@@ -41,7 +41,7 @@ public class OperAction extends EntityActionSupport{
         return true;
     }
     
-    protected void doExecute(PMContext ctx)throws PMException{
+    protected void doExecute(PMStrutsContext ctx)throws PMException{
         ctx.getRequest().setAttribute(ITEM_OPERATIONS, operations.getOperationsForScope(SCOPE_ITEM));
     }
 }

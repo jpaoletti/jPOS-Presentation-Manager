@@ -23,16 +23,16 @@ import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
 
 public abstract class FieldProcessingActionSupport extends EntityActionSupport{
     
-    protected void proccessField(PMContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
+    protected void proccessField(PMStrutsContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
         //Object object = rc.getSelected();
         Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
         if(moc!=null){
@@ -70,7 +70,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
         }
     }
 
-    private void validateField(PMContext ctx, Field field, EntityInstanceWrapper wrapper, String s) throws PMException {
+    private void validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, String s) throws PMException {
         if(field.getValidators()!= null){
              for (Validator fv : field.getValidators()) {
                  ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
@@ -83,7 +83,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
          }
     }
 
-    private String getParamValues(PMContext ctx, String name, String separator) {
+    private String getParamValues(PMStrutsContext ctx, String name, String separator) {
         String[] ss = ctx.getRequest().getParameterValues(name);
         if(ss!=null){
             StringBuilder s = new StringBuilder();
