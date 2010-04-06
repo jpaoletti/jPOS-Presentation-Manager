@@ -85,12 +85,12 @@ public class Entity extends PMCoreObject {
     
     /**Defines an owner to the entity. It makes this entity "weak".<br/>
      * {@code
-	 *  <owner>
-	 *     <entityId>owner_entity_id</entityId>
-	 *     <entityProperty>owner_property</entityProperty>
-	 *     <localProperty>local_pointer_to_owner</localProperty>
-	 *     <entityCollectionClass></entityCollectionClass>
-	 *  </owner>
+     *  <owner>
+     *     <entityId>owner_entity_id</entityId>
+     *     <entityProperty>owner_property</entityProperty>
+     *     <localProperty>local_pointer_to_owner</localProperty>
+     *     <entityCollectionClass></entityCollectionClass>
+     *  </owner>
      * @see EntityOwner*/
     private EntityOwner owner;
     
@@ -110,13 +110,13 @@ public class Entity extends PMCoreObject {
      * @see OperationContext*/
     private Operations operations;
     
-	/**A list of highlights.*/
-	private Highlights highlights;
-	
-	/** DataAcces, by default, DB*/
-	private DataAccess dataAccess;
-	
-	private List<Entity> weaks;
+    /**A list of highlights.*/
+    private Highlights highlights;
+    
+    /** DataAcces, by default, DB*/
+    private DataAccess dataAccess;
+    
+    private List<Entity> weaks;
     
     /**Default constructor*/
     public Entity () {
@@ -130,56 +130,56 @@ public class Entity extends PMCoreObject {
      *  @return The list of visible (ordered) fields for the list
      * */
     public ArrayList<Field> getListableFields(){
-    	ArrayList<Field> r = new ArrayList<Field>();
-    	for(Field f : getOrderedFields()){
-    		if(f.isDisplayInList())r.add(f);
-    	}
-    	return r;
+        ArrayList<Field> r = new ArrayList<Field>();
+        for(Field f : getOrderedFields()){
+            if(f.isDisplayInList())r.add(f);
+        }
+        return r;
     }
     
     public ArrayList<Field> getAllFields(){
-    	ArrayList<Field> r = new ArrayList<Field>();
-    	r.addAll(getFields());
-    	if(extendzEntity != null)
-    		r.addAll(getExtendzEntity().getAllFields());
-    	return r;
+        ArrayList<Field> r = new ArrayList<Field>();
+        r.addAll(getFields());
+        if(extendzEntity != null)
+            r.addAll(getExtendzEntity().getAllFields());
+        return r;
     }
     
     public List<?> getList(PMContext ctx, EntityFilter filter) throws PMException{
-    	return getList(ctx,filter, null, null);
+        return getList(ctx,filter, null, null);
     }
 
     public List<?> getList(PMContext ctx) throws PMException{
-    	EntityFilter filter = (this.equals(ctx.getEntity()))?ctx.getEntityContainer().getFilter():null;
-		return getList(ctx,filter,null, null);
+        EntityFilter filter = (this.equals(ctx.getEntity()))?ctx.getEntityContainer().getFilter():null;
+        return getList(ctx,filter,null, null);
     }
     
     public List<?> getList(PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException{
-    	ctx.put(PM_ENTITY, this);
-    	List<?> list = getDataAccess().list(ctx,filter,from, count);
-    	ctx.put(PM_ENTITY, null);
-		return list;
+        ctx.put(PM_ENTITY, this);
+        List<?> list = getDataAccess().list(ctx,filter,from, count);
+        ctx.put(PM_ENTITY, null);
+        return list;
     }
     
-	/**Getter for a field by its id
+    /**Getter for a field by its id
      * @param id The Field id
      * @return The Field with the given id*/
     public Field getFieldById(String id){
-    	return getFieldsbyid().get(id);
+        return getFieldsbyid().get(id);
     }
 
     /**Getter for fieldsbyid. If its null, this methods fill it
      * @return The mapped field list
      * */
-	private Map<String, Field> getFieldsbyid() {
-		if(fieldsbyid == null){
-    		fieldsbyid = new HashMap<String, Field>();
-    		for(Field f : getFields()){
-    			fieldsbyid.put(f.getId(), f);
-    		}    		
-    	}
-		return fieldsbyid;
-	}
+    private Map<String, Field> getFieldsbyid() {
+        if(fieldsbyid == null){
+            fieldsbyid = new HashMap<String, Field>();
+            for(Field f : getFields()){
+                fieldsbyid.put(f.getId(), f);
+            }            
+        }
+        return fieldsbyid;
+    }
     
     /**This method sorts the fields and returns them
      * @return fields ordered
@@ -187,9 +187,9 @@ public class Entity extends PMCoreObject {
     public ArrayList<Field> getOrderedFields(){
         try {
             if(isOrdered()){
-            	ArrayList<Field> r = new ArrayList<Field>(getAllFields());
-	            Collections.sort(r, new FieldComparator(getOrder()));
-	            return r;
+                ArrayList<Field> r = new ArrayList<Field>(getAllFields());
+                Collections.sort(r, new FieldComparator(getOrder()));
+                return r;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,24 +199,24 @@ public class Entity extends PMCoreObject {
 
     /**Determine if some of the fields is multieditable
      * @deprecated not implemented yet*/
-	public boolean haveMultiEdit(){
+    public boolean haveMultiEdit(){
         for (Field field : getFields()) {
             if (field.isMultiEditable()) return true;
         }
         return false;
     }
     
-	/**Determine if the entity have the order property
-	 * @return true if order != null*/
+    /**Determine if the entity have the order property
+     * @return true if order != null*/
     public boolean isOrdered(){
         return getOrder() != null;
     }
 
     public String toString() {
-		return "Entity (" + id + ") " + clazz;
-	}
+        return "Entity (" + id + ") " + clazz;
+    }
 
-	/**This method fills the extendsFields variable with the parent Fields.
+    /**This method fills the extendsFields variable with the parent Fields.
      * If some field is redefined, parent field is ignored
      * @param entity The parent entity given by PM engine*/
     public void fillFields(Entity entity) {
@@ -231,261 +231,261 @@ public class Entity extends PMCoreObject {
      * @param id The field id
      * @return true if the entity contains a Field with the given id*/
     private boolean containsField(String id) {
-    	return getFieldById(id) != null;
+        return getFieldById(id) != null;
     }
 
-	/**Getter for id
-	 * @return the id
-	 */
-	public String getId() {
-		return id;
-	}
+    /**Getter for id
+     * @return the id
+     */
+    public String getId() {
+        return id;
+    }
 
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(String id) {
-		this.id = id;
-	}
+    /**
+     * @param id the id to set
+     */
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	/**Getter for clazz
-	 * @return the clazz
-	 */
-	public String getClazz() {
-		return clazz;
-	}
+    /**Getter for clazz
+     * @return the clazz
+     */
+    public String getClazz() {
+        return clazz;
+    }
 
-	/**
-	 * @param clazz the clazz to set
-	 */
-	public void setClazz(String clazz) {
-		this.clazz = clazz;
-	}
+    /**
+     * @param clazz the clazz to set
+     */
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
+    }
 
-	/**Getter for listfilter
-	 * @return the listfilter
-	 */
-	public ListFilter getListfilter() {
-		return listfilter;
-	}
+    /**Getter for listfilter
+     * @return the listfilter
+     */
+    public ListFilter getListfilter() {
+        return listfilter;
+    }
 
-	/**
-	 * @param listfilter the listfilter to set
-	 */
-	public void setListfilter(ListFilter listfilter) {
-		this.listfilter = listfilter;
-	}
+    /**
+     * @param listfilter the listfilter to set
+     */
+    public void setListfilter(ListFilter listfilter) {
+        this.listfilter = listfilter;
+    }
 
-	/**Getter for order
-	 * @return the order
-	 */
-	public String getOrder() {
-		return order;
-	}
+    /**Getter for order
+     * @return the order
+     */
+    public String getOrder() {
+        return order;
+    }
 
-	/**
-	 * @param order the order to set
-	 */
-	public void setOrder(String order) {
-		this.order = order;
-	}
+    /**
+     * @param order the order to set
+     */
+    public void setOrder(String order) {
+        this.order = order;
+    }
 
-	/**The name of the parent entity
-	 * @return the extendz
-	 */
-	public String getExtendz() {
-		return extendz;
-	}
+    /**The name of the parent entity
+     * @return the extendz
+     */
+    public String getExtendz() {
+        return extendz;
+    }
 
-	/**
-	 * @param extendz the extendz to set
-	 */
-	public void setExtendz(String extendz) {
-		this.extendz = extendz;
-	}
+    /**
+     * @param extendz the extendz to set
+     */
+    public void setExtendz(String extendz) {
+        this.extendz = extendz;
+    }
 
-	/**Indicates if the entity is persistent on database or not.
-	 * @return the persistent
-	 */
-	public boolean isPersistent() {
-		if(persistent==null)return true;
-		return persistent;
-	}
+    /**Indicates if the entity is persistent on database or not.
+     * @return the persistent
+     */
+    public boolean isPersistent() {
+        if(persistent==null)return true;
+        return persistent;
+    }
 
-	/**
-	 * @param persistent the persistent to set
-	 */
-	public void setPersistent(boolean persistent) {
-		this.persistent = persistent;
-	}
+    /**
+     * @param persistent the persistent to set
+     */
+    public void setPersistent(boolean persistent) {
+        this.persistent = persistent;
+    }
 
-	/**Indicates if the entity is auditable or not
-	 * @return the auditable
-	 */
-	public boolean isAuditable() {
-		if(persistent==null)return false;
-		return auditable;
-	}
+    /**Indicates if the entity is auditable or not
+     * @return the auditable
+     */
+    public boolean isAuditable() {
+        if(persistent==null)return false;
+        return auditable;
+    }
 
-	/**
-	 * @param auditable the auditable to set
-	 */
-	public void setAuditable(boolean auditable) {
-		this.auditable = auditable;
-	}
+    /**
+     * @param auditable the auditable to set
+     */
+    public void setAuditable(boolean auditable) {
+        this.auditable = auditable;
+    }
 
-	/**Getter for owner
-	 * @return the owner
-	 */
-	public EntityOwner getOwner() {
-		return owner;
-	}
+    /**Getter for owner
+     * @return the owner
+     */
+    public EntityOwner getOwner() {
+        return owner;
+    }
 
-	/**
-	 * @param owner the owner to set
-	 */
-	public void setOwner(EntityOwner owner) {
-		this.owner = owner;
-	}
+    /**
+     * @param owner the owner to set
+     */
+    public void setOwner(EntityOwner owner) {
+        this.owner = owner;
+    }
 
-	/** Getter for entity fields
-	 * @return the fields
-	 */
-	public ArrayList<Field> getFields() {
-		return fields;
-	}
+    /** Getter for entity fields
+     * @return the fields
+     */
+    public ArrayList<Field> getFields() {
+        return fields;
+    }
 
-	/**
-	 * @param fields the fields to set
-	 */
-	public void setFields(ArrayList<Field> fields) {
-		this.fields = fields;
-	}
+    /**
+     * @param fields the fields to set
+     */
+    public void setFields(ArrayList<Field> fields) {
+        this.fields = fields;
+    }
 
-	/**Getter for entity relations
-	 * @return the relations
-	 * @deprecated
-	 *
-	public ArrayList<Relation> getRelations() {
-		return relations;
-	}
+    /**Getter for entity relations
+     * @return the relations
+     * @deprecated
+     *
+    public ArrayList<Relation> getRelations() {
+        return relations;
+    }
 
-	/**
-	 * @param relations the relations to set
-	 * @deprecated
-	 *
-	public void setRelations(ArrayList<Relation> relations) {
-		this.relations = relations;
-	}
-	 */
-	/**Getter for entity operations
-	 * @return the operations
-	 */
-	public Operations getOperations() {
-		return operations;
-	}
+    /**
+     * @param relations the relations to set
+     * @deprecated
+     *
+    public void setRelations(ArrayList<Relation> relations) {
+        this.relations = relations;
+    }
+     */
+    /**Getter for entity operations
+     * @return the operations
+     */
+    public Operations getOperations() {
+        return operations;
+    }
 
-	/**
-	 * @param operations the operations to set
-	 */
-	public void setOperations(Operations operations) {
-		this.operations = operations;
-	}
+    /**
+     * @param operations the operations to set
+     */
+    public void setOperations(Operations operations) {
+        this.operations = operations;
+    }
 
-	/**
-	 * @param extendzEntity the extendzEntity to set
-	 */
-	public void setExtendzEntity(Entity extendzEntity) {
-		this.extendzEntity = extendzEntity;
-	}
+    /**
+     * @param extendzEntity the extendzEntity to set
+     */
+    public void setExtendzEntity(Entity extendzEntity) {
+        this.extendzEntity = extendzEntity;
+    }
 
-	/**
-	 * @return the extendzEntity
-	 */
-	public Entity getExtendzEntity() {
-		return extendzEntity;
-	}
+    /**
+     * @return the extendzEntity
+     */
+    public Entity getExtendzEntity() {
+        return extendzEntity;
+    }
 
-	/**Set also fields, operations and owner service
-	 * @see org.jpos.ee.pm.core.PMCoreObject#setService(org.jpos.ee.pm.core.PMService)
-	 */
-	public void setService(PMService service) {
-		super.setService(service);
-		if(getOwner()!=null) getOwner().setService(service);
-		if(getOperations() != null) getOperations().setService(service);
-		if(getFields() != null){
-			for(Field f: getFields()) f.setService(service);
-		}
-	}
+    /**Set also fields, operations and owner service
+     * @see org.jpos.ee.pm.core.PMCoreObject#setService(org.jpos.ee.pm.core.PMService)
+     */
+    public void setService(PMService service) {
+        super.setService(service);
+        if(getOwner()!=null) getOwner().setService(service);
+        if(getOperations() != null) getOperations().setService(service);
+        if(getFields() != null){
+            for(Field f: getFields()) f.setService(service);
+        }
+    }
 
-	/**
-	 * @param highlights the highlights to set
-	 */
-	public void setHighlights(Highlights highlights) {
-		this.highlights = highlights;
-	}
+    /**
+     * @param highlights the highlights to set
+     */
+    public void setHighlights(Highlights highlights) {
+        this.highlights = highlights;
+    }
 
-	/**
-	 * @return the highlights
-	 */
-	public Highlights getHighlights() {
-		return highlights;
-	}
+    /**
+     * @return the highlights
+     */
+    public Highlights getHighlights() {
+        return highlights;
+    }
 
-	/**
-	 * @param dataAccess the dataAccess to set
-	 */
-	public void setDataAccess(DataAccess dataAccess) {
-		this.dataAccess = dataAccess;
-	}
+    /**
+     * @param dataAccess the dataAccess to set
+     */
+    public void setDataAccess(DataAccess dataAccess) {
+        this.dataAccess = dataAccess;
+    }
 
-	/**
-	 * @return the dataAccess
-	 */
-	public DataAccess getDataAccess() {
-		if(dataAccess == null)
-			try {
-				dataAccess = (DataAccess) Class.forName(getService().getDefaultDataAccess()).newInstance();
-			} catch (Exception e) {
-				PMLogger.error(e);
-			}
-		return dataAccess;
-	}
+    /**
+     * @return the dataAccess
+     */
+    public DataAccess getDataAccess() {
+        if(dataAccess == null)
+            try {
+                dataAccess = (DataAccess) Class.forName(getService().getDefaultDataAccess()).newInstance();
+            } catch (Exception e) {
+                PMLogger.error(e);
+            }
+        return dataAccess;
+    }
 
-	/**
-	 * @param weaks the weaks to set
-	 */
-	public void setWeaks(List<Entity> weaks) {
-		this.weaks = weaks;
-	}
+    /**
+     * @param weaks the weaks to set
+     */
+    public void setWeaks(List<Entity> weaks) {
+        this.weaks = weaks;
+    }
 
-	/**
-	 * @return the weaks
-	 */
-	public List<Entity> getWeaks() {
-		return weaks;
-	}
+    /**
+     * @return the weaks
+     */
+    public List<Entity> getWeaks() {
+        return weaks;
+    }
 
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((id == null) ? 0 : id.hashCode());
+        return result;
+    }
 
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Entity))
-			return false;
-		Entity other = (Entity) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
-	}
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (!(obj instanceof Entity))
+            return false;
+        Entity other = (Entity) obj;
+        if (id == null) {
+            if (other.id != null)
+                return false;
+        } else if (!id.equals(other.id))
+            return false;
+        return true;
+    }
 }

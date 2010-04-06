@@ -38,7 +38,7 @@ import org.jpos.util.NameRegistrar;
 public class PMService extends QBeanSupport implements Constants{
     protected Map<Object,Entity> entities;
     protected Map<String,MenuItemLocation> locations;
-	private Map<Object, Monitor> monitors;
+    private Map<Object, Monitor> monitors;
     private String template;
     private String appversion;
     private boolean loginRequired;
@@ -48,11 +48,12 @@ public class PMService extends QBeanSupport implements Constants{
     private String logo;
     private String contact;
     private String defaultDataAccess;
+    private PersistenceManager persistenceManager;
     
     protected void initService() throws Exception {
-		PMLogger.setLog(getLog());
-		PMLogger.setDebug(cfg.getBoolean("debug"));
-		
+        PMLogger.setLog(getLog());
+        PMLogger.setDebug(cfg.getBoolean("debug"));
+        
         getLog().info ("Entity Manager activated");
         EntityParser parser = new EntityParser();
         loadEntities(parser);
@@ -79,60 +80,62 @@ public class PMService extends QBeanSupport implements Constants{
         if(contact==null || contact.compareTo("")==0) contact="mailto:jpaoletti@angras.com.ar";
 
         try {
-			setLoginRequired(cfg.getBoolean("login-required")); 
-		} catch (Exception e) {
-			setLoginRequired(true);
-		}
-		
-		if(loginRequired) getLog().info("Login Required");
-		else getLog().info("Login Not Required");
+            setLoginRequired(cfg.getBoolean("login-required")); 
+        } catch (Exception e) {
+            setLoginRequired(true);
+        }
+        
+        if(loginRequired) getLog().info("Login Required");
+        else getLog().info("Login Not Required");
         
         try {
-			setIgnoreDb(cfg.getBoolean("ignore-db")); 
-		} catch (Exception e) {
-			setIgnoreDb(false);
-		}
-				
+            setIgnoreDb(cfg.getBoolean("ignore-db")); 
+        } catch (Exception e) {
+            setIgnoreDb(false);
+        }
+        
+        setPersistenceManager((PersistenceManager)Class.forName(cfg.get("persistence-manager", "org.jpos.ee.pm.core.DBPersistenceManager")).newInstance());
+                
         NameRegistrar.register (getCustomName(), this);
     }
 
-	private void loadMonitors(EntityParser parser) throws FileNotFoundException {
-		Map<Object,Monitor> result = new HashMap<Object,Monitor>();
+    private void loadMonitors(EntityParser parser) throws FileNotFoundException {
+        Map<Object,Monitor> result = new HashMap<Object,Monitor>();
         String[] ss = cfg.getAll ("monitor");
         for (Integer i=0; i<ss.length; i++) {
-        	Monitor m = parser.parseMonitorFile(ss[i]);
-        	result.put (m.getId(), m);
+            Monitor m = parser.parseMonitorFile(ss[i]);
+            result.put (m.getId(), m);
             result.put (i, m);
             m.setService(this);
             m.getSource().init();
             getLog().info (m.toString());
             Thread thread = new Thread(m);
             m.setThread(thread);
-			thread.start();
+            thread.start();
         }
         setMonitors(result);
-	}
-
-	private void loadLocations() {
-		MenuItemLocationsParser parser = new MenuItemLocationsParser("cfg/pm.locations.xml");
-		locations = parser.getLocations();
-		if(locations == null || locations.size()==0)
-			getLog().warn("There is no location defined!");
-	}
-
-	public static String getCustomName() {
-		return "presentation-manager-ee";
-	}
-    
-	/**Encapsulate a String that is going to be visualized by default (without a Converter)
-	 * @param s The String
-	 * @return The wrapped String*/
-    public String visualizationWrapper(String s){
-    	return s;
     }
 
-	private void loadEntities(EntityParser parser) throws FileNotFoundException {
-		Map<Object,Entity> m = new HashMap<Object,Entity>();
+    private void loadLocations() {
+        MenuItemLocationsParser parser = new MenuItemLocationsParser("cfg/pm.locations.xml");
+        locations = parser.getLocations();
+        if(locations == null || locations.size()==0)
+            getLog().warn("There is no location defined!");
+    }
+
+    public static String getCustomName() {
+        return "presentation-manager-ee";
+    }
+    
+    /**Encapsulate a String that is going to be visualized by default (without a Converter)
+     * @param s The String
+     * @return The wrapped String*/
+    public String visualizationWrapper(String s){
+        return s;
+    }
+
+    private void loadEntities(EntityParser parser) throws FileNotFoundException {
+        Map<Object,Entity> m = new HashMap<Object,Entity>();
         String[] ss = cfg.getAll ("entity");
         for (Integer i=0; i<ss.length; i++) {
             Entity e = parser.parseEntityFile(ss[i]);
@@ -142,130 +145,144 @@ public class PMService extends QBeanSupport implements Constants{
             getLog().info (e.toString());
         }
         entities = m;
-	}
-	
-	protected List<Entity> weakEntities(Entity e) {
-		List<Entity> res = new ArrayList<Entity>();
-		for(Entity entity : getEntities().values()){
-			if(entity.getOwner() != null && entity.getOwner().getEntityId().compareTo(e.getId())==0){
-				res.add(entity);
-			}
-		}
-		if(res.isEmpty()) return null; else return res;
-	}
+    }
+    
+    protected List<Entity> weakEntities(Entity e) {
+        List<Entity> res = new ArrayList<Entity>();
+        for(Entity entity : getEntities().values()){
+            if(entity.getOwner() != null && entity.getOwner().getEntityId().compareTo(e.getId())==0){
+                res.add(entity);
+            }
+        }
+        if(res.isEmpty()) return null; else return res;
+    }
 
-	public Map<Object,Entity> getEntities() {
+    public Map<Object,Entity> getEntities() {
         return entities;
     }
     public Entity getEntity (String id) {
         Entity e = getEntities().get (id);
         if(e.getExtendz() != null && e.getExtendzEntity() == null)
-        	e.setExtendzEntity(this.getEntity(e.getExtendz()));
-		return e;
+            e.setExtendzEntity(this.getEntity(e.getExtendz()));
+        return e;
     }
     public Monitor getMonitor (String id) {
-		return getMonitors().get (id);
+        return getMonitors().get (id);
     }
-	public String getTemplate() {
-		return template;
-	}
-	
-	public String getAppversion(){
-		return appversion;
-	}
-	
-	public MenuItemLocation getLocation(String id){
-		return locations.get(id);
-	}
+    public String getTemplate() {
+        return template;
+    }
+    
+    public String getAppversion(){
+        return appversion;
+    }
+    
+    public MenuItemLocation getLocation(String id){
+        return locations.get(id);
+    }
 
-	/**
-	 * @param loginRequired the loginRequired to set
-	 */
-	public void setLoginRequired(boolean loginRequired) {
-		this.loginRequired = loginRequired;
-	}
+    /**
+     * @param loginRequired the loginRequired to set
+     */
+    public void setLoginRequired(boolean loginRequired) {
+        this.loginRequired = loginRequired;
+    }
 
-	/**
-	 * @return the loginRequired
-	 */
-	public boolean isLoginRequired() {
-		return loginRequired;
-	}
+    /**
+     * @return the loginRequired
+     */
+    public boolean isLoginRequired() {
+        return loginRequired;
+    }
 
-	/**
-	 * @param ignoreDb the ignoreDb to set
-	 */
-	public void setIgnoreDb(boolean ignoreDb) {
-		this.ignoreDb = ignoreDb;
-	}
+    /**
+     * @param ignoreDb the ignoreDb to set
+     */
+    public void setIgnoreDb(boolean ignoreDb) {
+        this.ignoreDb = ignoreDb;
+    }
 
-	/**
-	 * @return the ignoreDb
-	 */
-	public boolean ignoreDb() {
-		return ignoreDb;
-	}
+    /**
+     * @return the ignoreDb
+     */
+    public boolean ignoreDb() {
+        return ignoreDb;
+    }
 
-	/**
-	 * @return the title
-	 */
-	public String getTitle() {
-		return title;
-	}
+    /**
+     * @return the title
+     */
+    public String getTitle() {
+        return title;
+    }
 
-	/**
-	 * @return the subtitle
-	 */
-	public String getSubtitle() {
-		return subtitle;
-	}
+    /**
+     * @return the subtitle
+     */
+    public String getSubtitle() {
+        return subtitle;
+    }
 
-	/**
-	 * @return the logo
-	 */
-	public String getLogo() {
-		return logo;
-	}
+    /**
+     * @return the logo
+     */
+    public String getLogo() {
+        return logo;
+    }
 
-	/**
-	 * @param contact the contact to set
-	 */
-	public void setContact(String contact) {
-		this.contact = contact;
-	}
+    /**
+     * @param contact the contact to set
+     */
+    public void setContact(String contact) {
+        this.contact = contact;
+    }
 
-	/**
-	 * @return the contact
-	 */
-	public String getContact() {
-		return contact;
-	}
+    /**
+     * @return the contact
+     */
+    public String getContact() {
+        return contact;
+    }
 
-	/**
-	 * @param monitors the monitors to set
-	 */
-	public void setMonitors(Map<Object, Monitor> monitors) {
-		this.monitors = monitors;
-	}
+    /**
+     * @param monitors the monitors to set
+     */
+    public void setMonitors(Map<Object, Monitor> monitors) {
+        this.monitors = monitors;
+    }
 
-	/**
-	 * @return the monitors
-	 */
-	public Map<Object, Monitor> getMonitors() {
-		return monitors;
-	}
+    /**
+     * @return the monitors
+     */
+    public Map<Object, Monitor> getMonitors() {
+        return monitors;
+    }
 
-	/**
-	 * @param defaultDataAccess the defaultDataAccess to set
-	 */
-	public void setDefaultDataAccess(String defaultDataAccess) {
-		this.defaultDataAccess = defaultDataAccess;
-	}
+    /**
+     * @param defaultDataAccess the defaultDataAccess to set
+     */
+    public void setDefaultDataAccess(String defaultDataAccess) {
+        this.defaultDataAccess = defaultDataAccess;
+    }
 
-	/**
-	 * @return the defaultDataAccess
-	 */
-	public String getDefaultDataAccess() {
-		return defaultDataAccess;
-	}
+    /**
+     * @return the defaultDataAccess
+     */
+    public String getDefaultDataAccess() {
+        return defaultDataAccess;
+    }
+
+    /**
+     * @param persistanceManager the persistanceManager to set
+     */
+    public void setPersistenceManager(PersistenceManager persistanceManager) {
+        this.persistenceManager = persistanceManager;
+    }
+
+    /**
+     * @return the persistanceManager
+     */
+    public PersistenceManager getPersistenceManager() {
+        return persistenceManager;
+    }
 }

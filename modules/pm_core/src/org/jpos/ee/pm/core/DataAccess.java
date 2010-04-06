@@ -22,11 +22,12 @@ import java.util.List;
 import org.jpos.ee.Constants;
 
 public interface DataAccess extends Constants {
-	public Object 	getItem	(PMContext ctx, String property, String value) throws PMException;
-	public List<?>	list	(PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException;
-	public Long		count	(PMContext ctx) throws PMException;
-	public void 	delete	(PMContext ctx, Object object);
-	public void 	update	(PMContext ctx, Object instance);
-	public void 	add		(PMContext ctx, Object instance);
-	public Object 	refresh	(PMContext ctx, Object o) throws PMException;
+    public Object     getItem    (PMContext ctx, String property, String value) throws PMException;
+    public List<?>    list    (PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException;
+    public Long        count    (PMContext ctx) throws PMException;
+    public void     delete    (PMContext ctx, Object object) throws PMException;
+    public void     update    (PMContext ctx, Object instance) throws PMException;
+    public void     add        (PMContext ctx, Object instance) throws PMException;
+    public Object     refresh    (PMContext ctx, Object o) throws PMException;
+    public EntityFilter createFilter(PMContext ctx) throws PMException;
 }

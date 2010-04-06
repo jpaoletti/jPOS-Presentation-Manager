@@ -31,12 +31,12 @@ import com.thoughtworks.xstream.io.xml.JDomDriver;
  * @author yero
  * */
 public class EntityParser {
-	/**The parser*/
-	private XStream xstream;
-	
-	/**Default constructor*/
-	public EntityParser() {
-		super();
+    /**The parser*/
+    private XStream xstream;
+    
+    /**Default constructor*/
+    public EntityParser() {
+        super();
         xstream = new XStream(new JDomDriver());
         xstream.alias ("entity", Entity.class);
         
@@ -68,7 +68,7 @@ public class EntityParser {
         xstream.alias ("highlight", Highlight.class);
         xstream.alias ("monitor", Monitor.class);
         
-        xstream.useAttributeFor(PMCoreObject.class, 	"debug");
+        xstream.useAttributeFor(PMCoreObject.class,     "debug");
         
         xstream.useAttributeFor(Highlight.class, "field");
         xstream.useAttributeFor(Highlight.class, "color");
@@ -86,33 +86,33 @@ public class EntityParser {
         xstream.addImplicitCollection(Highlights.class, "highlights", Highlight.class);
         xstream.addImplicitCollection(Operation.class, "validators", Validator.class);
         
-	}
+    }
 
-	/**Parse an entity configuration file
-	 * @param filename The file name
-	 * @return The obtained entity*/
-	public Entity parseEntityFile(String filename) throws FileNotFoundException{
-		return (Entity) xstream.fromXML (new FileReader (filename));
-	}
+    /**Parse an entity configuration file
+     * @param filename The file name
+     * @return The obtained entity*/
+    public Entity parseEntityFile(String filename) throws FileNotFoundException{
+        return (Entity) xstream.fromXML (new FileReader (filename));
+    }
 
-	/**Parse a monitor configuration file
-	 * @param filename The file name
-	 * @return The obtained monitor*/
-	public Monitor parseMonitorFile(String filename) throws FileNotFoundException{
-		return (Monitor) xstream.fromXML (new FileReader (filename), new Monitor());
-	}
+    /**Parse a monitor configuration file
+     * @param filename The file name
+     * @return The obtained monitor*/
+    public Monitor parseMonitorFile(String filename) throws FileNotFoundException{
+        return (Monitor) xstream.fromXML (new FileReader (filename), new Monitor());
+    }
 
-	/**Parse an operations file
-	 * @param filename The file name
-	 * @return The operations*/
-	public Operations parseOperationsFile(String filename) throws FileNotFoundException{
-		return (Operations) xstream.fromXML (new FileReader (filename));
-	}
+    /**Parse an operations file
+     * @param filename The file name
+     * @return The operations*/
+    public Operations parseOperationsFile(String filename) throws FileNotFoundException{
+        return (Operations) xstream.fromXML (new FileReader (filename));
+    }
 
-	/**
-	 * @return the parser
-	 */
-	public XStream getXstream() {
-		return xstream;
-	}	
+    /**
+     * @return the parser
+     */
+    public XStream getXstream() {
+        return xstream;
+    }    
 }

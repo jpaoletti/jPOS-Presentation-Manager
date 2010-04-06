@@ -30,95 +30,95 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMList;
 
 public class ListAction extends EntityActionSupport {
-	
-	/**Makes the operation generate an auditory entry*/
-	protected boolean isAudited() {	return false; }
+    
+    /**Makes the operation generate an auditory entry*/
+    protected boolean isAudited() {    return false; }
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
-	protected void doExecute(PMContext ctx) throws PMException {
-		ListActionForm f = (ListActionForm) ctx.getForm();
+    protected void doExecute(PMContext ctx) throws PMException {
+        ListActionForm f = (ListActionForm) ctx.getForm();
         configureList(ctx,f);
         boolean searchable = ctx.getOperation().getConfig("searchable", "true").compareTo("true")==0;
         boolean paginable = ctx.getOperation().getConfig("paginable", "true").compareTo("true")==0;
         ctx.getRequest().setAttribute("searchable", searchable);
         ctx.getRequest().setAttribute("paginable", paginable);
-	}
-	
-	private void configureList(PMContext ctx, ListActionForm f) throws PMException {
-		//PMListSupport pmls = new PMListSupport();
+    }
+    
+    private void configureList(PMContext ctx, ListActionForm f) throws PMException {
+        //PMListSupport pmls = new PMListSupport();
 
-		List<Object> contents = null;
-		long total = 0;
-		Integer rpp = 10;
-		
-		PMList pmlist = ctx.getList();
-		if(pmlist == null){
-			pmlist = new PMList();
+        List<Object> contents = null;
+        long total = 0;
+        Integer rpp = 10;
+        
+        PMList pmlist = ctx.getList();
+        if(pmlist == null){
+            pmlist = new PMList();
             pmlist.setEntity(ctx.getEntity());
             Operations operations = (Operations) ctx.getSession().getAttribute(OPERATIONS);
-            pmlist.setOperations	(operations.getOperationsForScope(SCOPE_GRAL));
+            pmlist.setOperations    (operations.getOperationsForScope(SCOPE_GRAL));
             String sortfield = ctx.getOperation().getConfig("sort-field");
             String sortdirection = ctx.getOperation().getConfig("sort-direction");
-    		if(sortfield!=null){
-    			pmlist.setOrder(sortfield);
-    			if(sortdirection!=null && sortdirection.toLowerCase().compareTo("desc")==0)
-    				pmlist.setDesc(true);
-    		}
-		}
-		
-		if(ctx.getParameter(FINISH)!=null){
-			pmlist.setOrder(f.getOrder());
-			pmlist.setDesc(f.isDesc());
-			pmlist.setPage(f.getPage());
-			pmlist.setRowsPerPage(f.getRowsPerPage());
-		}
-		
-		if(ctx.isWeak()){
-			PMLogger.debug(this,"Listing weak entity");
-			//The list is the collection of the owner.
-			String entity_property = ctx.getEntity().getOwner().getEntityProperty();
-			Collection<Object> moc = getModifiedOwnerCollection(ctx, entity_property);
-			if(moc == null){
-				moc = getOwnerCollection(ctx);
-			}
-			contents = new ArrayList<Object>();
-			try {
-				Collection<Object> result;
-				String collection_class = ctx.getEntity().getOwner().getEntityCollectionClass();
-				result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class );
-				if(moc != null)	result.addAll(moc);
-				PMLogger.debug(this,"Setting modified owner collection: "+result);
-				setModifiedOwnerCollection(ctx, entity_property, result);
-				contents.addAll(result);
-			} catch (ConfigurationException e) {
-				PMLogger.error(e);
-			}
-			total = contents.size();
-		}else{
-			if(ctx.getEntity().isPersistent()){
-				ctx.put(PM_LIST_ORDER, pmlist.getOrder());
-				ctx.put(PM_LIST_ASC, !pmlist.isDesc());
-				try {
-					contents = (List<Object>) ctx.getEntity().getList(ctx, ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
-					total = ctx.getEntity().getDataAccess().count(ctx);
-				} catch (Exception e) {
-					PMLogger.error(e);
-					throw new PMException("pm.operation.cant.load.list");
-				}
-				rpp = pmlist.rpp();
-			}else{
-				//An empty list that will be filled on an a list context
-				contents = new ArrayList<Object>();
-			}
-		}
-		
-		PMLogger.debug(this,"List Contents: "+contents);
+            if(sortfield!=null){
+                pmlist.setOrder(sortfield);
+                if(sortdirection!=null && sortdirection.toLowerCase().compareTo("desc")==0)
+                    pmlist.setDesc(true);
+            }
+        }
+        
+        if(ctx.getParameter(FINISH)!=null){
+            pmlist.setOrder(f.getOrder());
+            pmlist.setDesc(f.isDesc());
+            pmlist.setPage(f.getPage());
+            pmlist.setRowsPerPage(f.getRowsPerPage());
+        }
+        
+        if(ctx.isWeak()){
+            PMLogger.debug(this,"Listing weak entity");
+            //The list is the collection of the owner.
+            String entity_property = ctx.getEntity().getOwner().getEntityProperty();
+            Collection<Object> moc = getModifiedOwnerCollection(ctx, entity_property);
+            if(moc == null){
+                moc = getOwnerCollection(ctx);
+            }
+            contents = new ArrayList<Object>();
+            try {
+                Collection<Object> result;
+                String collection_class = ctx.getEntity().getOwner().getEntityCollectionClass();
+                result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class );
+                if(moc != null)    result.addAll(moc);
+                PMLogger.debug(this,"Setting modified owner collection: "+result);
+                setModifiedOwnerCollection(ctx, entity_property, result);
+                contents.addAll(result);
+            } catch (ConfigurationException e) {
+                PMLogger.error(e);
+            }
+            total = contents.size();
+        }else{
+            if(ctx.getEntity().isPersistent()){
+                ctx.put(PM_LIST_ORDER, pmlist.getOrder());
+                ctx.put(PM_LIST_ASC, !pmlist.isDesc());
+                try {
+                    contents = (List<Object>) ctx.getEntity().getList(ctx, ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
+                    total = ctx.getEntity().getDataAccess().count(ctx);
+                } catch (Exception e) {
+                    PMLogger.error(e);
+                    throw new PMException("pm.operation.cant.load.list");
+                }
+                rpp = pmlist.rpp();
+            }else{
+                //An empty list that will be filled on an a list context
+                contents = new ArrayList<Object>();
+            }
+        }
+        
+        PMLogger.debug(this,"List Contents: "+contents);
         ctx.getEntityContainer().setList(pmlist);
         pmlist.setContents(contents);
-		pmlist.setTotal(total);
+        pmlist.setTotal(total);
         
-		PMLogger.debug(this,"Resulting list: "+pmlist);
-		pmlist.setRowsPerPage	(rpp);
-	}
+        PMLogger.debug(this,"Resulting list: "+pmlist);
+        pmlist.setRowsPerPage    (rpp);
+    }
 }

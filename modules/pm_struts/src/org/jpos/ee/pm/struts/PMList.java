@@ -25,126 +25,126 @@ import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.Operations;
 
 public class PMList implements Constants{
-	private Entity entity;
-	private List<Object> contents;
-	private Integer page;
-	private Long pages;
-	private Long total;
-	private Integer rowsPerPage;
-	private String order;
-	private boolean desc;
-	private Operations operations;
-	private Operations rowOperations;
-	
-	
-	
-	public List<Integer> getPageRange(){
-		List<Integer> r = new ArrayList<Integer>();
-		for(int i = 1 ; i <= getPages() ; i++) r.add(i);
-		return r;
-	}
-	
-	
-	public String toString() {
-		return "PMList [entity=" + entity + ", page=" + page + ", pages="
-				+ pages + ", total=" + total + ", rowsPerPage=" + rowsPerPage
-				+ ", order=" + order + ", desc=" + desc + "]";
-	}
-	
-	public PMList(){
-		this.page = 1;
-		rowsPerPage = 10; //Default
-	}
-	
-	public PMList(List<Object> contents, Long total) {
-		super();
-		this.contents = contents;
-		rowsPerPage = 10; //Default
-		this.page = 1;
-		setTotal(total); 
-	}
-	
-	public void setRowsPerPage(Integer rowsPerPage) {
-		this.rowsPerPage = rowsPerPage;
-		//this.page = 1;
-		this.pages = new Long(total.longValue() / rowsPerPage + 1);
-	}
-	
-	public String getOrder() {
-		return order;
-	}
+    private Entity entity;
+    private List<Object> contents;
+    private Integer page;
+    private Long pages;
+    private Long total;
+    private Integer rowsPerPage;
+    private String order;
+    private boolean desc;
+    private Operations operations;
+    private Operations rowOperations;
+    
+    
+    
+    public List<Integer> getPageRange(){
+        List<Integer> r = new ArrayList<Integer>();
+        for(int i = 1 ; i <= getPages() ; i++) r.add(i);
+        return r;
+    }
+    
+    
+    public String toString() {
+        return "PMList [entity=" + entity + ", page=" + page + ", pages="
+                + pages + ", total=" + total + ", rowsPerPage=" + rowsPerPage
+                + ", order=" + order + ", desc=" + desc + "]";
+    }
+    
+    public PMList(){
+        this.page = 1;
+        rowsPerPage = 10; //Default
+    }
+    
+    public PMList(List<Object> contents, Long total) {
+        super();
+        this.contents = contents;
+        rowsPerPage = 10; //Default
+        this.page = 1;
+        setTotal(total); 
+    }
+    
+    public void setRowsPerPage(Integer rowsPerPage) {
+        this.rowsPerPage = rowsPerPage;
+        //this.page = 1;
+        this.pages = new Long(total.longValue() / rowsPerPage + 1);
+    }
+    
+    public String getOrder() {
+        return order;
+    }
 
-	public void setOrder(String order) {
-		this.order = order;
-	}
+    public void setOrder(String order) {
+        this.order = order;
+    }
 
-	public boolean isDesc() {
-		return desc;
-	}
+    public boolean isDesc() {
+        return desc;
+    }
 
-	public void setDesc(boolean desc) {
-		this.desc = desc;
-	}
+    public void setDesc(boolean desc) {
+        this.desc = desc;
+    }
 
-	public List<Object> getContents() {
-		if(contents==null) contents = new ArrayList<Object>();
-		return contents;
-	}
-	public void setContents(List<Object> contents) {
-		this.contents = contents;
-	}
-	public Integer getPage() {
-		return page;
-	}
-	public void setPage(Integer page) {
-		this.page = page;
-	}
-	public Long getPages() {
-		return pages;
-	}
-	public void setPages(Long pages) {
-		this.pages = pages;
-	}
-	public Long getTotal() {
-		return total;
-	}
-	public void setTotal(Long total) {
-		this.total = total;
-		this.pages = total / rowsPerPage;
-	}
-	public Integer getRowsPerPage() {
-		return rowsPerPage;
-	}
+    public List<Object> getContents() {
+        if(contents==null) contents = new ArrayList<Object>();
+        return contents;
+    }
+    public void setContents(List<Object> contents) {
+        this.contents = contents;
+    }
+    public Integer getPage() {
+        return page;
+    }
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+    public Long getPages() {
+        return pages;
+    }
+    public void setPages(Long pages) {
+        this.pages = pages;
+    }
+    public Long getTotal() {
+        return total;
+    }
+    public void setTotal(Long total) {
+        this.total = total;
+        this.pages = total / rowsPerPage;
+    }
+    public Integer getRowsPerPage() {
+        return rowsPerPage;
+    }
 
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
 
-	public Entity getEntity() {
-		return entity;
-	}
+    public Entity getEntity() {
+        return entity;
+    }
 
-	public void setOperations(Operations operations) {
-		this.operations = operations;
-	}
+    public void setOperations(Operations operations) {
+        this.operations = operations;
+    }
 
-	public Operations getOperations() {
-		return operations;
-	}
+    public Operations getOperations() {
+        return operations;
+    }
 
-	public void setRowOperations(Operations operations) {
-		rowOperations = operations;
-	}
+    public void setRowOperations(Operations operations) {
+        rowOperations = operations;
+    }
 
-	public Operations getRowOperations() {
-		return rowOperations;
-	}
-	
-	public Integer from(){
-		return (this.getPage()!=null)?(((getPage()-1) * getRowsPerPage())):0;
-	}
-	
-	public Integer rpp(){
-		return (getRowsPerPage()!=null)?getRowsPerPage():DEFAULT_PAGE_SIZE;
-	}
+    public Operations getRowOperations() {
+        return rowOperations;
+    }
+    
+    public Integer from(){
+        return (this.getPage()!=null)?(((getPage()-1) * getRowsPerPage())):0;
+    }
+    
+    public Integer rpp(){
+        return (getRowsPerPage()!=null)?getRowsPerPage():DEFAULT_PAGE_SIZE;
+    }
 }

@@ -17,16 +17,10 @@
  */
 package org.jpos.ee.pm.struts;
 
-import org.jpos.ee.DB;
 import org.jpos.ee.pm.core.ListFilter;
 
 /**Helper class for the {@link ListFilter} interface
  * @author jpaoletti*/
 public abstract class ListFilterSupport implements ListFilter {
 
-	/**Getter for a DataBase
-	 * @return DataBase*/
-	public DB getDb(){
-		return PMEntitySupport.getInstance().getDb();
-	}
 }

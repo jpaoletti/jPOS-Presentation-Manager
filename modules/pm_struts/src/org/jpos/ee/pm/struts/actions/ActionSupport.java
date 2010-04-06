@@ -43,49 +43,49 @@ public abstract class ActionSupport extends Action implements Constants{
     protected abstract void doExecute(PMContext ctx)throws PMException;
     
     /**Forces execute to check if any user is logged in*/
-    protected boolean checkUser(){ 	return true;}
+    protected boolean checkUser(){     return true;}
     
-	protected boolean prepare(PMContext ctx) throws PMException {
-		if(checkUser() && ctx.getUser() == null){
-			ctx.getRequest().setAttribute("reload", 1);
-			throw new PMUnauthorizedException();
-		}
-		return true;
-	}
+    protected boolean prepare(PMContext ctx) throws PMException {
+        if(checkUser() && ctx.getUser() == null){
+            ctx.getRequest().setAttribute("reload", 1);
+            throw new PMUnauthorizedException();
+        }
+        return true;
+    }
 
-	public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
-		PMContext ctx = (PMContext) request.getAttribute(PM_CONTEXT);
-		ctx.setMapping(mapping);
-		ctx.setForm(form);
-		try {
-			boolean step = prepare(ctx);
-			if(step) excecute(ctx);
-			return mapping.findForward(SUCCESS);
-		} catch (PMForwardException e){
-			return mapping.findForward(e.getKey());
-		} catch (PMUnauthorizedException e){
-			return mapping.findForward(STRUTS_LOGIN);
-		} catch (PMException e) {
-			PMLogger.error(e);
-			if(e.getKey()!=null) ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, e.getKey()));
-			ActionErrors errors = new ActionErrors();
-			for(PMMessage msg : ctx.getErrors()){
-				errors.add(msg.getKey(), new ActionMessage(msg.getMessage(), msg.getArg0(), msg.getArg1(), msg.getArg2(), msg.getArg3()));
-			}
-			saveErrors(request, errors);
-			return mapping.findForward(FAILURE);
-		}
-	}
-	
-	protected void excecute(PMContext ctx) throws PMException {
-		doExecute(ctx);
-	}
+    public ActionForward execute(ActionMapping mapping, ActionForm form,HttpServletRequest request, HttpServletResponse response)throws Exception {
+        PMContext ctx = (PMContext) request.getAttribute(PM_CONTEXT);
+        ctx.setMapping(mapping);
+        ctx.setForm(form);
+        try {
+            boolean step = prepare(ctx);
+            if(step) excecute(ctx);
+            return mapping.findForward(SUCCESS);
+        } catch (PMForwardException e){
+            return mapping.findForward(e.getKey());
+        } catch (PMUnauthorizedException e){
+            return mapping.findForward(STRUTS_LOGIN);
+        } catch (PMException e) {
+            PMLogger.error(e);
+            if(e.getKey()!=null) ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, e.getKey()));
+            ActionErrors errors = new ActionErrors();
+            for(PMMessage msg : ctx.getErrors()){
+                errors.add(msg.getKey(), new ActionMessage(msg.getMessage(), msg.getArg0(), msg.getArg1(), msg.getArg2(), msg.getArg3()));
+            }
+            saveErrors(request, errors);
+            return mapping.findForward(FAILURE);
+        }
+    }
+    
+    protected void excecute(PMContext ctx) throws PMException {
+        doExecute(ctx);
+    }
 
     protected PMStrutsService getPMService()throws PMException{
-    	try {
-        	return (PMStrutsService) PMEntitySupport.staticPmservice();
-		} catch (Exception e) {
-			throw new PMException();
-		}
+        try {
+            return (PMStrutsService) PMEntitySupport.staticPmservice();
+        } catch (Exception e) {
+            throw new PMException();
+        }
     }   
 }

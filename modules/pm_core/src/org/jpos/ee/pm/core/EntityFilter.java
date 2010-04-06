@@ -16,93 +16,36 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */package org.jpos.ee.pm.core;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
-import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Restrictions;
 
 public class EntityFilter extends PMCoreObject {
-	public static final String __EQ__ = "eq";
-	public static final String __LT__ = "lt";
-	public static final String __LE__ = "le";
-	public static final String __GT__ = "gt";
-	public static final String __GE__ = "ge";
-	public static final String __NE__ = "ne";
-	private static final String __BETWEEN__ = "between";	
-	//There must be a way to generalize this without using hibernate but this is the simplest way for now
-	private List<Criterion> filters;
-	private EntityInstanceWrapper instance;
-	
-	public void process(Entity entity){
-		debug("Processing filter");
-		for(Field field : entity.getFields()){
-			List<Object> values = new ArrayList<Object>();
-			for(Object o : instance.getInstances()){
-				values.add(EntitySupport.get(o, field.getId()));
-			}
-			debug("VALUES ["+field.getId()+"]: "+values);
-			Criterion c =null;
-            //if(false){
-                /*String co = rc.getParameter("compare_operation");
-                Criterion c =null;
-               	if(co!=null && co.compareTo("")!=0){
-               		c = getCompareCriterion(co, field.getId(), converted);
-               	}else{*/
-			if(values.get(0)!=null){
-            	if(values.get(0) instanceof String)
-               		c = Restrictions.ilike(field.getId(), "%"+values.get(0)+"%");
-               	else
-               		c = Restrictions.eq(field.getId(), values.get(0));
-               	//}
-               	if(c!=null) getFilters().add(c);
-             //}
-			}
-		}
-		debug("FILTERS: "+getFilters());
-	}
-	
-	private Criterion getCompareCriterion(String co, String fid, Object converted) {
-		// TODO Make this better
-		
-		if(co.compareTo(__LT__)==0)
-			return Restrictions.lt(fid, converted);
-		if(co.compareTo(__LE__)==0)
-			return Restrictions.le(fid, converted);
-		if(co.compareTo(__GT__)==0)
-			return Restrictions.gt(fid, converted);
-		if(co.compareTo(__GE__)==0)
-			return Restrictions.ge(fid, converted);
-		if(co.compareTo(__NE__)==0)
-			return Restrictions.ne(fid, converted);
-	
-		if(co.compareTo(__BETWEEN__)==0){
-			Entry<Object, Object> entry = (Entry<Object, Object>)converted;
-			Object lo = entry.getKey();
-			Object hi = entry.getValue();
-			return Restrictions.between(fid, lo, hi);
-		}
-		return Restrictions.eq(fid, converted);
-	}	
-	
-	public EntityFilter(){
-		this.setFilters(new ArrayList<Criterion>());
-	}
+    public static final String __EQ__ = "eq";
+    public static final String __LT__ = "lt";
+    public static final String __LE__ = "le";
+    public static final String __GT__ = "gt";
+    public static final String __GE__ = "ge";
+    public static final String __NE__ = "ne";
+    public static final String __BETWEEN__ = "between";    
+    
+    private EntityInstanceWrapper instance;
+    
+    public EntityFilter(){
+        
+    }
 
-	public void setFilters(List<Criterion> filters) {
-		this.filters = filters;
-	}
+    public void process(Entity entity){
 
-	public List<Criterion> getFilters() {
-		return filters;
-	}
+    }
 
-	public void setInstance(EntityInstanceWrapper instance) {
-		this.instance = instance;
-	}
+    public void clear() {
+        
+    }
+    
+    public void setInstance(EntityInstanceWrapper instance) {
+        this.instance = instance;
+    }
 
-	public EntityInstanceWrapper getInstance() {
-		return instance;
-	}
+    public EntityInstanceWrapper getInstance() {
+        return instance;
+    }
+
 }

@@ -29,82 +29,82 @@ import org.jpos.ee.pm.core.EntityInstanceWrapper;
  * 
  */
 public class EntityContainer {
-	private String id;
-	private String sid;
-	private Entity entity;
-	private PMList list;
-	private EntityInstanceWrapper selected;
-	private boolean selectedNew;
-	private EntityFilter filter;
-	
-	public EntityContainer(Entity entity, String sid) {
-		super();
-		setEntity(entity);
-		setSid(sid);
-		setId(buildId(sid, entity.getId()));
-		setSelectedNew(false);
-	}
-	
-	public static String buildId(String sid, String eid){
-		//return sid.substring(0,20) + eid.hashCode() + sid.substring(20);
-		return eid;
-	}
-	
-	
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public Entity getEntity() {
-		return entity;
-	}
-	public void setEntity(Entity entity) {
-		this.entity = entity;
-	}
-	public PMList getList() {
-		return list;
-	}
-	public void setList(PMList list) {
-		this.list = list;
-	}
-	public void setSid(String sid) {
-		this.sid = sid;
-	}
-	public String getSid() {
-		return sid;
-	}
+    private String id;
+    private String sid;
+    private Entity entity;
+    private PMList list;
+    private EntityInstanceWrapper selected;
+    private boolean selectedNew;
+    private EntityFilter filter;
+    
+    public EntityContainer(Entity entity, String sid) {
+        super();
+        setEntity(entity);
+        setSid(sid);
+        setId(buildId(sid, entity.getId()));
+        setSelectedNew(false);
+    }
+    
+    public static String buildId(String sid, String eid){
+        //return sid.substring(0,20) + eid.hashCode() + sid.substring(20);
+        return eid;
+    }
+    
+    
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
+    }
+    public Entity getEntity() {
+        return entity;
+    }
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
+    public PMList getList() {
+        return list;
+    }
+    public void setList(PMList list) {
+        this.list = list;
+    }
+    public void setSid(String sid) {
+        this.sid = sid;
+    }
+    public String getSid() {
+        return sid;
+    }
 
-	public void setSelected(EntityInstanceWrapper selected) {
-		this.selected = selected;
-		setSelectedNew(false);
-	}
+    public void setSelected(EntityInstanceWrapper selected) {
+        this.selected = selected;
+        setSelectedNew(false);
+    }
 
-	public EntityInstanceWrapper getSelected() {
-		return selected;
-	}
+    public EntityInstanceWrapper getSelected() {
+        return selected;
+    }
 
-	public void setSelectedNew(boolean new_) {
-		this.selectedNew = new_;
-	}
+    public void setSelectedNew(boolean new_) {
+        this.selectedNew = new_;
+    }
 
-	public boolean isSelectedNew() {
-		return selectedNew;
-	}
+    public boolean isSelectedNew() {
+        return selectedNew;
+    }
 
-	/**
-	 * @param filter the filter to set
-	 */
-	public void setFilter(EntityFilter filter) {
-		this.filter = filter;
-	}
+    /**
+     * @param filter the filter to set
+     */
+    public void setFilter(EntityFilter filter) {
+        this.filter = filter;
+    }
 
-	/**
-	 * @return the filter
-	 */
-	public EntityFilter getFilter() {
-		return filter;
-	}
-	
+    /**
+     * @return the filter
+     */
+    public EntityFilter getFilter() {
+        return filter;
+    }
+    
 }

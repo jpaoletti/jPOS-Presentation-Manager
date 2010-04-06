@@ -24,58 +24,58 @@ import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntitySupport;
 
 public class PMEntitySupport extends EntitySupport implements Constants{
-	private String context_path;
-	private static PMEntitySupport instance;
-	
-	/*Singleton getter*/
-	public synchronized static PMEntitySupport getInstance(){
-		if(instance == null) instance = new PMEntitySupport();
-		return instance;
-	}
-	
-	public EntityContainer getContainer(HttpServletRequest request) {
-		String pmid = (String)request.getAttribute(PM_ID);
-		return (EntityContainer)request.getSession().getAttribute(pmid);
-	}
-	
-	public Entity putEntityInRequest(HttpServletRequest request) throws PMStrutsException{
-		EntityContainer container = getContainer(request);
-		if(container==null) throw new PMStrutsException("container.not.found");
-		Entity entity = container.getEntity();
-		request.setAttribute(ENTITY, entity);
-		return entity;
-	}
+    private String context_path;
+    private static PMEntitySupport instance;
+    
+    /*Singleton getter*/
+    public synchronized static PMEntitySupport getInstance(){
+        if(instance == null) instance = new PMEntitySupport();
+        return instance;
+    }
+    
+    public EntityContainer getContainer(HttpServletRequest request) {
+        String pmid = (String)request.getAttribute(PM_ID);
+        return (EntityContainer)request.getSession().getAttribute(pmid);
+    }
+    
+    public Entity putEntityInRequest(HttpServletRequest request) throws PMStrutsException{
+        EntityContainer container = getContainer(request);
+        if(container==null) throw new PMStrutsException("container.not.found");
+        Entity entity = container.getEntity();
+        request.setAttribute(ENTITY, entity);
+        return entity;
+    }
 
-	public PMList putListInRequest(HttpServletRequest request) throws PMStrutsException{
-		EntityContainer container = getContainer(request);
-		if(container==null) throw new PMStrutsException("container.not.found");
-		PMList list = container.getList();
-		request.setAttribute(PM_LIST, list);
-		return list;
-	}
+    public PMList putListInRequest(HttpServletRequest request) throws PMStrutsException{
+        EntityContainer container = getContainer(request);
+        if(container==null) throw new PMStrutsException("container.not.found");
+        PMList list = container.getList();
+        request.setAttribute(PM_LIST, list);
+        return list;
+    }
 
-	public Object putItemInRequest(HttpServletRequest request) throws PMStrutsException{
-		EntityContainer container = getContainer(request);
-		if(container==null) throw new PMStrutsException("container.not.found");
-		Object r = container.getSelected().getInstance();
-		request.setAttribute(ENTITY_INSTANCE, r);
-		return r;
-	}
-	
-	public Object putFilterInRequest(HttpServletRequest request) throws PMStrutsException{
-		EntityContainer container = getContainer(request);
-		if(container==null) throw new PMStrutsException("container.not.found");
-		Object r = container.getFilter().getInstance().getInstance();
-		request.setAttribute(ENTITY_INSTANCE, r);
-		return r;
-	}
-	
-	
-	public void setContext_path(String context_path) {
-		this.context_path = context_path;
-	}
+    public Object putItemInRequest(HttpServletRequest request) throws PMStrutsException{
+        EntityContainer container = getContainer(request);
+        if(container==null) throw new PMStrutsException("container.not.found");
+        Object r = container.getSelected().getInstance();
+        request.setAttribute(ENTITY_INSTANCE, r);
+        return r;
+    }
+    
+    public Object putFilterInRequest(HttpServletRequest request) throws PMStrutsException{
+        EntityContainer container = getContainer(request);
+        if(container==null) throw new PMStrutsException("container.not.found");
+        Object r = container.getFilter().getInstance().getInstance();
+        request.setAttribute(ENTITY_INSTANCE, r);
+        return r;
+    }
+    
+    
+    public void setContext_path(String context_path) {
+        this.context_path = context_path;
+    }
 
-	public String getContext_path() {
-		return context_path;
-	}
+    public String getContext_path() {
+        return context_path;
+    }
 }
