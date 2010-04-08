@@ -34,20 +34,26 @@ public class LengthValidator extends ValidatorSupport {
     public ValidationResult validate(PMContext ctx) {
         ValidationResult res = new ValidationResult();
         Field field = (Field)ctx.get(PM_FIELD);
-        String fieldvalue = (String) ctx.get(PM_FIELD_VALUE);
-        
-        res.setSuccessful(true);
-        
-        Integer len = fieldvalue.length();
-        Integer maxl = getInt ("max-length");
-        if (len > maxl){
+        Object object = ctx.get(PM_FIELD_VALUE);
+        if(object instanceof String){
+			String fieldvalue = (String) object;
+	        
+	        res.setSuccessful(true);
+	        
+	        Integer len = fieldvalue.length();
+	        Integer maxl = getInt ("max-length");
+	        if (len > maxl){
+	            res.setSuccessful(false);
+	            res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", ""),field.getId(), len.toString(), maxl.toString()));
+	        }
+	        Integer minl = getInt ("min-length");
+	        if (len < minl){
+	            res.setSuccessful(false);
+	            res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", ""),field.getId(), len.toString(), minl.toString()));
+	        }
+        }else{
             res.setSuccessful(false);
-            res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", ""), len.toString(), maxl.toString()));
-        }
-        Integer minl = getInt ("min-length");
-        if (len < minl){
-            res.setSuccessful(false);
-            res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", ""), len.toString(), minl.toString()));
+            res.getMessages().add(new PMMessage(field.getId(), "pm_core.validator.fieldnotstring", field.getId()));
         }
         return res;
     }
