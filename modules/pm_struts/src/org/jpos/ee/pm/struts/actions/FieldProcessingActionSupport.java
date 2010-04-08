@@ -50,8 +50,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
              PMLogger.debug(this,"Field ["+eid + "] "+s);
              int i = 0;       
              while(s != null){
-                 PMLogger.debug(this,"Object to convert: "+s);
-                validateField(ctx, f, wrapper, s);
+                PMLogger.debug(this,"Object to convert: "+s);
                 try {
                     Object o = wrapper.getInstance(i);
                     Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
@@ -60,6 +59,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
                     ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
                     Object converted = converter.build(ctx);
                     PMLogger.debug(this,"Object converted: "+converted);
+                    validateField(ctx, f, wrapper, converted);
                     PMEntitySupport.set(o, f.getId(), converted);
                 } catch (IgnoreConvertionException e) {
                      //Do nothing, just ignore conversion.
@@ -70,12 +70,12 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
         }
     }
 
-    private void validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, String s) throws PMException {
+    private void validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, Object o) throws PMException {
         if(field.getValidators()!= null){
              for (Validator fv : field.getValidators()) {
                  ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
                  ctx.put(PM_FIELD, field) ;
-                 ctx.put(PM_FIELD_VALUE, s);
+                 ctx.put(PM_FIELD_VALUE, o);
                  ValidationResult vr = fv.validate(ctx);
                  ctx.getErrors().addAll(vr.getMessages());
                  if(! vr.isSuccessful()) throw new PMException();
