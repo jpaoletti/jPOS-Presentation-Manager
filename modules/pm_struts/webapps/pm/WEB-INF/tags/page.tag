@@ -9,13 +9,14 @@
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <%@attribute name="title" required="true"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <%@tag import="org.jpos.ee.pm.core.PMLogger"%><html>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" /> 
-<title><bean:message key="${es.pmservice.title}"/> - <bean:message key="${title}"/></title>
+<title><pm:message key="${es.pmservice.title}"/> - <pm:message key="${title}"/></title>
 <link href="${es.context_path}/templates/${es.pmservice.template}/all.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="${es.context_path}/js/jquery.js"></script>
 <script type="text/javascript" src="${es.context_path}/js/jquery.dataTables.js"></script>
@@ -37,7 +38,7 @@ html .jqueryslidemenu{height: 1%;} /*Holly Hack for IE7 and below*/
 <% }catch(Exception e){
 	PMLogger.error(e);
 	%>
-	<bean:message key="pm.page.error"/>
+	<pm:message key="pm.page.error"/>
 	<%
 } %>
 </body>

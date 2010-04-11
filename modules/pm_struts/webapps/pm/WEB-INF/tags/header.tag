@@ -7,14 +7,14 @@
 <div id="header">
 	<pm:topmenu />
 	<div id="logo">
-		<h1><a href="${es.context_path}"><bean:message key="${es.pmservice.title}"/></a></h1>
-		<h2><bean:message key="${es.pmservice.subtitle}"/></h2>
+		<h1><a href="${es.context_path}"><pm:message key="${es.pmservice.title}"/></a></h1>
+		<h2><pm:message key="${es.pmservice.subtitle}"/></h2>
 	</div>
 	<logic:present name="user">
 		<div id="userbox">
 		${user.name} &nbsp; |
-		&nbsp; <a href="javascript:loadPage('${es.context_path}/show.do?pmid=secuserprofile&identified=username:${user.username}');"><bean:message key="user.profile"/></a> &nbsp; |
-		&nbsp; <a href="${es.context_path}/logout.do" title="<bean:message key="logout"/>"><bean:message key="logout"/></a>
+		&nbsp; <a href="javascript:loadPage('${es.context_path}/show.do?pmid=secuserprofile&identified=username:${user.username}');"><pm:message key="user.profile"/></a> &nbsp; |
+		&nbsp; <a href="${es.context_path}/logout.do" title="<pm:message key="logout"/>"><pm:message key="logout"/></a>
 		</div> 
 	</logic:present>
 </div>

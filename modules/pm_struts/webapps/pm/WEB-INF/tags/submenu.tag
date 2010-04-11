@@ -10,7 +10,7 @@
 <!-- we need to test if user has permissions -->
 <%@tag import="org.jpos.ee.pm.menu.MenuItem"%>
 <logic:present name="menu" property="submenus">
-    <li><a href="#"><bean:message key="${menu.text}" /></a>
+    <li><a href="#"><pm:message key="${menu.text}" /></a>
     <ul>
         <logic:iterate id="m" name="menu" property="submenus">
         <pm:submenu menu="${m}" />
@@ -22,11 +22,11 @@
 	<bean:define id="item" name="menu" type="org.jpos.ee.pm.menu.MenuItem" />
 	<li>
 		<logic:empty name="item" property="location">
-			<a href="#"><bean:message key="${menu.text}" /></a>
+			<a href="#"><pm:message key="${menu.text}" /></a>
 		</logic:empty>
 		<logic:notEmpty name="item" property="location">
 			<% request.setAttribute("context",item.getLocation().build(item,es.getContext_path()));	%>
-			${context.prefix}<bean:message key="${context.value}"/>${context.sufix}
+			${context.prefix}<pm:message key="${context.value}"/>${context.sufix}
 		</logic:notEmpty>
 	</li>
 </logic:notPresent>
