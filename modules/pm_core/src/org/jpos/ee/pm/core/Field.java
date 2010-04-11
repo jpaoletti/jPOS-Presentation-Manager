@@ -161,6 +161,7 @@ public class Field extends PMCoreObject{
         this.display = display;
     }
     public String getDisplay() {
+    	if(display==null || display.trim().compareTo("")==0) return "all";
         return display;
     }
     public void setSortable (boolean sortable) {
@@ -176,12 +177,12 @@ public class Field extends PMCoreObject{
         return searchable || "id".equals (getId());
     }
     public boolean shouldDisplay (String action) {
-        if (action == null || display == null 
+        if (action == null || getDisplay() == null 
             || "list show edit add".indexOf(action) < 0) 
         {
             return false;
         }
-        return "all".equalsIgnoreCase(display) || display.indexOf (action) >= 0;
+        return "all".equalsIgnoreCase(getDisplay()) || getDisplay().indexOf (action) >= 0;
     }
     // Helpers
     public boolean canUpdate () {
@@ -276,5 +277,8 @@ public class Field extends PMCoreObject{
         return converters;
     }
 
+	public String toString() {
+		return id;
+	}
 
 }
