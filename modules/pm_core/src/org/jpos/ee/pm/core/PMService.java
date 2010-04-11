@@ -42,7 +42,6 @@ public class PMService extends QBeanSupport implements Constants{
     private String template;
     private String appversion;
     private boolean loginRequired;
-    private boolean ignoreDb;
     private String title;
     private String subtitle;
     private String logo;
@@ -87,12 +86,6 @@ public class PMService extends QBeanSupport implements Constants{
         
         if(loginRequired) getLog().info("Login Required");
         else getLog().info("Login Not Required");
-        
-        try {
-            setIgnoreDb(cfg.getBoolean("ignore-db")); 
-        } catch (Exception e) {
-            setIgnoreDb(false);
-        }
         
         setPersistenceManager((PersistenceManager)Class.forName(cfg.get("persistence-manager", "org.jpos.ee.pm.core.DBPersistenceManager")).newInstance());
                 
@@ -193,20 +186,6 @@ public class PMService extends QBeanSupport implements Constants{
      */
     public boolean isLoginRequired() {
         return loginRequired;
-    }
-
-    /**
-     * @param ignoreDb the ignoreDb to set
-     */
-    public void setIgnoreDb(boolean ignoreDb) {
-        this.ignoreDb = ignoreDb;
-    }
-
-    /**
-     * @return the ignoreDb
-     */
-    public boolean ignoreDb() {
-        return ignoreDb;
     }
 
     /**
