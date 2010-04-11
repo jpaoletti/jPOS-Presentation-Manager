@@ -29,7 +29,7 @@
 <%}else{ %>
  	<pm:menu />
  	<iframe frameborder="0"  id="content" width="75%" height="75%" src=""></iframe>
- %} %> 
+ <%} %> 
 
 	<pm:footer />
 </div>
