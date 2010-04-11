@@ -7,7 +7,7 @@ package org.jpos.ee.pm.core;
  * @author jpaoletti
  *
  */
-public class VoidPersistenceManager implements PersistenceManager {
+public class PersistenceManagerVoid implements PersistenceManager {
 
     public void commit(PMContext ctx, Object transaction) throws Exception {
 
