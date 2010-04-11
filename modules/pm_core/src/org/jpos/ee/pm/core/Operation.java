@@ -49,7 +49,7 @@ public class Operation extends PMCoreObject {
     private String id;
     
     /**Determine if the operation is enabled or not.*/
-    private boolean enabled;
+    private Boolean enabled;
     
     /**Scope of the operation. Possibles values are:
      * <dl>
@@ -110,13 +110,14 @@ public class Operation extends PMCoreObject {
      * @return the enabled
      */
     public boolean isEnabled() {
+    	if(enabled==null) return true;
         return enabled;
     }
 
     /**
      * @param enabled the enabled to set
      */
-    public void setEnabled(boolean enabled) {
+    public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -124,6 +125,7 @@ public class Operation extends PMCoreObject {
      * @return the scope
      */
     public String getScope() {
+    	if(scope==null || scope.trim().compareTo("")==0) return "item";
         return scope;
     }
 
@@ -138,6 +140,7 @@ public class Operation extends PMCoreObject {
      * @return the visibleIn
      */
     public String getVisibleIn() {
+    	if(visibleIn==null || visibleIn.trim().compareTo("")==0) return "all";
         return visibleIn;
     }
 
