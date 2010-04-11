@@ -84,7 +84,7 @@ public abstract class EntityActionSupport extends ActionSupport {
             Object tx = null;
             try{
                 tx = service.getPersistenceManager().startTransaction(ctx);
-                PMLogger.debug(this,"Started Transaction "+tx.hashCode());
+                PMLogger.debug(this,"Started Transaction "+tx);
                     
                 /** EXCECUTES THE OPERATION **/
                 doExecute(ctx);
@@ -97,7 +97,7 @@ public abstract class EntityActionSupport extends ActionSupport {
                     }*/
                 try {
                     if(tx != null){
-                        PMLogger.debug(this,"Commiting Transaction "+tx.hashCode());
+                        PMLogger.debug(this,"Commiting Transaction "+tx);
                         
                         service.getPersistenceManager().commit(ctx,tx);
                     }
@@ -110,7 +110,7 @@ public abstract class EntityActionSupport extends ActionSupport {
                 throw new PMException(e);
             }finally{
                 if(tx != null){
-                    PMLogger.debug(this,"Rolling Back Transaction "+tx.hashCode());
+                    PMLogger.debug(this,"Rolling Back Transaction "+tx);
                     try {
                         service.getPersistenceManager().rollback(ctx, tx);
                     } catch (Exception e) {
