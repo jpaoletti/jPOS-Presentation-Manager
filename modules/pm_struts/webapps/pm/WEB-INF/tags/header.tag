@@ -13,7 +13,9 @@
 	<logic:present name="user">
 		<div id="userbox">
 		${user.name} &nbsp; |
+		<logic:equal value="true" name="es" property="pmservice.loginRequired">
 		&nbsp; <a href="javascript:loadPage('${es.context_path}/show.do?pmid=secuserprofile&identified=username:${user.username}');"><pm:message key="user.profile"/></a> &nbsp; |
+        </logic:equal>
 		&nbsp; <a href="${es.context_path}/logout.do" title="<pm:message key="logout"/>"><pm:message key="logout"/></a>
 		</div> 
 	</logic:present>
