@@ -20,7 +20,6 @@ import org.jpos.util.NameRegistrar.NotFoundException;
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jpos.core.ConfigurationException;
@@ -74,15 +73,10 @@ public class FilterAction extends FieldProcessingActionSupport {
         PMList pmlist = ctx.getList();
         List<Object> contents = null;
         Long total = new Long(0);
-        if(ctx.getEntity().isPersistent()){
-            ctx.put(PM_LIST_ORDER, pmlist.getOrder());
-            ctx.put(PM_LIST_ASC, !pmlist.isDesc());
-            contents = (List<Object>) ctx.getEntity().getList(ctx , ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
-            total = ctx.getEntity().getDataAccess().count(ctx);
-        }else{
-            //An empty list that will be filled on an a list context
-            contents = new ArrayList<Object>();
-        }
+        ctx.put(PM_LIST_ORDER, pmlist.getOrder());
+        ctx.put(PM_LIST_ASC, !pmlist.isDesc());
+        contents = (List<Object>) ctx.getEntity().getList(ctx , ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
+        total = ctx.getEntity().getDataAccess().count(ctx);
         PMList pmList = ctx.getList();
         pmList.setContents(contents);
         pmList.setTotal(total);

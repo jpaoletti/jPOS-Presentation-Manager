@@ -28,8 +28,7 @@ public class DeleteAction extends RowActionSupport {
         if(ctx.isWeak()){
             getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).remove(ctx.getSelected().getInstance());
         }else{
-            if(ctx.getEntity().isPersistent())
-                ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
+            ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
         }
         ctx.getEntityContainer().setSelected(null);
     }

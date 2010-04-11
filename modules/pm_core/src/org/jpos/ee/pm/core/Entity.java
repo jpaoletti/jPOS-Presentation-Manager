@@ -73,11 +73,6 @@ public class Entity extends PMCoreObject {
     /**The parent entity if extendz is defined*/
     private Entity extendzEntity;
     
-    /**Indicates if the entity is persistent. If its not persistent, the PM will not try to post 
-     * any info on the database.
-     * <br/>{@code <persistent>true</persistent>}*/
-    private Boolean persistent;
-
     /**Indicates if the entity is auditable so every time an instance is modified, the PM will
      * create an auditory entry of the change 
      * <br/>{@code<auditable>true</auditable>}*/
@@ -304,26 +299,11 @@ public class Entity extends PMCoreObject {
         this.extendz = extendz;
     }
 
-    /**Indicates if the entity is persistent on database or not.
-     * @return the persistent
-     */
-    public boolean isPersistent() {
-        if(persistent==null)return true;
-        return persistent;
-    }
-
-    /**
-     * @param persistent the persistent to set
-     */
-    public void setPersistent(boolean persistent) {
-        this.persistent = persistent;
-    }
-
     /**Indicates if the entity is auditable or not
      * @return the auditable
      */
     public boolean isAuditable() {
-        if(persistent==null)return false;
+        if(auditable==null)return false;
         return auditable;
     }
 

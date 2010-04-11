@@ -96,21 +96,16 @@ public class ListAction extends EntityActionSupport {
             }
             total = contents.size();
         }else{
-            if(ctx.getEntity().isPersistent()){
-                ctx.put(PM_LIST_ORDER, pmlist.getOrder());
-                ctx.put(PM_LIST_ASC, !pmlist.isDesc());
-                try {
-                    contents = (List<Object>) ctx.getEntity().getList(ctx, ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
-                    total = ctx.getEntity().getDataAccess().count(ctx);
-                } catch (Exception e) {
-                    PMLogger.error(e);
-                    throw new PMException("pm.operation.cant.load.list");
-                }
-                rpp = pmlist.rpp();
-            }else{
-                //An empty list that will be filled on an a list context
-                contents = new ArrayList<Object>();
+            ctx.put(PM_LIST_ORDER, pmlist.getOrder());
+            ctx.put(PM_LIST_ASC, !pmlist.isDesc());
+            try {
+                contents = (List<Object>) ctx.getEntity().getList(ctx, ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
+                total = ctx.getEntity().getDataAccess().count(ctx);
+            } catch (Exception e) {
+                PMLogger.error(e);
+                throw new PMException("pm.operation.cant.load.list");
             }
+            rpp = pmlist.rpp();
         }
         
         PMLogger.debug(this,"List Contents: "+contents);

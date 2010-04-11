@@ -73,10 +73,8 @@ public class AddAction extends RowActionSupport {
                 EntitySupport.set(instance, p, ctx.getOwner().getSelected().getInstance());
             }
         }else{
-            if(ctx.getEntity().isPersistent()){
-                PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
-                ctx.getEntity().getDataAccess().add(ctx, instance);
-            }
+            PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
+            ctx.getEntity().getDataAccess().add(ctx, instance);
         }
     }
     
