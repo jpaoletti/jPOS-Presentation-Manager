@@ -20,9 +20,7 @@ package org.jpos.ee.pm.core;
 
 
 /**This interface allows the programmer to defines some code to execute before or after any operation 
- * execution. if an entity is not persistent (look at {@link Entity#isPersistent()}) this is the place
- * to put code to give "life" to the operations over the entity.
- * */
+ * execution. */
 public interface OperationContext {
     
     /**This method is executed before trying to execute the main method of the operation, that is

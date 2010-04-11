@@ -32,7 +32,6 @@ import java.util.Map;
  * <!DOCTYPE entity SYSTEM "cfg/entity.dtd">
  * <entity id="entity_id" clazz="the.entity.Class" >
  *     <auditable>false</auditable>
- *     <persistent>true</persistent>
  *     ...
  *     <operations>
  *     ...
