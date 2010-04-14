@@ -79,7 +79,7 @@ public class DataAccessDB implements DataAccess {
         Criteria count = createCriteria(ctx, getEntity(ctx) ,filter);
         count.setProjection(Projections.rowCount());
         count.setMaxResults(1);
-        return new Long((Integer) count.uniqueResult());
+        return (Long)count.uniqueResult();
     }
     
     protected Criteria createCriteria(PMContext ctx, Entity entity, EntityFilter filter) throws PMException{
