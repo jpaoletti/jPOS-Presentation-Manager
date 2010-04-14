@@ -1,4 +1,4 @@
-<!--/*
+<%--
  * jPOS Presentation Manager [http://jpospm.blogspot.com]
  * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
  *
@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */-->
+ *--%>
  <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" %>
