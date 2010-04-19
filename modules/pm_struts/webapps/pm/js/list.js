@@ -85,7 +85,8 @@
 						"bSort": sortable,
 						"bFilter": searchable,
 						"bPaginate": paginable,
-						"bInfo":false
+						"bInfo":false, 
+						"bAutoWidth":false
 			});
 			
 	 		$("tbody tr").hover(function() {  
