@@ -18,14 +18,12 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMStrutsContext;
+import org.jpos.util.DisplacedList;
 
 public abstract class RowActionSupport extends FieldProcessingActionSupport {
     
@@ -40,11 +38,13 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
             Integer index = Integer.parseInt(item);
             PMLogger.debug(this,"Getting row index: "+ index);
             if(index != null){
-                List <Object> al = new ArrayList<Object>();
-                if(ctx.isWeak())
+                DisplacedList <Object> al = new DisplacedList<Object>();
+                if(ctx.isWeak()){
                     al.addAll(getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()));
-                else
+                }else{
                     al.addAll(ctx.getList().getContents());
+                    al.setDisplacement(ctx.getList().getContents().getDisplacement());
+                }
                 Object o = al.get(index);
                 ctx.getEntity().getDataAccess().refresh(ctx,o);
                 ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(o));

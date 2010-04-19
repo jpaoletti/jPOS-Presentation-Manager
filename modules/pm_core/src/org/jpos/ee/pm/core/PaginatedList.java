@@ -15,18 +15,17 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpos.ee.pm.struts;
+package org.jpos.ee.pm.core;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jpos.ee.Constants;
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.Operations;
+import org.jpos.util.DisplacedList;
 
-public class PMList implements Constants{
+public class PaginatedList implements Constants{
     private Entity entity;
-    private List<Object> contents;
+    private DisplacedList<Object> contents;
     private Integer page;
     private Long pages;
     private Long total;
@@ -36,14 +35,11 @@ public class PMList implements Constants{
     private Operations operations;
     private Operations rowOperations;
     
-    
-    
     public List<Integer> getPageRange(){
         List<Integer> r = new ArrayList<Integer>();
         for(int i = 1 ; i <= getPages() ; i++) r.add(i);
         return r;
     }
-    
     
     public String toString() {
         return "PMList [entity=" + entity + ", page=" + page + ", pages="
@@ -51,12 +47,12 @@ public class PMList implements Constants{
                 + ", order=" + order + ", desc=" + desc + "]";
     }
     
-    public PMList(){
+    public PaginatedList(){
         this.page = 1;
         rowsPerPage = 10; //Default
     }
     
-    public PMList(List<Object> contents, Long total) {
+    public PaginatedList(DisplacedList<Object> contents, Long total) {
         super();
         this.contents = contents;
         rowsPerPage = 10; //Default
@@ -86,20 +82,23 @@ public class PMList implements Constants{
         this.desc = desc;
     }
 
-    public List<Object> getContents() {
-        if(contents==null) contents = new ArrayList<Object>();
+    public DisplacedList<Object> getContents() {
+        if(contents==null) contents = new DisplacedList<Object>();
         return contents;
     }
-    public void setContents(List<Object> contents) {
+    public void setContents(DisplacedList<Object> contents) {
         this.contents = contents;
+        getContents().setDisplacement((int) ((getPage()-1)*getRowsPerPage()));
     }
     public Integer getPage() {
+    	if(page==null) return 1;
         return page;
     }
     public void setPage(Integer page) {
         this.page = page;
     }
     public Long getPages() {
+    	if(pages==null)return 1L;
         return pages;
     }
     public void setPages(Long pages) {

@@ -15,56 +15,58 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
- <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/tld/fmt.tld" prefix="fmt" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+<bean:define id="pmlist" name="PMLIST" type="org.jpos.ee.pm.core.PaginatedList" />
+<bean:define id="show_row_number" name="show_row_number" type="java.lang.Boolean" />
+<bean:define id="show_checks" name="show_checks" type="java.lang.Boolean" />
+<% int c =  (pmlist.getTotal() ==0) ? 1 : (int)Math.log10(pmlist.getTotal()) + 1; %>
 <table id="list" class="display" >
-		<thead>
-			<tr>
-			<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
-				<th scope="col" style="width:${field.width}px;" ><pm:field-name entity="${entity}" field="${field}" /></th>
-			</logic:iterate>
-			</tr>
-		</thead>
-		<tbody id="list_body" >
-			<logic:iterate id="item" name="contents" indexId="i">
-			<tr>
-				<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field" indexId="j">
-						<logic:equal name="j" value="0">
-						<td style="text-align:${field.align};">
-						<span style="white-space: nowrap;" >
-							<div class="operations" id="row_${i}"><div class="operationspopup" id="g_${i}">
-							<img src="${es.context_path}/templates/${es.pmservice.template}/images/loading.gif" alt="loading" />
-							</div>
-							<div class="trigger" style="width: ${field.width}px;">
-							<pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
-							</div>
-							</div>
-							<script type="text/javascript">
-								var operationdiv = $('#row_'+"${i}");
-								var grupodiv = $('#g_'+"${i}");
-								grupodiv.load('opers.do?pmid='+"${pmid}"+'&i='+"${i}");
-							</script>
-						</span>
-						</logic:equal>
-						<logic:notEqual name="j" value="0">
-						<td align="${field.align}">
-							<pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
-						</logic:notEqual>
-					</td>
-				</logic:iterate>
-			</tr>
-			</logic:iterate>
-		</tbody>
-		<tfoot>
-			
-			<logic:equal name="searchable" value="true" >
-			<tr>
-				<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
-					<th><input type="text" name="search_<pm:field-name entity="${entity}" field="${field}" />" value="<bean:message key="list.input.search"/><pm:field-name entity="${entity}" field="${field}" />" class="search_init" /></th>
-				</logic:iterate>
-			</tr>
-			</logic:equal>
-		</tfoot>
-	</table>
+        <thead>
+            <tr>
+            <th scope="col" style="width:${operation_column_width}">&nbsp;</th>
+            <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
+                <bean:define id="w" value="<%=(field.getWidth().compareTo("")!=0)?"style='width:"+field.getWidth()+"px;'":"" %>"></bean:define>
+                <th scope="col" ${w} ><pm:field-name entity="${entity}" field="${field}" /></th>
+            </logic:iterate>
+            </tr>
+        </thead>
+        <tbody id="list_body" >
+            <bean:define id="contents" name="contents" type="org.jpos.util.DisplacedList" />
+            <logic:iterate id="item" name="contents">
+            <% Integer i = contents.indexOf(item); request.setAttribute("i",i); %> 
+            <tr>
+                <td style="color:grey; white-space: nowrap;"><%= (show_row_number)?String.format("[%0"+c+"d]", i):"" %> &nbsp;
+                    <span style="white-space: nowrap;" class="operationspopup" id="g_${i}">
+                        <img src="${es.context_path}/templates/${es.pmservice.template}/images/loading.gif" alt="loading" />
+                    </span>
+                    <script type="text/javascript">
+                    $('#g_'+"${i}").load('opers.do?pmid='+"${pmid}"+'&i='+"${i}", 
+                       function() {
+                        //this function fix IE whitespace visualization bug
+                        $('#g_'+"${i}").html($('#g_'+"${i}").html().trim());
+                       });
+                    </script>
+                </td>
+                <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field" indexId="j">
+                        <td align="${field.align}">
+                            <pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
+                    </td>
+                </logic:iterate>
+            </tr>
+            </logic:iterate>
+        </tbody>
+        <tfoot>
+            <logic:equal name="searchable" value="true" >
+            <tr>
+               <th><input type="hidden" name="search" class="search_init" /></th>
+               <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
+                   <th><input type="text" name="search_<pm:field-name entity="${entity}" field="${field}" />" value="<bean:message key="list.input.search"/><pm:field-name entity="${entity}" field="${field}" />" class="search_init" /></th>
+               </logic:iterate>
+            </tr>
+            </logic:equal>
+        </tfoot>
+    </table>

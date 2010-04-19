@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntitySupport;
+import org.jpos.ee.pm.core.PaginatedList;
 
 public class PMEntitySupport extends EntitySupport implements Constants{
     private String context_path;
@@ -46,10 +47,10 @@ public class PMEntitySupport extends EntitySupport implements Constants{
         return entity;
     }
 
-    public PMList putListInRequest(HttpServletRequest request) throws PMStrutsException{
+    public PaginatedList putListInRequest(HttpServletRequest request) throws PMStrutsException{
         EntityContainer container = getContainer(request);
         if(container==null) throw new PMStrutsException("container.not.found");
-        PMList list = container.getList();
+        PaginatedList list = container.getList();
         request.setAttribute(PM_LIST, list);
         return list;
     }

@@ -259,6 +259,7 @@ public class Field extends PMCoreObject{
 
 
     public String getWidth() {
+    	if(width==null) return "";
         return width;
     }
 

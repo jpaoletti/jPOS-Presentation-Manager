@@ -23,7 +23,6 @@ import org.jpos.ee.Constants;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
 import org.jpos.ee.pm.struts.EntityContainer;
 import org.jpos.ee.pm.struts.PMEntitySupport;
-import org.jpos.ee.pm.struts.PMList;
 import org.jpos.ee.pm.struts.PMStrutsService;
 import org.jpos.transaction.Context;
 
@@ -113,7 +112,7 @@ public class PMContext extends Context implements Constants{
         return getEntityContainer().getEntity();
     }
     
-    public PMList getList() throws PMException{
+    public PaginatedList getList() throws PMException{
         return getEntityContainer().getList();
     }
     

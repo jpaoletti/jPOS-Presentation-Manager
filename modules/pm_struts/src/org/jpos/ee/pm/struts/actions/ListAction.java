@@ -25,9 +25,10 @@ import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.Operations;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PaginatedList;
 import org.jpos.ee.pm.struts.PMEntitySupport;
-import org.jpos.ee.pm.struts.PMList;
 import org.jpos.ee.pm.struts.PMStrutsContext;
+import org.jpos.util.DisplacedList;
 
 public class ListAction extends EntityActionSupport {
     
@@ -41,20 +42,23 @@ public class ListAction extends EntityActionSupport {
         configureList(ctx,f);
         boolean searchable = ctx.getOperation().getConfig("searchable", "true").compareTo("true")==0;
         boolean paginable = ctx.getOperation().getConfig("paginable", "true").compareTo("true")==0;
+        Boolean showRowNumber = ctx.getOperation().getConfig("show-row-number", "false").compareTo("true")==0;
+        String operationColWidth= ctx.getOperation().getConfig("operation-column-width", "50px");
         ctx.getRequest().setAttribute("searchable", searchable);
         ctx.getRequest().setAttribute("paginable", paginable);
+        ctx.getRequest().setAttribute("show_row_number", showRowNumber);
+        ctx.getRequest().setAttribute("operation_column_width", operationColWidth);
+        ctx.getRequest().setAttribute("show_checks", true);
     }
     
     private void configureList(PMStrutsContext ctx, ListActionForm f) throws PMException {
-        //PMListSupport pmls = new PMListSupport();
-
         List<Object> contents = null;
         long total = 0;
         Integer rpp = 10;
         
-        PMList pmlist = ctx.getList();
+        PaginatedList pmlist = ctx.getList();
         if(pmlist == null){
-            pmlist = new PMList();
+            pmlist = new PaginatedList();
             pmlist.setEntity(ctx.getEntity());
             Operations operations = (Operations) ctx.getSession().getAttribute(OPERATIONS);
             pmlist.setOperations    (operations.getOperationsForScope(SCOPE_GRAL));
@@ -110,7 +114,7 @@ public class ListAction extends EntityActionSupport {
         
         PMLogger.debug(this,"List Contents: "+contents);
         ctx.getEntityContainer().setList(pmlist);
-        pmlist.setContents(contents);
+        pmlist.setContents(new DisplacedList<Object>( contents ));
         pmlist.setTotal(total);
         
         PMLogger.debug(this,"Resulting list: "+pmlist);

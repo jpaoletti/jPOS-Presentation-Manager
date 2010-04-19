@@ -19,7 +19,7 @@
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="java.util.Collection"%>
-<%@page import="java.util.List" import="org.jpos.ee.pm.struts.PMEntitySupport"  import="org.jpos.ee.pm.struts.PMList"%>
+<%@page import="java.util.List" import="org.jpos.ee.pm.struts.PMEntitySupport" %>
 <bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
 <bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
 <bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />

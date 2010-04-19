@@ -1,23 +1,21 @@
 /*
- * jPOS Presentation Manager [http://import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.struts.action.ActionForward;
-import org.jpos.core.ConfigurationException;
-import org.jpos.ee.pm.core.EntityFilter;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.struts.PMList;
-import org.jpos.ee.pm.struts.PMListSupport;
-import org.jpos.util.NameRegistrar.NotFoundException;
- WARRANTY; without even the implied warranty of
+ * jPOS Presentation Manager [http://jpospm.blogspot.com]
+ * Copyright (C) 2010 Jeronimo Paoletti [jeronimo.paoletti@gmail.com]
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 package org.jpos.ee.pm.struts.actions;
 
 import java.util.List;
@@ -29,9 +27,10 @@ import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.core.PaginatedList;
 import org.jpos.ee.pm.struts.PMForwardException;
-import org.jpos.ee.pm.struts.PMList;
 import org.jpos.ee.pm.struts.PMStrutsContext;
+import org.jpos.util.DisplacedList;
 
 public class FilterAction extends FieldProcessingActionSupport {
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
@@ -69,15 +68,14 @@ public class FilterAction extends FieldProcessingActionSupport {
     }
     
     protected void doExecute(PMStrutsContext ctx) throws PMException {
-        //PMListSupport pmls = new PMListSupport();
-        PMList pmlist = ctx.getList();
-        List<Object> contents = null;
+        PaginatedList pmlist = ctx.getList();
+        DisplacedList<Object> contents = null;
         Long total = new Long(0);
         ctx.put(PM_LIST_ORDER, pmlist.getOrder());
         ctx.put(PM_LIST_ASC, !pmlist.isDesc());
-        contents = (List<Object>) ctx.getEntity().getList(ctx , ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
+        contents.addAll( (List<Object>) ctx.getEntity().getList(ctx , ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp()) );
         total = ctx.getEntity().getDataAccess().count(ctx);
-        PMList pmList = ctx.getList();
+        PaginatedList pmList = ctx.getList();
         pmList.setContents(contents);
         pmList.setTotal(total);
     }

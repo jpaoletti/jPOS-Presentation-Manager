@@ -20,6 +20,7 @@ package org.jpos.ee.pm.struts;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
+import org.jpos.ee.pm.core.PaginatedList;
 
 /**
  * @author jpaoletti
@@ -32,7 +33,7 @@ public class EntityContainer {
     private String id;
     private String sid;
     private Entity entity;
-    private PMList list;
+    private PaginatedList list;
     private EntityInstanceWrapper selected;
     private boolean selectedNew;
     private EntityFilter filter;
@@ -63,10 +64,10 @@ public class EntityContainer {
     public void setEntity(Entity entity) {
         this.entity = entity;
     }
-    public PMList getList() {
+    public PaginatedList getList() {
         return list;
     }
-    public void setList(PMList list) {
+    public void setList(PaginatedList list) {
         this.list = list;
     }
     public void setSid(String sid) {
