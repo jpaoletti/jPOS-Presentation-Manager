@@ -22,9 +22,8 @@ import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class OperAction extends EntityActionSupport{
-    Operations operations;
     
-    /**Opens an hibernate transaction before doExecute*/
+	/**Opens an hibernate transaction before doExecute*/
     protected boolean openTransaction() { return false;    }
     /**Makes the operation generate an audithory entry*/
     protected boolean isAudited() {    return false; }
@@ -34,14 +33,14 @@ public class OperAction extends EntityActionSupport{
     protected boolean checkEntity(){ return true; }
 
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
+    	Operations operations;
         configureEntityContainer(ctx);
         ctx.setOperation ( ctx.getEntity().getOperations().getOperation("list") );
         ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
         operations = ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation());
+        ctx.getRequest().setAttribute(ITEM_OPERATIONS, operations.getOperationsForScope(SCOPE_ITEM));
         return true;
     }
     
-    protected void doExecute(PMStrutsContext ctx)throws PMException{
-        ctx.getRequest().setAttribute(ITEM_OPERATIONS, operations.getOperationsForScope(SCOPE_ITEM));
-    }
+    protected void doExecute(PMStrutsContext ctx)throws PMException{}
 }
