@@ -78,7 +78,7 @@ public class ListAction extends EntityActionSupport {
         if(ctx.getParameter(FINISH)!=null){
             pmlist.setOrder(f.getOrder());
             pmlist.setDesc(f.isDesc());
-            pmlist.setPage(f.getPage());
+            pmlist.setPage((f.getPage()!=null && f.getPage()>0)?f.getPage():1);
             pmlist.setRowsPerPage(f.getRowsPerPage());
         }
         
