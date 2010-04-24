@@ -59,7 +59,7 @@ public class EntityParser {
         xstream.useAttributeFor(Operation.class, "id");
         xstream.useAttributeFor(Operation.class, "enabled");
         xstream.useAttributeFor(Operation.class, "scope");
-        xstream.useAttributeFor(Operation.class, "visibleIn");
+        xstream.useAttributeFor(Operation.class, "display");
         
         xstream.alias ("owner", EntityOwner.class);
         xstream.alias ("converters", Converters.class);

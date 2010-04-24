@@ -68,7 +68,7 @@ public class Operations  extends PMCoreObject implements Constants{
         result = new Operations();
         List<Operation> r = new ArrayList<Operation>(); 
         for (Operation op : getOperations()) {
-            if(op.isVisibleIn(operation.getId()) && op.isEnabled() && !op.equals(operation))
+            if(op.isDisplayed(operation.getId()) && op.isEnabled() && !op.equals(operation))
                 r.add(op);
         }
         result.setOperations(r);
