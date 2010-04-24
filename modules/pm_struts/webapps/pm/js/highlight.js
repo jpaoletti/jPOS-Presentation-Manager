@@ -5,7 +5,7 @@
 	
 
 	$('.cell').each(function(i) {
-			var value = $(this).html();
+			var value = $(this).html().trim();
 			if(! isHTML(value)){
 				//Second class is field id
 				var field = $(this).attr('class').split(' ')[1];
