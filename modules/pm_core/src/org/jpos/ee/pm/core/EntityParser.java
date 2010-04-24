@@ -40,7 +40,10 @@ public class EntityParser {
         xstream = new XStream(new JDomDriver());
         xstream.alias ("entity", Entity.class);
         
+        xstream.aliasAttribute("no-count", "noCount");
+        
         xstream.useAttributeFor(Entity.class, "id");
+        xstream.useAttributeFor(Entity.class, "noCount");
         xstream.useAttributeFor(Entity.class, "clazz");
         
         xstream.alias ("field", Field.class);
