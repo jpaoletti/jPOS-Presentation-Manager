@@ -17,3 +17,8 @@
     public static final boolean PM_LIST_ASC = true;
     public static final String PM_EXTRA_DATA = "PM_EXTRA_DATA";
     public static final String PM_ENTITY = "PM_ENTITY";
+    
+    public static final String SCOPE_GRAL = "general";
+    public static final String SCOPE_ITEM = "item";
+    public static final String SCOPE_SELECTED = "selected";
+    

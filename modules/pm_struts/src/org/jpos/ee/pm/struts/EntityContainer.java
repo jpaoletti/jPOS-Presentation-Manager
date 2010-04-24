@@ -17,6 +17,9 @@
  */
 package org.jpos.ee.pm.struts;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
@@ -34,6 +37,7 @@ public class EntityContainer {
     private String sid;
     private Entity entity;
     private PaginatedList list;
+    private Set<Integer> selectedIndexes;
     private EntityInstanceWrapper selected;
     private boolean selectedNew;
     private EntityFilter filter;
@@ -107,5 +111,20 @@ public class EntityContainer {
     public EntityFilter getFilter() {
         return filter;
     }
-    
+
+	/**
+	 * @param selectedIndexes the selectedIndexes to set
+	 */
+	public void setSelectedIndexes(Set<Integer> selectedIndexes) {
+		this.selectedIndexes = selectedIndexes;
+	}
+
+	/**
+	 * @return the selectedIndexes
+	 */
+	public Set<Integer> getSelectedIndexes() {
+		if(selectedIndexes==null) selectedIndexes=new HashSet<Integer>();
+		return selectedIndexes;
+	}
+
 }

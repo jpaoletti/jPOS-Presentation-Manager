@@ -80,11 +80,21 @@ public class Operations  extends PMCoreObject implements Constants{
      * @param scope The scope
      * @return The Operations
      *  */
-    public Operations  getOperationsForScope(String scope) {
+    public Operations  getOperationsForScope(String ... scopes) {
         Operations result = new Operations();
         List<Operation> r = new ArrayList<Operation>(); 
         for (Operation op : getOperations()) {
-            if(op.getScope()!= null && op.getScope().trim().compareTo(scope) == 0) r.add(op);
+        	if(op.getScope()!= null){
+	            String s = op.getScope().trim();
+	            for (int i = 0; i < scopes.length; i++) {
+					String scope = scopes[i];
+					if(s.compareTo(scope) == 0){
+						r.add(op);
+						break;
+					}
+				}
+        	}
+			 
         }
         result.setOperations(r);
         return result;
@@ -112,4 +122,8 @@ public class Operations  extends PMCoreObject implements Constants{
             for(Operation o : getOperations())
                 o.setService(service);
     }
+
+	public int count() {
+		return getOperations().size();
+	}
 }

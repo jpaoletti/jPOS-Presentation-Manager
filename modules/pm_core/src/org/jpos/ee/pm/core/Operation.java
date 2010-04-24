@@ -31,7 +31,7 @@ import org.jpos.ee.pm.validator.Validator;
  * 
  * <pre>
  * {@code
- * <operation id="some_id" enabled="true" scope="general | item" visibleIn="all | add list edit">
+ * <operation id="some_id" enabled="true" scope="general | item | selected" visibleIn="all | add list edit">
  *    <showTitle>true</showTitle>
  *    <confirm>true</confirm>
  *    <context class="some.operation.Context" />
@@ -55,6 +55,7 @@ public class Operation extends PMCoreObject {
      * <dl>
      * <dd> general </dd><dt>A general scope operation affects all the instances of the entity or none of them. </dt>
      * <dd> item </dd><dt>An item scope operation affects only one instance.</dt>
+     * <dd> selected </dd><dt>A selected scope operation affects only selected instances.</dt>
      * </dl>
      * */
     private String scope;

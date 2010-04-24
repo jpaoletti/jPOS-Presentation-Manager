@@ -12,8 +12,6 @@
     public static final String ACCESS_COUNT     = "accessCount";
     public static final String ENTITY_INSTANCE     = "entity_instance";
 
-    public static final String SCOPE_GRAL = "general";
-    public static final String SCOPE_ITEM = "item";
     public static final String ENTITY_SUPPORT     = "es";
     
     public static final String CONTEXT_PATH     = "context_path";

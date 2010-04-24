@@ -33,8 +33,12 @@
       <forward name="failure" path="/pages/ae.jsp"/>
     </action>
     <action path="/opers" type="org.jpos.ee.pm.struts.actions.OperAction" >
-    	<forward name="success" path="/pages/opers.jsp" />
+        <forward name="success" path="/pages/opers.jsp" />
     </action>
+    <action path="/selectItem" type="org.jpos.ee.pm.struts.actions.SelectItemAction" >
+        <forward name="success" path="/pages/void.jsp" />
+    </action>
+    
     <action path="/report" type="org.jpos.ee.pm.struts.actions.ReportAction">
       <forward name="success" path="/pages/showreport.jsp"/>
       <forward name="continue" path="/pages/filterreport.jsp"/>

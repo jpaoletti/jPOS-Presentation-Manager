@@ -44,11 +44,15 @@ public class ListAction extends EntityActionSupport {
         boolean paginable = ctx.getOperation().getConfig("paginable", "true").compareTo("true")==0;
         Boolean showRowNumber = ctx.getOperation().getConfig("show-row-number", "false").compareTo("true")==0;
         String operationColWidth= ctx.getOperation().getConfig("operation-column-width", "50px");
+        Operations operations = (Operations) ctx.getSession().getAttribute(OPERATIONS);
+        
+        
         ctx.getRequest().setAttribute("searchable", searchable);
         ctx.getRequest().setAttribute("paginable", paginable);
         ctx.getRequest().setAttribute("show_row_number", showRowNumber);
         ctx.getRequest().setAttribute("operation_column_width", operationColWidth);
         ctx.getRequest().setAttribute("show_checks", true);
+        ctx.getRequest().setAttribute("has_selected", operations.getOperationsForScope(SCOPE_SELECTED).count() > 0);
     }
     
     private void configureList(PMStrutsContext ctx, ListActionForm f) throws PMException {
@@ -61,7 +65,7 @@ public class ListAction extends EntityActionSupport {
             pmlist = new PaginatedList();
             pmlist.setEntity(ctx.getEntity());
             Operations operations = (Operations) ctx.getSession().getAttribute(OPERATIONS);
-            pmlist.setOperations    (operations.getOperationsForScope(SCOPE_GRAL));
+            pmlist.setOperations    (operations.getOperationsForScope(SCOPE_GRAL, SCOPE_SELECTED));
             String sortfield = ctx.getOperation().getConfig("sort-field");
             String sortdirection = ctx.getOperation().getConfig("sort-direction");
             if(sortfield!=null){

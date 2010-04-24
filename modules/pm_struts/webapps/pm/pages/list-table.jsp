@@ -23,7 +23,14 @@
 <bean:define id="pmlist" name="PMLIST" type="org.jpos.ee.pm.core.PaginatedList" />
 <bean:define id="show_row_number" name="show_row_number" type="java.lang.Boolean" />
 <bean:define id="show_checks" name="show_checks" type="java.lang.Boolean" />
+<bean:define id="has_selected" name="has_selected" type="java.lang.Boolean" />
+<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <% int c =  (pmlist.getTotal() ==0) ? 1 : (int)Math.log10(pmlist.getTotal()) + 1; %>
+<script type="text/javascript">
+function selectItem(i){
+	$.ajax({ url: "selectItem.do?pmid="+"${pmid}"+"&idx="+i});
+}
+                        </script>
 <table id="list" class="display" >
         <thead>
             <tr>
@@ -39,7 +46,12 @@
             <logic:iterate id="item" name="contents">
             <% Integer i = contents.indexOf(item); request.setAttribute("i",i); %> 
             <tr>
-                <td style="color:grey; white-space: nowrap;"><%= (show_row_number)?String.format("[%0"+c+"d]", i):"" %> &nbsp;
+                <td style="color:grey; white-space: nowrap;">
+                    <logic:equal name="has_selected" value="true">
+                        <bean:define id="checked" value="<%=(es.getContainer(request).getSelectedIndexes().contains(i))?"checked":"" %>" />
+                        <input type="checkbox" id="selected_item" value="${i}" onchange="selectItem(this.value);" ${checked} />
+                    </logic:equal>
+                    <%= (show_row_number)?String.format("[%0"+c+"d]", i):"" %> &nbsp;
                     <span style="white-space: nowrap;" class="operationspopup" id="g_${i}">
                         <img src="${es.context_path}/templates/${es.pmservice.template}/images/loading.gif" alt="loading" />
                     </span>
