@@ -83,8 +83,10 @@ public abstract class EntityActionSupport extends ActionSupport {
             PMService service = PMEntitySupport.staticPmservice();
             Object tx = null;
             try{
-                tx = service.getPersistenceManager().startTransaction(ctx);
-                PMLogger.debug(this,"Started Transaction "+tx);
+                if(openTransaction()) {
+                	tx = service.getPersistenceManager().startTransaction(ctx);
+                	PMLogger.debug(this,"Started Transaction "+tx);
+                }
                     
                 /** EXCECUTES THE OPERATION **/
                 doExecute(ctx);
@@ -98,7 +100,6 @@ public abstract class EntityActionSupport extends ActionSupport {
                 try {
                     if(tx != null){
                         PMLogger.debug(this,"Commiting Transaction "+tx);
-                        
                         service.getPersistenceManager().commit(ctx,tx);
                     }
                 } catch (Exception e) {
