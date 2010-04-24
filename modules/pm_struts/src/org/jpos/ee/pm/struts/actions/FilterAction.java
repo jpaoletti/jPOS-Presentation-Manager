@@ -69,7 +69,7 @@ public class FilterAction extends FieldProcessingActionSupport {
     
     protected void doExecute(PMStrutsContext ctx) throws PMException {
         PaginatedList pmlist = ctx.getList();
-        DisplacedList<Object> contents = null;
+        DisplacedList<Object> contents = new DisplacedList<Object>();
         Long total = new Long(0);
         ctx.put(PM_LIST_ORDER, pmlist.getOrder());
         ctx.put(PM_LIST_ASC, !pmlist.isDesc());
