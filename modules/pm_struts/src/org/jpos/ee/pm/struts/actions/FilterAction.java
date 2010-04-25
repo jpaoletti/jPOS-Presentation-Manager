@@ -69,12 +69,13 @@ public class FilterAction extends FieldProcessingActionSupport {
     
     protected void doExecute(PMStrutsContext ctx) throws PMException {
         PaginatedList pmlist = ctx.getList();
-        DisplacedList<Object> contents = null;
-        Long total = new Long(0);
+        DisplacedList<Object> contents = new DisplacedList<Object>();
+        Long total = null;
         ctx.put(PM_LIST_ORDER, pmlist.getOrder());
         ctx.put(PM_LIST_ASC, !pmlist.isDesc());
         contents.addAll( (List<Object>) ctx.getEntity().getList(ctx , ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp()) );
-        total = ctx.getEntity().getDataAccess().count(ctx);
+        if(!ctx.getEntity().getNoCount())
+        	total = ctx.getEntity().getDataAccess().count(ctx);
         PaginatedList pmList = ctx.getList();
         pmList.setContents(contents);
         pmList.setTotal(total);

@@ -57,7 +57,7 @@ public class ListAction extends EntityActionSupport {
     
     private void configureList(PMStrutsContext ctx, ListActionForm f) throws PMException {
         List<Object> contents = null;
-        long total = 0;
+        Long total = null;
         Integer rpp = 10;
         
         PaginatedList pmlist = ctx.getList();
@@ -78,7 +78,7 @@ public class ListAction extends EntityActionSupport {
         if(ctx.getParameter(FINISH)!=null){
             pmlist.setOrder(f.getOrder());
             pmlist.setDesc(f.isDesc());
-            pmlist.setPage(f.getPage());
+            pmlist.setPage((f.getPage()!=null && f.getPage()>0)?f.getPage():1);
             pmlist.setRowsPerPage(f.getRowsPerPage());
         }
         
@@ -102,13 +102,15 @@ public class ListAction extends EntityActionSupport {
             } catch (ConfigurationException e) {
                 PMLogger.error(e);
             }
-            total = contents.size();
+            if(!ctx.getEntity().getNoCount())
+            	total = new Long(contents.size());
         }else{
             ctx.put(PM_LIST_ORDER, pmlist.getOrder());
             ctx.put(PM_LIST_ASC, !pmlist.isDesc());
             try {
                 contents = (List<Object>) ctx.getEntity().getList(ctx, ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp());
-                total = ctx.getEntity().getDataAccess().count(ctx);
+                if(!ctx.getEntity().getNoCount())
+                	total = ctx.getEntity().getDataAccess().count(ctx);
             } catch (Exception e) {
                 PMLogger.error(e);
                 throw new PMException("pm.operation.cant.load.list");

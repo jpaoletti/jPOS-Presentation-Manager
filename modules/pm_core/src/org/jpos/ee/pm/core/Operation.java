@@ -31,7 +31,7 @@ import org.jpos.ee.pm.validator.Validator;
  * 
  * <pre>
  * {@code
- * <operation id="some_id" enabled="true" scope="general | item | selected" visibleIn="all | add list edit">
+ * <operation id="some_id" enabled="true" scope="general | item | selected" display="all | add list edit">
  *    <showTitle>true</showTitle>
  *    <confirm>true</confirm>
  *    <context class="some.operation.Context" />
@@ -61,7 +61,7 @@ public class Operation extends PMCoreObject {
     private String scope;
     
     /**A String with other operations id separated by blanks where this operation will be shown*/
-    private String visibleIn;
+    private String display;
     
     /**If defined, its a direct link to a fixed URL*/
     private String url;
@@ -84,8 +84,8 @@ public class Operation extends PMCoreObject {
     /**Determine if this operation is visible in another. 
      * @param other The id of the other operation
      * @return true if this operation is visible in the other*/
-    public boolean isVisibleIn(String other){
-        return (getVisibleIn()==null || getVisibleIn().compareTo("all")==0 || getVisibleIn().indexOf(other)!=-1);
+    public boolean isDisplayed(String other){
+        return (getDisplay()==null || getDisplay().compareTo("all")==0 || getDisplay().indexOf(other)!=-1);
     }
 
     /**Redefines toString from object*/
@@ -138,18 +138,18 @@ public class Operation extends PMCoreObject {
     }
 
     /**
-     * @return the visibleIn
+     * @return the display
      */
-    public String getVisibleIn() {
-    	if(visibleIn==null || visibleIn.trim().compareTo("")==0) return "all";
-        return visibleIn;
+    public String getDisplay() {
+    	if(display==null || display.trim().compareTo("")==0) return "all";
+        return display;
     }
 
     /**
-     * @param visibleIn the visibleIn to set
+     * @param display the display to set
      */
-    public void setVisibleIn(String visibleIn) {
-        this.visibleIn = visibleIn;
+    public void setDisplay(String display) {
+        this.display = display;
     }
 
     /**

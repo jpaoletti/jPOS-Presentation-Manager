@@ -15,9 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
- <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
 	<logic:equal value="true" name="paginable">
 			<tr>
 			<td colspan="100">
@@ -26,21 +27,27 @@
 								<html:option value="5" />
 								<html:option value="10"/>
 								<html:option value="20"/>
-				</html:select>			
-				<bean:message key='list.total' />&nbsp;${PMLIST.total} &nbsp;
-				
-				<bean:message key='list.page' />
-				<logic:greaterThan value="20" name="PMLIST" property="pages">
-					<html:text property="page" value="${PMLIST.page}" styleId="page" size="5" style="width:25px;" />
-				</logic:greaterThan>
-				<logic:lessEqual value="20" name="PMLIST" property="pages">
-					<html:select property="page" value="${PMLIST.page}" onchange="this.form.submit();">
-						<logic:iterate id="i" name="PMLIST" property="pageRange" >
-							<html:option value="${i}">${i}</html:option>
-						</logic:iterate>
-					</html:select>
-				</logic:lessEqual>
-				<bean:message key='list.pages' />&nbsp;${PMLIST.pages}<br/>
+				</html:select> | 
+				<c:if test="${PMLIST.total != null}">
+					<bean:message key='list.total' />&nbsp;${PMLIST.total} &nbsp; | &nbsp;  
+					<bean:message key='list.page' />
+					<logic:greaterThan value="20" name="PMLIST" property="pages">
+						<html:text property="page" value="${PMLIST.page}" styleId="page" size="5" style="width:25px;" />
+					</logic:greaterThan>
+					<logic:lessEqual value="20" name="PMLIST" property="pages">
+						<html:select property="page" value="${PMLIST.page}" onchange="this.form.submit();">
+							<logic:iterate id="i" name="PMLIST" property="pageRange" >
+								<html:option value="${i}">${i}</html:option>
+							</logic:iterate>
+						</html:select>
+					</logic:lessEqual>
+					<bean:message key='list.pages' />&nbsp;${PMLIST.pages}<br/>
+				</c:if>
+                <c:if test="${PMLIST.total == null}">
+                    <bean:message key='list.page' />
+                    <html:text property="page" value="${PMLIST.page}" styleId="page" size="5" style="width:25px;" />
+                    <bean:message key='list.pages' />...<br/>
+                </c:if>
 			</td>
 			</tr>
 	</logic:equal>

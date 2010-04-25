@@ -42,7 +42,7 @@ public class PaginatedList implements Constants{
     }
     
     public String toString() {
-        return "PMList [entity=" + entity + ", page=" + page + ", pages="
+        return "PMList [entity=" + entity + ", page " + page + " of "
                 + pages + ", total=" + total + ", rowsPerPage=" + rowsPerPage
                 + ", order=" + order + ", desc=" + desc + "]";
     }
@@ -57,13 +57,14 @@ public class PaginatedList implements Constants{
         this.contents = contents;
         rowsPerPage = 10; //Default
         this.page = 1;
-        setTotal(total); 
+        if(total!=null)
+        	setTotal(total); 
     }
     
     public void setRowsPerPage(Integer rowsPerPage) {
         this.rowsPerPage = rowsPerPage;
-        //this.page = 1;
-        this.pages = new Long(total.longValue() / rowsPerPage + 1);
+        if(total!=null)
+        	this.pages = new Long(total.longValue() / rowsPerPage + 1);
     }
     
     public String getOrder() {
@@ -109,7 +110,8 @@ public class PaginatedList implements Constants{
     }
     public void setTotal(Long total) {
         this.total = total;
-        this.pages = total / rowsPerPage;
+    	if(total != null)
+    		this.pages = total / rowsPerPage;
     }
     public Integer getRowsPerPage() {
         return rowsPerPage;

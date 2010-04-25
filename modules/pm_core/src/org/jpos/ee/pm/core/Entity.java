@@ -107,8 +107,11 @@ public class Entity extends PMCoreObject {
     /**A list of highlights.*/
     private Highlights highlights;
     
-    /** DataAcces, by default, DB*/
+    /** Data Access*/
     private DataAccess dataAccess;
+    
+    /**Avoid counting items*/
+    private Boolean noCount;
     
     private List<Entity> weaks;
     
@@ -467,4 +470,19 @@ public class Entity extends PMCoreObject {
             return false;
         return true;
     }
+
+	/**
+	 * @param noCount the noCount to set
+	 */
+	public void setNoCount(Boolean noCount) {
+		this.noCount = noCount;
+	}
+
+	/**
+	 * @return the noCount
+	 */
+	public Boolean getNoCount() {
+		if(noCount==null)return false;
+		return noCount;
+	}
 }

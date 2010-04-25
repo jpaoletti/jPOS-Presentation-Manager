@@ -25,7 +25,7 @@
 <bean:define id="show_checks" name="show_checks" type="java.lang.Boolean" />
 <bean:define id="has_selected" name="has_selected" type="java.lang.Boolean" />
 <bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
-<% int c =  (pmlist.getTotal() ==0) ? 1 : (int)Math.log10(pmlist.getTotal()) + 1; %>
+<% int c =  (pmlist.getTotal()==null || pmlist.getTotal() ==0) ? 1 : (int)Math.log10(pmlist.getTotal()) + 1; %>
 <script type="text/javascript">
 function selectItem(i){
 	$.ajax({ url: "selectItem.do?pmid="+"${pmid}"+"&idx="+i});

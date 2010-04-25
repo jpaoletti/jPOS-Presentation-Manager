@@ -108,6 +108,7 @@ public abstract class EntityActionSupport extends ActionSupport {
                 }
                 tx = null;
             } catch (Exception e) {
+            	PMLogger.error(e);
                 throw new PMException(e);
             }finally{
                 if(tx != null){
