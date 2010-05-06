@@ -21,9 +21,7 @@
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <bean:define id="pmlist" name="PMLIST" type="org.jpos.ee.pm.core.PaginatedList" />
-<bean:define id="show_row_number" name="show_row_number" type="java.lang.Boolean" />
-<bean:define id="show_checks" name="show_checks" type="java.lang.Boolean" />
-<bean:define id="has_selected" name="has_selected" type="java.lang.Boolean" />
+<bean:define id="has_selected" name="PMLIST" property="hasSelectedScope" type="java.lang.Boolean" />
 <bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <% int c =  (pmlist.getTotal()==null || pmlist.getTotal() ==0) ? 1 : (int)Math.log10(pmlist.getTotal()) + 1; %>
 <script type="text/javascript">
@@ -34,7 +32,7 @@ function selectItem(i){
 <table id="list" class="display" >
         <thead>
             <tr>
-            <th scope="col" style="width:${operation_column_width}">&nbsp;</th>
+            <th scope="col" style="width:${pmlist.operationColWidth}">&nbsp;</th>
             <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
                 <bean:define id="w" value="<%=(field.getWidth().compareTo("")!=0)?"style='width:"+field.getWidth()+"px;'":"" %>"></bean:define>
                 <th scope="col" ${w} ><pm:field-name entity="${entity}" field="${field}" /></th>
@@ -51,7 +49,7 @@ function selectItem(i){
                         <bean:define id="checked" value="<%=(es.getContainer(request).getSelectedIndexes().contains(i))?"checked":"" %>" />
                         <input type="checkbox" id="selected_item" value="${i}" onchange="selectItem(this.value);" ${checked} />
                     </logic:equal>
-                    <%= (show_row_number)?String.format("[%0"+c+"d]", i):"" %> &nbsp;
+                    <%= (pmlist.isShowRowNumber())?String.format("[%0"+c+"d]", i):"" %> &nbsp;
                     <span style="white-space: nowrap;" class="operationspopup" id="g_${i}">
                         <img src="${es.context_path}/templates/${es.pmservice.template}/images/loading.gif" alt="loading" />
                     </span>
@@ -72,7 +70,7 @@ function selectItem(i){
             </logic:iterate>
         </tbody>
         <tfoot>
-            <logic:equal name="searchable" value="true" >
+            <logic:equal name="PMLIST" property="searchable" value="true" >
             <tr>
                <th><input type="hidden" name="search" class="search_init" /></th>
                <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">

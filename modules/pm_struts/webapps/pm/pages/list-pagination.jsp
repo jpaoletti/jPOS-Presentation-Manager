@@ -19,7 +19,7 @@
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
-	<logic:equal value="true" name="paginable">
+	<logic:equal value="true" name="PMLIST" property="paginable">
 			<tr>
 			<td colspan="100">
 				<bean:message key='list.length.menu' />

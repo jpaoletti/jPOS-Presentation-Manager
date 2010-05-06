@@ -74,52 +74,51 @@ public abstract class EntityActionSupport extends ActionSupport {
     
     protected void excecute(PMStrutsContext ctx) throws PMException {
         
-        if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
-            ctx.getOperation().getContext().preExecute(ctx);
+        /* Validate de operation*/
+        validate(ctx);
         
-            /* Validate de operation*/
-            validate(ctx);
-            
-            PMService service = PMEntitySupport.staticPmservice();
-            Object tx = null;
-            try{
-                if(openTransaction()) {
-                	tx = service.getPersistenceManager().startTransaction(ctx);
-                	PMLogger.debug(this,"Started Transaction "+tx);
+        PMService service = PMEntitySupport.staticPmservice();
+        Object tx = null;
+        try{
+            if(openTransaction()) {
+            	tx = service.getPersistenceManager().startTransaction(ctx);
+            	PMLogger.debug(this,"Started Transaction "+tx);
+            }
+        	if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
+        		ctx.getOperation().getContext().preExecute(ctx);
+        
+            /** EXCECUTES THE OPERATION **/
+            doExecute(ctx);
+
+            if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
+                ctx.getOperation().getContext().postExecute(ctx);
+        
+                /*if(isAuditable(ctx)){
+                    logRevision (ctx.getDB(), (ctx.getEntity()!=null)?ctx.getEntity().getId():null, ctx.getOper_id(), ctx.getUser());
+                }*/
+            try {
+                if(tx != null){
+                    PMLogger.debug(this,"Commiting Transaction "+tx);
+                    service.getPersistenceManager().commit(ctx,tx);
                 }
-                    
-                /** EXCECUTES THE OPERATION **/
-                doExecute(ctx);
-    
-                if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
-                    ctx.getOperation().getContext().postExecute(ctx);
-            
-                    /*if(isAuditable(ctx)){
-                        logRevision (ctx.getDB(), (ctx.getEntity()!=null)?ctx.getEntity().getId():null, ctx.getOper_id(), ctx.getUser());
-                    }*/
+            } catch (Exception e) {
+                PMLogger.error(e);
+                throw new PMException("pm.struts.cannot.commit.txn");
+            }
+            tx = null;
+        } catch (Exception e) {
+        	PMLogger.error(e);
+            throw new PMException(e);
+        }finally{
+            if(tx != null){
+                PMLogger.debug(this,"Rolling Back Transaction "+tx);
                 try {
-                    if(tx != null){
-                        PMLogger.debug(this,"Commiting Transaction "+tx);
-                        service.getPersistenceManager().commit(ctx,tx);
-                    }
+                    service.getPersistenceManager().rollback(ctx, tx);
                 } catch (Exception e) {
                     PMLogger.error(e);
-                    throw new PMException("pm.struts.cannot.commit.txn");
-                }
-                tx = null;
-            } catch (Exception e) {
-            	PMLogger.error(e);
-                throw new PMException(e);
-            }finally{
-                if(tx != null){
-                    PMLogger.debug(this,"Rolling Back Transaction "+tx);
-                    try {
-                        service.getPersistenceManager().rollback(ctx, tx);
-                    } catch (Exception e) {
-                        PMLogger.error(e);
-                    }
                 }
             }
+        }
     }
 
     protected boolean isAuditable(PMContext ctx) throws PMException{
@@ -162,11 +161,12 @@ public abstract class EntityActionSupport extends ActionSupport {
     /**
      * 
      */
-    private void validate(PMContext ctx) throws PMException {
+    private void validate(PMStrutsContext ctx) throws PMException {
         if(ctx.getOperation()!= null && ctx.getOperation().getValidators()!= null){
             for (Validator ev : ctx.getOperation().getValidators()) {
                 ctx.put(PM_ENTITY_INSTANCE, ctx.getSelected().getInstance());
                 ValidationResult vr = ev.validate(ctx);
+                
                 ctx.getErrors().addAll(vr.getMessages());
                     if(!vr.isSuccessful()) throw new PMException();
             }

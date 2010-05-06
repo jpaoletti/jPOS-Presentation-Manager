@@ -36,23 +36,37 @@ public class ListAction extends EntityActionSupport {
     protected boolean isAudited() {    return false; }
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
-
-    protected void doExecute(PMStrutsContext ctx) throws PMException {
-        ListActionForm f = (ListActionForm) ctx.getForm();
-        configureList(ctx,f);
-        boolean searchable = ctx.getOperation().getConfig("searchable", "true").compareTo("true")==0;
+    
+    protected boolean prepare(PMStrutsContext ctx) throws PMException {
+    	super.prepare(ctx);
+    	PMLogger.debug(this, "Prepare");
+        return true;
+    }
+	private void prepareParameters(PMStrutsContext ctx) throws PMException {
+		
+		boolean searchable = ctx.getOperation().getConfig("searchable", "true").compareTo("true")==0;
         boolean paginable = ctx.getOperation().getConfig("paginable", "true").compareTo("true")==0;
         Boolean showRowNumber = ctx.getOperation().getConfig("show-row-number", "false").compareTo("true")==0;
         String operationColWidth= ctx.getOperation().getConfig("operation-column-width", "50px");
         Operations operations = (Operations) ctx.getSession().getAttribute(OPERATIONS);
         
+        ctx.getList().setSearchable(searchable);
+        ctx.getList().setPaginable(paginable);
+        ctx.getList().setShowRowNumber(showRowNumber);
+        ctx.getList().setOperationColWidth(operationColWidth);
+        ctx.getList().setHasSelectedScope(operations.getOperationsForScope(SCOPE_SELECTED).count() > 0);
         
-        ctx.getRequest().setAttribute("searchable", searchable);
-        ctx.getRequest().setAttribute("paginable", paginable);
-        ctx.getRequest().setAttribute("show_row_number", showRowNumber);
-        ctx.getRequest().setAttribute("operation_column_width", operationColWidth);
-        ctx.getRequest().setAttribute("show_checks", true);
-        ctx.getRequest().setAttribute("has_selected", operations.getOperationsForScope(SCOPE_SELECTED).count() > 0);
+        //ctx.getRequest().setAttribute("searchable", searchable);
+        //ctx.getRequest().setAttribute("paginable", paginable);
+        //ctx.getRequest().setAttribute("show_row_number", showRowNumber);
+        //ctx.getRequest().setAttribute("operation_column_width", operationColWidth);
+        //ctx.getRequest().setAttribute("has_selected",operations.getOperationsForScope(SCOPE_SELECTED).count() > 0 );
+	}
+
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
+        ListActionForm f = (ListActionForm) ctx.getForm();
+        configureList(ctx,f);
+        prepareParameters(ctx);
     }
     
     private void configureList(PMStrutsContext ctx, ListActionForm f) throws PMException {

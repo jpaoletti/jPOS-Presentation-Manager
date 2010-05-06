@@ -35,6 +35,12 @@ public class PaginatedList implements Constants{
     private Operations operations;
     private Operations rowOperations;
     
+    private boolean searchable;
+    private boolean paginable;
+    private boolean showRowNumber;
+    private String operationColWidth;
+    private boolean hasSelectedScope;
+    
     public List<Integer> getPageRange(){
         List<Integer> r = new ArrayList<Integer>();
         for(int i = 1 ; i <= getPages() ; i++) r.add(i);
@@ -148,4 +154,76 @@ public class PaginatedList implements Constants{
     public Integer rpp(){
         return (getRowsPerPage()!=null)?getRowsPerPage():DEFAULT_PAGE_SIZE;
     }
+
+	/**
+	 * @param searchable the searchable to set
+	 */
+	public void setSearchable(boolean searchable) {
+		this.searchable = searchable;
+	}
+
+	/**
+	 * @return the searchable
+	 */
+	public boolean isSearchable() {
+		return searchable;
+	}
+
+	/**
+	 * @param paginable the paginable to set
+	 */
+	public void setPaginable(boolean paginable) {
+		this.paginable = paginable;
+	}
+
+	/**
+	 * @return the paginable
+	 */
+	public boolean isPaginable() {
+		return paginable;
+	}
+
+	/**
+	 * @param showRowNumber the showRowNumber to set
+	 */
+	public void setShowRowNumber(boolean showRowNumber) {
+		this.showRowNumber = showRowNumber;
+	}
+
+	/**
+	 * @return the showRowNumber
+	 */
+	public boolean isShowRowNumber() {
+		return showRowNumber;
+	}
+
+	/**
+	 * @param operationColWidth the operationColWidth to set
+	 */
+	public void setOperationColWidth(String operationColWidth) {
+		this.operationColWidth = operationColWidth;
+	}
+
+	/**
+	 * @return the operationColWidth
+	 */
+	public String getOperationColWidth() {
+		return operationColWidth;
+	}
+
+
+	/**
+	 * @param hasSelectedScope the hasSelectedScope to set
+	 */
+	public void setHasSelectedScope(boolean hasSelectedScope) {
+		this.hasSelectedScope = hasSelectedScope;
+	}
+
+	/**
+	 * @return the hasSelectedScope
+	 */
+	public boolean isHasSelectedScope() {
+		return hasSelectedScope;
+	}
+
 }
