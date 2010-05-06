@@ -12,13 +12,53 @@
 
 \section{Introduction}
 
+
+\subsection{Motivation}
+
+If you already used jPOS, for sure you were shocked (like me) because of its
+great arquitecture and the number of tools to make electronic transaction
+systems, but probably, like me, you have a business model with a lot of
+participants on it associated to your transacitional model and this information
+must be administrated so you will need to probably start an extension of the
+transactional system to give it an interface. This will make you (or your
+transactional experts developers) loose time doing some Web interface or
+something to administrate business objects. More over, probably you will start
+with transactions and sadly, this is something ``ethereal'' to most of the
+clients. This is a problem and this project is intended to help you and any
+jPOS developer to give this a good ``jPOS style'' solution.
+
 \subsection{What is jPOS-Presentation Manager}
 
-Its \ldots
+Its a group of jPOS modules based on an xml representation of user model
+objects (entities). The goal of this is to provide a generic, extensible, easy
+to start and to expand, way of generate an administrative interface for jPOS
+based transactional projects.
+
+Trying to give a solution to the problem presented before, jPOS-PM gives a lot
+of tools to give a jPOS system a fast Web based start. With a few configuration
+you can have a full web site with a simple yet extensible interface so you can
+concentrate your work on transaction, make a little and fast start to the
+interface and get a nice start with few extra work. When transactional part is
+ready, you can make a lot of enhancement on Web interface with the many
+features jPOS-PM have.
 
 \subsection{How can I get it}
 
-GitHub: \url{http://github.com/jpaoletti/jPOS-Presentation-Manager}
+You can get it from GitHub project.
+
+\url{http://github.com/jpaoletti/jPOS-Presentation-Manager}
+
+\subsection{What it needs?}
+
+jPOS-PM requires this jPOS modules to work:
+
+\begin{description}
+\item[jpos] \url{http://jposee.googlecode.com/svn/trunk/modules/jpos/}
+\item[constants] \url{http://jposee.googlecode.com/svn/trunk/opt/}
+\item[jetty6] If you are going to work with struts implementation (default),
+you need \url{http://jposee.googlecode.com/svn/trunk/opt/}
+\item[commons] \url{http://jposee.googlecode.com/svn/trunk/opt/}
+\end{description}
 
 \section{Entity Management}
 
@@ -26,33 +66,188 @@ GitHub: \url{http://github.com/jpaoletti/jPOS-Presentation-Manager}
 
 \subsection{Configuring Bean}
 
+\begin{lstlisting}[language=XML]
+<presentation-manager class="org.jpos.ee.pm.struts.PMStrutsService"  logger="Q2">
+    <property name="debug" value="true" /> 
+    <property name="template" value="default" />
+    <property name="appversion" value="0.9.6.0" />
+    <property name="login-required" value="true" />
+    <property name="ignore-db" value="false" />
+    <property name="title" value="project.title" />
+    <property name="subtitle" value="project.subtitle" />
+    <property name="default-data-access" value="org.jpos.ee.pm.core.DataAccessDB"/>
+    
+    <!-- Busissnes Entities -->
+    <property name="entity" value="cfg/entities/sysconfig.xml" />
+    <!--     Security Entities -->
+    <property name="entity" value="cfg/entities/secuser.xml" />
+    <property name="entity" value="cfg/entities/secusergroup.xml" />
+    <property name="entity" value="cfg/entities/secperm.xml" />
+    <property name="entity" value="cfg/entities/secuserprofile.xml" />
+
+    <property name="monitor" value="cfg/monitors/q2.xml" />
+    <property name="monitor" value="cfg/monitors/status.xml" />
+
+</presentation-manager>
+\end{lstlisting}
 
 \subsection{Defining Entities}
 
+Example: SysConfig
+
+\begin{lstlisting}[language=XML]
+<?xml version='1.0' ?>
+<!DOCTYPE entity SYSTEM "cfg/entity.dtd">  
+<entity id="sysconfig" clazz="org.jpos.ee.SysConfig">
+      <auditable>false</auditable>
+      <operations>
+          <operation id="list" enabled="true" scope="item" display="all">
+            <properties>
+                <property name="operation-column-width" value="1px" />
+            </properties>
+          </operation>
+          <operation id="add" enabled="true" scope="general" display="all"/>
+          <operation id="show" enabled="true" scope="item" display="all"/>
+          <operation id="edit" enabled="false" scope="item" display="all"/>
+      </operations>
+
+      <field id="id" display="list add show" align="center" width="30" >
+          <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add edit" />
+          </converters>
+      </field>
+      <field id="value" display="all">
+          <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add edit" />
+          </converters>
+      </field>
+      <field id="readPerm" display="all" width="50">
+          <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add edit" />
+          </converters>
+      </field>
+      <field id="writePerm" display="all" width="50">
+          <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add edit" />
+          </converters>
+      </field>
+</entity>
+\end{lstlisting}
+
+
+pm.entity.sysconfig=System Configuration
+pm.field.sysconfig.id=Id
+pm.field.sysconfig.value=Value 
+pm.field.sysconfig.readPerm=Read Permission
+pm.field.sysconfig.writePerm= Write Permission
+
+
+
 \subsubsection{Basic Definition}
 
+\begin{lstlisting}[language=XML]
+
+\end{lstlisting}
+
 \subsubsection{Context}
+\begin{lstlisting}[language=XML]
 
+\end{lstlisting}
 \subsubsection{Data Access}
+\begin{lstlisting}[language=XML]
 
+\end{lstlisting}
 \subsubsection{Fields}
+\begin{lstlisting}[language=XML]
 
+\end{lstlisting}
 \subsubsection{Operations}
 
+List
+
+\begin{lstlisting}[language=XML]
+          <operation id="list" enabled="true" scope="item" display="all">
+            <properties>
+                <property name="operation-column-width" value="80px" />
+                <property name="sort-field" value="id"/>
+                <property name="sort-direction" value="desc"/>
+                <property name="searchable" value="true"/>
+                <property name="show-row-number" value="true" />
+            </properties>
+          </operation>
+\end{lstlisting}
+
+
+
 \subsubsection{Converters}
+\begin{lstlisting}[language=XML]
 
+\end{lstlisting}
 \subsubsection{Validators}
+\begin{lstlisting}[language=XML]
 
+\end{lstlisting}
 
 
 
 \section{Menu}
 
+\emph{cfg/pm.menu.xml}
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE menu SYSTEM "menu.dtd">
+<menu>
+    <menu-list text="pm.menu.list.monitor" perm="monitoring">
+        <menu-item text="pm.menu.item.txns" perm="">
+            <location id="pmstruts" value="/list.do?pmid=transaction" />
+            <external>false</external>
+        </menu-item>
+        <menu-item text="pm.menu.item.q2log" perm="">
+            <location id="pmstruts" value="/monitor.do?pmid=q2" />
+            <external>false</external>
+        </menu-item> 
+        <menu-item text="pm.menu.item.status" perm="">
+            <location id="pmstruts" value="/monitor.do?pmid=status" />
+            <external>false</external>
+        </menu-item> 
+        <menu-item text="pm.menu.item.events" perm="">
+            <location id="pmstruts" value="/list.do?pmid=event" />
+            <external>false</external>
+        </menu-item>
+    </menu-list>
+    <menu-list text="pm.menu.list.business" perm="business">
+        ...
+    </menu-list>
+    <menu-list text="pm.menu.list.security" perm="useradmin">
+        ...
+    </menu-list>
+    <menu-list text="pm.menu.list.config" perm="configuration">
+        <menu-item text="pm.menu.item.sysconfig" perm="">
+            <location id="pmstruts" value="/list.do?pmid=sysconfig" />
+            <external>false</external>
+        </menu-item>
+        ...
+    </menu-list>
+    </menu-list>
+</menu>
+\end{lstlisting}
+
+Foto con la key
+
+pm.menu.item.sysconfig=System Configuration
+
+foto con el correcto.
+
 \subsection{Defining Locations}
 
-
-
-
+\emph{cfg/pm.locations.xml}
+\begin{lstlisting}[language=XML]
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE menu SYSTEM "locations.dtd">
+<locations>
+       <location id="pmstruts" class="org.jpos.ee.pm.struts.MenuItemLocationStruts"/>
+</locations>
+\end{lstlisting}
 
 \section{Monitors}
 
