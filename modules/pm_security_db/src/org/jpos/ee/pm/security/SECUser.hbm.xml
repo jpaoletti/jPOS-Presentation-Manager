@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping 
+  SYSTEM "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="org.jpos.ee.pm.security.SECUser" table="sec_users">
+    <id name="id" column="id" type="long">
+      <generator class="native" />
+    </id>
+
+    <property name="nick" type="string">
+     <column name="nick" sql-type="varchar(32)" unique="true" not-null="true" />
+    </property>
+    <property name="password" length="32" type="string" />
+    <property name="name" length="128" not-null="false" type="string" />
+    <property name="active" type="yes_no" />
+    <property name="deleted" type="yes_no" />
+    <property name="changePassword" type="yes_no" column="change_password"/>      
+    <property name="email" />
+
+    <set name="groups" table="sec_user_groups" lazy="false">
+      <key column="sec_user" />
+      <many-to-many class="org.jpos.ee.pm.security.SECUserGroup" column="sec_group"/>
+    </set>
+    
+    <list name="passwordhistory"  table="sec_user_passwordhistory" cascade="delete">
+      <key column="eeuser" not-null="true"/>
+      <list-index column="id"/>
+      <composite-element class="org.jpos.ee.pm.security.SECPasswordHistory">
+       <property name="value" type="string">
+       <column name="value" sql-type="varchar(32)" not-null="true" />
+       </property>
+      </composite-element>
+    </list>
+
+    <map name="props" lazy="true" table="sec_user_props" cascade="all-delete-orphan">
+        <key />
+        <index column="propName" type="string" length="32"/>
+        <element column="propValue" type="string"/>
+    </map>
+
+    <!-- <set name="visitors" cascade="all-delete-orphan" lazy="true">
+      <key column="eeuser" />
+      <one-to-many class="org.jpos.ee.pm.security.Visitor" />
+    </set>
+
+    <list name="revisions" lazy="true" cascade="all-delete-orphan">
+     <key column="eeuser" />
+     <index column="posn" />
+     <one-to-many class="org.jpos.ee.pm.security.UserRevisionEntry" />
+    </list> -->
+
+  </class>
+</hibernate-mapping>
+

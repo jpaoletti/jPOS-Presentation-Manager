@@ -1,0 +1,1 @@
+    <forward name="changepassword" path="/changepassword.do?pmid=secuserprofile"/>

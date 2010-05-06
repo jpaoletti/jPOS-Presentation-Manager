@@ -1,0 +1,83 @@
+<?xml version='1.0' ?>
+<!DOCTYPE entity SYSTEM "cfg/entity.dtd">  
+<entity>
+    <id>secusergroup</id>
+    <clazz>org.jpos.ee.pm.security.core.PMSecurityUserGroup</clazz>
+      <auditable>false</auditable>
+      <dataAccess class="org.jpos.ee.pm.security.ui.DataAccessGroup" />
+    
+    <operations>
+        <operation>
+            <id>list</id>
+            <enabled>true</enabled>
+            <scope>item</scope>
+            <display>all</display>
+        </operation>        
+        <operation>
+            <id>add</id>
+            <enabled>true</enabled>
+            <scope>general</scope>
+            <display>list show</display>
+        </operation>
+        <operation>
+            <id>show</id>
+            <enabled>true</enabled>
+            <scope>item</scope>
+            <display>list</display>
+        </operation>
+        <operation>
+            <id>edit</id>
+            <enabled>true</enabled>
+            <scope>item</scope>
+            <display>list show</display>
+        </operation>
+    </operations>
+    
+    <field>
+        <id>name</id>
+        <display>all</display>
+        <width>200</width>
+        <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add"/>
+          </converters>
+    </field>
+    
+    <field>
+        <id>description</id>
+        <display>all</display>
+        <width>200</width>
+        <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add edit"/>
+          </converters>
+    </field>
+    
+    <field>
+          <id>active</id>
+          <display>all</display>
+          <width>40</width>
+          <align>center</align>
+          <converters>
+              <converter class="org.jpos.ee.pm.converter.ShowBooleanConverter" operations="list show">
+                   <properties>
+                       <property name="true-text" value="Si" />
+                       <property name="false-text" value="No" />
+                   </properties>
+              </converter>
+              <converter class="org.jpos.ee.pm.struts.converter.EditBooleanConverter" operations="add edit"/>
+          </converters>
+      </field>
+    
+    <field>
+        <id>permissions</id>
+        <display>all</display>
+        <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditCollectionConverter" operations="add edit">
+                   <properties>
+                    <property name="filter" value="" />
+                    <property name="entity" value="secperm" />
+                    <property name="collection-class" value="java.util.ArrayList" />
+                </properties>
+              </converter>
+          </converters>
+    </field>
+</entity>

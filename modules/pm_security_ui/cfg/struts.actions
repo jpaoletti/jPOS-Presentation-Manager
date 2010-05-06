@@ -1,0 +1,6 @@
+    <action input="/pages/changepassword.jsp" path="/changepassword" name="ChangePasswordForm" type="org.jpos.ee.pm.security.ui.actions.ChangePasswordAction" validate="false">
+      <forward name="success" path="/logout.do"/>
+      <forward name="continue" path="/pages/changepassword.jsp"/>
+      <forward name="failure" path="/pages/changepassword.jsp"/>
+    </action>
+    

@@ -1,0 +1,1 @@
+    <form-bean name="ChangePasswordForm" type="org.jpos.ee.pm.security.ui.actions.ChangePasswordForm"/>

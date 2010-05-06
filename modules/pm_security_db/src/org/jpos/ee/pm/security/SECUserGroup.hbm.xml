@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping 
+  SYSTEM "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="org.jpos.ee.pm.security.SECUserGroup" table="sec_groups">
+    <id name="id" column="id" type="long">
+      <generator class="native" />
+    </id>
+    <property name="name" type="string">
+      <column name="name" sql-type="varchar(32)" unique="true" not-null="true" />
+    </property>
+    <property name="description" length="255" not-null="false" type="string" />
+    <property name="active" type="yes_no" />
+    <property name="creation" type="date" />
+    
+    <set name="permissions" lazy="false" table="sec_group_perms" cascade="delete">
+        <key column="sec_group" />
+         <many-to-many class="org.jpos.ee.pm.security.SECPermission" column="sec_perm"/>
+    </set>
+  </class>
+</hibernate-mapping>

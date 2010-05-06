@@ -1,0 +1,81 @@
+<?xml version='1.0' ?>
+<!DOCTYPE entity SYSTEM "cfg/entity.dtd">  
+<entity>
+    <id>secrule</id>
+    <clazz>org.jpos.ee.pm.security.rules.SECRule</clazz>
+      <auditable>true</auditable>
+    
+    <operations>
+        <operation>
+            <id>list</id>
+            <enabled>true</enabled>
+            <scope>item</scope>
+            <display>all</display>
+        </operation>        
+        <operation>
+            <id>show</id>
+            <enabled>true</enabled>
+            <scope>item</scope>
+            <display>list</display>
+        </operation>
+        <operation>
+            <id>edit</id>
+            <enabled>true</enabled>
+            <scope>item</scope>
+            <display>list show</display>
+        </operation>
+    </operations>
+    
+    <field>
+        <id>id</id>
+        <display>list show</display>
+          <width>60</width>
+          <align>center</align>
+    </field>
+        
+    <field>
+        <id>description</id>
+        <display>list show</display>
+          <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.ShowLocalizedStringConverter" operations="list show"/>
+          </converters>
+    </field>
+    
+    <field>
+          <id>enabled</id>
+          <display>all</display>
+          <width>40</width>
+          <align>center</align>
+          <converters>
+              <converter class="org.jpos.ee.pm.converter.ShowBooleanConverter" operations="list show">
+                   <properties>
+                       <property name="true-text" value="Si" />
+                       <property name="false-text" value="No" />
+                   </properties>
+              </converter>
+              <converter class="org.jpos.ee.pm.struts.converter.EditBooleanConverter" operations="edit"/>
+          </converters>
+      </field>
+    <field>
+        <id>parameter</id>
+        <display>all</display>
+          <converters>
+              <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="edit"/>
+          </converters>
+    </field>
+    <field>
+        <id>applyTo</id>
+        <display>list show</display>
+          <converters>
+              <converter class="org.jpos.ee.pm.security.ui.converter.ShowRuleApplyToConverter" operations="show list"/>
+          </converters>
+    </field>
+    <field>
+        <id>updateDate</id>
+        <display>show list</display>
+    </field>
+    <field>
+        <id>updateUser</id>
+        <display>show</display>
+    </field>
+</entity>
