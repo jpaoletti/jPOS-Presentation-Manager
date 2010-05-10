@@ -1,0 +1,14 @@
+Add this icons to your template folder 
+
+your_module_ui/webapps/templates/your_template/img
+
+and add this styles to your button style sheet
+
+your_module_ui/webapps/templates/your_template/buttons.css
+
+.changepassword {
+    background:url(img/changepassword.gif) no-repeat 10px 8px;
+}
+.resetpsw {
+    background:url(img/resetpsw.gif) no-repeat 10px 8px;
+}

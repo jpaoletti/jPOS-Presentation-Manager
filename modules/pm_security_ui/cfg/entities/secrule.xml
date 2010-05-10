@@ -47,7 +47,7 @@
           <width>40</width>
           <align>center</align>
           <converters>
-              <converter class="org.jpos.ee.pm.converter.ShowBooleanConverter" operations="list show">
+              <converter class="org.jpos.ee.pm.struts.converter.ShowBooleanConverter" operations="list show">
                    <properties>
                        <property name="true-text" value="Si" />
                        <property name="false-text" value="No" />

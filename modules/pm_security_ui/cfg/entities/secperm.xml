@@ -1,28 +1,15 @@
 <?xml version='1.0' ?>
 <!DOCTYPE entity SYSTEM "cfg/entity.dtd">  
-<entity>
-    <id>secperm</id>
-    <clazz>org.jpos.ee.pm.security.core.PMSecurityPermission</clazz>
-      <auditable>false</auditable>
-      <dataAccess class="org.jpos.ee.pm.security.ui.DataAccessPerm" />
-    
+<entity id="secperm" clazz="org.jpos.ee.pm.security.core.PMSecurityPermission">
+    <auditable>false</auditable>
+    <dataAccess class="org.jpos.ee.pm.security.ui.DataAccessPerm" />
     <operations>
-        <operation>
-            <id>list</id>
-            <enabled>true</enabled>
-            <scope>item</scope>
-            <display>all</display>
-        </operation>        
+        <operation id="list">
+              <properties>
+                  <property name="operation-column-width" value="1px" />
+              </properties>
+        </operation>
     </operations>
-    
-    <field>
-        <id>name</id>
-        <width>200</width>
-        <display>show list</display>
-    </field>
-    
-    <field>
-        <id>description</id>
-        <display>all</display>
-    </field>
+    <field id="name" width="150"/>
+    <field id="description" />
 </entity>
