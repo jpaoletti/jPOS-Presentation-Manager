@@ -3,4 +3,7 @@
       <forward name="continue" path="/pages/changepassword.jsp"/>
       <forward name="failure" path="/pages/changepassword.jsp"/>
     </action>
-    
+    <action path="/resetpsw" type="org.jpos.ee.pm.security.ui.actions.ResetPasswordAction" validate="false">
+      <forward name="success" path="/pages/resetpsw.jsp"/>
+      <forward name="failure" path="/pages/resetpsw.jsp"/>
+    </action>

@@ -59,8 +59,10 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
         DB db = (DB) ctx.get(PM_DB);
         try{
             SECUser user = getDBUser(username);
-            authenticate(username, password);
-            checkUserRules(username, password);
+            if(password!=null){
+            	authenticate(username, password);
+            	checkUserRules(username, password);
+            }
             user.setPassword( encryptPassword(username, newpassword) );
             db.save(user);
         } catch (Exception e) {
