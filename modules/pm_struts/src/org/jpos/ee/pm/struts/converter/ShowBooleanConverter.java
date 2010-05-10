@@ -15,20 +15,21 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpos.ee.pm.converter;
+package org.jpos.ee.pm.struts.converter;
 
+import org.jpos.ee.pm.converter.Converter;
+import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 
-/**Converter for boolean.<br>
+/**Converter for showing a boolean value.<br>
  * <pre>
  * {@code
- * <converter class="org.jpos.ee.pm.converter.ShowBooleanConverter">
- *     <operationId>show</operationId>
+ * <converter class="org.jpos.ee.pm.converter.ShowBooleanConverter" operations="show list">
  *     <properties>
- *         <property name="true-text" value="Yes" />
- *         <property name="false-text" value="No" />
+ *         <property name="true-text" value="pm.true.text" />
+ *         <property name="false-text" value="pm.false.text" />
  *     <properties>
  * </converter>
  * }
@@ -42,11 +43,13 @@ public class ShowBooleanConverter extends Converter {
     }
     
     public String visualize(PMContext ctx) throws ConverterException {
-        try {
-            EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-            return ((Boolean) getValue(einstance.getInstance(), (Field) ctx.get(PM_FIELD))).booleanValue() ? getConfig("true-text", "Yes") : getConfig("false-text", "No");
-        } catch (Exception e) {
-            throw new ConverterException("pm_core.converter.not.boolean");
-        }
+    	EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        Object value = getValue(einstance.getInstance(),(Field) ctx.get(PM_FIELD) );
+        if(! (value instanceof Boolean)) throw new ConverterException("invalid.conversion");
+		boolean b = ((Boolean) value).booleanValue();
+        if(b)
+        	return super.visualize("localized_string_converter.jsp?value="+getConfig("true-text", "pm.converter.boolean_converter.no"),"");
+        else
+        	return super.visualize("localized_string_converter.jsp?value="+getConfig("false-text", "pm.converter.boolean_converter.yes"),"");
     }
 }
