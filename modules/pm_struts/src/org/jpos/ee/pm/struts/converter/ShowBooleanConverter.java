@@ -48,8 +48,8 @@ public class ShowBooleanConverter extends Converter {
         if(! (value instanceof Boolean)) throw new ConverterException("invalid.conversion");
 		boolean b = ((Boolean) value).booleanValue();
         if(b)
-        	return super.visualize("localized_string_converter.jsp?value="+getConfig("true-text", "pm.converter.boolean_converter.no"),"");
+        	return super.visualize("localized_string_converter.jsp?value="+getConfig("true-text", "pm.converter.boolean_converter.yes"),"");
         else
-        	return super.visualize("localized_string_converter.jsp?value="+getConfig("false-text", "pm.converter.boolean_converter.yes"),"");
+        	return super.visualize("localized_string_converter.jsp?value="+getConfig("false-text", "pm.converter.boolean_converter.no"),"");
     }
 }
