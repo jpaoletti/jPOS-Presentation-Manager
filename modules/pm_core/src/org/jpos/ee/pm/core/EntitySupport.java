@@ -74,7 +74,7 @@ public class EntitySupport {
     
     /**Setter for an object property value
      * @param obj The object
-     * @param propertyName The property
+     * @param name The property name
      * @param value The value to set
      * */
     public static void set (Object obj, String name, Object value) {

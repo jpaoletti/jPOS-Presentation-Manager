@@ -3,6 +3,10 @@ package org.jpos.ee.pm.core;
 import java.util.ArrayList;
 import java.util.List;
 
+/**An implementation of Data Access that simply do nothing
+ * 
+ * @author jpaoletti
+ * */
 public class DataAccessVoid implements DataAccess {
 
 	

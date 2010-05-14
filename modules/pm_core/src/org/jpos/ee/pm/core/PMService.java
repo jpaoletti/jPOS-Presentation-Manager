@@ -33,7 +33,7 @@ import org.jpos.util.NameRegistrar;
 /**Presentation Manager service bean.
   * 
   * @author jpaoletti jeronimo.paoletti@gmail.com
-  * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+  * http://github.com/jpaoletti/jPOS-Presentation-Manager
   * */
 public class PMService extends QBeanSupport implements Constants{
     protected Map<Object,Entity> entities;

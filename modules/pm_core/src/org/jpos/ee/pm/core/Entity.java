@@ -74,10 +74,12 @@ public class Entity extends PMCoreObject {
     
     /**Indicates if the entity is auditable so every time an instance is modified, the PM will
      * create an auditory entry of the change 
-     * <br/>{@code<auditable>true</auditable>}*/
+     * <br/><pre>{@code <auditable>true</auditable>}</pre> 
+     * */
     private Boolean auditable;
     
     /**Defines an owner to the entity. It makes this entity "weak".<br/>
+     * <pre>
      * {@code
      *  <owner>
      *     <entityId>owner_entity_id</entityId>
@@ -85,6 +87,8 @@ public class Entity extends PMCoreObject {
      *     <localProperty>local_pointer_to_owner</localProperty>
      *     <entityCollectionClass></entityCollectionClass>
      *  </owner>
+     *  }
+     * </pre>
      * @see EntityOwner*/
     private EntityOwner owner;
     
@@ -98,7 +102,7 @@ public class Entity extends PMCoreObject {
     
     /**Operations of the entity. Standard operations are "add", "edit", "delete", "show", "list"
      * but the programmer can define whatever he wants.
-     * <br/>{@code<operations>...</operations>}
+     * <br/>{@code <operations>...</operations>}
      * @see Operations
      * @see Operation
      * @see OperationContext*/

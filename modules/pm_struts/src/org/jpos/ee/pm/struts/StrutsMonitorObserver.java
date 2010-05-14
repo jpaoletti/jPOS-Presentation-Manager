@@ -31,7 +31,7 @@ import org.jpos.ee.pm.core.monitor.MonitorObserver;
  * needed and delete from observers list.
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
- * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+ * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
 public class StrutsMonitorObserver extends MonitorObserver {

@@ -21,7 +21,7 @@ package org.jpos.ee.pm.core.monitor;
  * A monitor line. Its composed by an id to identificate the line and a content.
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
- * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+ * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
 public class MonitorLine {

@@ -26,7 +26,7 @@ import java.util.List;
 /** A monitor source that takes information from a file
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
- * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+ * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
 public class FileMonitorSource extends MonitorSource {

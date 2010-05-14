@@ -27,7 +27,7 @@ import org.jpos.ee.pm.core.PMService;
 /** A monitor that watch something showing his status.
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
- * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+ * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
 public class Monitor extends Observable implements Runnable{

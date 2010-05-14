@@ -27,7 +27,7 @@ import org.jpos.ee.pm.core.PMLogger;
 /** This class is an observer of the monitor.
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
- * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+ * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
 public class MonitorObserver implements Observer{

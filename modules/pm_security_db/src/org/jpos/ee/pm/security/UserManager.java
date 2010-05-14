@@ -163,7 +163,7 @@ public class UserManager {
     }
 
     /**
-     * @param u The user.
+     * @param password The password
      * @param seed The seed
      * @return Computed password
      * @throws SECException if invalid user/pass
@@ -177,7 +177,7 @@ public class UserManager {
     }
    
     /**
-     * @param u The user.
+     * @param password The password to encrypt.
      * @param seed The seed
      * @return Computed password
      * @throws SECException if invalid user/pass

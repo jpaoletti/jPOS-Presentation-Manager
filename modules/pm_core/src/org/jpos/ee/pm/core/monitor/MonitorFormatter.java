@@ -26,7 +26,7 @@ import java.util.Properties;
  * Programmer can extend this class and redefine format method to change the output.
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
- * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+ * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
 public class MonitorFormatter {

@@ -77,7 +77,7 @@ public class Operations  extends PMCoreObject implements Constants{
     }
 
     /**Returns an Operations object for the given scope
-     * @param scope The scope
+     * @param scopes The scopes
      * @return The Operations
      *  */
     public Operations  getOperationsForScope(String ... scopes) {

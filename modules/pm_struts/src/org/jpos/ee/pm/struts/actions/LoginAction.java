@@ -88,10 +88,7 @@ public class LoginAction extends EntityActionSupport {
          ctx.getSession().setAttribute(MENU, menu);
     }
     /**
-     * @param accessCount
-     * @param seed
-     * @param cfgMgr
-     * @param mgr
+     * @param ctx The context with all the parameters
      * @return The user
      * @throws BLException
      */

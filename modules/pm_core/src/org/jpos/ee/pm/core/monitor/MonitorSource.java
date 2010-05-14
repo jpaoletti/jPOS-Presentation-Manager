@@ -23,7 +23,7 @@ import java.util.Properties;
 /** A monitor source is where the monitor takes the information
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
- * @see http://github.com/jpaoletti/jPOS-Presentation-Manager
+ * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * 
  * */
 public abstract class MonitorSource {
