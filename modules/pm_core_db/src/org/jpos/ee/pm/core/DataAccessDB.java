@@ -24,9 +24,10 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.jpos.ee.Constants;
 import org.jpos.ee.DB;
 
-public class DataAccessDB implements DataAccess {
+public class DataAccessDB implements DataAccess, Constants {
 
     public Object getItem(PMContext ctx, String property, String value) throws PMException {
         try {
