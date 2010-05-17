@@ -66,7 +66,7 @@ public abstract class ActionSupport extends Action implements Constants{
         } catch (PMUnauthorizedException e){
             return mapping.findForward(STRUTS_LOGIN);
         } catch (PMException e) {
-            PMLogger.error(e);
+            PMLogger.debug(this,e);
             if(e.getKey()!=null) ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, e.getKey()));
             ActionErrors errors = new ActionErrors();
             for(PMMessage msg : ctx.getErrors()){

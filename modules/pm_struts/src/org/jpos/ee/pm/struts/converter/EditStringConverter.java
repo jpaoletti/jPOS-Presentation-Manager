@@ -33,7 +33,7 @@ public class EditStringConverter extends StrutsEditConverter {
         EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);
         Object p = getNestedProperty (einstance.getInstance(), field.getId());
-        return super.visualize("string_converter.jsp?value="+normalize((p==null)?"":p.toString()));
+        return super.visualize("string_converter.jsp?ml="+getConfig("max-length")+"&value="+normalize((p==null)?"":p.toString()));
     }
 
     public String normalize (String s) {
