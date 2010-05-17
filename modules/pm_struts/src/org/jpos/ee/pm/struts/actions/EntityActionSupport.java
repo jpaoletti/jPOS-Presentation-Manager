@@ -106,6 +106,8 @@ public abstract class EntityActionSupport extends ActionSupport {
                 throw new PMException("pm.struts.cannot.commit.txn");
             }
             tx = null;
+        } catch (PMException e) {
+            throw e;
         } catch (Exception e) {
         	PMLogger.error(e);
             throw new PMException(e);

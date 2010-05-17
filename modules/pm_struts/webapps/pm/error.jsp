@@ -15,8 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */-->
- <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <pm:page title="errors">
-<html:errors/>
+    <div class="boxed">
+        <h2 class="title"><pm:message key="errors.title" /></h2><br/>
+        <html:errors/>
+        <a href="javascript:history.back()"><pm:message key="errors.back" /></a>
+    </div>
 </pm:page>
