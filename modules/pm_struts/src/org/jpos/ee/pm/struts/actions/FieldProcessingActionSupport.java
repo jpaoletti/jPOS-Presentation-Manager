@@ -48,7 +48,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
              String eid = "f_" + f.getId();
              String s = getParamValues(ctx, eid, ";");
              PMLogger.debug(this,"Field ["+eid + "] "+s);
-             int i = 0;       
+             int i = 0;
              while(s != null){
                 PMLogger.debug(this,"Object to convert: "+s);
                 try {
@@ -59,18 +59,19 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
                     ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
                     Object converted = converter.build(ctx);
                     PMLogger.debug(this,"Object converted: "+converted);
-                    validateField(ctx, f, wrapper, converted);
-                    PMEntitySupport.set(o, f.getId(), converted);
+                    if(validateField(ctx, f, wrapper, converted))
+                        PMEntitySupport.set(o, f.getId(), converted);
                 } catch (IgnoreConvertionException e) {
                      //Do nothing, just ignore conversion.
-                  }
-                  i++;
-                  s = getParamValues(ctx, eid+"_"+i, ";");
+                }
+                i++;
+                s = getParamValues(ctx, eid+"_"+i, ";");
              }
         }
     }
 
-    private void validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, Object o) throws PMException {
+    private boolean validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, Object o) throws PMException {
+        boolean ok = true;
         if(field.getValidators()!= null){
              for (Validator fv : field.getValidators()) {
                  ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
@@ -78,9 +79,11 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
                  ctx.put(PM_FIELD_VALUE, o);
                  ValidationResult vr = fv.validate(ctx);
                  ctx.getErrors().addAll(vr.getMessages());
-                 if(! vr.isSuccessful()) throw new PMException();
+                 ok = ok && vr.isSuccessful();
+                 ///if(! vr.isSuccessful()) throw new PMException();
              }
          }
+        return ok;
     }
 
     private String getParamValues(PMStrutsContext ctx, String name, String separator) {
