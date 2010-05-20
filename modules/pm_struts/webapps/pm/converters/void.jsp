@@ -1,1 +1,1 @@
-<span style="white-space:pre;">${param.text}</span>
+${param.text}
