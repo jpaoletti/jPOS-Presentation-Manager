@@ -17,6 +17,9 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
@@ -67,10 +70,17 @@ public class AddAction extends RowActionSupport {
     protected void doExecute(PMStrutsContext ctx) throws PMException {
         Object instance = ctx.getSelected().getInstance();
         if(ctx.isWeak()){
-            getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).add(instance);
+            final Collection<Object> collection = getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty());
+            collection.add(instance);
             String p = ctx.getEntity().getOwner().getLocalProperty();
             if(p != null){
                 EntitySupport.set(instance, p, ctx.getOwner().getSelected().getInstance());
+            }
+            //For ordered list, we usually need to set a "position" property
+            String pos = ctx.getEntity().getOwner().getLocalPosition();
+            if(pos != null){
+                List tmp = new ArrayList(collection);
+                EntitySupport.set(instance, pos, tmp.indexOf(instance));
             }
         }else{
             PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");

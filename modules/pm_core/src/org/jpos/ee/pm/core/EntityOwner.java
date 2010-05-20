@@ -42,6 +42,8 @@ public class EntityOwner extends PMCoreObject{
     private String localProperty;
     /**The collection class*/
     private String entityCollectionClass;
+    /**Optional list position on ordered lists */
+    private String localPosition;
     
     /**
      * @return the entityId
@@ -91,4 +93,14 @@ public class EntityOwner extends PMCoreObject{
     public void setEntityCollectionClass(String entityCollectionClass) {
         this.entityCollectionClass = entityCollectionClass;
     }
+
+    public String getLocalPosition() {
+        return localPosition;
+    }
+
+    public void setLocalPosition(String localPosition) {
+        this.localPosition = localPosition;
+    }
+
+    
 }
