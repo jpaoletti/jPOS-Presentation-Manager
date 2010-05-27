@@ -35,9 +35,11 @@ public class Highlight {
         this.scope = scope;
     }
     /**
-     * @return the scope
+     * @return the scope. 'instance' for the whole item and 'property' for just
+     * the instance property. instance by default
      */
     public String getScope() {
+        if(scope==null) return "instance";
         return scope;
     }
     

@@ -489,4 +489,9 @@ public class Entity extends PMCoreObject {
 		if(noCount==null)return false;
 		return noCount;
 	}
+
+        public Highlight getHighlight(Field field, Object instance){
+            if(getHighlights()==null) return null;
+            return getHighlights().getHighlight(this, field, instance);
+        }
 }

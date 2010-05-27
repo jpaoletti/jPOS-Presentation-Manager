@@ -75,13 +75,13 @@
 	<html:errors/>
 
 	<logic:present name="entity" property="highlights">
-	<style>
-	<logic:iterate id="highlight" name="entity" property="highlights.highlights">
+        <style type="text/css">
+	<logic:iterate id="highlight" name="entity" property="highlights.highlights" indexId="i">
 		<logic:equal value="instance" name="highlight" property="scope">
-		tr.${highlight.field}_${highlight.value} { background-color: ${highlight.color}; }
+		tr.pm_hl_${i} { background-color: ${highlight.color}; }
 		</logic:equal>
 		<logic:notEqual value="instance" name="highlight" property="scope">
-		td.${highlight.field}_${highlight.value} { background-color: ${highlight.color}; }
+		td.pm_hl_${i} { background-color: ${highlight.color}; }
 		</logic:notEqual>
 	</logic:iterate>
 	</style>	
@@ -102,7 +102,7 @@
 		$('#sort_page').jqm({onShow:myOpen});		  
 	});
 	</script>
-	<script type="text/javascript" src="${es.context_path}/js/highlight.js"></script>
+	
 </html:form>
 </div>
 </pm:page>
