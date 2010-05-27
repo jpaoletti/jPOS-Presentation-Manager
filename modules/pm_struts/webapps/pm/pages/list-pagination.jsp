@@ -24,9 +24,11 @@
 			<td colspan="100">
 				<bean:message key='list.length.menu' />
 				<html:select property="rowsPerPage" value="${PMLIST.rowsPerPage}" onchange="this.form.submit();">
-								<html:option value="5" />
-								<html:option value="10"/>
-								<html:option value="20"/>
+                                    <html:option value="5" />
+                                    <html:option value="10"/>
+                                    <html:option value="20"/>
+                                    <html:option value="50"/>
+                                    <html:option value="100"/>
 				</html:select> | 
 				<c:if test="${PMLIST.total != null}">
 					<bean:message key='list.total' />&nbsp;${PMLIST.total} &nbsp; | &nbsp;  
