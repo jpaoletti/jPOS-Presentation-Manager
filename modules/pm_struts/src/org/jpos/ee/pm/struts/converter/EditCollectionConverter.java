@@ -43,7 +43,8 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
             if(ss.length > 0 ){
                 for (int i = 0; i < ss.length; i++) {
                     Integer x = Integer.parseInt(ss[i]);
-                    result.add(list.get(x));
+                    if(!result.contains(list.get(x)))
+                        result.add(list.get(x));
                 }
             }
             return result;
