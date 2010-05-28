@@ -60,7 +60,8 @@ public class FilterAction extends FieldProcessingActionSupport {
         }else{
             ctx.getEntityContainer().getFilter().clear();
             for (Field f : ctx.getEntity().getFields()) {
-                proccessField(ctx, f, ctx.getEntityContainer().getFilter().getInstance());
+                if(f.shouldDisplay(ctx.getOperation().getId()))
+                    proccessField(ctx, f, ctx.getEntityContainer().getFilter().getInstance());
             }
             ctx.getEntityContainer().getFilter().process(ctx.getEntity());
             return true;
@@ -75,7 +76,7 @@ public class FilterAction extends FieldProcessingActionSupport {
         ctx.put(PM_LIST_ASC, !pmlist.isDesc());
         contents.addAll( (List<Object>) ctx.getEntity().getList(ctx , ctx.getEntityContainer().getFilter(), pmlist.from(), pmlist.rpp()) );
         if(!ctx.getEntity().getNoCount())
-        	total = ctx.getEntity().getDataAccess().count(ctx);
+            total = ctx.getEntity().getDataAccess().count(ctx);
         PaginatedList pmList = ctx.getList();
         pmList.setContents(contents);
         pmList.setTotal(total);
