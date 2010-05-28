@@ -19,32 +19,30 @@ package org.jpos.ee.pm.struts.converter;
 
 import java.util.Collection;
 import java.util.List;
+import org.jpos.core.ConfigurationException;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.Entity;
+import org.jpos.ee.pm.core.EntitySupport;
+import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
-public class EditCollectionConverter extends StrutsEditConverter {
+public class EditCollectionConverter extends AbstractCollectionConverter {
 
     public Object build(PMContext ctx) throws ConverterException {
         try{
-            String collection_class = getConfig("collection-class");
-            if(collection_class == null) throw new ConverterException("collection-class must be defined");
-            
-            Collection<Object> result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
+            final PMStrutsContext c = (PMStrutsContext) ctx;
+            Collection<Object> result = getCollection(ctx);
+            List<?> list = recoverList(c, getConfig("entity"), true);
+
             String s = ctx.getString(PM_FIELD_VALUE);
             if(s.trim().compareTo("")==0) return result;
             String[] ss = s.split(";");
             if(ss.length > 0 ){
-                String eid = ss[0].split("@")[0];
-                PMEntitySupport es = PMEntitySupport.getInstance();
-                Entity e = es.getPmservice().getEntity(eid);
-                if(e==null) throw new ConverterException("Cannot find entity "+eid);
-                List<?> list = e.getList(ctx);
                 for (int i = 0; i < ss.length; i++) {
-                    Integer x = Integer.parseInt(ss[i].split("@")[1]);
+                    Integer x = Integer.parseInt(ss[i]);
                     result.add(list.get(x));
                 }
             }
@@ -53,12 +51,28 @@ public class EditCollectionConverter extends StrutsEditConverter {
             throw e2;
         } catch (Exception e1) {
             PMLogger.error(e1);
-            throw new ConverterException("Cannot convert collection");
+            throw new ConverterException("pm.struts.converter.cant.convert.collection");
         }
     }
 
-    public String visualize(PMContext ctx) throws ConverterException {
-        return super.visualize("collection_converter.jsp?filter="+getConfig("filter")+"&entity="+getConfig("entity"));
+    protected Collection<Object> getCollection(PMContext ctx) throws ConverterException, ConfigurationException {
+        String collection_class = getConfig("collection-class");
+        if (collection_class == null) {
+            throw new ConverterException("pm.struts.converter.class.mustbedefined");
+        }
+        Collection<Object> result = null;
+        Field field = (Field) ctx.get(PM_FIELD);
+        result = (Collection<Object>) EntitySupport.get(ctx.get(PM_ENTITY_INSTANCE), field.getId());
+        if (result == null) {
+            result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
+        }
+        return result;
     }
 
+    public String visualize(PMContext ctx) throws ConverterException {
+        final String filter = getConfig("filter");
+        final String entity = getConfig("entity");
+        saveList((PMStrutsContext) ctx,entity);
+        return super.visualize("collection_converter.jsp?filter="+filter+"&entity="+entity);
+    }
 }

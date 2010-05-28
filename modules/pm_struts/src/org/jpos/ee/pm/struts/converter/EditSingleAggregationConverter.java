@@ -20,13 +20,9 @@ package org.jpos.ee.pm.struts.converter;
 import java.util.List;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntitySupport;
-import org.jpos.ee.pm.core.ListFilter;
 import org.jpos.ee.pm.core.PMContext;
-import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.struts.PMEntitySupport;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 /**Converter for integer <br>
  * <pre>
@@ -41,55 +37,32 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
  * </converter>
  * }
  * </pre>
- * @author J.Paoletti jeronimo.paoletti@gmail.com
+ * @author jaoletti jeronimo.paoletti@gmail.com
  * */
 
-public class EditSingleAggregationConverter extends StrutsEditConverter {
+public class EditSingleAggregationConverter extends AbstractCollectionConverter {
 
     public Object build(PMContext ctx) throws ConverterException {
         try{
             String s = ctx.getString(PM_FIELD_VALUE);
-            if(s.trim().compareTo("")==0) return null;
+            if(s==null || s.trim().compareTo("")==0) return null;
             Integer x = Integer.parseInt(s);
-            if(x==-1) return null;
-            
-            String eid = getConfig("entity");
-            String f = getConfig("filter");
-            
-            List<?> list = getList(eid, f , ctx);
+            if(x==-1) return null;            
+            List<?> list = recoverList((PMStrutsContext) ctx,getConfig("entity"),true);
             return list.get(x);
         } catch (Exception e1) {
             PMLogger.error(e1);
             throw new ConverterException("Cannot convert single aggregation");
         }
     }
-
-    public static List<?> getList(String eid, String f, PMContext ctx) throws ConverterException,
-            PMException {
-        
-        ListFilter filter = null;
-        
-        if( f != null && f.compareTo("null") != 0) {
-            filter = (ListFilter) EntitySupport.newObjectOf(f);
-        }
-                
-        PMEntitySupport es = PMEntitySupport.getInstance();
-        Entity e = es.getPmservice().getEntity(eid);
-        List<?> list = null;
-        if(e==null) throw new ConverterException("Cannot find entity "+eid);
-        synchronized (e) {
-            ListFilter tmp = e.getListfilter();
-            e.setListfilter(filter);
-            list = e.getList(ctx,null,null,null);
-            e.setListfilter(tmp);
-        }
-        return list;
-    }
-
+    
     public String visualize(PMContext ctx) throws ConverterException {
         String wn = getConfig("with-null", "false");
         boolean withNull= (wn==null || wn.compareTo("true")!=0)?false:true;
-        return super.visualize("single_aggregation_converter.jsp?filter="+getConfig("filter")+"&entity="+getConfig("entity")+"&with_null="+withNull);
+        final String filter = getConfig("filter");
+        final String entity = getConfig("entity");
+        saveList((PMStrutsContext) ctx,entity);
+        return super.visualize("single_aggregation_converter.jsp?filter="+filter+"&entity="+entity+"&with_null="+withNull);
     }
 
 }

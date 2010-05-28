@@ -18,19 +18,19 @@
 <%@page contentType="text/html; charset=ISO-8859-1" %>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="java.util.Collection"%>
+<%@page import="org.jpos.ee.pm.struts.converter.*"%>
+<%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="java.util.Collection" import="org.jpos.ee.pm.struts.*"%>
 <%@page import="java.util.List" import="org.jpos.ee.pm.struts.PMEntitySupport" %>
 <bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
-<bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
-<bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />
+<bean:define id="entity"     name="entity" type="org.jpos.ee.pm.core.Entity" />
+<bean:define id="es"         name="es" 	   type="org.jpos.ee.pm.struts.PMEntitySupport"  />
 <%
-	Entity e = es.getPmservice().getEntity(request.getParameter("entity"));
-	//PMList list = es.getItems(es.getDb(),e,request.getParameter("filter"));
-	List<?> list = e.getList((PMContext)request.getAttribute(Constants.PM_CONTEXT));
+        PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
+        List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
 	request.setAttribute("collection", list);
 	Collection listv = (Collection)es.get(tmp_object, request.getParameter("f"));
 %>
 <logic:iterate id="o" name="collection" type="java.lang.Object" indexId="i">
-	<bean:define id="checked" value="<%= (listv.contains(o))?"checked":"" %>" />
-	<input type="checkbox" ${checked} value="${param.entity}@${i}" id="f_${param.f}" name="f_${param.f}" />&nbsp;${o}<br/>
+	<bean:define id="checked" value="<%= (listv!=null && listv.contains(o))?"checked":"" %>" />
+	<input type="checkbox" ${checked} value="${i}" id="f_${param.f}" name="f_${param.f}" />&nbsp;${o}<br/>
 </logic:iterate>
