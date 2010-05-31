@@ -176,13 +176,15 @@ public class Field extends PMCoreObject{
     public boolean isSearchable () {
         return searchable || "id".equals (getId());
     }
-    public boolean shouldDisplay (String action) {
-        if (action == null || getDisplay() == null 
-            || "list show edit add".indexOf(action) < 0) 
-        {
-            return false;
-        }
-        return "all".equalsIgnoreCase(getDisplay()) || getDisplay().indexOf (action) >= 0;
+
+    /**Indicates if the field is shown in the given operation id
+     *
+     * @param operationId  The Operation id
+     * @return true if field is displayed on the operation
+     */
+    public boolean shouldDisplay (String operationId) {
+        if (operationId == null || getDisplay() == null) return false;
+        return "all".equalsIgnoreCase(getDisplay()) || getDisplay().indexOf (operationId) >= 0;
     }
     // Helpers
     public boolean canUpdate () {
