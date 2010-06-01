@@ -38,7 +38,7 @@
 <script type="text/javascript" src="${es.context_path}/js/jquery.modal.js"></script>
 <script type="text/javascript" src="${es.context_path}/js/jquery.center.js"></script>
 <div class="boxed">
-<html:form method="post" action="/list">
+<html:form method="post" action="/list" styleId="listform">
 	<input type="hidden" name="finish" value="1" />
 	<pm:pmtitle entity="${entity}" operation="${operation}"/>
 	<html:errors property="entity" /> 
@@ -49,17 +49,17 @@
 		var sortable = false;
 		var paginable = false;
 		var texts = new Array(
-				"<bean:message key='list.search.all' />" ,
-				"<bean:message key='list.first' />" ,
-				"<bean:message key='list.last' />" ,
-				"<bean:message key='list.next' />" ,
-				"<bean:message key='list.previous' />" ,
-				"<bean:message key='list.info' />" ,
-				"<bean:message key='list.info.empty' />" ,
-				"<bean:message key='list.info.filtered' />" ,
-				"<bean:message key='list.length.menu' />" ,
-				"<bean:message key='list.processing' />" ,
-				"<bean:message key='list.zero.records' />" 
+				"<pm:message key='list.search.all' />" ,
+				"<pm:message key='list.first' />" ,
+				"<pm:message key='list.last' />" ,
+				"<pm:message key='list.next' />" ,
+				"<pm:message key='list.previous' />" ,
+				"<pm:message key='list.info' />" ,
+				"<pm:message key='list.info.empty' />" ,
+				"<pm:message key='list.info.filtered' />" ,
+				"<pm:message key='pm.struts.list.rpp' />" ,
+				"<pm:message key='list.processing' />" ,
+				"<pm:message key='list.zero.records' />"
 					);
 	</script>	
 	<script type="text/javascript" charset="utf-8" src="${es.context_path}/js/list.js"></script>
