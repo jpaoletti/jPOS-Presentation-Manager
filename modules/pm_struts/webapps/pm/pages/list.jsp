@@ -45,7 +45,7 @@
 	<pm:operations labels="true" />
 	<script type="text/javascript" charset="utf-8">
 		var pmid = "${pmid}";
-		var searchable = "${searchable}" == "true";
+		var searchable = "${PMLIST.searchable}" == "true";
 		var sortable = false;
 		var paginable = false;
 		var texts = new Array(
