@@ -30,11 +30,15 @@ public class DBPersistenceManager implements PersistenceManager {
 
     public void rollback(PMContext ctx, Object transaction) throws Exception{
         ((Transaction) transaction).rollback();
-        ((DB)ctx.get(PM_DB)).close();
-        ((DB)ctx.get(PM_DB)).open();
+        final DB db = (DB) ctx.get(PM_DB);
+        db.close();
+        db.open();
     }
 
     public Object startTransaction(PMContext ctx) throws Exception{
-        return ((DB)ctx.get(PM_DB)).beginTransaction();
+        final DB db = (DB) ctx.get(PM_DB);
+        //BugFix. Some cases session keeps values and break save/update/delete
+        db.session().clear();
+        return db.beginTransaction();
     }
 }

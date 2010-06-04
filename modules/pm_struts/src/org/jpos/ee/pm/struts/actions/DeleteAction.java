@@ -18,6 +18,7 @@
 package org.jpos.ee.pm.struts.actions;
 
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class DeleteAction extends RowActionSupport {
@@ -28,7 +29,12 @@ public class DeleteAction extends RowActionSupport {
         if(ctx.isWeak()){
             getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).remove(ctx.getSelected().getInstance());
         }else{
-            ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
+            try {
+                ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
+            } catch (Exception e) {
+                PMLogger.error(e);
+                throw new PMException("pm.struts.cant.delete");
+            }
         }
         ctx.getEntityContainer().setSelected(null);
     }
