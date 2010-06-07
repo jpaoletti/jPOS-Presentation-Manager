@@ -54,6 +54,9 @@ function selectItem(i){
             if(h!=null) request.setAttribute("pm_hl_class","pm_hl_"+entity.getHighlights().indexOf(h));
             %>
             <tr class="${pm_hl_class}">
+                <%
+                    request.removeAttribute("pm_hl_class");
+                %>
                 <td style="color:gray; white-space: nowrap;">
                     <logic:equal name="has_selected" value="true">
                         <bean:define id="checked" value="<%=(es.getContainer(request).getSelectedIndexes().contains(i))?"checked":"" %>" />
@@ -72,9 +75,17 @@ function selectItem(i){
                     </script>
                 </td>
                 <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field" indexId="j">
-                        <td align="${field.align}">
-                            <pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
+                    <%
+                       Highlight h2 = entity.getHighlight(field, item);
+                       if(h2!=null) request.setAttribute("pm_hl_class2","pm_hl_"+entity.getHighlights().indexOf(h2));
+                    %>
+                    <td class=" ${pm_hl_class2}" align="${field.align}">
+                        <pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
                     </td>
+                    <%
+                       h2 = null;
+                       request.removeAttribute("pm_hl_class2");
+                    %>
                 </logic:iterate>
             </tr>
             </logic:iterate>

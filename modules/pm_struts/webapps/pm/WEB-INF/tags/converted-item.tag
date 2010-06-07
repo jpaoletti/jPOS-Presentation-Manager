@@ -10,10 +10,8 @@ try{
 	ctx.put(Constants.PM_ENTITY_INSTANCE,item);
 	ctx.put(Constants.PM_EXTRA_DATA,"");
 	request.setAttribute("ctx",ctx);
-        Highlight h = entity.getHighlight(field, item);
-        if(h!=null) request.setAttribute("pm_hl_class","pm_hl_"+entity.getHighlights().indexOf(h));
 %>
-<div class="cell ${pm_hl_class}"><jsp:include page="<%= "../converters/"+field.visualize(ctx)+"&f="+field.getId() %>" flush="true" /></div>
+<div class="cell"><jsp:include page="<%= "../converters/"+field.visualize(ctx)+"&f="+field.getId() %>" flush="true" /></div>
 <%}catch(Exception e){PMLogger.error(e);%>
 <img width="16px" src='${es.context_path}/templates/${es.pmservice.template}/images/m_error.png' alt='error' />
 <%}%>
