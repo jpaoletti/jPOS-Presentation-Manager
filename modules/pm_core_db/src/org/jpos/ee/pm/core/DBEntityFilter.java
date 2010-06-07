@@ -33,26 +33,27 @@ public class DBEntityFilter extends EntityFilter {
     public void process(Entity entity){
         debug("Processing filter");
         for(Field field : entity.getFields()){
-            List<Object> values = new ArrayList<Object>();
-            for(Object o : getInstance().getInstances()){
-                values.add(EntitySupport.get(o, field.getId()));
-            }
-            debug("VALUES ["+field.getId()+"]: "+values);
-            Criterion c =null;
-            //if(false){
-                /*String co = rc.getParameter("compare_operation");
+            //This is not the best way but works for now
+            if(field.shouldDisplay("filter")){
+                List<Object> values = new ArrayList<Object>();
+                for(Object o : getInstance().getInstances()){
+                    values.add(EntitySupport.get(o, field.getId()));
+                }
+                debug("VALUES ["+field.getId()+"]: "+values);
                 Criterion c =null;
-                   if(co!=null && co.compareTo("")!=0){
-                       c = getCompareCriterion(co, field.getId(), converted);
-                   }else{*/
-            if(values.get(0)!=null){
-                if(values.get(0) instanceof String)
-                       c = Restrictions.ilike(field.getId(), "%"+values.get(0)+"%");
-                   else
-                       c = Restrictions.eq(field.getId(), values.get(0));
-                   //}
-                   if(c!=null) getFilters().add(c);
-             //}
+                //if(false){
+                    /*String co = rc.getParameter("compare_operation");
+                    Criterion c =null;
+                       if(co!=null && co.compareTo("")!=0){
+                           c = getCompareCriterion(co, field.getId(), converted);
+                       }else{*/
+                if(values.get(0)!=null){
+                    if(values.get(0) instanceof String)
+                           c = Restrictions.ilike(field.getId(), "%"+values.get(0)+"%");
+                       else
+                           c = Restrictions.eq(field.getId(), values.get(0));
+                       if(c!=null) getFilters().add(c);
+                }
             }
         }
         debug("FILTERS: "+getFilters());
