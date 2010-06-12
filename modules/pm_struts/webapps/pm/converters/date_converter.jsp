@@ -19,7 +19,7 @@
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="org.jpos.ee.pm.struts.PMEntitySupport" %>
 <bean:define id="value"  	value="${param.value}"/>
-<input type="text" maxlength="${field.maxLength}" value="${value}" id="f_${param.f}" name="f_${param.f}" />
+<input type="text" value="${value}" id="f_${param.f}" name="f_${param.f}" />
 <script type="text/javascript" src="${es.context_path}/js/jquery-ui.js"></script>
 <script type='text/javascript'>
 $(document).ready(function() {
