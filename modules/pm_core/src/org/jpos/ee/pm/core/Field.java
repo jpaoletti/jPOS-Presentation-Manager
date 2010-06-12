@@ -190,46 +190,41 @@ public class Field extends PMCoreObject{
     public boolean canUpdate () {
         return isDisplayInEdit();
     }
+    
+    @Deprecated
     public boolean isDisplayInList () {
         return shouldDisplay("list");// && hasPermission (getReadPerm());
     }
+
+    @Deprecated
     public boolean isDisplayInShow() {
         return shouldDisplay("show");// && hasPermission (getReadPerm());
     }
+    @Deprecated
     public boolean isDisplayInEdit() {
         return shouldDisplay("edit");// && hasPermissions (getReadPerm(), getWritePerm());
     }
+    @Deprecated
     public boolean isDisplayInAdd() {
         return shouldDisplay("add");// && hasPermissions (getReadPerm(), getWritePerm());
     }
-    /*public boolean hasPermission (Permission permName) {
-        if (permName != null) {
-            SECUser u = PresentationManagerAction.getContextUser();
-            if (u == null)
-                return false;
-            return u.hasPermission(permName);
-        }
-        return true;
-    }
-    public boolean hasPermissions (Permission perm0, Permission perm1) {
-        SECUser u = PresentationManagerAction.getContextUser();
-        if ((u == null) ||
-            (perm0 != null && !u.hasPermission(perm0)) ||
-            (perm1 != null && !u.hasPermission(perm1)))
-            return false;
-        return true;
-    }*/
 
+    @Deprecated
     public Object fromString (String s) {
         return s;
     }
-   
+
+    @Deprecated
     public String toString (Object obj) {
         return obj.toString();
     }
+
+    @Deprecated
     public void setSearchCriteria(String searchCriteria) {
         this.searchCriteria = searchCriteria;
     }
+
+    @Deprecated
     public String getSearchCriteria() {
         return searchCriteria;
     }
