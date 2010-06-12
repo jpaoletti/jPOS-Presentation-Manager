@@ -45,6 +45,7 @@ public class EntityParser {
         xstream.useAttributeFor(Entity.class, "id");
         xstream.useAttributeFor(Entity.class, "noCount");
         xstream.useAttributeFor(Entity.class, "clazz");
+        xstream.useAttributeFor(Entity.class, "extendz");
         
         xstream.alias ("field", Field.class);
         

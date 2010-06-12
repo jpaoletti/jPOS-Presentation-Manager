@@ -129,6 +129,7 @@ public class Entity extends PMCoreObject {
     /**A helper to get the visible fields in list operation. This may me in some support class because 
      * it is "operation specific"
      *  @return The list of visible (ordered) fields for the list
+     * @deprecated 
      * */
     public ArrayList<Field> getListableFields(){
         ArrayList<Field> r = new ArrayList<Field>();
@@ -140,7 +141,8 @@ public class Entity extends PMCoreObject {
     
     public ArrayList<Field> getAllFields(){
         ArrayList<Field> r = new ArrayList<Field>();
-        r.addAll(getFields());
+        if(getFields()!=null)
+            r.addAll(getFields());
         if(extendzEntity != null)
             r.addAll(getExtendzEntity().getAllFields());
         return r;
@@ -193,7 +195,7 @@ public class Entity extends PMCoreObject {
                 return r;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            PMLogger.error(e);
         }
         return getAllFields();
     }
@@ -348,22 +350,6 @@ public class Entity extends PMCoreObject {
         this.fields = fields;
     }
 
-    /**Getter for entity relations
-     * @return the relations
-     * @deprecated
-     *
-    public ArrayList<Relation> getRelations() {
-        return relations;
-    }
-
-    /**
-     * @param relations the relations to set
-     * @deprecated
-     *
-    public void setRelations(ArrayList<Relation> relations) {
-        this.relations = relations;
-    }
-     */
     /**Getter for entity operations
      * @return the operations
      */

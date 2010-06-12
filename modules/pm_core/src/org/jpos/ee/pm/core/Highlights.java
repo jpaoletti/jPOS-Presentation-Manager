@@ -49,7 +49,7 @@ public class Highlights {
     public Highlight getHighlight(Entity entity, Object instance){
         for (Highlight highlight : highlights) {
             if(highlight.getScope().equals(INSTANCE)){
-                for (Field field : entity.getFields()) {
+                for (Field field : entity.getOrderedFields()) {
                     if(match(instance, field, highlight))
                         return highlight;
                 }

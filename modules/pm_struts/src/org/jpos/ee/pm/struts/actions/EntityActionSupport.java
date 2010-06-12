@@ -17,10 +17,12 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 
 import org.jpos.ee.pm.core.Entity;
+import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
@@ -49,11 +51,14 @@ public abstract class EntityActionSupport extends ActionSupport {
         String operationId = requrl.substring(requrl.lastIndexOf("/")+1, requrl.lastIndexOf("."));
         ctx.setOperation((ctx.hasEntity())?ctx.getEntity().getOperations().getOperation(operationId):null);
         
-        if(ctx.hasEntity() && ctx.getEntity().getExtendz() != null){
-            Entity otherentity = getPMService().getEntity(ctx.getEntity().getExtendz()); 
-            ctx.getEntity().getFields().addAll(otherentity.getFields());
+        /*if(ctx.hasEntity() && ctx.getEntity().getExtendz() != null){
+            Entity otherentity = getPMService().getEntity(ctx.getEntity().getExtendz());
+            //Optimization
+            if(ctx.getEntity().getFields() == null)
+                ctx.getEntity().setFields(new ArrayList<Field>());
+            ctx.getEntity().getFields().addAll(otherentity.getAllFields());
             ctx.getEntity().setExtendz(null); //we do this one time
-        }
+        }*/
 
         //Its a weak entity, we get the owner entity for list reference
         if(ctx.hasEntity() && ctx.getEntity().getOwner() != null){

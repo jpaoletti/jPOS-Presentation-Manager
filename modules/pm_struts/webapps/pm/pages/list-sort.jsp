@@ -18,15 +18,16 @@
  <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 	<div id="sort_page" class="jqmWindow">
 		<bean:message key='list.sort.field' /> <br/>
 		<html:select property="order" onchange="this.form.submit();" value="${PMLIST.order}">
-			<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
-			<%--<option value="<pm:field-name entity='${entity}' field='${field}' />" />--%>
-				<html:option value="${field.id}">
-					<pm:field-name entity='${entity}' field='${field}' />
-				</html:option>
+			<logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
+                <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+				<html:option value="${field.id}"><pm:field-name entity='${entity}' field='${field}' /></html:option>
+                </c:if>
 			</logic:iterate>
 		</html:select>
 		<html:select property="desc" onchange="this.form.submit();" value="${PMLIST.desc}">

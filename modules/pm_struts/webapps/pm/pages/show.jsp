@@ -35,7 +35,7 @@
 		<div class="content">
 			<table id="box-table-a">
 				<tbody id="list_body" >
-					<logic:iterate id="field" name="entity" property="fields" type="org.jpos.ee.pm.core.Field">
+					<logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
 					<c:if test="${fn:contains(field.display,'show') or fn:contains(field.display,'all')}">
 						<tr>
 							<th scope="row" width="175px"><pm:field-name entity="${entity}" field="${field}" /></th>

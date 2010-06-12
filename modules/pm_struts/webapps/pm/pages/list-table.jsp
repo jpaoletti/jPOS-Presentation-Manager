@@ -17,6 +17,8 @@
 --%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/fmt.tld" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
@@ -38,9 +40,11 @@ function selectItem(i){
         <thead>
             <tr>
             <th scope="col" style="width:${pmlist.operationColWidth}">&nbsp;</th>
-            <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
-                <bean:define id="w" value="<%=(field.getWidth().compareTo("")!=0)?"style='width:"+field.getWidth()+"px;'":"" %>"></bean:define>
-                <th scope="col" ${w} ><pm:field-name entity="${entity}" field="${field}" /></th>
+            <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
+					<c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                        <bean:define id="w" value="<%=(field.getWidth().compareTo("")!=0)?"style='width:"+field.getWidth()+"px;'":"" %>"></bean:define>
+                        <th scope="col" ${w} ><pm:field-name entity="${entity}" field="${field}" /></th>
+                    </c:if>
             </logic:iterate>
             </tr>
         </thead>
@@ -74,7 +78,8 @@ function selectItem(i){
                        });
                     </script>
                 </td>
-                <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field" indexId="j">
+                <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
+					<c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
                     <%
                        Highlight h2 = entity.getHighlight(field, item);
                        if(h2!=null) request.setAttribute("pm_hl_class2","pm_hl_"+entity.getHighlights().indexOf(h2));
@@ -86,6 +91,7 @@ function selectItem(i){
                        h2 = null;
                        request.removeAttribute("pm_hl_class2");
                     %>
+                    </c:if>
                 </logic:iterate>
             </tr>
             </logic:iterate>
@@ -94,8 +100,10 @@ function selectItem(i){
             <logic:equal name="PMLIST" property="searchable" value="true" >
             <tr>
                <th><input type="hidden" name="search" class="search_init" /></th>
-               <logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
-                   <th><input type="text" name="search_<pm:field-name entity="${entity}" field="${field}" />" value="<bean:message key="list.input.search"/><pm:field-name entity="${entity}" field="${field}" />" class="search_init" /></th>
+               <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
+					<c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                    <th><input type="text" name="search_<pm:field-name entity="${entity}" field="${field}" />" value="<bean:message key="list.input.search"/><pm:field-name entity="${entity}" field="${field}" />" class="search_init" /></th>
+                    </c:if>
                </logic:iterate>
             </tr>
             </logic:equal>

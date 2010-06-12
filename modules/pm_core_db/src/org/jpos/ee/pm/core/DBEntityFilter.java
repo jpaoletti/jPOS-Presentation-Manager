@@ -32,7 +32,7 @@ public class DBEntityFilter extends EntityFilter {
 
     public void process(Entity entity){
         debug("Processing filter");
-        for(Field field : entity.getFields()){
+        for(Field field : entity.getAllFields()){
             //This is not the best way but works for now
             if(field.shouldDisplay("filter")){
                 List<Object> values = new ArrayList<Object>();

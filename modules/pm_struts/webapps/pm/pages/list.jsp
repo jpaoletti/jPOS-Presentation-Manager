@@ -29,7 +29,6 @@
 	request.setAttribute("operation", e.getOperations().getOperation("list"));
 	es.putListInRequest(request);
 %>
-<bean:define id="fields" 	  name="entity" property="listableFields" type="java.util.List" toScope="request"/>
 <bean:define id="operations"  name="PMLIST" property="operations" type="org.jpos.ee.pm.core.Operations" toScope="request"/>
 <bean:define id="contents" 	  name="PMLIST" property="contents" type="java.util.List<Object>" toScope="request"/>
 <bean:define id="operation"   name="operation" type="org.jpos.ee.pm.core.Operation" toScope="request"/>

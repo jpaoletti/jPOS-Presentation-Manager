@@ -58,8 +58,9 @@ public class AddAction extends RowActionSupport {
         if(ctx.getSelected() == null){
             throw new PMException("pm.instance.not.found");
         }
-        for (Field f : ctx.getEntity().getFields()) {
-            proccessField(ctx, f, ctx.getSelected());
+        for (Field f : ctx.getEntity().getAllFields()) {
+            if(f.shouldDisplay(ctx.getOperation().getId()))
+                proccessField(ctx, f, ctx.getSelected());
         }
         if(!ctx.getErrors().isEmpty()) 
             throw new PMException();

@@ -59,7 +59,7 @@ public class FilterAction extends FieldProcessingActionSupport {
             throw new PMForwardException(CONTINUE);
         }else{
             ctx.getEntityContainer().getFilter().clear();
-            for (Field f : ctx.getEntity().getFields()) {
+            for (Field f : ctx.getEntity().getAllFields()) {
                 if(f.shouldDisplay(ctx.getOperation().getId()))
                     proccessField(ctx, f, ctx.getEntityContainer().getFilter().getInstance());
             }
