@@ -45,8 +45,10 @@ public class ShowStringConverter extends Converter {
         String prefix = getConfig("prefix");
         String suffix = getConfig("suffix");
         String res = obj != null ? obj.toString() : "";
-        if(prefix!=null) res = prefix + res;
-        if(suffix!=null) res = res+suffix;
+        if(!res.equals("")){
+            if(prefix!=null) res = prefix + res;
+            if(suffix!=null) res = res+suffix;
+        }
         return res;
         
     }
