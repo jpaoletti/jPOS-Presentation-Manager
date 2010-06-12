@@ -20,6 +20,7 @@
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
 <bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
@@ -30,13 +31,15 @@
 	request.setAttribute("operation", weak.getOperations().getOperation("list"));
 	request.setAttribute("contents", listv);
 %>
-<bean:define id="fields" 	  name="weak" property="listableFields" type="java.util.List" toScope="request"/>
+<bean:define id="fields" 	  name="weak" property="orderedFields" type="java.util.List" toScope="request"/>
 <div class="boxed">
 	<table id="list" class="display" >
 		<thead>
 			<tr>
 			<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field">
+                <c:if test="${fn:contains(field.display,'list') or fn:contains(field.display,'all')}">
 				<th scope="col" style="width:${field.width}px;" ><pm:field-name entity="${weak}" field="${field}" /></th>
+                </c:if>
 			</logic:iterate>
 			</tr>
 		</thead>
@@ -44,9 +47,11 @@
 			<logic:iterate id="item" name="contents" >
 			<tr>
 				<logic:iterate id="field" name="fields" type="org.jpos.ee.pm.core.Field" indexId="j">
+                    <c:if test="${fn:contains(field.display,'list') or fn:contains(field.display,'all')}">
 					<td align="text-align:${field.align};">
 						<pm:converted-item operation="${operation}" entity="${weak}" item="${item}" field="${field}" />
 					</td>
+                    </c:if>
 				</logic:iterate>
 			</tr>
 			</logic:iterate>
