@@ -34,7 +34,7 @@ public class EditBooleanConverter extends StrutsEditConverter {
     public String visualize(PMContext ctx) throws ConverterException {
         EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);
-        Boolean p = (Boolean)getNestedProperty (einstance.getInstance(), field.getId());
+        Boolean p = (Boolean)getValue(einstance, field);
         boolean withnull = Boolean.parseBoolean( getConfig("with-null", "false") );
         if(!withnull)
             return super.visualize("boolean_converter.jsp?checked="+((p!=null && p.booleanValue())?"checked":""));

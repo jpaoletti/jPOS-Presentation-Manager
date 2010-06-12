@@ -31,7 +31,7 @@ import org.jpos.ee.pm.core.Field;
 public class ShowPreConverter extends ShowStringConverter{
     public String visualize(Entity entity, Field field, Operation operation,
             EntityInstanceWrapper einstance, String extra) throws ConverterException {
-        String s = (String) getNestedProperty (einstance.getInstance(), field.getId());
+        String s = (String)getValue(einstance, field);
         return super.visualize("pre.jsp?value="+s,extra);
     }
 }

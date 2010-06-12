@@ -43,7 +43,7 @@ public class EditClassConverter  extends StrutsEditConverter{
         Field field = (Field) ctx.get(PM_FIELD);
         String s = "";
         try {
-            s = PMEntitySupport.get(einstance.getInstance(), field.getId()).getClass().getName();
+            s = getValue(einstance, field).getClass().getName();
         } catch (Exception e) {
         }
         return super.visualize("string_converter.jsp?value="+s);

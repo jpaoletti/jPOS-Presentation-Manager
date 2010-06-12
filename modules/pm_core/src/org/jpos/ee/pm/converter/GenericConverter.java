@@ -48,7 +48,7 @@ public class GenericConverter extends Converter{
             Interpreter bsh = getBsh();
             EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
             Field field = (Field) ctx.get(PM_FIELD);
-            Object o = getValue(einstance.getInstance(), field);
+            Object o = getValue(einstance, field);
             bsh.set("value", o);
             bsh.set("converter", this);
             debug("Generic Converter Visualize value: "+o);

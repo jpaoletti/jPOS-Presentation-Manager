@@ -21,7 +21,6 @@ package org.jpos.ee.pm.converter;
 import java.util.Collection;
 
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
@@ -46,7 +45,7 @@ public class ShowCollectionConverter extends Converter {
         try {
             EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
             Field field = (Field) ctx.get(PM_FIELD);
-            Collection<?> list = (Collection<?>)EntitySupport.get(einstance.getInstance(), field.getId());
+            Collection<?> list = (Collection<?>)getValue(einstance, field);
             StringBuilder sb = new StringBuilder();
             sb.append("<ul>");
             for(Object o:list){

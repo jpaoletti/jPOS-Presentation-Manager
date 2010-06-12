@@ -63,7 +63,7 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
         }
         Collection<Object> result = null;
         Field field = (Field) ctx.get(PM_FIELD);
-        result = (Collection<Object>) EntitySupport.get(ctx.get(PM_ENTITY_INSTANCE), field.getId());
+        result = (Collection<Object>) getValue(ctx.get(PM_ENTITY_INSTANCE), field);
         if (result == null) {
             result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
         }

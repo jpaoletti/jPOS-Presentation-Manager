@@ -36,7 +36,7 @@ public class ShowRuleApplyToConverter extends ShowStringConverter{
     public String visualize(Entity entity, Field field, Operation operation,
             EntityInstanceWrapper einstance, String extra)
             throws ConverterException {
-        Integer p = (Integer) getNestedProperty (einstance.getInstance(), field.getId());
+        Integer p = (Integer) getValue(einstance, field);
         switch (p) {
         case 0:
             return super.visualize("localized_string_converter.jsp?value=pm.secrule.applyTo.username",extra);

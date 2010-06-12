@@ -35,7 +35,7 @@ public class ShowLocalizedStringConverter extends ShowStringConverter{
     public String visualize(Entity entity, Field field, Operation operation,
             EntityInstanceWrapper einstance, String extra)
             throws ConverterException {
-        String s = (String) getNestedProperty (einstance.getInstance(), field.getId());
+        String s = (String) getValue(einstance, field);
         return super.visualize("localized_string_converter.jsp?value="+s,extra);
     }
 }

@@ -22,6 +22,7 @@ import java.util.Properties;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jpos.ee.Constants;
+import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMCoreObject;
@@ -106,6 +107,12 @@ public class Converter extends PMCoreObject implements Constants{
      * @return The field value on the entity instance*/
     protected Object getValue(Object einstance, Field field) {
         return getNestedProperty(einstance, field.getId());
+    /**Getter for the value
+     * @param einstance The entity instance wrapper
+     * @param field The field
+     * @return The field value on the entity instance*/
+    protected Object getValue(EntityInstanceWrapper einstance, Field field) {
+        return getValue(einstance.getInstance(), field);
     }
     
     /**Getter for a nested property in the given object.
@@ -122,7 +129,7 @@ public class Converter extends PMCoreObject implements Constants{
             // Hmm... that's fine too
         } catch (Exception e) {
             // Now I don't like it.
-            return e.getClass().getName() + ":" + e.getMessage();
+            return String.format("Cant get '%s' , '%s' : '%s'", propertyName, e.getClass().getName() , e.getMessage());
         }
         return null;
     }
