@@ -126,25 +126,15 @@ public class Entity extends PMCoreObject {
         extendzEntity  = null;
     }
     
-    /**A helper to get the visible fields in list operation. This may me in some support class because 
-     * it is "operation specific"
-     *  @return The list of visible (ordered) fields for the list
-     * @deprecated 
-     * */
-    public ArrayList<Field> getListableFields(){
-        ArrayList<Field> r = new ArrayList<Field>();
-        for(Field f : getOrderedFields()){
-            if(f.isDisplayInList())r.add(f);
-        }
-        return r;
-    }
-    
     public ArrayList<Field> getAllFields(){
         ArrayList<Field> r = new ArrayList<Field>();
         if(getFields()!=null)
             r.addAll(getFields());
-        if(extendzEntity != null)
-            r.addAll(getExtendzEntity().getAllFields());
+        if(getExtendzEntity() != null){
+            for (Field field : getExtendzEntity().getAllFields()) {
+                if(!r.contains(field)) r.add(field);
+            }
+        }
         return r;
     }
     
@@ -177,7 +167,7 @@ public class Entity extends PMCoreObject {
     private Map<String, Field> getFieldsbyid() {
         if(fieldsbyid == null){
             fieldsbyid = new HashMap<String, Field>();
-            for(Field f : getFields()){
+            for(Field f : getAllFields()){
                 fieldsbyid.put(f.getId(), f);
             }            
         }
@@ -198,15 +188,6 @@ public class Entity extends PMCoreObject {
             PMLogger.error(e);
         }
         return getAllFields();
-    }
-
-    /**Determine if some of the fields is multieditable
-     * @deprecated not implemented yet*/
-    public boolean haveMultiEdit(){
-        for (Field field : getFields()) {
-            if (field.isMultiEditable()) return true;
-        }
-        return false;
     }
     
     /**Determine if the entity have the order property

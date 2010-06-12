@@ -37,9 +37,9 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
         Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
         if(moc!=null){
             Object obj = wrapper.getInstance();
-            Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(obj, f.getId());
+            Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(obj, f.getProperty());
             if(collection==null) {
-                PMEntitySupport.set(obj, f.getId(), moc);
+                PMEntitySupport.set(obj, f.getProperty(), moc);
             }else{
                 collection.clear();
                 collection.addAll(moc);
@@ -60,7 +60,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
                     Object converted = converter.build(ctx);
                     PMLogger.debug(this,"Object converted: "+converted);
                     if(validateField(ctx, f, wrapper, converted))
-                        PMEntitySupport.set(o, f.getId(), converted);
+                        PMEntitySupport.set(o, f.getProperty(), converted);
                 } catch (IgnoreConvertionException e) {
                      //Do nothing, just ignore conversion.
                 }

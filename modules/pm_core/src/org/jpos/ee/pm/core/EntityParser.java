@@ -53,7 +53,8 @@ public class EntityParser {
         xstream.useAttributeFor(Field.class, "display");
         xstream.useAttributeFor(Field.class, "align");
         xstream.useAttributeFor(Field.class, "width");
-        
+        xstream.useAttributeFor(Field.class, "property");
+
         //xstream.alias ("relation", Relation.class);
         xstream.alias ("field-validator", Validator.class);
         xstream.alias ("validator", Validator.class);

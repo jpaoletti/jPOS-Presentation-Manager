@@ -94,7 +94,7 @@ public class DataAccessDB implements DataAccess, Constants {
             throw new PMException();
         }
         
-        String order = ctx.getString(PM_LIST_ORDER);
+        String order = entity.getFieldById(ctx.getString(PM_LIST_ORDER)).getProperty();
         boolean asc = (ctx.get(PM_LIST_ASC)==null)?true:(Boolean) ctx.get(PM_LIST_ASC);
         //This is a temporary patch until i found how to sort propertys
         if(order!=null && order.contains(".")) order = order.substring(0, order.indexOf("."));

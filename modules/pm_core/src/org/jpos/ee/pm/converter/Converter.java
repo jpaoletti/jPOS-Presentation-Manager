@@ -106,7 +106,9 @@ public class Converter extends PMCoreObject implements Constants{
      * @param field The field
      * @return The field value on the entity instance*/
     protected Object getValue(Object einstance, Field field) {
-        return getNestedProperty(einstance, field.getId());
+        return getNestedProperty(einstance, field.getProperty());
+    }
+
     /**Getter for the value
      * @param einstance The entity instance wrapper
      * @param field The field

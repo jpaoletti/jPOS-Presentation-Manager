@@ -59,7 +59,7 @@ public class Highlights {
     }
 
     protected boolean match(Object instance, Field field, Highlight highlight) {
-        Object o = EntitySupport.get(instance, field.getId());
+        Object o = EntitySupport.get(instance, field.getProperty());
         if (o != null && o.toString().equals(highlight.getValue()) && highlight.getField().equals(field.getId())) {
             return true;
         }

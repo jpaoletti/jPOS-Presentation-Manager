@@ -26,7 +26,7 @@ import org.jpos.ee.pm.converter.Converters;
 import org.jpos.ee.pm.converter.GenericConverter;
 import org.jpos.ee.pm.validator.Validator;
 
-/**A Field represents an attribute of the represented entity. 
+/**A Field represents a property of the represented entity.
  * 
  * <h2>Simple entity configuration file</h2>
  * <pre>
@@ -39,31 +39,23 @@ import org.jpos.ee.pm.validator.Validator;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class Field extends PMCoreObject{
-    /**The id of the field, there must be a getter and a setter for this name on the represented entity.*/
+    /**The id of the field, must be unique in the entity*/
     private String id;
-    
+    /**The property to be accesed on the entity instance objects. There must be
+     * a getter and a setter for this name on the represented entity. When null,
+     default is the field id*/
+    private String property;
     /**The width of the field value*/
     private String width;
     private String display;
-    private int size;
-    private int maxLength;
-    /**@deprecated*/
-    private boolean sortable;
-    /**@deprecated*/
-    private boolean searchable;
     private ArrayList<Validator> validators;
     private Converters converters;
-    /**@deprecated*/
-    private String searchCriteria; 
     private String defaultValue;   
     private String align; //left right center          
-    private boolean multiEditable; 
-    
     
     public Field () {
         super();
         align="left";
-        multiEditable=false;
         defaultValue="";
     }
 
@@ -86,7 +78,7 @@ public class Field extends PMCoreObject{
             return getService().visualizationWrapper(c.visualize(ctx));
         } catch (Exception e) {
             PMLogger.error(e);
-            throw new ConverterException("Unable to convert "+ctx.getEntity().getId()+"."+getId());
+            throw new ConverterException("Unable to convert "+ctx.getEntity().getId()+"."+getProperty());
         }
     }
     
@@ -98,8 +90,6 @@ public class Field extends PMCoreObject{
         getConverters().setService(service);
     }
 
-
-    
     public int compareTo(Field o) {
         return getId().compareTo(o.getId());
     }
@@ -107,7 +97,6 @@ public class Field extends PMCoreObject{
     public ArrayList<Validator> getValidators() {
         return validators;
     }
-
 
     public void setValidators(ArrayList<Validator> validators) {
         this.validators = validators;
@@ -119,62 +108,16 @@ public class Field extends PMCoreObject{
     public String getId() {
         return id;
     }
-    /*public void setName (String name) {
-        this.name = name;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setShortName (String shortName) {
-        this.shortName = shortName;
-    }
-    public String getShortName() {
-        return shortName != null ? shortName : name;
-    }*/
-
-/*    public void setReadPerm (Permission readPerm) {
-        this.readPerm = readPerm;
-    }
-    public Permission getReadPerm () {
-        return readPerm;
-    }
-    public void setWritePerm (Permission writePerm) {
-        this.writePerm = writePerm;
-    }
-    public Permission getWritePerm () {
-        return writePerm;
-    }*/
-    public void setMaxLength (int maxLength) {
-        this.maxLength = maxLength;
-    }
-    public int getMaxLength() {
-        return maxLength;
-    }
-    public void setSize (int size) {
-        this.size = size;
-    }
-    public int getSize () {
-        return size;
-    }
 
     public void setDisplay (String display) {
         this.display = display;
     }
+
+    /** @return The list (separated by blanks) of operations id where this field
+     * will be displayed */
     public String getDisplay() {
     	if(display==null || display.trim().compareTo("")==0) return "all";
         return display;
-    }
-    public void setSortable (boolean sortable) {
-        this.sortable = sortable;
-    }
-    public boolean isSortable () {
-        return sortable;
-    }
-    public void setSearchable (boolean searchable) {
-        this.searchable = searchable;
-    }
-    public boolean isSearchable () {
-        return searchable || "id".equals (getId());
     }
 
     /**Indicates if the field is shown in the given operation id
@@ -186,29 +129,7 @@ public class Field extends PMCoreObject{
         if (operationId == null || getDisplay() == null) return false;
         return "all".equalsIgnoreCase(getDisplay()) || getDisplay().indexOf (operationId) >= 0;
     }
-    // Helpers
-    public boolean canUpdate () {
-        return isDisplayInEdit();
-    }
     
-    @Deprecated
-    public boolean isDisplayInList () {
-        return shouldDisplay("list");// && hasPermission (getReadPerm());
-    }
-
-    @Deprecated
-    public boolean isDisplayInShow() {
-        return shouldDisplay("show");// && hasPermission (getReadPerm());
-    }
-    @Deprecated
-    public boolean isDisplayInEdit() {
-        return shouldDisplay("edit");// && hasPermissions (getReadPerm(), getWritePerm());
-    }
-    @Deprecated
-    public boolean isDisplayInAdd() {
-        return shouldDisplay("add");// && hasPermissions (getReadPerm(), getWritePerm());
-    }
-
     @Deprecated
     public Object fromString (String s) {
         return s;
@@ -217,16 +138,6 @@ public class Field extends PMCoreObject{
     @Deprecated
     public String toString (Object obj) {
         return obj.toString();
-    }
-
-    @Deprecated
-    public void setSearchCriteria(String searchCriteria) {
-        this.searchCriteria = searchCriteria;
-    }
-
-    @Deprecated
-    public String getSearchCriteria() {
-        return searchCriteria;
     }
 
     public void setDefaultValue(String defaultValue) {
@@ -242,13 +153,6 @@ public class Field extends PMCoreObject{
     public String getAlign() {
         return align;
     }
-    public void setMultiEditable(boolean multiEditable) {
-        this.multiEditable = multiEditable;
-    }
-    public boolean isMultiEditable() {
-        return multiEditable;
-    }
-
 
     public void setWidth(String width) {
         this.width = width;
@@ -275,8 +179,20 @@ public class Field extends PMCoreObject{
         return converters;
     }
 
-	public String toString() {
-		return id;
-	}
+    public String toString() {
+    	return id;
+    }
 
+    /** @return the property of the entity instance object that can be accesed by
+     * getter and setter. Default value is the field id
+     */
+    public String getProperty() {
+        String r = property;
+        if(r == null || r.trim().equals("")) r = id;
+        return r;
+    }
+
+    public void setProperty(String property) {
+        this.property = property;
+    }
 }

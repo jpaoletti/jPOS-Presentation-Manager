@@ -37,9 +37,9 @@ public class DBEntityFilter extends EntityFilter {
             if(field.shouldDisplay("filter")){
                 List<Object> values = new ArrayList<Object>();
                 for(Object o : getInstance().getInstances()){
-                    values.add(EntitySupport.get(o, field.getId()));
+                    values.add(EntitySupport.get(o, field.getProperty()));
                 }
-                debug("VALUES ["+field.getId()+"]: "+values);
+                debug("VALUES ["+field.getProperty()+"]: "+values);
                 Criterion c =null;
                 //if(false){
                     /*String co = rc.getParameter("compare_operation");
@@ -49,9 +49,9 @@ public class DBEntityFilter extends EntityFilter {
                        }else{*/
                 if(values.get(0)!=null){
                     if(values.get(0) instanceof String)
-                           c = Restrictions.ilike(field.getId(), "%"+values.get(0)+"%");
+                           c = Restrictions.ilike(field.getProperty(), "%"+values.get(0)+"%");
                        else
-                           c = Restrictions.eq(field.getId(), values.get(0));
+                           c = Restrictions.eq(field.getProperty(), values.get(0));
                        if(c!=null) getFilters().add(c);
                 }
             }
