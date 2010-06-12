@@ -40,16 +40,17 @@
 <!ELEMENT validators (validator*) >
 <!ELEMENT validator (#PCDATA) >
 
-<!ELEMENT field (id, display?, width?, align?, searchCriteria?, multiEditable?, maxLength?, converters?, field-validator*) >
+<!ELEMENT field (id, property?, display?, width?, align?, searchCriteria?, multiEditable?, converters?, field-validator*) >
 
-<!ATTLIST operation 
+<!ATTLIST field
 			id CDATA #REQUIRED
+            property CDATA #IMPLIED
 		   	display CDATA #IMPLIED
 		   	width CDATA #IMPLIED
 		   	align CDATA #IMPLIED>
 
 <!ELEMENT display (#PCDATA) >
-<!ELEMENT maxLength (#PCDATA)>
+<!ELEMENT property (#PCDATA) >
 <!ELEMENT width (#PCDATA)>
 <!ELEMENT converters (converter*)>
 <!ELEMENT converter (properties?)>
@@ -66,4 +67,3 @@
 <!ELEMENT showToList (#PCDATA)>
 <!ELEMENT align (#PCDATA)>
 <!ELEMENT searchCriteria (#PCDATA)>
-<!ELEMENT multiEditable (#PCDATA)>
