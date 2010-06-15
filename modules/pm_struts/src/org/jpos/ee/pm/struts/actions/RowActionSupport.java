@@ -45,8 +45,7 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
                     al.addAll(ctx.getList().getContents());
                     al.setDisplacement(ctx.getList().getContents().getDisplacement());
                 }
-                Object o = al.get(index);
-                ctx.getEntity().getDataAccess().refresh(ctx,o);
+                Object o = ctx.getEntity().getDataAccess().refresh(ctx,al.get(index));
                 ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(o));
             }
         }else{

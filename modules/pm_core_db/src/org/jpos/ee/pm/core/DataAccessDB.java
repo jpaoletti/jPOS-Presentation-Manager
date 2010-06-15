@@ -115,10 +115,9 @@ public class DataAccessDB implements DataAccess, Constants {
         return c;
     }
 
-    public Object refresh(PMContext ctx, Object o) {
+    public Object refresh(PMContext ctx, Object o) throws PMException {
         DB db = (DB) ctx.get(PM_DB);
-        db.session().refresh(o);
-        return o;
+        return db.session().merge(o);
     }
 
     public EntityFilter createFilter(PMContext ctx) throws PMException {
