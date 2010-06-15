@@ -66,9 +66,10 @@ public class GenericConverter extends Converter{
         try {
             Interpreter bsh = getBsh();
             bsh.set("value", ctx.get(PM_FIELD_VALUE));
+            bsh.set("converter", this);
             return bsh.eval (build);
         } catch (EvalError e) {
-            getLog().error("BSH Interpreter Evaluation", e);
+            getLog().error("BSH Interpreter Evaluation Error", e);
         }
         return null;
     }
