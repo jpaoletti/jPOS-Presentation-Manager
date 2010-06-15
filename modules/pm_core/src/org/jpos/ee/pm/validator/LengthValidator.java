@@ -27,7 +27,8 @@ import org.jpos.ee.pm.core.PMMessage;
  * min-length: minimum length of the string
  * min-length-msg:  message to show if the name is too short
  * 
- * @author jpaoletti jeronimo.paoletti@gmail.com */
+ * @author J.Paoletti jeronimo.paoletti@gmail.com
+ */
 public class LengthValidator extends ValidatorSupport {
     
     /**The validate method*/

@@ -25,7 +25,8 @@ import org.jpos.ee.pm.core.PMMessage;
  * Properties are:
  * msg: the message to show when there is an invalid character. This should be a key for messages properties file
  * 
- * @author jpaoletti jeronimo.paoletti@gmail.com */
+ * @author J.Paoletti jeronimo.paoletti@gmail.com
+ */
 public class IsNameValidator extends ValidatorSupport {
     
     /**The validate method*/

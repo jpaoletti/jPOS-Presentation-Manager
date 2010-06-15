@@ -35,7 +35,7 @@ import org.jpos.ee.Constants;
  * </operation>
  * }
  * </pre>
- * @author yero jeronimo.paoletti@gmail.com
+ * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public abstract class ValidatorSupport extends org.jpos.util.Validator implements Validator, Constants{
     /**The properties*/

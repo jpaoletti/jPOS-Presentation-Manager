@@ -17,12 +17,9 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
