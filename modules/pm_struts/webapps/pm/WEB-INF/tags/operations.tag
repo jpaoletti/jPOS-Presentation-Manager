@@ -1,6 +1,5 @@
 <%@ tag description="This tag shows the operations" pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <%@attribute name="labels" required="false" type="java.lang.Boolean" %>
