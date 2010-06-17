@@ -23,6 +23,7 @@ import java.util.Set;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
+import org.jpos.ee.pm.core.Operation;
 import org.jpos.ee.pm.core.PaginatedList;
 
 /**
@@ -33,6 +34,7 @@ import org.jpos.ee.pm.core.PaginatedList;
  * 
  */
 public class EntityContainer {
+
     private String id;
     private String sid;
     private Entity entity;
@@ -41,7 +43,9 @@ public class EntityContainer {
     private EntityInstanceWrapper selected;
     private boolean selectedNew;
     private EntityFilter filter;
-    
+    private EntityContainer owner;
+    private Operation operation;
+
     public EntityContainer(Entity entity, String sid) {
         super();
         setEntity(entity);
@@ -49,34 +53,40 @@ public class EntityContainer {
         setId(buildId(sid, entity.getId()));
         setSelectedNew(false);
     }
-    
-    public static String buildId(String sid, String eid){
+
+    public static String buildId(String sid, String eid) {
         //return sid.substring(0,20) + eid.hashCode() + sid.substring(20);
         return eid;
     }
-    
-    
+
     public String getId() {
         return id;
     }
+
     public void setId(String id) {
         this.id = id;
     }
+
     public Entity getEntity() {
         return entity;
     }
+
     public void setEntity(Entity entity) {
         this.entity = entity;
     }
+
     public PaginatedList getList() {
         return list;
     }
+
     public void setList(PaginatedList list) {
         this.list = list;
     }
+
     public void setSid(String sid) {
         this.sid = sid;
     }
+
     public String getSid() {
         return sid;
     }
@@ -112,19 +122,36 @@ public class EntityContainer {
         return filter;
     }
 
-	/**
-	 * @param selectedIndexes the selectedIndexes to set
-	 */
-	public void setSelectedIndexes(Set<Integer> selectedIndexes) {
-		this.selectedIndexes = selectedIndexes;
-	}
+    /**
+     * @param selectedIndexes the selectedIndexes to set
+     */
+    public void setSelectedIndexes(Set<Integer> selectedIndexes) {
+        this.selectedIndexes = selectedIndexes;
+    }
 
-	/**
-	 * @return the selectedIndexes
-	 */
-	public Set<Integer> getSelectedIndexes() {
-		if(selectedIndexes==null) selectedIndexes=new HashSet<Integer>();
-		return selectedIndexes;
-	}
+    /**
+     * @return the selectedIndexes
+     */
+    public Set<Integer> getSelectedIndexes() {
+        if (selectedIndexes == null) {
+            selectedIndexes = new HashSet<Integer>();
+        }
+        return selectedIndexes;
+    }
 
+    public EntityContainer getOwner() {
+        return owner;
+    }
+
+    public void setOwner(EntityContainer owner) {
+        this.owner = owner;
+    }
+
+    public Operation getOperation() {
+        return operation;
+    }
+
+    public void setOperation(Operation operation) {
+        this.operation = operation;
+    }
 }
