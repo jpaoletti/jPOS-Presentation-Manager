@@ -12,9 +12,8 @@ public class DBPersistenceManager implements PersistenceManager {
     }
 
     public void finish(PMContext ctx) throws Exception{
-        if(ctx.get(PM_DB)!=null){
-            ((DB)ctx.get(PM_DB)).close();
-        }
+        final DB db = (DB)ctx.get(PM_DB);
+        if(db!=null) db.close();
     }
 
     public void init(PMContext ctx) throws Exception{
@@ -37,8 +36,6 @@ public class DBPersistenceManager implements PersistenceManager {
 
     public Object startTransaction(PMContext ctx) throws Exception{
         final DB db = (DB) ctx.get(PM_DB);
-        //BugFix. Some cases session keeps values and break save/update/delete
-        db.session().clear();
         return db.beginTransaction();
     }
 }
