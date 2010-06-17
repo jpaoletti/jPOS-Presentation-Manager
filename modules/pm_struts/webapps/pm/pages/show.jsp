@@ -25,13 +25,17 @@
 <%  es.putEntityInRequest(request);
 	es.putItemInRequest(request);
 	Entity e = (Entity)request.getAttribute("entity");
-	request.setAttribute("operation", e.getOperations().getOperation("show")); 
+	request.setAttribute("operation", e.getOperations().getOperation("show"));
+    request.setAttribute("e_container", es.getContainer(request));
 %>
 <pm:page title="titles.add">
 	<html:errors />
 	<div id="add" class="boxed">
 		<pm:pmtitle entity="${entity}" operation="${operation}"/>
 		<pm:operations labels="true" />
+        <div id="navigation_bar">
+        <pm:navigation container="${e_container.owner}"  />
+        </div>
 		<div class="content">
 			<table id="box-table-a">
 				<tbody id="list_body" >

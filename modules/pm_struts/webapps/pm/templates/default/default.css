@@ -443,3 +443,7 @@ img {
     background-color: #ECF8E0;
     color:navy;
 }
+#navigation_bar{
+    padding: 3px;
+    margin:3px;
+}

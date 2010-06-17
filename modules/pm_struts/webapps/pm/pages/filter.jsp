@@ -21,7 +21,8 @@
 <%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
-<% es.putEntityInRequest(request);%>
+<% es.putEntityInRequest(request);
+request.setAttribute("e_container", es.getContainer(request));%>
 <% es.putFilterInRequest(request);%>
 <pm:page title="titles.filter">
 	<div id="add" class="boxed">
@@ -30,6 +31,9 @@
 		<html:hidden property="finish" value="yes"/>
 		<fieldset>
 		<pm:operations labels="true" />
+        <div id="navigation_bar">
+        <pm:navigation container="${e_container.owner}"  />
+        </div>
 		<div class="content">
 			<table id="box-table-a">
 				<tbody id="list_body" >

@@ -28,6 +28,7 @@
 	Entity e = es.putEntityInRequest(request);
 	request.setAttribute("operation", e.getOperations().getOperation("list"));
 	es.putListInRequest(request);
+    request.setAttribute("e_container", es.getContainer(request));
 %>
 <bean:define id="operations"  name="PMLIST" property="operations" type="org.jpos.ee.pm.core.Operations" toScope="request"/>
 <bean:define id="contents" 	  name="PMLIST" property="contents" type="java.util.List<Object>" toScope="request"/>
@@ -39,10 +40,12 @@
 <div class="boxed">
 <html:form method="post" action="/list" styleId="listform">
 	<input type="hidden" name="finish" value="1" />
-	<pm:pmtitle entity="${entity}" operation="${operation}"/>
-	<html:errors property="entity" /> 
-	<pm:operations labels="true" />
-	<script type="text/javascript" charset="utf-8">
+	<pm:pmtitle entity="${entity}" operation="${operation}" />
+    <pm:operations labels="true" />
+    <div id="navigation_bar">
+    <pm:navigation container="${e_container.owner}"  />
+    </div>
+    <script type="text/javascript" charset="utf-8">
 		var pmid = "${pmid}";
 		var searchable = "${PMLIST.searchable}" == "true";
 		var sortable = false;
