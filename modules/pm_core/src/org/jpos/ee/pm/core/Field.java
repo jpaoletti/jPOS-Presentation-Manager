@@ -59,27 +59,40 @@ public class Field extends PMCoreObject{
         defaultValue="";
     }
 
-    public String visualize(PMContext ctx) throws PMException{
-        debug("Converting ["+ctx.getOperation().getId()+"]"+ctx.getEntity().getId()+"."+getId());
+    public String visualize(PMContext ctx, Operation operation, Entity entity) throws PMException{
+        debug("Converting ["+operation.getId()+"]"+entity.getId()+"."+getId());
         try {
             Converter c = null;
             if(getConverters()!= null){
-                c = getConverters().getConverterForOperation(ctx.getOperation().getId());
+                c = getConverters().getConverterForOperation(operation.getId());
             }
             if(c == null){
-                c = new GenericConverter();
-                c.setService(getService());
-                Properties properties = new Properties();
-                properties.put("filename", "cfg/converters/show.tostring.converter");
-                c.setProperties(properties);
+                c = getDefaultConverter(c);
             }
             ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
             ctx.put(PM_FIELD, this);
             return getService().visualizationWrapper(c.visualize(ctx));
         } catch (Exception e) {
             PMLogger.error(e);
-            throw new ConverterException("Unable to convert "+ctx.getEntity().getId()+"."+getProperty());
+            throw new ConverterException("Unable to convert "+entity.getId()+"."+getProperty());
         }
+    }
+
+    public Converter getDefaultConverter(Converter c) {
+        c = new GenericConverter();
+        c.setService(getService());
+        Properties properties = new Properties();
+        properties.put("filename", "cfg/converters/show.tostring.converter");
+        c.setProperties(properties);
+        return c;
+    }
+
+    public String visualize(PMContext ctx, Operation operation) throws PMException{
+        return visualize(ctx, operation, ctx.getEntity());
+    }
+
+    public String visualize(PMContext ctx) throws PMException{
+        return visualize(ctx, ctx.getOperation());
     }
     
     /**Set also converters service
