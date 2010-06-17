@@ -31,9 +31,10 @@
     request.setAttribute("woperation", weak.getOperations().getOperation("list"));
     request.setAttribute("contents", listv);
 %>
-<bean:define id="fields" 	  name="weak" property="orderedFields" type="java.util.List" toScope="request"/>
-<br/>
-<a href="${es.context_path}/list.do?pmid=${param.weakid}" class='button edit' > &nbsp;&nbsp; <pm:message key="pm.struts.weak.converter.edit" /></a>
+<bean:define id="fields" 	  name="weak" property="orderedFields" type="java.util.List" toScope="request"/><br/>
+<c:if test="${param.showbutton}">
+    <a href="${es.context_path}/list.do?pmid=${param.weakid}" class='button edit' > &nbsp;&nbsp; <pm:message key="pm.struts.weak.converter.edit" /></a>
+</c:if>
 <c:if test="${param.showlist}">
     <div class="boxed">
         <table id="list" class="display" >
