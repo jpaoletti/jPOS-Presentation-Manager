@@ -31,11 +31,21 @@ import org.jpos.ee.pm.security.core.PMSecurityUserGroup;
 
 public class DataAccessGroup implements DataAccess {
 
-    public void delete(PMContext ctx, Object object)  throws PMException {}
+    public void delete(PMContext ctx, Object object)  throws PMException {
+        try {
+            getConnector(ctx).removeGroup((PMSecurityUserGroup) object);
+        } catch (PMSecurityException ex) {
+            PMLogger.error(ex);
+        }
+    }
     
     public Object refresh(PMContext ctx, Object o) throws PMException {
-        PMSecurityUserGroup instance  = (PMSecurityUserGroup)o;
-        return getItem(ctx, "", instance.getId());
+        if(o!=null){
+            PMSecurityUserGroup instance  = (PMSecurityUserGroup)o;
+            return getItem(ctx, "", instance.getName());
+        }else{
+            return null;
+        }
     }
 
     public Object getItem(PMContext ctx, String property, String value) throws PMException {

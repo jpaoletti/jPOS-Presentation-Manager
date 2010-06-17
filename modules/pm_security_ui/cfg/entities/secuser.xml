@@ -8,12 +8,8 @@
           <operation id="add" scope="general" display="list"/>
           <operation id="show" display="list edit" />
           <operation id="edit" display="list show" />
-          <operation id="delete" display="list">
-              <confirm>true</confirm>
-          </operation>
-          <operation id="resetpsw" display="list show edit" >
-              <confirm>true</confirm>
-          </operation>   
+          <operation id="delete" display="list" confirm="true"/>
+          <operation id="resetpsw" display="list show edit" confirm="true"/>
       </operations>
       <field id="username" width="100">
           <converters>

@@ -154,7 +154,6 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
                                     .createCriteria (SECUserGroup.class)
                                     .add (Restrictions.eq ("name", groupname))
                                     .uniqueResult();
-            if(g!=null)db.session().refresh(g);
         } catch (Exception e) {
             getLog().error(e);
         }
@@ -331,13 +330,11 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
         return null;
     }
 
-    
     public void removeGroup(PMSecurityUserGroup group)
             throws PMSecurityException {
-        // TODO Auto-generated method stub
-        
+        DB db = (DB) ctx.get(PM_DB);
+        db.session().delete( getDBGroup(group.getName()) );
     }
-
     
     public void removeProfile(PMSecurityProfile profile)
             throws PMSecurityException {
@@ -350,5 +347,10 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
             throws PMSecurityException {
         // TODO Auto-generated method stub
         
+    }
+
+    public void removeUser(PMSecurityUser object) throws PMSecurityException {
+        DB db = (DB) ctx.get(PM_DB);
+        db.session().delete( getDBUser(object.getUsername()) );
     }
 }

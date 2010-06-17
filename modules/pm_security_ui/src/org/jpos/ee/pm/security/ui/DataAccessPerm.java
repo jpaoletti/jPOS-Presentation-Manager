@@ -38,8 +38,12 @@ public class DataAccessPerm implements DataAccess {
     }
     
     public Object refresh(PMContext ctx, Object o) throws PMException {
-        PMSecurityPermission instance  = (PMSecurityPermission)o;
-        return getItem(ctx, "", instance.getName());
+        if(o!=null){
+            PMSecurityPermission instance  = (PMSecurityPermission)o;
+            return getItem(ctx, "", instance.getName());
+        }else{
+            return null;
+        }
     }
 
     public List<?> list(PMContext ctx, EntityFilter filter, Integer from, Integer count)  throws PMException{

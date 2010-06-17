@@ -1,75 +1,36 @@
 <?xml version='1.0' ?>
 <!DOCTYPE entity SYSTEM "cfg/entity.dtd">  
-<entity>
-    <id>secusergroup</id>
-    <clazz>org.jpos.ee.pm.security.core.PMSecurityUserGroup</clazz>
-      <auditable>false</auditable>
-      <dataAccess class="org.jpos.ee.pm.security.ui.DataAccessGroup" />
-    
+<entity id="secusergroup" clazz="org.jpos.ee.pm.security.core.PMSecurityUserGroup">
+    <auditable>false</auditable>
+    <dataAccess class="org.jpos.ee.pm.security.ui.DataAccessGroup" />
     <operations>
-        <operation>
-            <id>list</id>
-            <enabled>true</enabled>
-            <scope>item</scope>
-            <display>all</display>
-        </operation>        
-        <operation>
-            <id>add</id>
-            <enabled>true</enabled>
-            <scope>general</scope>
-            <display>list show</display>
-        </operation>
-        <operation>
-            <id>show</id>
-            <enabled>true</enabled>
-            <scope>item</scope>
-            <display>list</display>
-        </operation>
-        <operation>
-            <id>edit</id>
-            <enabled>true</enabled>
-            <scope>item</scope>
-            <display>list show</display>
-        </operation>
+        <operation id="list"/>
+        <operation id="add" scope="general" display="list show" />
+        <operation id="show" display="list" />
+        <operation id="edit" display="list show" />
+        <operation id="delete" display="list show" confirm="true" />
     </operations>
     
-    <field>
-        <id>name</id>
-        <display>all</display>
-        <width>200</width>
+    <field id="name" width="200">
         <converters>
               <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add"/>
           </converters>
     </field>
     
-    <field>
-        <id>description</id>
-        <display>all</display>
-        <width>200</width>
+    <field id="description" width="200">
         <converters>
               <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add edit"/>
           </converters>
     </field>
     
-    <field>
-          <id>active</id>
-          <display>all</display>
-          <width>40</width>
-          <align>center</align>
+    <field id="active" width="40" align="center">
           <converters>
-              <converter class="org.jpos.ee.pm.struts.converter.ShowBooleanConverter" operations="list show">
-                   <properties>
-                       <property name="true-text" value="Si" />
-                       <property name="false-text" value="No" />
-                   </properties>
-              </converter>
+              <converter class="org.jpos.ee.pm.struts.converter.ShowBooleanConverter" operations="list show" />
               <converter class="org.jpos.ee.pm.struts.converter.EditBooleanConverter" operations="add edit"/>
           </converters>
       </field>
     
-    <field>
-        <id>permissions</id>
-        <display>all</display>
+    <field id="permissions">
         <converters>
               <converter class="org.jpos.ee.pm.struts.converter.EditCollectionConverter" operations="add edit">
                    <properties>

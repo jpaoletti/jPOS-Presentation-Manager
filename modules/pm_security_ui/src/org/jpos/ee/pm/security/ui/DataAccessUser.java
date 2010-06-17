@@ -18,6 +18,8 @@
 package org.jpos.ee.pm.security.ui;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jpos.ee.pm.core.DataAccess;
 import org.jpos.ee.pm.core.EntityFilter;
@@ -32,11 +34,21 @@ import org.jpos.ee.pm.security.core.PMSecurityUser;
 public class DataAccessUser implements DataAccess {
 
     public void delete(PMContext ctx, Object object)  throws PMException {
+        PMSecurityUser instance  = (PMSecurityUser)object;
+        try {
+            getConnector(ctx).removeUser(instance);
+        } catch (PMSecurityException ex) {
+            PMLogger.error(ex);
+        }
     }
     
     public Object refresh(PMContext ctx, Object o) throws PMException {
-        PMSecurityUser instance  = (PMSecurityUser)o;
-        return getItem(ctx, "", instance.getUsername());
+        if(o!=null){
+            PMSecurityUser instance  = (PMSecurityUser)o;
+            return getItem(ctx, "", instance.getUsername());
+        }else{
+            return null;
+        }
     }
 
     public Object getItem(PMContext ctx, String property, String value) throws PMException{
