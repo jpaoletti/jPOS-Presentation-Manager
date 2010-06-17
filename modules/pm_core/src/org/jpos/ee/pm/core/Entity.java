@@ -419,6 +419,14 @@ public class Entity extends PMCoreObject {
         return weaks;
     }
 
+    public Entity getWeak(Field field){
+        for (Entity entity : getWeaks()) {
+            if(entity.getOwner().getEntityProperty().equals(field.getProperty()))
+                return entity;
+        }
+        return null;
+    }
+
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -449,16 +457,19 @@ public class Entity extends PMCoreObject {
 		this.noCount = noCount;
 	}
 
-	/**
-	 * @return the noCount
-	 */
-	public Boolean getNoCount() {
-		if(noCount==null)return false;
-		return noCount;
-	}
+    /**
+     * @return the noCount
+     */
+    public Boolean getNoCount() {
+        if(noCount==null)return false;
+        return noCount;
+    }
 
-        public Highlight getHighlight(Field field, Object instance){
-            if(getHighlights()==null) return null;
-            return getHighlights().getHighlight(this, field, instance);
-        }
+    public Highlight getHighlight(Field field, Object instance){
+        if(getHighlights()==null) return null;
+        return getHighlights().getHighlight(this, field, instance);
+    }
+    public boolean isWeak(){
+        return getOwner() != null;
+    }
 }
