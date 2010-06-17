@@ -17,11 +17,19 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.jpos.core.ConfigurationException;
 
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
+import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
+import org.jpos.ee.pm.core.EntityOwner;
+import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
@@ -34,17 +42,48 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
     
     protected void proccessField(PMStrutsContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
         //Object object = rc.getSelected();
-        Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
+        /*Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
         if(moc!=null){
             Object obj = wrapper.getInstance();
-            Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(obj, f.getProperty());
-            if(collection==null) {
-                PMEntitySupport.set(obj, f.getProperty(), moc);
-            }else{
+            
+            try {
+                Collection<Object> collection = (Collection<Object>) EntitySupport.get(obj, f.getProperty());
+                if(collection==null) {
+                    String collection_class = ctx.getEntity().getOwner().getEntityCollectionClass();
+                    collection = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance ( collection_class );
+                    EntitySupport.set(obj, f.getProperty(), collection);
+                }
                 collection.clear();
-                collection.addAll(moc);
+
+                for (Object object : moc) {
+                    System.out.println("Object: "+object);
+                    final Entity weak = ctx.getEntity().getWeak(f);
+                    final EntityOwner owner = weak.getOwner();
+                    Object o = ctx.getEntity().getDataAccess().refresh(ctx, object);
+                    System.out.println("Object: "+o);
+                    //I must process each child property
+                    for (Field field : weak.getAllFields()) {
+                        EntitySupport.set(o, field.getProperty(), EntitySupport.get(object, field.getProperty()));
+                    }
+                    //I need to set the backward property
+                    final String lp = owner.getLocalProperty();
+                    if(lp != null){
+                        System.out.println("Debug 1: "+ lp + " " + o + " "+obj);
+                        EntitySupport.set(o, lp, obj);
+                    }
+                    //I need to set the position property
+                    String pos = owner.getLocalPosition();
+                    if( pos != null){
+                        List tmp = new ArrayList(collection);
+                        System.out.println("Debug 2: "+pos + " " + o + " "+tmp.indexOf(object));
+                        EntitySupport.set(o, pos, tmp.indexOf(object));
+                    }
+                    collection.add(o);
+                }
+            } catch (ConfigurationException ex) {
+                ex.printStackTrace();
             }
-        }else{
+        }else{*/
              String eid = "f_" + f.getId();
              String s = getParamValues(ctx, eid, ";");
              PMLogger.debug(this,"Field ["+eid + "] "+s);
@@ -67,7 +106,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport{
                 i++;
                 s = getParamValues(ctx, eid+"_"+i, ";");
              }
-        }
+        //}
     }
 
     private boolean validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, Object o) throws PMException {

@@ -17,26 +17,31 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.Collection;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class DeleteAction extends RowActionSupport {
 
-    protected boolean openTransaction() {return true;}
+    protected boolean openTransaction() {
+        return true;
+    }
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
-        if(ctx.isWeak()){
-            getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()).remove(ctx.getSelected().getInstance());
-        }else{
-            try {
-                ctx.getEntity().getDataAccess().delete(ctx, ctx.getSelected().getInstance());
-            } catch (Exception e) {
-                PMLogger.error(e);
-                throw new PMException("pm.struts.cant.delete");
+        final Object instance = ctx.getSelected().getInstance();
+        if (ctx.getEntity().isWeak()) {
+            final Collection<Object> collection = getOwnerCollection(ctx);
+            if (collection != null) {
+                collection.remove(instance);
             }
+        }
+        try {
+            ctx.getEntity().getDataAccess().delete(ctx, instance);
+        } catch (Exception e) {
+            PMLogger.error(e);
+            throw new PMException("pm.struts.cant.delete");
         }
         ctx.getEntityContainer().setSelected(null);
     }
-
 }

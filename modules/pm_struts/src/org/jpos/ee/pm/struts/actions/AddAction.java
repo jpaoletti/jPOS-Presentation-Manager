@@ -17,12 +17,9 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import org.jpos.core.ConfigurationException;
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
+import org.jpos.ee.pm.core.EntityOwner;
 import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
@@ -32,7 +29,8 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class AddAction extends RowActionSupport {
     
-    public boolean testSelectedExist() { return false;    }
+    public boolean testSelectedExist() { return false; }
+    protected boolean openTransaction() { return true; }
 
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
@@ -43,12 +41,6 @@ public class AddAction extends RowActionSupport {
                 obj = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
                 ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
                 ctx.getEntityContainer().setSelectedNew(true);
-                PMLogger.debug(this,"Cleaning weak collections");
-                if(ctx.getEntity().getWeaks()!=null){
-                    for(Entity e : ctx.getEntity().getWeaks()){
-                        setModifiedOwnerCollection(ctx, e.getOwner().getEntityProperty(), null);
-                    }
-                }
                 throw new PMForwardException(CONTINUE);
             } catch (ConfigurationException e) {
                 PMLogger.error(e);
@@ -62,6 +54,13 @@ public class AddAction extends RowActionSupport {
             if(f.shouldDisplay(ctx.getOperation().getId()))
                 proccessField(ctx, f, ctx.getSelected());
         }
+        if(ctx.getEntity().isWeak()){
+            final Object parent = ctx.getEntityContainer().getOwner().getSelected().getInstance();
+            final EntityOwner owner = ctx.getEntity().getOwner();
+            final Object instance = ctx.getSelected().getInstance();
+            EntitySupport.set(instance,owner.getLocalProperty(), parent);
+            getOwnerCollection(ctx).add(instance);
+        }
         if(!ctx.getErrors().isEmpty()) 
             throw new PMException();
         
@@ -70,26 +69,7 @@ public class AddAction extends RowActionSupport {
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
         Object instance = ctx.getSelected().getInstance();
-        if(ctx.isWeak()){
-            final Collection<Object> collection = getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty());
-            collection.add(instance);
-            String p = ctx.getEntity().getOwner().getLocalProperty();
-            if(p != null){
-                EntitySupport.set(instance, p, ctx.getOwner().getSelected().getInstance());
-            }
-            //For ordered list, we usually need to set a "position" property
-            String pos = ctx.getEntity().getOwner().getLocalPosition();
-            if(pos != null){
-                List tmp = new ArrayList(collection);
-                EntitySupport.set(instance, pos, tmp.indexOf(instance));
-            }
-        }else{
-            PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
-            ctx.getEntity().getDataAccess().add(ctx, instance);
-        }
-    }
-    
-    protected boolean openTransaction() {
-        return true;
+        PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
+        ctx.getEntity().getDataAccess().add(ctx, instance);
     }
 }

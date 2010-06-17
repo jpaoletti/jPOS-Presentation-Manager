@@ -26,50 +26,48 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.util.DisplacedList;
 
 public abstract class RowActionSupport extends FieldProcessingActionSupport {
-    
-    public boolean testSelectedExist(){ return true; }
+
+    public boolean testSelectedExist() {return true;}
 
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
-        
+
         //If we get item param, we change the selected item on the container
         String item = ctx.getParameter("item");
-        if(item!=null && item.trim().compareTo("") != 0){
+        if (item != null && item.trim().compareTo("") != 0) {
             Integer index = Integer.parseInt(item);
-            PMLogger.debug(this,"Getting row index: "+ index);
-            if(index != null){
-                DisplacedList <Object> al = new DisplacedList<Object>();
-                if(ctx.isWeak()){
-                    al.addAll(getModifiedOwnerCollection(ctx, ctx.getEntity().getOwner().getEntityProperty()));
-                }else{
-                    al.addAll(ctx.getList().getContents());
-                    al.setDisplacement(ctx.getList().getContents().getDisplacement());
-                }
-                Object o = ctx.getEntity().getDataAccess().refresh(ctx,al.get(index));
-                ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(o));
+            PMLogger.debug(this, "Getting row index: " + index);
+            if (index != null) {
+                DisplacedList<Object> al = new DisplacedList<Object>();
+                al.addAll(ctx.getList().getContents());
+                al.setDisplacement(ctx.getList().getContents().getDisplacement());
+                ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(al.get(index)));
             }
-        }else{
+        } else {
             String identified = ctx.getParameter("identified");
-            if(identified!=null && identified.trim().compareTo("") != 0){
-                PMLogger.debug(this,"Getting row identified by: "+identified);
+            if (identified != null && identified.trim().compareTo("") != 0) {
+                PMLogger.debug(this, "Getting row identified by: " + identified);
                 String[] ss = identified.split(":");
                 //TODO Throw exception when the size of this is not 2
-                if(ss.length != 2) PMLogger.error ("Ivalid row identifier!");
-                else{
+                if (ss.length != 2) {
+                    PMLogger.error("Ivalid row identifier!");
+                } else {
                     String prop = ss[0];
-                    String value= ss[1];
-                    EntityInstanceWrapper wrapper = new EntityInstanceWrapper( ctx.getEntity().getDataAccess().getItem(ctx, prop, value) );
+                    String value = ss[1];
+                    EntityInstanceWrapper wrapper = new EntityInstanceWrapper(ctx.getEntity().getDataAccess().getItem(ctx, prop, value));
                     ctx.getEntityContainer().setSelected(wrapper);
                 }
-            }else{
-                PMLogger.debug(this,"Row Selection ignored");
+            } else {
+                PMLogger.debug(this, "Row Selection ignored");
             }
         }
-        
-        if(testSelectedExist() && ctx.getEntityContainer().getSelected() == null){
-            ctx.getErrors().add(new PMMessage(ENTITY , "unknow.item"));
-               throw new PMException();
-        }else
+        refreshSelectedObject(ctx, null);
+
+        if (testSelectedExist() && ctx.getEntityContainer().getSelected() == null) {
+            ctx.getErrors().add(new PMMessage(ENTITY, "unknow.item"));
+            throw new PMException();
+        } else {
             return true;
+        }
     }
 }

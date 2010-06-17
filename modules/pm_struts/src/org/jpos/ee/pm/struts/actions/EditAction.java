@@ -23,42 +23,34 @@ import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
-public class EditAction extends RowActionSupport{
+public class EditAction extends RowActionSupport {
 
-    /** Opens an hibernate transaction before doExecute*/
-    protected boolean openTransaction() { return true;    }
-    /**Makes the operation generate an auditory entry*/
-    protected boolean isAudited() {    return true; }
-    /**Forces execute to check if any user is logged in*/
-    protected boolean checkUser(){     return true;}
-    /**Forces execute to check if there is an entity defined in parameters*/
-    protected boolean checkEntity(){ return true; }
-    
+    protected boolean openTransaction() {return true;}
+    protected boolean isAudited() {return true;}
+    protected boolean checkUser() {return true;}
+    protected boolean checkEntity() {return true;}
+
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
-        if(ctx.getRequest().getParameter(FINISH)==null){
-            /*This point limite anidation of weak entities.*/
-            if(!ctx.isWeak()){
-                clearModifiedOwnerCollection(ctx);
-            }
+        if (ctx.getRequest().getParameter(FINISH) == null) {
             throw new PMForwardException(CONTINUE);
         }
-        if(ctx.getSelected() == null){
+        if (ctx.getSelected() == null) {
             throw new PMException("pm.instance.not.found");
         }
         for (Field f : ctx.getEntity().getAllFields()) {
-            if(f.shouldDisplay(ctx.getOperation().getId()))
+            if (f.shouldDisplay(ctx.getOperation().getId())) {
                 proccessField(ctx, f, ctx.getSelected());
+            }
         }
-        if(!ctx.getErrors().isEmpty()) throw new PMException();
+        if (!ctx.getErrors().isEmpty()) {
+            throw new PMException();
+        }
         return true;
     }
-    
+
     protected void doExecute(PMStrutsContext ctx) throws PMException {
-        if(!ctx.isWeak()){
-            PMLogger.debug(this,"Updating '"+ctx.getEntity().getId()+"' to Data Access");
-            ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
-        }
+        PMLogger.debug(this, "Updating '" + ctx.getEntity().getId() + "' to Data Access");
+        ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
     }
-    
 }

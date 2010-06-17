@@ -21,14 +21,18 @@ import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.PMContext;
 
-public class ShowCompositionConverter extends StrutsEditConverter{
-    
+public class WeakConverter extends StrutsEditConverter {
+
     public Object build(PMContext ctx) throws ConverterException {
         throw new IgnoreConvertionException("");
     }
 
     public String visualize(PMContext ctx) throws ConverterException {
-        return super.visualize("show_composition_converter.jsp?weakid="+getConfig("weak-entity"));
+        StringBuilder sb = new StringBuilder();
+        sb.append("weak_converter.jsp?weakid=");
+        sb.append(getConfig("weak-entity"));
+        sb.append("&showlist=");
+        sb.append(getConfig("show-list", "true"));
+        return super.visualize(sb.toString());
     }
-    
 }

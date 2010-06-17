@@ -23,17 +23,10 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class ShowAction extends RowActionSupport {
 
-    /**Makes the operation generate an audithory entry*/
     protected boolean isAudited() {    return false; }
     
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
-        if(ctx.getRequest().getParameter(FINISH)==null){
-            /*This point limite anidation of weak entities.*/
-            if(!ctx.isWeak()){
-                clearModifiedOwnerCollection(ctx);
-            }
-        }
         if(ctx.getSelected() == null){
             throw new PMException("pm.instance.not.found");
         }

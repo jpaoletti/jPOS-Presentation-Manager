@@ -17,8 +17,12 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
+import java.util.List;
+import org.jpos.ee.pm.core.EntityInstanceWrapper;
+import org.jpos.ee.pm.core.Operation;
 
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
@@ -46,31 +50,27 @@ public abstract class EntityActionSupport extends ActionSupport {
         
         String requrl = ctx.getRequest().getRequestURL().toString();
         String operationId = requrl.substring(requrl.lastIndexOf("/")+1, requrl.lastIndexOf("."));
-        ctx.setOperation((ctx.hasEntity())?ctx.getEntity().getOperations().getOperation(operationId):null);
-        
-        /*if(ctx.hasEntity() && ctx.getEntity().getExtendz() != null){
-            Entity otherentity = getPMService().getEntity(ctx.getEntity().getExtendz());
-            //Optimization
-            if(ctx.getEntity().getFields() == null)
-                ctx.getEntity().setFields(new ArrayList<Field>());
-            ctx.getEntity().getFields().addAll(otherentity.getAllFields());
-            ctx.getEntity().setExtendz(null); //we do this one time
-        }*/
-
-        //Its a weak entity, we get the owner entity for list reference
-        if(ctx.hasEntity() && ctx.getEntity().getOwner() != null){
-            ctx.setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntityId()));
-            if(ctx.getOwner()== null) {
-                throw new PMException("owner.not.exists");
-            } 
-        }else{
-            ctx.setOwner(null);
+        final Operation operation = (ctx.hasEntity()) ? ctx.getEntity().getOperations().getOperation(operationId) : null;
+        ctx.setOperation(operation);
+        if(ctx.hasEntity()){
+            ctx.getEntityContainer().setOperation(operation);
+            if(ctx.getEntity().isWeak()){
+                ctx.getEntityContainer().setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntityId()));
+                if(ctx.getEntityContainer().getOwner()== null) {
+                    throw new PMException("owner.not.exists");
+                }
+            }else{
+                ctx.getEntityContainer().setOwner(null);
+            }
         }
-        
         ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
         if(ctx.hasEntityContainer())
             ctx.getSession().setAttribute(OPERATIONS, ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation()));
         //TODO check entity-level permissions
+
+        //Try to refresh selected object, if there is one
+        refreshSelectedObject(ctx, null);
+
         return true;
     }
     
@@ -79,21 +79,22 @@ public abstract class EntityActionSupport extends ActionSupport {
         /* Validate de operation*/
         validate(ctx);
         
-        PMService service = PMEntitySupport.staticPmservice();
+        final PMService service = PMEntitySupport.staticPmservice();
+        final Operation operation = ctx.getOperation();
         Object tx = null;
         try{
             if(openTransaction()) {
             	tx = service.getPersistenceManager().startTransaction(ctx);
             	PMLogger.debug(this,"Started Transaction "+tx);
             }
-        	if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
-        		ctx.getOperation().getContext().preExecute(ctx);
+        	if(operation!= null && operation.getContext()!= null)
+        		operation.getContext().preExecute(ctx);
         
             /** EXCECUTES THE OPERATION **/
             doExecute(ctx);
 
-            if(ctx.getOperation()!= null && ctx.getOperation().getContext()!= null)
-                ctx.getOperation().getContext().postExecute(ctx);
+            if(operation!= null && operation.getContext()!= null)
+                operation.getContext().postExecute(ctx);
         
                 /*if(isAuditable(ctx)){
                     logRevision (ctx.getDB(), (ctx.getEntity()!=null)?ctx.getEntity().getId():null, ctx.getOper_id(), ctx.getUser());
@@ -176,21 +177,41 @@ public abstract class EntityActionSupport extends ActionSupport {
             }
         }
     }
-    
-    protected Collection<Object> getOwnerCollection(PMStrutsContext ctx) throws PMException {
-        return (Collection<Object>) ctx.getEntitySupport().get(ctx.getOwner().getSelected().getInstance(), ctx.getEntity().getOwner().getEntityProperty());
+
+    public Object refreshSelectedObject(PMStrutsContext ctx, EntityContainer container) throws PMException {
+        EntityContainer entityContainer =  container;
+
+        if(entityContainer==null)
+                entityContainer = ctx.getEntityContainer(true);
+
+        if(entityContainer == null) return null;
+        EntityInstanceWrapper origin = entityContainer.getSelected();
+
+        if(origin != null){
+            if(!entityContainer.isSelectedNew()){
+                Object o = ctx.getEntity().getDataAccess().refresh(ctx, origin.getInstance());
+                entityContainer.setSelected(new EntityInstanceWrapper(o));
+                return o;
+            }else{
+                return origin.getInstance();
+            }
+        }
+        return null;
     }
 
-    protected Collection<Object> getModifiedOwnerCollection(PMStrutsContext ctx, String field) {
-        Collection<Object> collection = (Collection<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
-        /*if(collection == null) {
-            collection = new ArrayList<Object>();
-            setModifiedOwnerCollection(field, collection);
-        }*/
+    
+    protected Collection<Object> getOwnerCollection(PMStrutsContext ctx) throws PMException {
+        final Object object = refreshSelectedObject(ctx, ctx.getEntityContainer().getOwner());
+        final Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(object, ctx.getEntity().getOwner().getEntityProperty());
+        return collection;
+    }
+
+    /*protected List<Object> getModifiedOwnerCollection(PMStrutsContext ctx, String field) {
+        List<Object> collection = (List<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
         return collection;
     }
     
-    protected void setModifiedOwnerCollection(PMStrutsContext ctx, String field, Collection<Object> list) {
+    protected void setModifiedOwnerCollection(PMStrutsContext ctx, String field, List<Object> list) {
         ctx.getSession().setAttribute(field+"_"+MODIFIED_OWNER_COLLECTION, list);
     }
 
@@ -202,7 +223,7 @@ public abstract class EntityActionSupport extends ActionSupport {
                 ctx.getSession().setAttribute(s, null);
             }
         }
-    }
+    }*/
     
     protected EntityContainer getEntityContainer(PMStrutsContext ctx, String eid) {
         return (EntityContainer) ctx.getRequest().getSession().getAttribute(EntityContainer.buildId(HASH, eid));
