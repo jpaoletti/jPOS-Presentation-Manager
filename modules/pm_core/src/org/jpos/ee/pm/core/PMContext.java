@@ -65,10 +65,23 @@ public class PMContext extends Context implements Constants{
     }
     /**
      * @return the entity_container
-     * @throws PMException 
+     * @throws PMException
      */
     public EntityContainer getEntityContainer() throws PMException {
         EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
+        if(entityContainer == null){
+            throw new PMException("pm_core.entity.not.found");
+        }
+        return entityContainer;
+    }
+
+    /**
+     * @return the entity_container
+     * @throws PMException
+     */
+    public EntityContainer getEntityContainer(boolean ignorenull) throws PMException {
+        EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
+        if(ignorenull) return entityContainer;
         if(entityContainer == null){
             throw new PMException("pm_core.entity.not.found");
         }
@@ -95,18 +108,6 @@ public class PMContext extends Context implements Constants{
     public Operation getOperation() {
         return (Operation)get(PM_OPERATION);
     }
-    /**
-     * @param owner the owner to set
-     */
-    public void setOwner(EntityContainer owner) {
-        put(PM_OWNER,owner);
-    }
-    /**
-     * @return the owner
-     */
-    public EntityContainer getOwner() {
-        return (EntityContainer)get(PM_OWNER);
-    }
     
     public Entity getEntity()throws PMException{
         return getEntityContainer().getEntity();
@@ -114,10 +115,6 @@ public class PMContext extends Context implements Constants{
     
     public PaginatedList getList() throws PMException{
         return getEntityContainer().getList();
-    }
-    
-    public boolean isWeak(){
-        return getOwner() != null;
     }
 
     public EntityInstanceWrapper getSelected() throws PMException{
