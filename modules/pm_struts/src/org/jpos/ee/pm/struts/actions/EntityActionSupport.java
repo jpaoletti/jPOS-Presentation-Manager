@@ -67,7 +67,6 @@ public abstract class EntityActionSupport extends ActionSupport {
         if(ctx.hasEntityContainer())
             ctx.getSession().setAttribute(OPERATIONS, ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation()));
         //TODO check entity-level permissions
-
         //Try to refresh selected object, if there is one
         refreshSelectedObject(ctx, null);
 
@@ -191,6 +190,7 @@ public abstract class EntityActionSupport extends ActionSupport {
             if(!entityContainer.isSelectedNew()){
                 Object o = ctx.getEntity().getDataAccess().refresh(ctx, origin.getInstance());
                 entityContainer.setSelected(new EntityInstanceWrapper(o));
+                if(o==null) PMLogger.warn("Fresh instance is null while origin was '"+origin.getInstance()+"'");
                 return o;
             }else{
                 return origin.getInstance();
