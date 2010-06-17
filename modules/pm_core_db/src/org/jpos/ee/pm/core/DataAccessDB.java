@@ -94,7 +94,10 @@ public class DataAccessDB implements DataAccess, Constants {
             throw new PMException();
         }
         
-        String order = entity.getFieldById(ctx.getString(PM_LIST_ORDER)).getProperty();
+        String order = null;
+        try {
+            order = (ctx.getString(PM_LIST_ORDER) != null) ? entity.getFieldById(ctx.getString(PM_LIST_ORDER)).getProperty() : null;
+        } catch (Exception e) {}
         boolean asc = (ctx.get(PM_LIST_ASC)==null)?true:(Boolean) ctx.get(PM_LIST_ASC);
         //This is a temporary patch until i found how to sort propertys
         if(order!=null && order.contains(".")) order = order.substring(0, order.indexOf("."));
@@ -112,6 +115,14 @@ public class DataAccessDB implements DataAccess, Constants {
                 c.add(criterion);
             }
         }
+        //Weak entities must filter the parent
+        if(entity.isWeak()){
+            final Object instance = ctx.getEntityContainer().getOwner().getSelected().getInstance();
+            final String localProperty = entity.getOwner().getLocalProperty();
+            System.out.println("Filtering "+localProperty+" = "+instance);
+            c.add(Restrictions.eq(localProperty, instance));
+        }
+
         return c;
     }
 
