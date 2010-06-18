@@ -26,7 +26,7 @@
 <bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <%
     Entity weak = es.getPmservice().getEntity(request.getParameter("weakid"));
-    Collection listv = (Collection)es.get(tmp_object, request.getParameter("f"));
+    Collection listv = (Collection)es.get(tmp_object, request.getParameter("property"));
     request.setAttribute("weak", weak);
     request.setAttribute("woperation", weak.getOperations().getOperation("list"));
     request.setAttribute("contents", listv);

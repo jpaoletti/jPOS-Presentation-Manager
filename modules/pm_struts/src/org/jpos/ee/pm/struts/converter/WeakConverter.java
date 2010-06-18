@@ -19,6 +19,7 @@ package org.jpos.ee.pm.struts.converter;
 
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
+import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 
 public class WeakConverter extends StrutsEditConverter {
@@ -28,6 +29,7 @@ public class WeakConverter extends StrutsEditConverter {
     }
 
     public String visualize(PMContext ctx) throws ConverterException {
+        Field field = (Field) ctx.get(PM_FIELD);
         StringBuilder sb = new StringBuilder();
         sb.append("weak_converter.jsp?weakid=");
         sb.append(getConfig("weak-entity"));
@@ -35,6 +37,9 @@ public class WeakConverter extends StrutsEditConverter {
         sb.append(getConfig("show-list", "true"));
         sb.append("&showbutton=");
         sb.append(getConfig("show-modify", "true"));
+        sb.append("&property=");
+        sb.append(field.getProperty());
+
         return super.visualize(sb.toString());
     }
 }
