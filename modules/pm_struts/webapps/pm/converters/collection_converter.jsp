@@ -25,10 +25,10 @@
 <bean:define id="entity"     name="entity" type="org.jpos.ee.pm.core.Entity" />
 <bean:define id="es"         name="es" 	   type="org.jpos.ee.pm.struts.PMEntitySupport"  />
 <%
-        PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
-        List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
+    PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
+    List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
 	request.setAttribute("collection", list);
-	Collection listv = (Collection)es.get(tmp_object, request.getParameter("f"));
+	Collection listv = (Collection)es.get(tmp_object, request.getParameter("prop"));
 %>
 <logic:iterate id="o" name="collection" type="java.lang.Object" indexId="i">
 	<bean:define id="checked" value="<%= (listv!=null && listv.contains(o))?"checked":"" %>" />

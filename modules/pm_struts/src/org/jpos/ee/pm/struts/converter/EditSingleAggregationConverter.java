@@ -20,6 +20,7 @@ package org.jpos.ee.pm.struts.converter;
 import java.util.List;
 
 import org.jpos.ee.pm.converter.ConverterException;
+import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMStrutsContext;
@@ -61,8 +62,9 @@ public class EditSingleAggregationConverter extends AbstractCollectionConverter 
         boolean withNull= (wn==null || wn.compareTo("true")!=0)?false:true;
         final String filter = getConfig("filter");
         final String entity = getConfig("entity");
+        Field field = (Field) ctx.get(PM_FIELD);
         saveList((PMStrutsContext) ctx,entity);
-        return super.visualize("single_aggregation_converter.jsp?filter="+filter+"&entity="+entity+"&with_null="+withNull);
+        return super.visualize("single_aggregation_converter.jsp?filter="+filter+"&entity="+entity+"&with_null="+withNull+"&prop="+field.getProperty());
     }
 
 }

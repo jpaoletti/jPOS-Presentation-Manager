@@ -22,7 +22,6 @@ import java.util.List;
 import org.jpos.core.ConfigurationException;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMLogger;
@@ -61,9 +60,10 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
         if (collection_class == null) {
             throw new ConverterException("pm.struts.converter.class.mustbedefined");
         }
+        final Object instance = ctx.get(PM_ENTITY_INSTANCE);
         Collection<Object> result = null;
         Field field = (Field) ctx.get(PM_FIELD);
-        result = (Collection<Object>) getValue(ctx.get(PM_ENTITY_INSTANCE), field);
+        result = (Collection<Object>) getValue(instance, field);
         if (result == null) {
             result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
         }
@@ -73,7 +73,8 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
     public String visualize(PMContext ctx) throws ConverterException {
         final String filter = getConfig("filter");
         final String entity = getConfig("entity");
+        final Field field = (Field) ctx.get(PM_FIELD);
         saveList((PMStrutsContext) ctx,entity);
-        return super.visualize("collection_converter.jsp?filter="+filter+"&entity="+entity);
+        return super.visualize("collection_converter.jsp?filter="+filter+"&entity="+entity+"&prop="+field.getProperty());
     }
 }

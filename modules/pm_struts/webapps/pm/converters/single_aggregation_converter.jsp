@@ -27,9 +27,9 @@
 <bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />
 <%
 	PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
-        List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
+    List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
 	request.setAttribute("collection", list);
-	Object selected = (Object)es.get(tmp_object, request.getParameter("f"));
+	Object selected = (Object)es.get(tmp_object, request.getParameter("prop"));
 %>
 <select size="1" id="f_${param.f}" name="f_${param.f}">
 <c:if test="${param.with_null}">
