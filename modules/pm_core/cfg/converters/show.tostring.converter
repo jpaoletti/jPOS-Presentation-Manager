@@ -4,6 +4,6 @@
 		return value.toString();
 	</visualize>
 	<build>
-		throw new IgnoreConvertionException("");
+		return "IgnoreConvertionException";
 	</build>
 </generic-converter>

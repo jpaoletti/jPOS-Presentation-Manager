@@ -4,6 +4,6 @@
 		return (value==null)?"":(new java.text.DecimalFormat (converter.getConfig("format", "#0.00"))).format(value);
 	</visualize>
 	<build>
-		throw new IgnoreConvertionException("");
+		return "IgnoreConvertionException";
 	</build>
 </generic-converter>

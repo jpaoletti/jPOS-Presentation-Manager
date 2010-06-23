@@ -54,7 +54,10 @@ public class GenericConverter extends Converter{
             debug("Generic Converter Visualize value: "+o);
             if(o==null) return getConfig("null-value","-");
             String result = bsh.eval (visualize).toString();
-            return visualize(result, ctx.getString(PM_EXTRA_DATA));
+            final String res = visualize(result, ctx.getString(PM_EXTRA_DATA));
+            if("IgnoreConvertionException".equals(res))
+                throw new IgnoreConvertionException("");
+            return res;
         } catch (EvalError e) {
             getLog().error("BSH Interpreter Evaluation", e);
         }
@@ -67,7 +70,10 @@ public class GenericConverter extends Converter{
             Interpreter bsh = getBsh();
             bsh.set("value", ctx.get(PM_FIELD_VALUE));
             bsh.set("converter", this);
-            return bsh.eval (build);
+            final Object res = bsh.eval(build);
+            if("IgnoreConvertionException".equals(res))
+                throw new IgnoreConvertionException("");
+            return res;
         } catch (EvalError e) {
             getLog().error("BSH Interpreter Evaluation Error", e);
         }
