@@ -63,6 +63,11 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
         }
         refreshSelectedObject(ctx, null);
 
+
+        if(ctx.getOperation() != null && ctx.getOperation().getContext()!=null)
+            ctx.getOperation().getContext().preConversion(ctx);
+
+
         if (testSelectedExist() && ctx.getEntityContainer().getSelected() == null) {
             ctx.getErrors().add(new PMMessage(ENTITY, "unknow.item"));
             throw new PMException();

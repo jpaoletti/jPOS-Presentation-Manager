@@ -17,10 +17,7 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.List;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Operation;
 
@@ -47,7 +44,7 @@ public abstract class EntityActionSupport extends ActionSupport {
         super.prepare(ctx);
         
         configureEntityContainer(ctx);
-        
+
         String requrl = ctx.getRequest().getRequestURL().toString();
         String operationId = requrl.substring(requrl.lastIndexOf("/")+1, requrl.lastIndexOf("."));
         final Operation operation = (ctx.hasEntity()) ? ctx.getEntity().getOperations().getOperation(operationId) : null;
