@@ -17,19 +17,10 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.jpos.core.ConfigurationException;
 
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
-import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.EntityOwner;
-import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMLogger;
@@ -37,107 +28,71 @@ import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
+import org.jpos.util.LogEvent;
+import org.jpos.util.Logger;
 
-public abstract class FieldProcessingActionSupport extends EntityActionSupport{
-    
+public abstract class FieldProcessingActionSupport extends EntityActionSupport {
+
     protected void proccessField(PMStrutsContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
-        //Object object = rc.getSelected();
-        /*Collection<Object> moc = getModifiedOwnerCollection(ctx, f.getId());
-        if(moc!=null){
-            Object obj = wrapper.getInstance();
-            
+        String eid = "f_" + f.getId();
+        String s = getParamValues(ctx, eid, ";");
+        LogEvent evt = PMLogger.getLog().createDebug();
+        evt.addMessage("Field [" + eid + "] ");
+        int i = 0;
+        if(s==null) s="";
+        while (s != null) {
+            evt.addMessage("    Object to convert: " + s);
             try {
-                Collection<Object> collection = (Collection<Object>) EntitySupport.get(obj, f.getProperty());
-                if(collection==null) {
-                    String collection_class = ctx.getEntity().getOwner().getEntityCollectionClass();
-                    collection = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance ( collection_class );
-                    EntitySupport.set(obj, f.getProperty(), collection);
+                Object o = wrapper.getInstance(i);
+                Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
+                ctx.put(PM_FIELD, f);
+                ctx.put(PM_FIELD_VALUE, s);
+                ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
+                Object converted = converter.build(ctx);
+                evt.addMessage("    Object converted: " + converted);
+                if (validateField(ctx, f, wrapper, converted)) {
+                    PMEntitySupport.set(o, f.getProperty(), converted);
                 }
-                collection.clear();
-
-                for (Object object : moc) {
-                    System.out.println("Object: "+object);
-                    final Entity weak = ctx.getEntity().getWeak(f);
-                    final EntityOwner owner = weak.getOwner();
-                    Object o = ctx.getEntity().getDataAccess().refresh(ctx, object);
-                    System.out.println("Object: "+o);
-                    //I must process each child property
-                    for (Field field : weak.getAllFields()) {
-                        EntitySupport.set(o, field.getProperty(), EntitySupport.get(object, field.getProperty()));
-                    }
-                    //I need to set the backward property
-                    final String lp = owner.getLocalProperty();
-                    if(lp != null){
-                        System.out.println("Debug 1: "+ lp + " " + o + " "+obj);
-                        EntitySupport.set(o, lp, obj);
-                    }
-                    //I need to set the position property
-                    String pos = owner.getLocalPosition();
-                    if( pos != null){
-                        List tmp = new ArrayList(collection);
-                        System.out.println("Debug 2: "+pos + " " + o + " "+tmp.indexOf(object));
-                        EntitySupport.set(o, pos, tmp.indexOf(object));
-                    }
-                    collection.add(o);
-                }
-            } catch (ConfigurationException ex) {
-                ex.printStackTrace();
+            } catch (IgnoreConvertionException e) {
+                //Do nothing, just ignore conversion.
             }
-        }else{*/
-             String eid = "f_" + f.getId();
-             String s = getParamValues(ctx, eid, ";");
-             PMLogger.debug(this,"Field ["+eid + "] "+s);
-             int i = 0;
-             while(s != null){
-                PMLogger.debug(this,"Object to convert: "+s);
-                try {
-                    Object o = wrapper.getInstance(i);
-                    Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
-                    ctx.put(PM_FIELD, f);
-                    ctx.put(PM_FIELD_VALUE, s);
-                    ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
-                    Object converted = converter.build(ctx);
-                    PMLogger.debug(this,"Object converted: "+converted);
-                    if(validateField(ctx, f, wrapper, converted))
-                        PMEntitySupport.set(o, f.getProperty(), converted);
-                } catch (IgnoreConvertionException e) {
-                     //Do nothing, just ignore conversion.
-                }
-                i++;
-                s = getParamValues(ctx, eid+"_"+i, ";");
-             }
-        //}
+            i++;
+            s = getParamValues(ctx, eid + "_" + i, ";");
+        }
+        Logger.log(evt);
     }
 
     private boolean validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, Object o) throws PMException {
         boolean ok = true;
-        if(field.getValidators()!= null){
-             for (Validator fv : field.getValidators()) {
-                 ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
-                 ctx.put(PM_FIELD, field) ;
-                 ctx.put(PM_FIELD_VALUE, o);
-                 ValidationResult vr = fv.validate(ctx);
-                 ctx.getErrors().addAll(vr.getMessages());
-                 ok = ok && vr.isSuccessful();
-                 ///if(! vr.isSuccessful()) throw new PMException();
-             }
-         }
+        if (field.getValidators() != null) {
+            for (Validator fv : field.getValidators()) {
+                ctx.put(PM_ENTITY_INSTANCE, wrapper.getInstance());
+                ctx.put(PM_FIELD, field);
+                ctx.put(PM_FIELD_VALUE, o);
+                ValidationResult vr = fv.validate(ctx);
+                ctx.getErrors().addAll(vr.getMessages());
+                ok = ok && vr.isSuccessful();
+            }
+        }
         return ok;
     }
 
     private String getParamValues(PMStrutsContext ctx, String name, String separator) {
         String[] ss = ctx.getRequest().getParameterValues(name);
-        if(ss!=null){
+        if (ss != null) {
             StringBuilder s = new StringBuilder();
-            if(ss!=null && ss.length > 0)s.append(ss[0]);
-            
+            if (ss != null && ss.length > 0) {
+                s.append(ss[0]);
+            }
+
             //In this case we have a multivalue input
             for (int i = 1; i < ss.length; i++) {
-                 s.append(separator);
-                 s.append(ss[i]);
+                s.append(separator);
+                s.append(ss[i]);
             }
             return s.toString();
-        }else
+        } else {
             return null;
+        }
     }
 }
