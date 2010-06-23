@@ -25,6 +25,7 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.util.LogEvent;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -34,16 +35,22 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  */
 public class MenuItemLocationsParser extends DefaultHandler{
+    private static final String TAB = "    ";
     private String conf;
     private Map<String,MenuItemLocation> locations;
+    private LogEvent evt;
+    private boolean error = false;
     
-    public MenuItemLocationsParser (String conf) {
+    public MenuItemLocationsParser (LogEvent evt, String conf) {
         this.setConf(conf);
+        this.evt = evt;
         init();
     }
     
     private void init() {
         locations = new HashMap<String, MenuItemLocation>();
+        evt.addMessage(TAB+"Locations");
+        error = false;
         parseConfig();        
     }
     
@@ -63,10 +70,10 @@ public class MenuItemLocationsParser extends DefaultHandler{
             String clazz = attributes.getValue("class");
             try {
                 locations.put(id, (MenuItemLocation) EntitySupport.newObjectOf(clazz));
-                PMLogger.info("Added location: "+id+" ["+clazz+"]");
+                evt.addMessage(TAB+TAB+String.format("[%s] %s", id,clazz));
             } catch (Exception e) {
-                PMLogger.warn("Unable to add location: "+id+" ["+clazz+"]");
-                PMLogger.error(e);
+                evt.addMessage(TAB+TAB+"Error loading location: "+id+" ["+clazz+"]");
+                error = true;
             }
         }
     }
@@ -90,5 +97,9 @@ public class MenuItemLocationsParser extends DefaultHandler{
      */
     public Map<String,MenuItemLocation> getLocations() {
         return locations;
+    }
+
+    public boolean hasError() {
+        return error;
     }
 }

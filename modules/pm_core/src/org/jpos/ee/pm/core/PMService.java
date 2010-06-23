@@ -28,6 +28,8 @@ import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 import org.jpos.ee.pm.menu.MenuItemLocationsParser;
 import org.jpos.q2.QBeanSupport;
+import org.jpos.util.LogEvent;
+import org.jpos.util.Logger;
 import org.jpos.util.NameRegistrar;
 
 /**Presentation Manager service bean.
@@ -36,6 +38,8 @@ import org.jpos.util.NameRegistrar;
   * http://github.com/jpaoletti/jPOS-Presentation-Manager
   * */
 public class PMService extends QBeanSupport implements Constants{
+    protected static final String TAB = "    ";
+    protected static final String ERR = " ==>";
     protected Map<Object,Entity> entities;
     protected Map<String,MenuItemLocation> locations;
     private Map<Object, Monitor> monitors;
@@ -48,72 +52,112 @@ public class PMService extends QBeanSupport implements Constants{
     private String contact;
     private String defaultDataAccess;
     private PersistenceManager persistenceManager;
+    private boolean error;
     
     protected void initService() throws Exception {
+        error = false;
         PMLogger.setLog(getLog());
         PMLogger.setDebug(cfg.getBoolean("debug"));
-        
-        getLog().info ("Entity Manager activated");
-        EntityParser parser = new EntityParser();
-        loadEntities(parser);
-        loadMonitors(parser);
-        loadLocations();
-        template = cfg.get("template");
-        if(template==null || template.compareTo("")==0) template="default";
-        
-        defaultDataAccess = cfg.get("default-data-access", "org.jpos.ee.pm.core.DataAccessDB");
-        
-        appversion = cfg.get("appversion");
-        if(appversion==null || appversion.compareTo("")==0) appversion="1.0.0";
 
-        title = cfg.get("title");
-        if(title==null || title.compareTo("")==0) title="jpos.title";
-
-        subtitle = cfg.get("subtitle");
-        if(subtitle==null || subtitle.compareTo("")==0) subtitle="pm.title";
-
-        logo = cfg.get("logo");
-        if(logo==null || logo.compareTo("")==0) logo="logo.png";
-
-        contact = cfg.get("contact");
-        if(contact==null || contact.compareTo("")==0) contact="mailto:jpaoletti@angras.com.ar";
-
+        LogEvent evt = getLog().createInfo();
+        evt.addMessage("Presentation Manager activated");
         try {
-            setLoginRequired(cfg.getBoolean("login-required")); 
-        } catch (Exception e) {
-            setLoginRequired(true);
+            EntityParser parser = new EntityParser();
+            loadEntities(evt, parser);
+            loadMonitors(evt, parser);
+            loadLocations(evt);
+            evt.addMessage(TAB + "Configuration");
+            template = cfg.get("template");
+            if (template == null || template.compareTo("") == 0) {
+                template = "default";
+
+            }
+            evt.addMessage(TAB + TAB + "Template: " + template);
+
+            defaultDataAccess = cfg.get("default-data-access", "org.jpos.ee.pm.core.DataAccessDB");
+            evt.addMessage(TAB + TAB + "Default Data Access: " + defaultDataAccess);
+
+            appversion = cfg.get("appversion");
+            if (appversion == null || appversion.compareTo("") == 0) {
+                appversion = "1.0.0";
+
+            }
+            evt.addMessage(TAB + TAB + "Application version: " + appversion);
+
+            title = cfg.get("title");
+            if (title == null || title.compareTo("") == 0) {
+                title = "jpos.title";
+
+            }
+            evt.addMessage(TAB + TAB + "Title: " + title);
+
+            subtitle = cfg.get("subtitle");
+            if (subtitle == null || subtitle.compareTo("") == 0) {
+                subtitle = "pm.title";
+
+            }
+            evt.addMessage(TAB + TAB + "Subtitle: " + subtitle);
+
+            contact = cfg.get("contact");
+            if (contact == null || contact.compareTo("") == 0) {
+                contact = "mailto:jpaoletti@angras.com.ar";
+
+            }
+            evt.addMessage(TAB + TAB + "Contact: " + contact);
+
+            try {
+                setLoginRequired(cfg.getBoolean("login-required"));
+            } catch (Exception e) {
+                setLoginRequired(true);
+            }
+            evt.addMessage(TAB + TAB + "Login Required: " + loginRequired);
+
+            setPersistenceManager((PersistenceManager) Class.forName(cfg.get("persistence-manager", "org.jpos.ee.pm.core.DBPersistenceManager")).newInstance());
+            evt.addMessage(TAB + TAB + "Persistance Manager: " + getPersistenceManager().getClass().getName());
+        } catch (Exception exception) {
+            getLog().error(exception);
+            error = true;
         }
-        
-        if(loginRequired) getLog().info("Login Required");
-        else getLog().info("Login Not Required");
-        
-        setPersistenceManager((PersistenceManager)Class.forName(cfg.get("persistence-manager", "org.jpos.ee.pm.core.DBPersistenceManager")).newInstance());
-                
-        NameRegistrar.register (getCustomName(), this);
+        if(!error){
+            NameRegistrar.register (getCustomName(), this);
+        }else{
+            evt.addMessage("error","One or more errors were found. Unable to start jPOS-PM");
+        }
+        Logger.log(evt);
     }
 
-    private void loadMonitors(EntityParser parser) throws FileNotFoundException {
+    private void loadMonitors(LogEvent evt, EntityParser parser) throws FileNotFoundException {
+        evt.addMessage(TAB+"Monitors");
         Map<Object,Monitor> result = new HashMap<Object,Monitor>();
         String[] ss = cfg.getAll ("monitor");
         for (Integer i=0; i<ss.length; i++) {
-            Monitor m = parser.parseMonitorFile(ss[i]);
-            result.put (m.getId(), m);
-            result.put (i, m);
-            m.setService(this);
-            m.getSource().init();
-            getLog().info (m.toString());
-            Thread thread = new Thread(m);
-            m.setThread(thread);
-            thread.start();
+            try {
+                Monitor m = parser.parseMonitorFile(ss[i]);
+                result.put(m.getId(), m);
+                result.put(i, m);
+                m.setService(this);
+                m.getSource().init();
+                Thread thread = new Thread(m);
+                m.setThread(thread);
+                thread.start();
+                evt.addMessage(TAB + TAB + m.getId());
+            } catch (Exception exception) {
+                getLog().error(exception);
+                evt.addMessage(TAB + TAB + ERR+ "Error loading "+ss[i]);
+                error = true;
+            }
         }
         setMonitors(result);
     }
 
-    private void loadLocations() {
-        MenuItemLocationsParser parser = new MenuItemLocationsParser("cfg/pm.locations.xml");
+    private void loadLocations(LogEvent evt) {
+        MenuItemLocationsParser parser = new MenuItemLocationsParser(evt, "cfg/pm.locations.xml");
         locations = parser.getLocations();
-        if(locations == null || locations.size()==0)
-            getLog().warn("There is no location defined!");
+        if(locations == null || locations.size()==0){
+            evt.addMessage(TAB+TAB+ERR+"No location defined!");
+            error = true;
+        }
+        if(parser.hasError()) error = true;
     }
 
     public static String getCustomName() {
@@ -127,15 +171,28 @@ public class PMService extends QBeanSupport implements Constants{
         return s;
     }
 
-    private void loadEntities(EntityParser parser) throws FileNotFoundException {
+    private void loadEntities(LogEvent evt, EntityParser parser) throws FileNotFoundException {
+        evt.addMessage(TAB+"Entities");
         Map<Object,Entity> m = new HashMap<Object,Entity>();
         String[] ss = cfg.getAll ("entity");
         for (Integer i=0; i<ss.length; i++) {
-            Entity e = parser.parseEntityFile(ss[i]);
-            m.put (e.getId(), e);
-            m.put (i, e);
-            e.setService(this);
-            getLog().info (e.toString());
+            try {
+                Entity e = parser.parseEntityFile(ss[i]);
+                try{
+                    Class.forName(e.getClazz());
+                    m.put(e.getId(), e);
+                    m.put(i, e);
+                    e.setService(this);
+                    evt.addMessage(String.format(TAB + TAB + "[%-30s] %s", e.getId(), e.getClazz()));
+                } catch (ClassNotFoundException cnte){
+                    evt.addMessage(TAB + TAB + ERR +String.format("Class '%s' not found in %s",e.getClazz(), ss[i]));
+                    error = true;
+                }
+            } catch (Exception exception) {
+                getLog().error(exception);
+                evt.addMessage(TAB + TAB +ERR+ "Error loading "+ss[i]);
+                error = true;
+            }
         }
         entities = m;
     }
