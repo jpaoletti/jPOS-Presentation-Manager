@@ -36,6 +36,7 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
             Collection<Object> result = getCollection(ctx);
             List<?> list = recoverList(c, getConfig("entity"), true);
 
+            result.clear();
             String s = ctx.getString(PM_FIELD_VALUE);
             if(s.trim().compareTo("")==0) return result;
             String[] ss = s.split(";");
