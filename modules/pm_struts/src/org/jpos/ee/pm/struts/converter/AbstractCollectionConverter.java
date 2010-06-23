@@ -19,7 +19,7 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
 
     public void saveList(PMStrutsContext ctx, String eid){
         try {
-            ctx.getSession().setAttribute(getTmpName(ctx, eid), getList(ctx));
+            ctx.getSession().setAttribute(getTmpName(ctx, eid), getList(ctx,null));
         } catch (PMException ex) {
             PMLogger.error(ex);
         }
@@ -36,9 +36,9 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
         }
     }
 
-    public List<?> getList(PMStrutsContext ctx) throws PMException {
+    public List<?> getList(PMStrutsContext ctx, String entity_id) throws PMException {
         final String filter = getConfig("filter");
-        final String eid = getConfig("entity");
+        final String eid = (entity_id==null)?getConfig("entity"):entity_id;
 
         ListFilter lfilter = null;
         if( filter != null && filter.compareTo("null") != 0 && filter.compareTo("") != 0) {
