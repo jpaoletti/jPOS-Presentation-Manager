@@ -17,10 +17,17 @@
  */
 package org.jpos.ee.pm.struts.converter;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
+import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.struts.PMEntitySupport;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class WeakConverter extends StrutsEditConverter {
 
@@ -41,5 +48,19 @@ public class WeakConverter extends StrutsEditConverter {
         sb.append(field.getProperty());
 
         return super.visualize(sb.toString());
+    }
+
+    public static Collection getCollection(PMStrutsContext ctx) throws PMException{
+        final Collection collection = (Collection) PMEntitySupport.get(ctx.getSelected().getInstance(), ctx.getRequest().getParameter("property"));
+        final List<Object> result = new ArrayList<Object>();
+        final Entity entity = getEntity(ctx);
+        for (Object object : collection) {
+            result.add(entity.getDataAccess().refresh(ctx, object));
+        }
+        return result;
+    }
+
+    public static Entity getEntity(PMStrutsContext ctx){
+        return PMEntitySupport.getInstance().getPmservice().getEntity((String) ctx.getRequest().getParameter("weakid"));
     }
 }

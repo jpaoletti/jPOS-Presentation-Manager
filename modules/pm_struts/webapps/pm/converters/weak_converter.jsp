@@ -17,16 +17,18 @@
  *--%>
 <%@page import="org.jpos.ee.Constants" import="java.util.Collection"%>
 <%@page import="org.jpos.ee.pm.converter.Converter" import="org.jpos.ee.pm.core.Entity"%>
+<%@page import=" org.jpos.ee.pm.struts.converter.WeakConverter" %>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
 <%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
-<bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
+<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
+<bean:define id="ctx" name="PM_CONTEXT" scope="request" type="org.jpos.ee.pm.struts.PMStrutsContext" />
 <%
-    Entity weak = es.getPmservice().getEntity(request.getParameter("weakid"));
-    Collection listv = (Collection)es.get(tmp_object, request.getParameter("property"));
+    Entity weak = WeakConverter.getEntity(ctx);
+    Collection listv = WeakConverter.getCollection(ctx);
     request.setAttribute("weak", weak);
     request.setAttribute("woperation", weak.getOperations().getOperation("list"));
     request.setAttribute("contents", listv);
