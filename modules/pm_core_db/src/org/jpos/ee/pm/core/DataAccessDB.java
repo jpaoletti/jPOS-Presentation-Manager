@@ -90,7 +90,7 @@ public class DataAccessDB implements DataAccess, Constants {
             c = db.session().createCriteria(Class.forName(entity.getClazz()));
         } catch (ClassNotFoundException e) {
             //TODO finish
-            ctx.getErrors().add(new PMMessage(""));
+            ctx.getErrors().add(new PMMessage("class.not.found"));
             throw new PMException();
         }
         
@@ -128,7 +128,9 @@ public class DataAccessDB implements DataAccess, Constants {
 
     public Object refresh(PMContext ctx, Object o) throws PMException {
         DB db = (DB) ctx.get(PM_DB);
-        return db.session().merge(o);
+        final Object merged = db.session().merge(o);
+        db.session().refresh(merged);
+        return  merged;
     }
 
     public EntityFilter createFilter(PMContext ctx) throws PMException {
