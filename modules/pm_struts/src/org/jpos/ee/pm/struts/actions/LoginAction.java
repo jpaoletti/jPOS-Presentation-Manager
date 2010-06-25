@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jpos.ee.pm.struts.actions;
 
 import org.apache.struts.action.ActionMessages;
@@ -37,56 +36,66 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
 public class LoginAction extends EntityActionSupport {
 
     /** Opens an hibernate transaction before doExecute*/
-    protected boolean openTransaction() { return false;    }
+    protected boolean openTransaction() {
+        return false;
+    }
+
     /**Makes the operation generate an audithory entry*/
-    protected boolean isAudited() {    return false; }
+    protected boolean isAudited() {
+        return false;
+    }
+
     /**Forces execute to check if any user is logged in*/
-    protected boolean checkUser(){     return false;}
+    protected boolean checkUser() {
+        return false;
+    }
+
     /**Forces execute to check if there is an entity defined in parameters*/
-    protected boolean checkEntity(){ return false; }
+    protected boolean checkEntity() {
+        return false;
+    }
 
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
-        if(getPMService().isLoginRequired()){
+        if (getPMService().isLoginRequired()) {
             return super.prepare(ctx);
-        }else{
+        } else {
             return true;
         }
     }
+
     protected void doExecute(PMStrutsContext ctx) throws PMException {
-         if(getPMService().isLoginRequired()){
+        if (getPMService().isLoginRequired()) {
             ctx.getSession().setAttribute(USER, null);
             ctx.getSession().setAttribute(MENU, null);
-            
-            try {
-                 PMSecurityUser u = authenticate(ctx);
-    
-                 loadMenu(ctx, u);
-                 
-                 if (u.isChangePassword())
-                     throw new PMForwardException("changepassword");
 
-             } catch (UserNotFoundException e) {
-                    ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_security.user.not.found"));
-                    throw new PMException();
-             } catch (InvalidPasswordException e) {
-                    ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_security.password.invalid"));
-                    throw new PMException();
-             } catch (Exception e) {
+            try {
+                PMSecurityUser u = authenticate(ctx);
+                loadMenu(ctx, u);
+                if (u.isChangePassword()) {
+                    throw new PMForwardException("changepassword");
+                }
+
+            } catch (UserNotFoundException e) {
+                throw new PMException("pm_security.user.not.found");
+            } catch (InvalidPasswordException e) {
+                throw new PMException("pm_security.password.invalid");
+            } catch (Exception e) {
                 PMLogger.error(e);
-                ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.unespected.error"));
-                throw new PMException();
-             }
-         }else{
-             PMSecurityUser u = new PMSecurityUser();
-             u.setName(" ");
-             loadMenu(ctx, u);
-         }
+                throw new PMException("pm_core.unespected.error");
+            }
+        } else {
+            PMSecurityUser u = new PMSecurityUser();
+            u.setName(" ");
+            loadMenu(ctx, u);
+        }
     }
-    private void loadMenu(PMStrutsContext ctx, PMSecurityUser u) throws PMException{
-        Menu menu = MenuSupport.getMenu(u,getPMService());
-         ctx.getSession().setAttribute(USER, u);
-         ctx.getSession().setAttribute(MENU, menu);
+
+    private void loadMenu(PMStrutsContext ctx, PMSecurityUser u) throws PMException {
+        Menu menu = MenuSupport.getMenu(u, getPMService());
+        ctx.getSession().setAttribute(USER, u);
+        ctx.getSession().setAttribute(MENU, menu);
     }
+
     /**
      * @param ctx The context with all the parameters
      * @return The user
@@ -96,9 +105,10 @@ public class LoginAction extends EntityActionSupport {
         PMSecurityUser u = null;
         LoginActionForm f = (LoginActionForm) ctx.getForm();
         String seed = ctx.getSession().getId();
-        u = getConnector(ctx).authenticate(f.getUsername(), decrypt(f.getPassword(),seed));
+        u = getConnector(ctx).authenticate(f.getUsername(), decrypt(f.getPassword(), seed));
         return u;
     }
+
     private PMSecurityConnector getConnector(PMContext ctx) {
         return PMSecurityService.getService().getConnector(ctx);
     }

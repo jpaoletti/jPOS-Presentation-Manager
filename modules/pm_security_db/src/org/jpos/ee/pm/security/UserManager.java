@@ -32,6 +32,8 @@ import org.hibernate.criterion.Restrictions;
 import org.jpos.ee.DB;
 import org.jpos.ee.MD5;
 import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.security.core.InvalidPasswordException;
+import org.jpos.ee.pm.security.core.PMSecurityException;
 import org.jpos.ee.pm.security.rules.SECRule;
 import org.jpos.iso.ISOUtil;
 
@@ -119,7 +121,7 @@ public class UserManager {
      * @param pass hash
      * @throws SECException if invalid user/pass
      */
-    public SECUser getUserByNick (String nick, String seed, String pass)throws HibernateException, SECException{
+    public SECUser getUserByNick (String nick, String seed, String pass)throws HibernateException, SECException, PMSecurityException{
         SECUser u = getUserByNick (nick);
         if(u==null)throw new SECException ("pm_security.user.not.found");
         try {

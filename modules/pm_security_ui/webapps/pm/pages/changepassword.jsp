@@ -41,7 +41,7 @@
 					</tr>
 				</tbody>
 				<tfoot>
-					<tr><td colspan="2"><html:errors property="entity"/></td></tr>
+					<tr><td colspan="2"><html:errors /></td></tr>
 				</tfoot>
 			</table>
 			<html:submit styleId="${entity.id}_submit" titleKey="submit"  />

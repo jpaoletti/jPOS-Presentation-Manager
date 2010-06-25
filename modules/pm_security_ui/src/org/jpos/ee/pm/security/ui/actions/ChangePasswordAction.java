@@ -21,6 +21,7 @@ import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.security.core.InvalidPasswordException;
 import org.jpos.ee.pm.security.core.PMSecurityConnector;
 import org.jpos.ee.pm.security.core.PMSecurityException;
 import org.jpos.ee.pm.security.core.PMSecurityService;
@@ -61,8 +62,11 @@ public class ChangePasswordAction extends RowActionSupport {
             if(!ctx.getErrors().isEmpty()) 
                 throw new PMException();
             getConnector(ctx).changePassword(u.getUsername(), f.getActual(), f.getNewpass() );
+        } catch (InvalidPasswordException e){
+            throw new PMException("pm_security.password.invalid");
         } catch (PMSecurityException e) {
-            ctx.getErrors().add(new PMMessage("actual",e.getMessage()));
+            e.printStackTrace();
+            throw e;
         }
         
         if(!ctx.getErrors().isEmpty()) 

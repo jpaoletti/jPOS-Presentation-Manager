@@ -1,18 +1,16 @@
-<?xml version="1.0"?>
-<!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="org.jpos.ee.pm.security.rules">
   <class name="SECRule" table="sec_rules">
-      <id name="id" column="id" type="long">
-          <generator class="native" />
-      </id>
-      <property name="description" type="string"/>
-      <property name="applyTo" />
-      <property name="parameter" />
-      <property name="validatorClass" column="validator_class" />
-      <property name="enabled" type="yes_no" />
-      <many-to-one name="updateUser" column="update_user" />
-      <property name="updateDate" column="update_date" />
+    <id column="id" name="id" type="long">
+      <generator class="native"/>
+    </id>
+    <property name="description" type="string"/>
+    <property name="applyTo"/>
+    <property name="parameter"/>
+    <property column="validator_class" name="validatorClass"/>
+    <property name="enabled" type="yes_no"/>
+    <many-to-one column="update_user" name="updateUser"/>
+    <property column="update_date" name="updateDate"/>
   </class>
 </hibernate-mapping>

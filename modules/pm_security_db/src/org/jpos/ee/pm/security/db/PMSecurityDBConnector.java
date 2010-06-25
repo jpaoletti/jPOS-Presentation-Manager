@@ -65,8 +65,11 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
             }
             user.setPassword( encryptPassword(username, newpassword) );
             db.save(user);
+        } catch (PMSecurityException e ){
+            throw e;
         } catch (Exception e) {
             getLog().error(e);
+            throw new PMSecurityException("unespected.error");
         }
     }
     
