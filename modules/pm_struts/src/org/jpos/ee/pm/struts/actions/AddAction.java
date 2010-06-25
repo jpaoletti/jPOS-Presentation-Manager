@@ -54,6 +54,9 @@ public class AddAction extends RowActionSupport {
             if(f.shouldDisplay(ctx.getOperation().getId()))
                 proccessField(ctx, f, ctx.getSelected());
         }
+        if(!ctx.getErrors().isEmpty())
+            throw new PMException();
+
         if(ctx.getEntity().isWeak()){
             final Object parent = ctx.getEntityContainer().getOwner().getSelected().getInstance();
             final EntityOwner owner = ctx.getEntity().getOwner();
@@ -61,8 +64,6 @@ public class AddAction extends RowActionSupport {
             EntitySupport.set(instance,owner.getLocalProperty(), parent);
             getOwnerCollection(ctx).add(instance);
         }
-        if(!ctx.getErrors().isEmpty()) 
-            throw new PMException();
         
         return true;
     }
