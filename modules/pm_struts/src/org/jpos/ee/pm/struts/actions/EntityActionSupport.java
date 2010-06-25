@@ -195,32 +195,12 @@ public abstract class EntityActionSupport extends ActionSupport {
         }
         return null;
     }
-
     
     protected Collection<Object> getOwnerCollection(PMStrutsContext ctx) throws PMException {
         final Object object = refreshSelectedObject(ctx, ctx.getEntityContainer().getOwner());
         final Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(object, ctx.getEntity().getOwner().getEntityProperty());
         return collection;
     }
-
-    /*protected List<Object> getModifiedOwnerCollection(PMStrutsContext ctx, String field) {
-        List<Object> collection = (List<Object>) ctx.getSession().getAttribute(field+"_"+MODIFIED_OWNER_COLLECTION);
-        return collection;
-    }
-    
-    protected void setModifiedOwnerCollection(PMStrutsContext ctx, String field, List<Object> list) {
-        ctx.getSession().setAttribute(field+"_"+MODIFIED_OWNER_COLLECTION, list);
-    }
-
-    protected void clearModifiedOwnerCollection(PMStrutsContext ctx) {
-        Enumeration<String> e = ctx.getSession().getAttributeNames();
-        while(e.hasMoreElements()){
-            String s = e.nextElement();
-            if(s.endsWith(MODIFIED_OWNER_COLLECTION)){
-                ctx.getSession().setAttribute(s, null);
-            }
-        }
-    }*/
     
     protected EntityContainer getEntityContainer(PMStrutsContext ctx, String eid) {
         return (EntityContainer) ctx.getRequest().getSession().getAttribute(EntityContainer.buildId(HASH, eid));
