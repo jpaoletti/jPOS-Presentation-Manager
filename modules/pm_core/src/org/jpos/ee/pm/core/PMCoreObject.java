@@ -25,7 +25,7 @@ import org.jpos.util.Log;
  * helpers.
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
-public class PMCoreObject implements Constants{
+public abstract class PMCoreObject implements Constants{
     private PMService service;
     private Boolean debug;
 
