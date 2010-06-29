@@ -32,10 +32,10 @@ public class ShowLocalizedStringConverter extends ShowStringConverter{
         throw new IgnoreConvertionException("");
     }
 
-    public String visualize(Entity entity, Field field, Operation operation,
-            EntityInstanceWrapper einstance, String extra)
-            throws ConverterException {
+    public String visualize(PMContext ctx) throws ConverterException {
+        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        Field field = (Field) ctx.get(PM_FIELD);
         String s = (String) getValue(einstance, field);
-        return super.visualize("localized_string_converter.jsp?value="+s,extra);
+        return super.visualize("localized_string_converter.jsp?value="+s,"");
     }
 }
