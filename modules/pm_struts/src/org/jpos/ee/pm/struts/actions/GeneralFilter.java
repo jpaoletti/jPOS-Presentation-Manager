@@ -43,6 +43,7 @@ public class GeneralFilter implements Filter,Constants {
 
     public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest)request;
+        req.setAttribute("pm", PresentationManager.pm);
         if(PresentationManager.pm==null) {
             chain.doFilter(request, response);
             return ;
@@ -52,7 +53,6 @@ public class GeneralFilter implements Filter,Constants {
             PMEntitySupport es = PMEntitySupport.getInstance();
             es.setContext_path(req.getContextPath());
             req.getSession().setAttribute(ENTITY_SUPPORT, es);
-            req.getSession().setAttribute("pm", PresentationManager.pm);
         }
         PMStrutsContext ctx = new PMStrutsContext();
         ctx.setRequest((HttpServletRequest) request);
