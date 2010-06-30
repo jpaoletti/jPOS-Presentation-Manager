@@ -22,7 +22,6 @@ import java.util.List;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
 /**Converter for integer <br>
@@ -52,7 +51,7 @@ public class EditSingleAggregationConverter extends AbstractCollectionConverter 
             List<?> list = recoverList((PMStrutsContext) ctx,getConfig("entity"),true);
             return list.get(x);
         } catch (Exception e1) {
-            PMLogger.error(e1);
+            ctx.getPresentationManager().error(e1);
             throw new ConverterException("Cannot convert single aggregation");
         }
     }

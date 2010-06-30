@@ -23,7 +23,6 @@ import org.jpos.ee.pm.core.DataAccess;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.security.core.PMSecurityConnector;
 import org.jpos.ee.pm.security.core.PMSecurityException;
 import org.jpos.ee.pm.security.core.PMSecurityPermission;
@@ -53,7 +52,7 @@ public class DataAccessPerm implements DataAccess {
             Integer t = (count == null)?list.size():(from+count > list.size()?list.size():from+count);
             return list.subList(f, t);
         } catch (PMSecurityException e) {
-            PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
             return null;
         }
     }

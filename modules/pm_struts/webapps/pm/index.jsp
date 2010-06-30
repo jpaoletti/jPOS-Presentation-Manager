@@ -26,7 +26,7 @@
 	}
 </script>
 
-<logic:present name="es" property="pmservice">
+<logic:present name="pm">
 	<pm:page title="titles.index" >
 		<div id="page-container">
 		  <pm:header />
@@ -49,7 +49,7 @@
 	</pm:page>
 </logic:present>
 
-<logic:notPresent name="es" property="pmservice">
+<logic:notPresent name="pm">
 	<style>
 		#pm_error_div{
 			margin: 70px;

@@ -17,7 +17,7 @@
 --%>
 <%@tag description="Navigation bar" pageEncoding="UTF-8"%>
 <%@tag import="org.jpos.ee.pm.core.*"%>
-<%@attribute name="container" required="false" type="org.jpos.ee.pm.struts.EntityContainer" %>
+<%@attribute name="container" required="false" type="org.jpos.ee.pm.core.EntityContainer" %>
 <%@taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <c:if test="${not empty container}">
     <pm:navigation container="${container.owner}" />

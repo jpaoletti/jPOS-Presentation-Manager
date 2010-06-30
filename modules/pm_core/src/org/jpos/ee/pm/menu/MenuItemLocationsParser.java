@@ -24,7 +24,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.jpos.ee.pm.core.EntitySupport;
-import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.util.LogEvent;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -60,7 +60,7 @@ public class MenuItemLocationsParser extends DefaultHandler{
             SAXParser db = dbf.newSAXParser();
             db.parse(conf,this);
         }catch(Exception e) {
-            PMLogger.error(e);
+            PresentationManager.pm.error(e);
         }
     }
     
@@ -69,7 +69,7 @@ public class MenuItemLocationsParser extends DefaultHandler{
             String id = attributes.getValue("id");
             String clazz = attributes.getValue("class");
             try {
-                locations.put(id, (MenuItemLocation) EntitySupport.newObjectOf(clazz));
+                locations.put(id, (MenuItemLocation) PresentationManager.pm.newObjectOf(clazz));
                 evt.addMessage(TAB+TAB+String.format("[%s] %s", id,clazz));
             } catch (Exception e) {
                 evt.addMessage(TAB+TAB+"Error loading location: "+id+" ["+clazz+"]");

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.jpos.ee.pm.core.EntitySupport;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.ee.pm.security.SECException;
 import org.jpos.ee.pm.security.SECUser;
 
@@ -21,7 +22,7 @@ public class SECRule implements Serializable{
     public void validate(String username, String password) throws SECException{
         if(!isEnabled()) return;
         System.out.println("Validating: "+getValidatorClass());
-        SECRuleValidator srv = (SECRuleValidator) EntitySupport.newObjectOf(getValidatorClass());
+        SECRuleValidator srv = (SECRuleValidator) PresentationManager.pm.newObjectOf(getValidatorClass());
         if(getApplyTo() == 0)
             srv.validate(username, getParameter());
         else

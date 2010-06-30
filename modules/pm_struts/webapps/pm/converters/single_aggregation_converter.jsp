@@ -29,7 +29,7 @@
 	PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
     List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
 	request.setAttribute("collection", list);
-	Object selected = (Object)es.get(tmp_object, request.getParameter("prop"));
+	Object selected = (Object)ctx.getPresentationManager().get(tmp_object, request.getParameter("prop"));
 %>
 <select size="1" id="f_${param.f}" name="f_${param.f}">
 <c:if test="${param.with_null}">

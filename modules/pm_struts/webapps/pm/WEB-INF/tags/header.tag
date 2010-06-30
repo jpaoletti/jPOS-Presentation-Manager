@@ -7,13 +7,13 @@
 <div id="header">
 	<pm:topmenu />
 	<div id="logo">
-		<h1><a href="${es.context_path}"><pm:message key="${es.pmservice.title}"/></a></h1>
-		<h2><pm:message key="${es.pmservice.subtitle}"/></h2>
+		<h1><a href="${es.context_path}"><pm:message key="${pm.title}"/></a></h1>
+		<h2><pm:message key="${pm.subtitle}"/></h2>
 	</div>
 	<logic:present name="user">
 		<div id="userbox">
 		${user.name} &nbsp; |
-		<logic:equal value="true" name="es" property="pmservice.loginRequired">
+		<logic:equal value="true" name="pm" property="loginRequired">
 		&nbsp; <a href="javascript:loadPage('${es.context_path}/show.do?pmid=secuserprofile&identified=username:${user.username}');"><pm:message key="user.profile"/></a> &nbsp; |
         </logic:equal>
 		&nbsp; <a href="${es.context_path}/logout.do" title="<pm:message key="logout"/>"><pm:message key="logout"/></a>

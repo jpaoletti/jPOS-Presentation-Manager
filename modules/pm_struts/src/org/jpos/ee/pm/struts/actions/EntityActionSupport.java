@@ -23,9 +23,8 @@ import org.jpos.ee.pm.core.Operation;
 
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.core.PMService;
-import org.jpos.ee.pm.struts.EntityContainer;
+import org.jpos.ee.pm.core.EntityContainer;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.validator.ValidationResult;
@@ -75,13 +74,12 @@ public abstract class EntityActionSupport extends ActionSupport {
         /* Validate de operation*/
         validate(ctx);
         
-        final PMService service = PMEntitySupport.staticPmservice();
         final Operation operation = ctx.getOperation();
         Object tx = null;
         try{
             if(openTransaction()) {
-            	tx = service.getPersistenceManager().startTransaction(ctx);
-            	PMLogger.debug(this,"Started Transaction "+tx);
+            	tx = ctx.getPresentationManager().getPersistenceManager().startTransaction(ctx);
+            	ctx.getPresentationManager().debug(this, "Started Transaction "+tx);
             }
         	if(operation!= null && operation.getContext()!= null)
         		operation.getContext().preExecute(ctx);
@@ -97,26 +95,26 @@ public abstract class EntityActionSupport extends ActionSupport {
                 }*/
             try {
                 if(tx != null){
-                    PMLogger.debug(this,"Commiting Transaction "+tx);
-                    service.getPersistenceManager().commit(ctx,tx);
+                    ctx.getPresentationManager().debug(this, "Commiting Transaction "+tx);
+                    ctx.getPresentationManager().getPersistenceManager().commit(ctx,tx);
                 }
             } catch (Exception e) {
-                PMLogger.error(e);
+                ctx.getPresentationManager().error(e);
                 throw new PMException("pm.struts.cannot.commit.txn");
             }
             tx = null;
         } catch (PMException e) {
             throw e;
         } catch (Exception e) {
-        	PMLogger.error(e);
+        	ctx.getPresentationManager().error(e);
             throw new PMException(e);
         }finally{
             if(tx != null){
-                PMLogger.debug(this,"Rolling Back Transaction "+tx);
+                ctx.getPresentationManager().debug(this,"Rolling Back Transaction "+tx);
                 try {
-                    service.getPersistenceManager().rollback(ctx, tx);
+                    ctx.getPresentationManager().getPersistenceManager().rollback(ctx, tx);
                 } catch (Exception e) {
-                    PMLogger.error(e);
+                    ctx.getPresentationManager().error(e);
                 }
             }
         }
@@ -144,7 +142,7 @@ public abstract class EntityActionSupport extends ActionSupport {
                 ctx.getErrors().clear();
             }
             if(!ctx.hasEntityContainer()){
-                ctx.setEntityContainer(getPMService().newEntityContainer(pmid));
+                ctx.setEntityContainer(ctx.getPresentationManager().newEntityContainer(pmid));
                 if( checkEntity() ) {
                     ctx.getSession().setAttribute(pmid, ctx.getEntityContainer());
                 }else{
@@ -187,7 +185,7 @@ public abstract class EntityActionSupport extends ActionSupport {
             if(!entityContainer.isSelectedNew()){
                 Object o = ctx.getEntity().getDataAccess().refresh(ctx, origin.getInstance());
                 entityContainer.setSelected(new EntityInstanceWrapper(o));
-                if(o==null) PMLogger.warn("Fresh instance is null while origin was '"+origin.getInstance()+"'");
+                if(o==null) ctx.getPresentationManager().warn("Fresh instance is null while origin was '"+origin.getInstance()+"'");
                 return o;
             }else{
                 return origin.getInstance();
@@ -198,11 +196,11 @@ public abstract class EntityActionSupport extends ActionSupport {
     
     protected Collection<Object> getOwnerCollection(PMStrutsContext ctx) throws PMException {
         final Object object = refreshSelectedObject(ctx, ctx.getEntityContainer().getOwner());
-        final Collection<Object> collection = (Collection<Object>) PMEntitySupport.get(object, ctx.getEntity().getOwner().getEntityProperty());
+        final Collection<Object> collection = (Collection<Object>) ctx.getPresentationManager().get(object, ctx.getEntity().getOwner().getEntityProperty());
         return collection;
     }
     
     protected EntityContainer getEntityContainer(PMStrutsContext ctx, String eid) {
-        return (EntityContainer) ctx.getRequest().getSession().getAttribute(EntityContainer.buildId(HASH, eid));
+        return (EntityContainer) ctx.getRequest().getSession().getAttribute(EntityContainer.buildId(PresentationManager.HASH, eid));
     }
 }

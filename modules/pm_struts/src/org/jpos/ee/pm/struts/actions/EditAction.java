@@ -19,7 +19,6 @@ package org.jpos.ee.pm.struts.actions;
 
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
@@ -50,7 +49,7 @@ public class EditAction extends RowActionSupport {
     }
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
-        PMLogger.debug(this, "Updating '" + ctx.getEntity().getId() + "' to Data Access");
+        ctx.getPresentationManager().debug(this, "Updating '" + ctx.getEntity().getId() + "' to Data Access");
         ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
     }
 }

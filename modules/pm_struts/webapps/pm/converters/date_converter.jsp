@@ -24,7 +24,7 @@
 <script type='text/javascript'>
 $(document).ready(function() {
 	$('#f_${param.f}').datepicker({
-		buttonImage: '${es.context_path}/templates/${es.pmservice.template}/img/calendar.gif',
+		buttonImage: '${es.context_path}/templates/${pm.template}/img/calendar.gif',
 		buttonImageOnly: true, 
 		buttonText: '', 
 		showOn: 'both', 

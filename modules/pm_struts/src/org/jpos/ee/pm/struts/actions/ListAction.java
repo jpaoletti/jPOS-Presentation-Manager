@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.jpos.ee.pm.core.Operations;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PaginatedList;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.util.DisplacedList;
@@ -80,17 +79,17 @@ public class ListAction extends EntityActionSupport {
                 total = ctx.getEntity().getDataAccess().count(ctx);
             }
         } catch (Exception e) {
-            PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
             throw new PMException("pm.operation.cant.load.list");
         }
         rpp = pmlist.rpp();
         
-        PMLogger.debug(this, "List Contents: " + contents);
+        ctx.getPresentationManager().debug(this, "List Contents: " + contents);
         ctx.getEntityContainer().setList(pmlist);
         pmlist.setContents(new DisplacedList<Object>(contents));
         pmlist.setTotal(total);
 
-        PMLogger.debug(this, "Resulting list: " + pmlist);
+        ctx.getPresentationManager().debug(this, "Resulting list: " + pmlist);
         pmlist.setRowsPerPage(rpp);
     }
 

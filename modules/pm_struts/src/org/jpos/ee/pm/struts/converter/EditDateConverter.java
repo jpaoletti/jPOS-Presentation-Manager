@@ -48,7 +48,7 @@ public class EditDateConverter extends EditStringConverter {
             if (value != null)
                 return getDateFormat().parse ((String)value);
         } catch (ParseException e) {
-            //PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
         }
         return null;
     }

@@ -30,9 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.jpos.ee.Constants;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
-import org.jpos.ee.pm.core.PMService;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
@@ -43,13 +42,17 @@ public class GeneralFilter implements Filter,Constants {
     }
 
     public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
-        PMService pmservice = PMEntitySupport.staticPmservice();
         HttpServletRequest req = (HttpServletRequest)request;
+        if(PresentationManager.pm==null) {
+            chain.doFilter(request, response);
+            return ;
+        }
         PMEntitySupport o = (PMEntitySupport) req.getSession().getAttribute(ENTITY_SUPPORT);
         if(o == null){
             PMEntitySupport es = PMEntitySupport.getInstance();
             es.setContext_path(req.getContextPath());
             req.getSession().setAttribute(ENTITY_SUPPORT, es);
+            req.getSession().setAttribute("pm", PresentationManager.pm);
         }
         PMStrutsContext ctx = new PMStrutsContext();
         ctx.setRequest((HttpServletRequest) request);
@@ -59,21 +62,26 @@ public class GeneralFilter implements Filter,Constants {
         ctx.put(USER, ctx.getSession().getAttribute(USER));
         
         try {
-            pmservice.getPersistenceManager().init(ctx);
+            ctx.getPresentationManager().getPersistenceManager().init(ctx);
             
             chain.doFilter(request, response);
         } catch (ServletException e) {
-            PMLogger.error(e);
+            error(ctx, e);
             throw e;
         } catch (Exception e) {
-            PMLogger.error(e);
+            error(ctx, e);
         }finally{
             try {
-                pmservice.getPersistenceManager().finish(ctx);
+                ctx.getPresentationManager().getPersistenceManager().finish(ctx);
             } catch (Exception e) {
-                PMLogger.error(e);
+                error(ctx, e);
             }
         }
+    }
+
+    protected void error(PMStrutsContext ctx, Exception e) {
+        if(ctx.getPresentationManager() != null)
+            ctx.getPresentationManager().error(e);
     }
 
     public void init(FilterConfig arg0) throws ServletException {

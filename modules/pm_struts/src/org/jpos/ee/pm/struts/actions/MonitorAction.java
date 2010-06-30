@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.core.monitor.MonitorObserver;
@@ -32,7 +31,7 @@ public class MonitorAction extends ActionSupport {
             }else{
                 ctx.getSession().setAttribute(LAST_PM_ID,pmid);
             }
-            Monitor monitor = PMEntitySupport.getInstance().getPmservice().getMonitor(pmid);
+            Monitor monitor = ctx.getPresentationManager().getMonitor(pmid);
             if(monitor == null) {
                 ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm.struts.error.monitor.not.found", pmid));
                 throw new PMException();
@@ -55,7 +54,7 @@ public class MonitorAction extends ActionSupport {
                 try {
                     lines.addAll( watcher.getLines() );
                 } catch (Exception e) {
-                    PMLogger.error(e);
+                    ctx.getPresentationManager().error(e);
                     lines.add("ERROR C");
                 }
             }

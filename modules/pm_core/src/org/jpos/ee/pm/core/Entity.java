@@ -48,36 +48,30 @@ import java.util.Map;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class Entity extends PMCoreObject {
+
     /**Represents the entity id. This must me unique.*/
     private String id;
-    
     /**The full name of the class represented by the entity.*/
     private String clazz;
-    
     /**A filter for the list of instances of the entity.
      * <br/>{@code <listfilter class="a.class.implementing.ListFilter" />}
      * @see ListFilter */
     private ListFilter listfilter;
-    
     /**If defined, represents the order of the fields. 
      * <br/>{@code <order>field_id2 field_id3 field_id1</order>}
      * @see Field*/
     private String order;
-    
     /**If defined, indicates the id of another entity to inherits the fields, not the 
      * operations for now.
      * <br/>{@code <extendz>other_entity_id</extendz>}*/
     private String extendz;
-    
     /**The parent entity if extendz is defined*/
     private Entity extendzEntity;
-    
     /**Indicates if the entity is auditable so every time an instance is modified, the PM will
      * create an auditory entry of the change 
      * <br/><pre>{@code <auditable>true</auditable>}</pre> 
      * */
     private Boolean auditable;
-    
     /**Defines an owner to the entity. It makes this entity "weak".<br/>
      * <pre>
      * {@code
@@ -91,15 +85,12 @@ public class Entity extends PMCoreObject {
      * </pre>
      * @see EntityOwner*/
     private EntityOwner owner;
-    
     /**List of fields
      * @see Field*/
     private ArrayList<Field> fields;
-    
     /**Internal map to optimize getFieldById() method
      * @see #getFieldById(String)*/
-    private Map<String,Field> fieldsbyid;
-    
+    private Map<String, Field> fieldsbyid;
     /**Operations of the entity. Standard operations are "add", "edit", "delete", "show", "list"
      * but the programmer can define whatever he wants.
      * <br/>{@code <operations>...</operations>}
@@ -107,57 +98,56 @@ public class Entity extends PMCoreObject {
      * @see Operation
      * @see OperationContext*/
     private Operations operations;
-    
     /**A list of highlights.*/
     private Highlights highlights;
-    
     /** Data Access*/
     private DataAccess dataAccess;
-    
     /**Avoid counting items*/
     private Boolean noCount;
-    
     private List<Entity> weaks;
-    
+
     /**Default constructor*/
-    public Entity () {
+    public Entity() {
         super();
         fieldsbyid = null;
-        extendzEntity  = null;
+        extendzEntity = null;
     }
-    
-    public ArrayList<Field> getAllFields(){
+
+    public ArrayList<Field> getAllFields() {
         ArrayList<Field> r = new ArrayList<Field>();
-        if(getFields()!=null)
+        if (getFields() != null) {
             r.addAll(getFields());
-        if(getExtendzEntity() != null){
+        }
+        if (getExtendzEntity() != null) {
             for (Field field : getExtendzEntity().getAllFields()) {
-                if(!r.contains(field)) r.add(field);
+                if (!r.contains(field)) {
+                    r.add(field);
+                }
             }
         }
         return r;
     }
-    
-    public List<?> getList(PMContext ctx, EntityFilter filter) throws PMException{
-        return getList(ctx,filter, null, null);
+
+    public List<?> getList(PMContext ctx, EntityFilter filter) throws PMException {
+        return getList(ctx, filter, null, null);
     }
 
-    public List<?> getList(PMContext ctx) throws PMException{
-        EntityFilter filter = (this.equals(ctx.getEntity()))?ctx.getEntityContainer().getFilter():null;
-        return getList(ctx,filter,null, null);
+    public List<?> getList(PMContext ctx) throws PMException {
+        EntityFilter filter = (this.equals(ctx.getEntity())) ? ctx.getEntityContainer().getFilter() : null;
+        return getList(ctx, filter, null, null);
     }
-    
-    public List<?> getList(PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException{
+
+    public List<?> getList(PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException {
         ctx.put(PM_ENTITY, this);
-        List<?> list = getDataAccess().list(ctx,filter,from, count);
+        List<?> list = getDataAccess().list(ctx, filter, from, count);
         ctx.put(PM_ENTITY, null);
         return list;
     }
-    
+
     /**Getter for a field by its id
      * @param id The Field id
      * @return The Field with the given id*/
-    public Field getFieldById(String id){
+    public Field getFieldById(String id) {
         return getFieldsbyid().get(id);
     }
 
@@ -165,34 +155,34 @@ public class Entity extends PMCoreObject {
      * @return The mapped field list
      * */
     private Map<String, Field> getFieldsbyid() {
-        if(fieldsbyid == null){
+        if (fieldsbyid == null) {
             fieldsbyid = new HashMap<String, Field>();
-            for(Field f : getAllFields()){
+            for (Field f : getAllFields()) {
                 fieldsbyid.put(f.getId(), f);
-            }            
+            }
         }
         return fieldsbyid;
     }
-    
+
     /**This method sorts the fields and returns them
      * @return fields ordered
      * */
-    public ArrayList<Field> getOrderedFields(){
+    public ArrayList<Field> getOrderedFields() {
         try {
-            if(isOrdered()){
+            if (isOrdered()) {
                 ArrayList<Field> r = new ArrayList<Field>(getAllFields());
                 Collections.sort(r, new FieldComparator(getOrder()));
                 return r;
             }
         } catch (Exception e) {
-            PMLogger.error(e);
+            getPresentationManager().error(e);
         }
         return getAllFields();
     }
-    
+
     /**Determine if the entity have the order property
      * @return true if order != null*/
-    public boolean isOrdered(){
+    public boolean isOrdered() {
         return getOrder() != null;
     }
 
@@ -210,7 +200,7 @@ public class Entity extends PMCoreObject {
             }
         }
     }
-    
+
     /**Check if there is a Field with an id
      * @param id The field id
      * @return true if the entity contains a Field with the given id*/
@@ -292,7 +282,9 @@ public class Entity extends PMCoreObject {
      * @return the auditable
      */
     public boolean isAuditable() {
-        if(auditable==null)return false;
+        if (auditable == null) {
+            return false;
+        }
         return auditable;
     }
 
@@ -359,18 +351,6 @@ public class Entity extends PMCoreObject {
         return extendzEntity;
     }
 
-    /**Set also fields, operations and owner service
-     * @see org.jpos.ee.pm.core.PMCoreObject#setService(org.jpos.ee.pm.core.PMService)
-     */
-    public void setService(PMService service) {
-        super.setService(service);
-        if(getOwner()!=null) getOwner().setService(service);
-        if(getOperations() != null) getOperations().setService(service);
-        if(getFields() != null){
-            for(Field f: getFields()) f.setService(service);
-        }
-    }
-
     /**
      * @param highlights the highlights to set
      */
@@ -396,12 +376,13 @@ public class Entity extends PMCoreObject {
      * @return the dataAccess
      */
     public DataAccess getDataAccess() {
-        if(dataAccess == null)
+        if (dataAccess == null) {
             try {
-                dataAccess = (DataAccess) Class.forName(getService().getDefaultDataAccess()).newInstance();
+                dataAccess = (DataAccess) Class.forName(PresentationManager.pm.getDefaultDataAccess()).newInstance();
             } catch (Exception e) {
-                PMLogger.error(e);
+                getPresentationManager().error(e);
             }
+        }
         return dataAccess;
     }
 
@@ -419,10 +400,11 @@ public class Entity extends PMCoreObject {
         return weaks;
     }
 
-    public Entity getWeak(Field field){
+    public Entity getWeak(Field field) {
         for (Entity entity : getWeaks()) {
-            if(entity.getOwner().getEntityProperty().equals(field.getProperty()))
+            if (entity.getOwner().getEntityProperty().equals(field.getProperty())) {
                 return entity;
+            }
         }
         return null;
     }
@@ -435,41 +417,51 @@ public class Entity extends PMCoreObject {
     }
 
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (!(obj instanceof Entity))
+        }
+        if (!(obj instanceof Entity)) {
             return false;
+        }
         Entity other = (Entity) obj;
         if (id == null) {
-            if (other.id != null)
+            if (other.id != null) {
                 return false;
-        } else if (!id.equals(other.id))
+            }
+        } else if (!id.equals(other.id)) {
             return false;
+        }
         return true;
     }
 
-	/**
-	 * @param noCount the noCount to set
-	 */
-	public void setNoCount(Boolean noCount) {
-		this.noCount = noCount;
-	}
+    /**
+     * @param noCount the noCount to set
+     */
+    public void setNoCount(Boolean noCount) {
+        this.noCount = noCount;
+    }
 
     /**
      * @return the noCount
      */
     public Boolean getNoCount() {
-        if(noCount==null)return false;
+        if (noCount == null) {
+            return false;
+        }
         return noCount;
     }
 
-    public Highlight getHighlight(Field field, Object instance){
-        if(getHighlights()==null) return null;
+    public Highlight getHighlight(Field field, Object instance) {
+        if (getHighlights() == null) {
+            return null;
+        }
         return getHighlights().getHighlight(this, field, instance);
     }
-    public boolean isWeak(){
+
+    public boolean isWeak() {
         return getOwner() != null;
     }
 }

@@ -19,7 +19,7 @@ package org.jpos.ee.pm.core;
 
 import java.util.List;
 
-public class Highlights {
+public class Highlights extends PMCoreObject{
     public static final String INSTANCE = "instance";
     /**A list of highlights.*/
     private List<Highlight> highlights;
@@ -59,7 +59,7 @@ public class Highlights {
     }
 
     protected boolean match(Object instance, Field field, Highlight highlight) {
-        Object o = EntitySupport.get(instance, field.getProperty());
+        Object o = getPresentationManager().get(instance, field.getProperty());
         if (o != null && o.toString().equals(highlight.getValue()) && highlight.getField().equals(field.getId())) {
             return true;
         }

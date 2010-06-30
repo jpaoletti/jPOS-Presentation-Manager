@@ -32,7 +32,7 @@ public class EditClassConverter  extends StrutsEditConverter{
         String s = (String) value;
         if(s.compareTo("")==0)return null;
         try {
-            return EntitySupport.newObjectOf(s);
+            return ctx.getPresentationManager().newObjectOf(s);
         } catch (Exception e) {
             throw new ConverterException(e.getMessage());
         }

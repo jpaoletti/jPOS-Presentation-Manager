@@ -29,9 +29,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.PMUnauthorizedException;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
@@ -66,7 +66,7 @@ public abstract class ActionSupport extends Action implements Constants{
         } catch (PMUnauthorizedException e){
             return mapping.findForward(STRUTS_LOGIN);
         } catch (PMException e) {
-            PMLogger.debug(this,e);
+            ctx.getPresentationManager().debug(this,e);
             if(e.getKey()!=null) ctx.getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, e.getKey()));
             ActionErrors errors = new ActionErrors();
             for(PMMessage msg : ctx.getErrors()){
@@ -83,7 +83,7 @@ public abstract class ActionSupport extends Action implements Constants{
 
     protected PMStrutsService getPMService()throws PMException{
         try {
-            return (PMStrutsService) PMEntitySupport.staticPmservice();
+            return (PMStrutsService) PresentationManager.pm.getService();
         } catch (Exception e) {
             throw new PMException();
         }

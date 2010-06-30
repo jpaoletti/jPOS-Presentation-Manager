@@ -16,22 +16,18 @@
 			<div class="content">
 				<html:form action="/login" method="POST"  onsubmit="return encrypt(this.username, this.password);">
 					<fieldset>
-					<logic:equal value="true" name="es" property="pmservice.loginRequired">
+					<logic:equal value="true" name="pm" property="loginRequired">
 						<legend><bean:message key="login.sign.in" /></legend>
 						<label for="username"><bean:message key="login.username" /></label>
 						<html:text property="username" styleId="username"></html:text>
 						<label for="password"><bean:message key="login.password" /></label>
 						<html:password property="password" styleId="password" value=""></html:password>
 					</logic:equal>
-					<logic:equal value="false" name="es" property="pmservice.loginRequired">
+					<logic:equal value="false" name="pm" property="loginRequired">
 						<html:hidden property="username" value="xxxxx"/>
 						<html:hidden property="password" value="xxxxx"/>
 					</logic:equal>
 					<html:submit styleId="submit"><bean:message key="login.sign.in" /></html:submit>
-	
-					<%--<logic:equal value="true" name="es" property="pmservice.loginRequired">
-						<p><a href="#"><bean:message key="login.forgot.password"/></a></p>
-					</logic:equal>--%>
 					</fieldset>
 				</html:form>
 			</div>

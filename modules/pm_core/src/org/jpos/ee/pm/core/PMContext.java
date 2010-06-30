@@ -21,10 +21,8 @@ import java.util.List;
 
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
-import org.jpos.ee.pm.struts.EntityContainer;
-import org.jpos.ee.pm.struts.PMEntitySupport;
-import org.jpos.ee.pm.struts.PMStrutsService;
 import org.jpos.transaction.Context;
+import org.jpos.util.Log;
 
 /**An extension of the org.jpos.transaction.Context class with some helpers
  * for PM.*/
@@ -53,10 +51,18 @@ public class PMContext extends Context implements Constants{
         return (getUser() != null);
     }
     
-    
-    protected PMStrutsService getPMService(){        
-        return (PMStrutsService) PMEntitySupport.staticPmservice();
+    public PresentationManager getPresentationManager(){
+        return PresentationManager.pm;
     }
+
+    public PersistenceManager getPersistanceManager(){
+        return getPresentationManager().getPersistenceManager();
+    }
+
+    public Log getLog(){
+        return getPresentationManager().getLog();
+    }
+
     /**
      * @param entityContainer the entity_container to set
      */

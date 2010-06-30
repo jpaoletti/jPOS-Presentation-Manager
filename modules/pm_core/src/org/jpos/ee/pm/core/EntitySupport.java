@@ -17,80 +17,11 @@
  */
 package org.jpos.ee.pm.core;
 
-import org.apache.commons.beanutils.NestedNullException;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.jpos.util.NameRegistrar;
-import org.jpos.util.NameRegistrar.NotFoundException;
-
-/**Helper class for introspection and some extra stuff
+/**
+ * Helper class for introspection and some extra stuff
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public class EntitySupport {
-    
-    /***/
-    public static synchronized PMService staticPmservice(){
-        try {
-            return ((PMService)NameRegistrar.get(PMService.getCustomName()));
-        } catch (NotFoundException e) {
-            return null;
-        }        
-    }
 
-    public synchronized PMService getPmservice(){
-        return staticPmservice();
-    }
-
-    /**Getter for an object property value as String
-     * @param obj The object
-     * @param propertyName The property
-     * @return The value of the property of the object as string
-     * */
-    public static String getAsString(Object obj, String propertyName){
-        Object o = get(obj, propertyName);
-        if(o != null) return o.toString(); else return "";
-    }
     
-    /**Getter for an object property value
-     * @param obj The object
-     * @param propertyName The property
-     * @return The value of the property of the object
-     * */
-    public static Object get (Object obj, String propertyName) {
-        try {
-            if (obj != null && propertyName != null)
-                return PropertyUtils.getNestedProperty (obj, propertyName);
-        } catch (NullPointerException e) {
-            // OK to happen
-        } catch (NestedNullException e) {
-            // Hmm... that's fine too
-        } catch (Exception e) {
-            // Now I don't like it.
-            PMLogger.error(e);
-            return "-undefined-";
-        }
-        return null;
-    }
-    
-    
-    /**Setter for an object property value
-     * @param obj The object
-     * @param name The property name
-     * @param value The value to set
-     * */
-    public static void set (Object obj, String name, Object value) {
-        try {
-            PropertyUtils.setNestedProperty (obj, name, value);
-        } catch (Exception e) {
-            PMLogger.error(e);
-        }
-    }
-
-    public static Object newObjectOf(String clazz) {
-        try {
-            return Class.forName(clazz).newInstance();
-        } catch (Exception e) {
-            PMLogger.error(e);
-            return null;
-        }
-    }
 }

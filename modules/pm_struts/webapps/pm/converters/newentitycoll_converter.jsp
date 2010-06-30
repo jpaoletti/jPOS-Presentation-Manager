@@ -24,8 +24,9 @@
 <bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
 <bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />
 <%
+    PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
 	Entity e = es.getPmservice().getEntity(request.getParameter("entity"));
-	Collection listv = (Collection)es.get(tmp_object, request.getParameter("f"));
+	Collection listv = (Collection)ctx.getPresentationManager().get(tmp_object, request.getParameter("f"));
 	//TODO Finish this. 
 %>
 <div id="">

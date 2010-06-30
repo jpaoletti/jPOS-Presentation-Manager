@@ -18,7 +18,7 @@
  <%@ page isErrorPage="true"  %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
 <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@page import="java.io.PrintWriter" import="org.jpos.ee.pm.core.PMLogger" import="java.io.StringWriter" %>
+<%@page import="java.io.PrintWriter" import="org.jpos.ee.pm.core.*" import="java.io.StringWriter" %>
 
 <div class="leftpane" align="center">
 	<p align="left">
@@ -46,7 +46,7 @@
 		out.print(sw);
 		sw.close();
 		pw.close();
-		PMLogger.error(exception);
+		if(PresentationManager.pm!=null) PresentationManager.pm.error(exception);
 	}
 	%>
 	</xmp>

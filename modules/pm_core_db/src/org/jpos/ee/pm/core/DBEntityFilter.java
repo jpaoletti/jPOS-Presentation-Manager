@@ -37,7 +37,7 @@ public class DBEntityFilter extends EntityFilter {
             if(field.shouldDisplay("filter")){
                 List<Object> values = new ArrayList<Object>();
                 for(Object o : getInstance().getInstances()){
-                    values.add(EntitySupport.get(o, field.getProperty()));
+                    values.add(PresentationManager.pm.get(o, field.getProperty()));
                 }
                 debug("VALUES ["+field.getProperty()+"]: "+values);
                 Criterion c =null;

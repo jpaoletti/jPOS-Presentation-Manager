@@ -18,6 +18,8 @@
 
 package org.jpos.ee.pm.menu;
 
+import org.jpos.ee.pm.core.PresentationManager;
+
 /**This class represents the leafs of the menu tree. It have a location and two flags indicating
  * if the item must be considered as "external" and if the item must be embed in jpos or not (this
  * flags could no apply for some PM engine.
@@ -107,6 +109,6 @@ public class MenuItem extends Menu{
      * @param value The location value*/
     public void parseLocation(String location, String value) {
         setLocation_value(value);
-        setLocation(getService().getLocation(location)); 
+        setLocation(PresentationManager.pm.getLocation(location));
     }    
 }

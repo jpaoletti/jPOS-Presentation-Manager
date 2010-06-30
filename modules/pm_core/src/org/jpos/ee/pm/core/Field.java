@@ -71,16 +71,15 @@ public class Field extends PMCoreObject{
             }
             ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
             ctx.put(PM_FIELD, this);
-            return getService().visualizationWrapper(c.visualize(ctx));
+            return PresentationManager.pm.visualizationWrapper(c.visualize(ctx));
         } catch (Exception e) {
-            PMLogger.error(e);
+            getPresentationManager().error(e);
             throw new ConverterException("Unable to convert "+entity.getId()+"."+getProperty());
         }
     }
 
     public Converter getDefaultConverter(Converter c) {
         c = new GenericConverter();
-        c.setService(getService());
         Properties properties = new Properties();
         properties.put("filename", "cfg/converters/show.tostring.converter");
         c.setProperties(properties);
@@ -93,14 +92,6 @@ public class Field extends PMCoreObject{
 
     public String visualize(PMContext ctx) throws PMException{
         return visualize(ctx, ctx.getOperation());
-    }
-    
-    /**Set also converters service
-     * @see org.jpos.ee.pm.core.PMCoreObject#setService(org.jpos.ee.pm.core.PMService)
-     */
-    public void setService(PMService service) {
-        super.setService(service);
-        getConverters().setService(service);
     }
 
     public int compareTo(Field o) {

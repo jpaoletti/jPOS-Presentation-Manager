@@ -18,6 +18,7 @@
 
 package org.jpos.ee.pm.converter;
 
+import org.jpos.ee.pm.struts.converter.ShowCollectionConverter;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;

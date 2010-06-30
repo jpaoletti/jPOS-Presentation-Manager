@@ -21,8 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PresentationManager;
 
 /** This class is an observer of the monitor.
  * 
@@ -48,7 +47,7 @@ public class MonitorObserver implements Observer{
             lines.addAll((List<String>) arg);
         if(arg instanceof Exception){
             Exception e = (Exception)arg;
-            PMLogger.error(e);
+            PresentationManager.pm.error(e);
             lines.add(e.getMessage());
         }
     }

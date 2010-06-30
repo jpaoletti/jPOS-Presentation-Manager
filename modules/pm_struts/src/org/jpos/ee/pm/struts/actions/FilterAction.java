@@ -25,7 +25,6 @@ import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.PaginatedList;
 import org.jpos.ee.pm.struts.PMForwardException;
@@ -51,7 +50,7 @@ public class FilterAction extends FieldProcessingActionSupport {
                     filter.setInstance(wrapper);
                     ctx.getEntityContainer().setFilter(filter);
                 } catch (ConfigurationException e) {
-                    PMLogger.error(e);
+                    ctx.getPresentationManager().error(e);
                     ctx.getErrors().add(new PMMessage(ENTITY, e.getMessage()));
                     throw new PMException();
                 }

@@ -17,11 +17,8 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.menu.Menu;
 import org.jpos.ee.pm.menu.MenuSupport;
 import org.jpos.ee.pm.security.core.InvalidPasswordException;
@@ -56,7 +53,7 @@ public class LoginAction extends EntityActionSupport {
     }
 
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
-        if (getPMService().isLoginRequired()) {
+        if (ctx.getPresentationManager().isLoginRequired()) {
             return super.prepare(ctx);
         } else {
             return true;
@@ -64,7 +61,7 @@ public class LoginAction extends EntityActionSupport {
     }
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
-        if (getPMService().isLoginRequired()) {
+        if (ctx.getPresentationManager().isLoginRequired()) {
             ctx.getSession().setAttribute(USER, null);
             ctx.getSession().setAttribute(MENU, null);
 
@@ -80,7 +77,7 @@ public class LoginAction extends EntityActionSupport {
             } catch (InvalidPasswordException e) {
                 throw new PMException("pm_security.password.invalid");
             } catch (Exception e) {
-                PMLogger.error(e);
+                ctx.getPresentationManager().error(e);
                 throw new PMException("pm_core.unespected.error");
             }
         } else {

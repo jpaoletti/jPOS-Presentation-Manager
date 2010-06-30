@@ -23,8 +23,6 @@ import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
-import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.validator.ValidationResult;
 import org.jpos.ee.pm.validator.Validator;
@@ -36,7 +34,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport {
     protected void proccessField(PMStrutsContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
         String eid = "f_" + f.getId();
         String s = getParamValues(ctx, eid, ";");
-        LogEvent evt = PMLogger.getLog().createDebug();
+        LogEvent evt = ctx.getPresentationManager().getLog().createDebug();
         evt.addMessage("Field [" + eid + "] ");
         int i = 0;
         if(s==null) s="";
@@ -51,7 +49,7 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport {
                 Object converted = converter.build(ctx);
                 evt.addMessage("    Object converted: " + converted);
                 if (validateField(ctx, f, wrapper, converted)) {
-                    PMEntitySupport.set(o, f.getProperty(), converted);
+                    ctx.getPresentationManager().set(o, f.getProperty(), converted);
                 }
             } catch (IgnoreConvertionException e) {
                 //Do nothing, just ignore conversion.

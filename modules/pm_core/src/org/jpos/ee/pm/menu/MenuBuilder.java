@@ -21,8 +21,8 @@ package org.jpos.ee.pm.menu;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMService;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -58,7 +58,7 @@ public class MenuBuilder extends DefaultHandler{
             db.parse(conf,this);
             return menu;
         }catch(Exception e) {
-            PMLogger.error(e);
+            PresentationManager.pm.error(e);
         }
         return null;
     }
@@ -69,7 +69,6 @@ public class MenuBuilder extends DefaultHandler{
 
     public void startDocument() throws SAXException {
         menu = new MenuList();
-        menu.setService(service);
     }
 
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -94,7 +93,6 @@ public class MenuBuilder extends DefaultHandler{
 
     private void processItem(String text, String perm) {
         MenuItem m = new MenuItem(text, "");
-        m.setService(service);
         m.setPermission(perm);
         item = m;
         menu.add(m);
@@ -102,7 +100,6 @@ public class MenuBuilder extends DefaultHandler{
 
     private void processList(String name, String perm) {
         MenuList subm = new MenuList();
-        subm.setService(service);
         subm.setText(name);
         subm.setPermission(perm);
         menu.add(subm);

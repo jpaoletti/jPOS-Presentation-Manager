@@ -17,6 +17,7 @@
  */
 package org.jpos.ee.pm.struts;
 
+import org.jpos.ee.pm.core.EntityContainer;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jpos.ee.Constants;
@@ -70,7 +71,6 @@ public class PMEntitySupport extends EntitySupport implements Constants{
         request.setAttribute(ENTITY_INSTANCE, r);
         return r;
     }
-    
     
     public void setContext_path(String context_path) {
         this.context_path = context_path;

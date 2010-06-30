@@ -23,7 +23,6 @@ import org.jpos.ee.pm.core.EntityOwner;
 import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
@@ -43,7 +42,7 @@ public class AddAction extends RowActionSupport {
                 ctx.getEntityContainer().setSelectedNew(true);
                 throw new PMForwardException(CONTINUE);
             } catch (ConfigurationException e) {
-                PMLogger.error(e);
+                ctx.getPresentationManager().error(e);
                 throw new PMException("pm_core.unespected.error");
             }
         }
@@ -61,7 +60,7 @@ public class AddAction extends RowActionSupport {
             final Object parent = ctx.getEntityContainer().getOwner().getSelected().getInstance();
             final EntityOwner owner = ctx.getEntity().getOwner();
             final Object instance = ctx.getSelected().getInstance();
-            EntitySupport.set(instance,owner.getLocalProperty(), parent);
+            ctx.getPresentationManager().set(instance,owner.getLocalProperty(), parent);
             getOwnerCollection(ctx).add(instance);
         }
         
@@ -70,7 +69,7 @@ public class AddAction extends RowActionSupport {
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
         Object instance = ctx.getSelected().getInstance();
-        PMLogger.debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
+        ctx.getPresentationManager().debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
         ctx.getEntity().getDataAccess().add(ctx, instance);
     }
 }

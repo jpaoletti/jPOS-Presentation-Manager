@@ -53,7 +53,6 @@ public class MenuSupport {
                 ml.setText(menu.getText());
                 ml.setPermission(menu.getPermission());
                 ml.setParent(menu.getParent());
-                ml.setService(menu.getService());
                 for(Menu m : ((MenuList)menu).getSubmenus() ){
                     Menu m2 = cleanWithoutPerms(m, user);
                     if(m2 != null) ml.add(m2);

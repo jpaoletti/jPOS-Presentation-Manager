@@ -34,6 +34,8 @@ import bsh.BshClassManager;
 import bsh.EvalError;
 import bsh.Interpreter;
 import bsh.UtilEvalError;
+import org.jpos.ee.pm.core.PMService;
+import org.jpos.util.NameRegistrar;
 
 
 public class GenericConverter extends Converter{
@@ -165,8 +167,8 @@ public class GenericConverter extends Converter{
     private Interpreter initBSH () throws UtilEvalError, EvalError {
         Interpreter bsh = new Interpreter ();
         BshClassManager bcm = bsh.getClassManager();
-        bcm.setClassPath(getService().getServer().getLoader().getURLs());
-        bcm.setClassLoader(getService().getServer().getLoader());
+        bcm.setClassPath(getPresentationManager().getService().getServer().getLoader().getURLs());
+        bcm.setClassLoader(getPresentationManager().getService().getServer().getLoader());
         bsh.set  ("qbean", this);
         return bsh;
     }

@@ -18,11 +18,11 @@ public class DBPersistenceManager implements PersistenceManager {
 
     public void init(PMContext ctx) throws Exception{
         try {
-            DB db = new DB(PMLogger.getLog());
+            DB db = new DB(ctx.getLog());
             db.open();
             ctx.put(PM_DB, db);
         } catch (Exception e) {
-            PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
             throw new ServletException(e);
         }
     }

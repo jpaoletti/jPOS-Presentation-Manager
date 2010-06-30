@@ -16,14 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package org.jpos.ee.pm.converter;
+package org.jpos.ee.pm.struts.converter;
 
 import java.util.Collection;
+import org.jpos.ee.pm.converter.Converter;
+import org.jpos.ee.pm.converter.ConverterException;
 
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
-import org.jpos.ee.pm.core.PMLogger;
 
 /**Converter for a collection (1..* aggregation).<br>
  * <pre>
@@ -56,7 +57,7 @@ public class ShowCollectionConverter extends Converter {
             sb.append("</ul>");
             return sb.toString();
         } catch (Exception e1) {
-            PMLogger.error(e1);
+            getPresentationManager().error(e1);
             throw new ConverterException("pm_core.converter.not.collection");
         }
     }

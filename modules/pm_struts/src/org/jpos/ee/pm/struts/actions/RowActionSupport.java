@@ -20,7 +20,6 @@ package org.jpos.ee.pm.struts.actions;
 
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.util.DisplacedList;
@@ -36,7 +35,7 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
         String item = ctx.getParameter("item");
         if (item != null && item.trim().compareTo("") != 0) {
             Integer index = Integer.parseInt(item);
-            PMLogger.debug(this, "Getting row index: " + index);
+            ctx.getPresentationManager().debug(this, "Getting row index: " + index);
             if (index != null) {
                 DisplacedList<Object> al = new DisplacedList<Object>();
                 al.addAll(ctx.getList().getContents());
@@ -46,11 +45,11 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
         } else {
             String identified = ctx.getParameter("identified");
             if (identified != null && identified.trim().compareTo("") != 0) {
-                PMLogger.debug(this, "Getting row identified by: " + identified);
+                ctx.getPresentationManager().debug(this, "Getting row identified by: " + identified);
                 String[] ss = identified.split(":");
                 //TODO Throw exception when the size of this is not 2
                 if (ss.length != 2) {
-                    PMLogger.error("Ivalid row identifier!");
+                    ctx.getPresentationManager().error("Ivalid row identifier!");
                 } else {
                     String prop = ss[0];
                     String value = ss[1];
@@ -58,7 +57,7 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
                     ctx.getEntityContainer().setSelected(wrapper);
                 }
             } else {
-                PMLogger.debug(this, "Row Selection ignored");
+                ctx.getPresentationManager().debug(this, "Row Selection ignored");
             }
         }
         refreshSelectedObject(ctx, null);

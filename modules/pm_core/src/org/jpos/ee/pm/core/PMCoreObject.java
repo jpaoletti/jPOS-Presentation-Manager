@@ -26,25 +26,10 @@ import org.jpos.util.Log;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public abstract class PMCoreObject implements Constants{
-    private PMService service;
     private Boolean debug;
 
-    /**
-     * @param service the service to set
-     */
-    public void setService(PMService service) {
-        this.service = service;
-    }
-
-    /**
-     * @return the service
-     */
-    public PMService getService() {
-        return service;
-    }
-    
     public void debug(String s){
-        if(getDebug()) PMLogger.debug(this,s);
+        if(getDebug()) PresentationManager.pm.debug(this,s);
     }
 
     /**
@@ -63,6 +48,12 @@ public abstract class PMCoreObject implements Constants{
     }
     
     public Log getLog(){
-        return PMLogger.getLog();
+        return PresentationManager.pm.getLog();
     }
+
+    /** Return the presentation manager singleton */
+    protected PresentationManager getPresentationManager(){
+        return PresentationManager.pm;
+    }
+
 }

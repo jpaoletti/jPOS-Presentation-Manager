@@ -31,7 +31,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.jpos.ee.DB;
 import org.jpos.ee.MD5;
-import org.jpos.ee.pm.core.PMLogger;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.ee.pm.security.core.InvalidPasswordException;
 import org.jpos.ee.pm.security.core.PMSecurityException;
 import org.jpos.ee.pm.security.rules.SECRule;
@@ -224,7 +224,7 @@ public class UserManager {
         } catch (SECException e) {
             throw e;
         } catch (Exception e) {
-            PMLogger.error(e);
+            PresentationManager.pm.error(e);
             throw new Exception("Could not load security rules");
         }
     }

@@ -3,7 +3,6 @@ package org.jpos.ee.pm.struts.actions;
 import java.util.Set;
 
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class SelectItemAction extends EntityActionSupport {
@@ -29,10 +28,10 @@ public class SelectItemAction extends EntityActionSupport {
     	Set<Integer> selectedIndexes = ctx.getEntityContainer().getSelectedIndexes();
     	if(selectedIndexes.contains(idx)) {
     		selectedIndexes.remove(idx);
-    		PMLogger.debug(this, "Deselected "+idx);
+    		ctx.getPresentationManager().debug(this, "Deselected "+idx);
     	}else{
     		selectedIndexes.add(idx);
-    		PMLogger.debug(this, "Selected "+idx);
+    		ctx.getPresentationManager().debug(this, "Selected "+idx);
     	}
         return true;
     }

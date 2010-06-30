@@ -7,7 +7,6 @@ import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.ListFilter;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
@@ -21,7 +20,7 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
         try {
             ctx.getSession().setAttribute(getTmpName(ctx, eid), getList(ctx,null));
         } catch (PMException ex) {
-            PMLogger.error(ex);
+            ctx.getPresentationManager().error(ex);
         }
     }
 
@@ -31,7 +30,7 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
             if(remove) ctx.getSession().removeAttribute(getTmpName(ctx, eid));
             return r;
         } catch (PMException ex) {
-            PMLogger.error(ex);
+            ctx.getPresentationManager().error(ex);
             return null;
         }
     }
@@ -42,10 +41,9 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
 
         ListFilter lfilter = null;
         if( filter != null && filter.compareTo("null") != 0 && filter.compareTo("") != 0) {
-            lfilter = (ListFilter) EntitySupport.newObjectOf(filter);
+            lfilter = (ListFilter) ctx.getPresentationManager().newObjectOf(filter);
         }
-        PMEntitySupport es = PMEntitySupport.getInstance();
-        Entity e = es.getPmservice().getEntity(eid);
+        Entity e = ctx.getPresentationManager().getEntity(eid);
         List<?> list = null;
         if(e==null) throw new ConverterException("Cannot find entity "+eid);
         synchronized (e) {

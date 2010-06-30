@@ -24,7 +24,6 @@ import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
@@ -51,7 +50,7 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
         } catch (ConverterException e2) {
             throw e2;
         } catch (Exception e1) {
-            PMLogger.error(e1);
+            ctx.getPresentationManager().error(e1);
             throw new ConverterException("pm.struts.converter.cant.convert.collection");
         }
     }
@@ -66,7 +65,7 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
         Field field = (Field) ctx.get(PM_FIELD);
         result = (Collection<Object>) getValue(instance, field);
         if (result == null) {
-            result = (Collection<Object>) PMEntitySupport.getInstance().getPmservice().getFactory().newInstance (collection_class);
+            result = (Collection<Object>) ctx.getPresentationManager().newObjectOf(collection_class);
         }
         return result;
     }

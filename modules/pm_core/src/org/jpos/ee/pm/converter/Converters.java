@@ -36,7 +36,6 @@ public class Converters extends PMCoreObject{
                 return converter;
         }
         Converter c = new GenericConverter();
-        c.setService(getService());
         Properties properties = new Properties();
         properties.put("filename", "cfg/converters/show.tostring.converter");
         c.setProperties(properties);
@@ -55,13 +54,5 @@ public class Converters extends PMCoreObject{
      */
     public List<Converter> getConverters() {
         return converters;
-    }
-
-    
-    public void setService(PMService service) {
-        super.setService(service);
-        if(getConverters()!=null)
-            for(Converter c: getConverters()) 
-                if(c!=null)c.setService(service);
     }
 }

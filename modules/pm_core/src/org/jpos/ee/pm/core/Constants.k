@@ -1,4 +1,4 @@
-    
+
     public static final String PM_MAPPINGS = "PM_MAPPINGS";
     public static final String PM_ACTION_FORM = "PM_ACTION_FORM"; 
     public static final String PM_HTTP_REQUEST = "PM_HTTP_REQUEST";

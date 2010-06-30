@@ -23,7 +23,6 @@ import org.jpos.ee.pm.core.DataAccess;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMLogger;
 import org.jpos.ee.pm.security.core.PMSecurityConnector;
 import org.jpos.ee.pm.security.core.PMSecurityException;
 import org.jpos.ee.pm.security.core.PMSecurityService;
@@ -35,7 +34,7 @@ public class DataAccessGroup implements DataAccess {
         try {
             getConnector(ctx).removeGroup((PMSecurityUserGroup) object);
         } catch (PMSecurityException ex) {
-            PMLogger.error(ex);
+            ctx.getPresentationManager().error(ex);
         }
     }
     
@@ -52,7 +51,7 @@ public class DataAccessGroup implements DataAccess {
         try {
             return getConnector(ctx).getGroup(value);
         } catch (PMSecurityException e) {
-            PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
         }
         return null;
     }
@@ -64,7 +63,7 @@ public class DataAccessGroup implements DataAccess {
             Integer t = (count == null)?list.size():(from+count > list.size()?list.size():from+count);
             return list.subList(f, t);
         } catch (PMSecurityException e) {
-            PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
             return null;
         }
     }
@@ -73,7 +72,7 @@ public class DataAccessGroup implements DataAccess {
         try {
             getConnector(ctx).updateGroup((PMSecurityUserGroup)instance);
         } catch (PMSecurityException e) {
-            PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
         }
     }
 
@@ -81,7 +80,7 @@ public class DataAccessGroup implements DataAccess {
         try {
             getConnector(ctx).addGroup((PMSecurityUserGroup) instance);
         } catch (Exception e) {
-            PMLogger.error(e);
+            ctx.getPresentationManager().error(e);
         }
     }
 

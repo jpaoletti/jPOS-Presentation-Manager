@@ -1,5 +1,6 @@
 package org.jpos.ee.pm.struts;
 
+import org.jpos.ee.pm.core.EntityContainer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;

@@ -68,7 +68,7 @@ function selectItem(i){
                     </logic:equal>
                     <%= (pmlist.isShowRowNumber())?String.format("[%0"+c+"d]", i):"" %> &nbsp;
                     <span style="white-space: nowrap;" class="operationspopup" id="g_${i}">
-                        <img src="${es.context_path}/templates/${es.pmservice.template}/images/loading.gif" alt="loading" />
+                        <img src="${es.context_path}/templates/${pm.template}/images/loading.gif" alt="loading" />
                     </span>
                     <script type="text/javascript">
                     $('#g_'+"${i}").load('opers.do?pmid='+"${pmid}"+'&i='+"${i}",
