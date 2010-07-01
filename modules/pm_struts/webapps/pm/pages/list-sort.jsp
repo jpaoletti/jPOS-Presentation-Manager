@@ -25,7 +25,7 @@
 		<bean:message key='list.sort.field' /> <br/>
 		<html:select property="order" onchange="this.form.submit();" value="${PMLIST.order}">
 			<logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
-                <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                <c:if test="${fn:contains(field.display,'sort') or fn:contains(field.display,'all')}">
 				<html:option value="${field.id}"><pm:field-name entity='${entity}' field='${field}' /></html:option>
                 </c:if>
 			</logic:iterate>
