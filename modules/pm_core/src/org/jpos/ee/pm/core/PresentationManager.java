@@ -202,6 +202,7 @@ public class PresentationManager extends Observable {
 
     public Entity getEntity(String id) {
         Entity e = getEntities().get(id);
+        if(e == null) return null;
         if (e.getExtendz() != null && e.getExtendzEntity() == null) {
             e.setExtendzEntity(this.getEntity(e.getExtendz()));
         }
