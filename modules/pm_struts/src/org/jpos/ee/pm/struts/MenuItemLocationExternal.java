@@ -20,15 +20,14 @@ package org.jpos.ee.pm.struts;
 import org.jpos.ee.pm.menu.MenuItem;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 
-public class MenuItemLocationStruts implements MenuItemLocation {
+public class MenuItemLocationExternal implements MenuItemLocation {
 
     public Object build(MenuItem item, Object... params) {
         MenuItemContext context = new MenuItemContext();
-        StringBuilder sb = new StringBuilder("<a href=");
-        String link = buildLink(item, params);
-        sb.append("javascript:loadPage('");
-        sb.append(link);
-        sb.append("')");
+        StringBuilder sb = new StringBuilder("<a target='_blank' href=");
+        sb.append("'");
+        sb.append(buildLink(item, params));
+        sb.append("'");
         sb.append(">");
         context.setPrefix(sb.toString());
         context.setValue(item.getText());
@@ -37,6 +36,6 @@ public class MenuItemLocationStruts implements MenuItemLocation {
     }
 
     protected String buildLink(MenuItem item, Object... params) {
-        return (String) params[0] + item.getLocation_value();
+        return item.getLocation_value();
     }
 }

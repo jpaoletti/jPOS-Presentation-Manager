@@ -27,12 +27,6 @@ import org.jpos.ee.pm.core.PresentationManager;
  * @author jpaoletti
  */
 public class MenuItem extends Menu{
-    /**Indicates if the item must be considered as not a part of the PM engine.*/
-    private boolean external;
-    
-    /**Indicates if the item is show embed in the PM engine or not.
-     * @deprecated*/    
-    private boolean embed;
     
     /**Indicates the location of the destiny. 
      * @see MenuItemLocation */
@@ -44,35 +38,6 @@ public class MenuItem extends Menu{
 
     public MenuItem(String name, String location) {
         setText(name);
-        setEmbed(true);
-    }
-
-    /**
-     * @param embed the embed to set
-     */
-    public void setEmbed(boolean embed) {
-        this.embed = embed;
-    }
-
-    /**
-     * @return the embed
-     */
-    public boolean isEmbed() {
-        return embed;
-    }
-
-    /**
-     * @param external the external to set
-     */
-    public void setExternal(boolean external) {
-        this.external = external;
-    }
-
-    /**
-     * @return the external
-     */
-    public boolean isExternal() {
-        return external;
     }
 
     /**

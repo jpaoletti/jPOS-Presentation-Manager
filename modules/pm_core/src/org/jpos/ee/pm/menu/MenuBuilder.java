@@ -77,18 +77,14 @@ public class MenuBuilder extends DefaultHandler{
         if(qName.compareTo("menu-list") == 0) processList(s,s2); else
         if(qName.compareTo("menu-item") == 0) processItem(s,s2);
         if(qName.compareTo("path") == 0)      value = null;
-        if(qName.compareTo("external") == 0)  value = null;
         if(qName.compareTo("location") == 0){       
             value = null;
             item.parseLocation(attributes.getValue("id"), attributes.getValue("value"));
         }
-        if(qName.compareTo("embed") == 0)     value = null;
     }
   
     public void endElement(String uri, String localName, String qName) throws SAXException {
         if(qName.compareTo("menu-list") == 0) if(menu.getParent()!= null) menu = menu.getParent();
-        if(qName.compareTo("external") == 0)  item.setExternal(value.compareTo("true")==0);
-        if(qName.compareTo("embed") == 0)        item.setEmbed(value.compareTo("true")==0);
     }
 
     private void processItem(String text, String perm) {
