@@ -23,11 +23,8 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 public class Validator {
-    private static final Log log = LogFactory.getLog (Validator.class);
     private static final ResourceBundle bundle = 
         ResourceBundle.getBundle(Validator.class.getName());
     private static final Map patterns = new HashMap();

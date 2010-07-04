@@ -34,8 +34,6 @@ import bsh.BshClassManager;
 import bsh.EvalError;
 import bsh.Interpreter;
 import bsh.UtilEvalError;
-import org.jpos.ee.pm.core.PMService;
-import org.jpos.util.NameRegistrar;
 
 
 public class GenericConverter extends Converter{

@@ -18,7 +18,6 @@
 package org.jpos.ee.pm.security.core;
 
 import org.jpos.ee.pm.core.PMContext;
-import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.util.NameRegistrar;
 import org.jpos.util.NameRegistrar.NotFoundException;

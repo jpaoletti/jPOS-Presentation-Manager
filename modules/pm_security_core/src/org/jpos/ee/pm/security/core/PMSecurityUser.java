@@ -20,7 +20,8 @@ package org.jpos.ee.pm.security.core;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PMSecurityUser{
+public class PMSecurityUser {
+
     private String username;
     private String password;
     private String name;
@@ -31,131 +32,159 @@ public class PMSecurityUser{
     private boolean active;
     private String email;
     private boolean changePassword;
-    
-    public PMSecurityUser(){ 
+
+    public PMSecurityUser() {
+        init();
+    }
+
+    private void init() {
         setGroups(new ArrayList<PMSecurityUserGroup>());
         setProfiles(new ArrayList<PMSecurityProfile>());
         setPermissions(new ArrayList<PMSecurityPermission>());
     }
-    
+
     /**
      * @return the username
      */
     public String getUsername() {
         return username;
     }
+
     /**
      * @param username the username to set
      */
     public void setUsername(String username) {
         this.username = username;
     }
+
     /**
      * @return the password
      */
     public String getPassword() {
         return password;
     }
+
     /**
      * @param password the password to set
      */
     public void setPassword(String password) {
         this.password = password;
     }
+
     /**
      * @return the name
      */
     public String getName() {
         return name;
     }
+
     /**
      * @param name the name to set
      */
     public void setName(String name) {
         this.name = name;
     }
+
     /**
      * @return the deleted
      */
     public boolean isDeleted() {
         return deleted;
     }
+
     /**
      * @param deleted the deleted to set
      */
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
     /**
      * @return the active
      */
     public boolean isActive() {
         return active;
     }
+
     /**
      * @param active the active to set
      */
     public void setActive(boolean active) {
         this.active = active;
     }
+
     /**
      * @return the email
      */
     public String getEmail() {
         return email;
     }
+
     /**
      * @param email the email to set
      */
     public void setEmail(String email) {
         this.email = email;
     }
+
     /**
      * @return the changePassword
      */
     public boolean isChangePassword() {
         return changePassword;
     }
+
     /**
      * @param changePassword the changePassword to set
      */
     public void setChangePassword(boolean changePassword) {
         this.changePassword = changePassword;
     }
-    
+
     /**
      * @param groups the groups to set
      */
     public void setGroups(List<PMSecurityUserGroup> groups) {
         this.groups = groups;
     }
+
     /**
      * @return the groups
      */
     public List<PMSecurityUserGroup> getGroups() {
         return groups;
     }
-    
+
     public boolean hasPermission(String permission) {
-        if(permission == null) return true;
+        if (permission == null) {
+            return true;
+        }
         //First we check personal permissions
-        for(PMSecurityPermission p : getPermissions()){
-            if(p.getName().compareTo(permission)==0) return true;
+        for (PMSecurityPermission p : getPermissions()) {
+            if (p.getName().compareTo(permission) == 0) {
+                return true;
+            }
         }
         //Second we check profile permissions
-        for(PMSecurityProfile p : getProfiles()){
-            if(p.hasPermission(permission)) return true;
+        for (PMSecurityProfile p : getProfiles()) {
+            if (p.hasPermission(permission)) {
+                return true;
+            }
         }
         //Finally, we check group permissions
-        for(PMSecurityUserGroup g : getGroups()){
-            if(g.hasPermission(permission)) return true;
+        for (PMSecurityUserGroup g : getGroups()) {
+            if (g.hasPermission(permission)) {
+                return true;
+            }
         }
         return false;
     }
-    
-    public boolean belongsTo(String groupname){
-        for(PMSecurityUserGroup g : getGroups()){
-            if(g.getName().compareToIgnoreCase(groupname) == 0) return true;
+
+    public boolean belongsTo(String groupname) {
+        for (PMSecurityUserGroup g : getGroups()) {
+            if (g.getName().compareToIgnoreCase(groupname) == 0) {
+                return true;
+            }
         }
         return false;
     }
