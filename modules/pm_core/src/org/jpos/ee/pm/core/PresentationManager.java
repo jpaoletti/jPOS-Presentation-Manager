@@ -37,6 +37,7 @@ import org.jpos.util.Logger;
  * @author jpaoletti
  */
 public class PresentationManager extends Observable {
+
     public static String HASH = "abcde54321poiuy96356abcde54321poiuy96356";
     // Singleton
     public static PresentationManager pm;
@@ -66,37 +67,50 @@ public class PresentationManager extends Observable {
         this.service = service;
 
         LogEvent evt = getLog().createInfo();
-        evt.addMessage("Presentation Manager activated");
+        evt.addMessage("startup", "Presentation Manager activated");
         try {
+            evt.addMessage(TAB + "<configuration>");
+
+            template = cfg.get("template", "default");
+            logItem(evt, "Template", template, "*");
+
+            defaultDataAccess = cfg.get("default-data-access", "org.jpos.ee.pm.core.DataAccessVoid");
+            try {
+                Class.forName(defaultDataAccess);
+                logItem(evt, "Default Data Access", defaultDataAccess, "*");
+            } catch (Exception e) {
+                logItem(evt, "Default Data Access", defaultDataAccess, "?");
+            }
+
+            appversion = cfg.get("appversion", "1.0.0");
+            logItem(evt, "Application version", appversion, "*");
+
+            title = cfg.get("title", "pm.title");
+            logItem(evt, "Title", title, "*");
+
+            subtitle = cfg.get("subtitle", "pm.subtitle");
+            logItem(evt, "Subtitle", subtitle, "*");
+
+            contact = cfg.get("contact", "mailto:jpaoletti@angras.com.ar");
+            logItem(evt, "Contact", contact, "*");
+
+            loginRequired = cfg.getBoolean("login-required", true);
+            logItem(evt, "Login Required", Boolean.toString(loginRequired), "*");
+
+            final String tmp = cfg.get("persistence-manager", "org.jpos.ee.pm.core.PersistenceManagerVoid");
+            try {
+                setPersistenceManager((PersistenceManager) newInstance(tmp));
+                logItem(evt, "Persistance Manager", getPersistenceManager().getClass().getName(), "*");
+            } catch (Exception e) {
+                error = true;
+                logItem(evt, "Persistance Manager", tmp, "?");
+            }
+            evt.addMessage(TAB + "<configuration>");
+
             EntityParser parser = new EntityParser();
             loadEntities(cfg, evt, parser);
             loadMonitors(cfg, evt, parser);
             loadLocations(evt);
-            evt.addMessage(TAB + "Configuration");
-
-            template = cfg.get("template", "default");
-            evt.addMessage(TAB + TAB + "Template: " + template);
-
-            defaultDataAccess = cfg.get("default-data-access", "org.jpos.ee.pm.core.DataAccessVoid");
-            evt.addMessage(TAB + TAB + "Default Data Access: " + defaultDataAccess);
-
-            appversion = cfg.get("appversion", "1.0.0");
-            evt.addMessage(TAB + TAB + "Application version: " + appversion);
-
-            title = cfg.get("title", "pm.title");
-            evt.addMessage(TAB + TAB + "Title: " + title);
-
-            subtitle = cfg.get("subtitle", "pm.subtitle");
-            evt.addMessage(TAB + TAB + "Subtitle: " + subtitle);
-
-            contact = cfg.get("contact", "mailto:jpaoletti@angras.com.ar");
-            evt.addMessage(TAB + TAB + "Contact: " + contact);
-
-            loginRequired = cfg.getBoolean("login-required", true);
-            evt.addMessage(TAB + TAB + "Login Required: " + loginRequired);
-
-            setPersistenceManager((PersistenceManager) Class.forName(cfg.get("persistence-manager", "org.jpos.ee.pm.core.PersistenceManagerVoid")).newInstance());
-            evt.addMessage(TAB + TAB + "Persistance Manager: " + getPersistenceManager().getClass().getName());
         } catch (Exception exception) {
             getLog().error(exception);
             error = true;
@@ -109,15 +123,21 @@ public class PresentationManager extends Observable {
     }
 
     public void debug(Object invoquer, Object o) {
-        if(!debug) return;
+        if (!debug) {
+            return;
+        }
         LogEvent evt = getLog().createDebug();
-        evt.addMessage("["+invoquer.getClass().getName()+"]");
+        evt.addMessage("[" + invoquer.getClass().getName() + "]");
         evt.addMessage(o);
         Logger.log(evt);
     }
 
+    protected String logEntity(Entity e, String symbol) {
+        return String.format("%s%s(%s) %-25s %s", TAB, TAB, symbol, e.getId(), e.getClazz());
+    }
+
     private void loadMonitors(Configuration cfg, LogEvent evt, EntityParser parser) {
-        evt.addMessage(TAB + "Monitors");
+        evt.addMessage(TAB + "<monitors>");
         Map<Object, Monitor> result = new HashMap<Object, Monitor>();
         String[] ss = cfg.getAll("monitor");
         for (Integer i = 0; i < ss.length; i++) {
@@ -129,26 +149,35 @@ public class PresentationManager extends Observable {
                 Thread thread = new Thread(m);
                 m.setThread(thread);
                 thread.start();
-                evt.addMessage(TAB + TAB + m.getId());
+                logItem(evt, m.getId(), m.getSource().getClass().getName(), "*");
             } catch (Exception exception) {
                 getLog().error(exception);
-                evt.addMessage(TAB + TAB + ERR + "Error loading " + ss[i]);
-                error = true;
+                logItem(evt, ss[i], null, "!");
             }
         }
         monitors = result;
+        evt.addMessage(TAB + "</monitors>");
+    }
+
+    /**
+     * Formatting helper for startup
+     */
+    public static void logItem(LogEvent evt, String s1, String s2, String symbol) {
+        evt.addMessage(String.format("%s%s(%s) %-25s %s", TAB, TAB, symbol, s1, (s2 != null) ? s2 : ""));
     }
 
     private void loadLocations(LogEvent evt) {
+        evt.addMessage(TAB + "<locations>");
         MenuItemLocationsParser parser = new MenuItemLocationsParser(evt, "cfg/pm.locations.xml");
         locations = parser.getLocations();
-        if (locations == null || locations.size() == 0) {
+        if (locations == null || locations.isEmpty()) {
             evt.addMessage(TAB + TAB + ERR + "No location defined!");
             error = true;
         }
         if (parser.hasError()) {
             error = true;
         }
+        evt.addMessage(TAB + "</locations>");
     }
 
     /**Encapsulate a String that is going to be visualized by default (without a Converter)
@@ -159,7 +188,7 @@ public class PresentationManager extends Observable {
     }
 
     private void loadEntities(Configuration cfg, LogEvent evt, EntityParser parser) {
-        evt.addMessage(TAB + "Entities");
+        evt.addMessage(TAB + "<entities>");
         if (entities == null) {
             entities = new HashMap<Object, Entity>();
         } else {
@@ -173,17 +202,23 @@ public class PresentationManager extends Observable {
                     Class.forName(e.getClazz());
                     entities.put(e.getId(), e);
                     entities.put(i, e);
-                    evt.addMessage(String.format(TAB + TAB + "[%-30s] %s", e.getId(), e.getClazz()));
+                    if (e.isWeak()) {
+                        logItem(evt, e.getId(), e.getClazz(), "\u00b7");
+                    } else {
+                        logItem(evt, e.getId(), e.getClazz(), "*");
+                    }
+
                 } catch (ClassNotFoundException cnte) {
-                    evt.addMessage(TAB + TAB + ERR + String.format("Class '%s' not found in %s", e.getClazz(), ss[i]));
+                    logItem(evt, e.getId(), e.getClazz(), "?");
                     error = true;
                 }
             } catch (Exception exception) {
                 getLog().error(exception);
-                evt.addMessage(TAB + TAB + ERR + "Error loading " + ss[i]);
+                logItem(evt, ss[i], "???", "!");
                 error = true;
             }
         }
+        evt.addMessage(TAB + "</entities>");
     }
 
     protected List<Entity> weakEntities(Entity e) {
@@ -202,7 +237,9 @@ public class PresentationManager extends Observable {
 
     public Entity getEntity(String id) {
         Entity e = getEntities().get(id);
-        if(e == null) return null;
+        if (e == null) {
+            return null;
+        }
         if (e.getExtendz() != null && e.getExtendzEntity() == null) {
             e.setExtendzEntity(this.getEntity(e.getExtendz()));
         }
@@ -301,38 +338,40 @@ public class PresentationManager extends Observable {
     }
 
     /* Loggin helpers*/
-
     /**Generate an info entry on the local logger*/
-    public void info(Object o){
+    public void info(Object o) {
         LogEvent evt = getLog().createInfo();
         evt.addMessage(o);
         Logger.log(evt);
     }
 
     /**Generate a warn entry on the local logger*/
-    public void warn(Object o){
+    public void warn(Object o) {
         LogEvent evt = getLog().createWarn();
         evt.addMessage(o);
         Logger.log(evt);
     }
 
     /**Generate an error entry on the local logger*/
-    public void error(Object o){
+    public void error(Object o) {
         LogEvent evt = getLog().createError();
         evt.addMessage(o);
         Logger.log(evt);
     }
 
     /* Helpers for bean management */
-
     /**Getter for an object property value as String
      * @param obj The object
      * @param propertyName The property
      * @return The value of the property of the object as string
      * */
-    public String getAsString(Object obj, String propertyName){
+    public String getAsString(Object obj, String propertyName) {
         Object o = get(obj, propertyName);
-        if(o != null) return o.toString(); else return "";
+        if (o != null) {
+            return o.toString();
+        } else {
+            return "";
+        }
     }
 
     /**Getter for an object property value
@@ -340,10 +379,11 @@ public class PresentationManager extends Observable {
      * @param propertyName The property
      * @return The value of the property of the object
      * */
-    public Object get (Object obj, String propertyName) {
+    public Object get(Object obj, String propertyName) {
         try {
-            if (obj != null && propertyName != null)
-                return PropertyUtils.getNestedProperty (obj, propertyName);
+            if (obj != null && propertyName != null) {
+                return PropertyUtils.getNestedProperty(obj, propertyName);
+            }
         } catch (NullPointerException e) {
             // OK to happen
         } catch (NestedNullException e) {

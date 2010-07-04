@@ -23,7 +23,6 @@ import java.util.Map;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.util.LogEvent;
 import org.xml.sax.Attributes;
@@ -34,50 +33,50 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  */
-public class MenuItemLocationsParser extends DefaultHandler{
+public final class MenuItemLocationsParser extends DefaultHandler {
+
     private static final String TAB = "    ";
     private String conf;
-    private Map<String,MenuItemLocation> locations;
+    private Map<String, MenuItemLocation> locations;
     private LogEvent evt;
     private boolean error = false;
-    
-    public MenuItemLocationsParser (LogEvent evt, String conf) {
+
+    public MenuItemLocationsParser(LogEvent evt, String conf) {
         this.setConf(conf);
         this.evt = evt;
         init();
     }
-    
+
     private void init() {
         locations = new HashMap<String, MenuItemLocation>();
-        evt.addMessage(TAB+"Locations");
         error = false;
-        parseConfig();        
+        parseConfig();
     }
-    
+
     private void parseConfig() {
         try {
             SAXParserFactory dbf = SAXParserFactory.newInstance();
             SAXParser db = dbf.newSAXParser();
-            db.parse(conf,this);
-        }catch(Exception e) {
+            db.parse(conf, this);
+        } catch (Exception e) {
             PresentationManager.pm.error(e);
         }
     }
-    
+
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-        if(qName.compareTo("location") == 0){
+        if (qName.compareTo("location") == 0) {
             String id = attributes.getValue("id");
             String clazz = attributes.getValue("class");
             try {
-                locations.put(id, (MenuItemLocation) PresentationManager.pm.newObjectOf(clazz));
-                evt.addMessage(TAB+TAB+String.format("[%s] %s", id,clazz));
+                locations.put(id, (MenuItemLocation) PresentationManager.pm.newInstance(clazz));
+                PresentationManager.logItem(evt, id, clazz, "*");
             } catch (Exception e) {
-                evt.addMessage(TAB+TAB+"Error loading location: "+id+" ["+clazz+"]");
+                PresentationManager.logItem(evt, id, clazz, "!");
                 error = true;
             }
         }
     }
-    
 
     /**
      * @param conf the conf to set
@@ -85,6 +84,7 @@ public class MenuItemLocationsParser extends DefaultHandler{
     public void setConf(String conf) {
         this.conf = conf;
     }
+
     /**
      * @return the conf
      */
@@ -95,7 +95,7 @@ public class MenuItemLocationsParser extends DefaultHandler{
     /**
      * @return the locations
      */
-    public Map<String,MenuItemLocation> getLocations() {
+    public Map<String, MenuItemLocation> getLocations() {
         return locations;
     }
 
