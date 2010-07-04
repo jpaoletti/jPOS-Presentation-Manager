@@ -65,7 +65,7 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
         Field field = (Field) ctx.get(PM_FIELD);
         result = (Collection<Object>) getValue(instance, field);
         if (result == null) {
-            result = (Collection<Object>) ctx.getPresentationManager().newObjectOf(collection_class);
+            result = (Collection<Object>) ctx.getPresentationManager().newInstance(collection_class);
         }
         return result;
     }

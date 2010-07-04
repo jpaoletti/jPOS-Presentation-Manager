@@ -22,7 +22,7 @@ public class SECRule implements Serializable{
     public void validate(String username, String password) throws SECException{
         if(!isEnabled()) return;
         System.out.println("Validating: "+getValidatorClass());
-        SECRuleValidator srv = (SECRuleValidator) PresentationManager.pm.newObjectOf(getValidatorClass());
+        SECRuleValidator srv = (SECRuleValidator) PresentationManager.pm.newInstance(getValidatorClass());
         if(getApplyTo() == 0)
             srv.validate(username, getParameter());
         else

@@ -356,23 +356,27 @@ public class PresentationManager extends Observable {
         return null;
     }
 
-
     /**Setter for an object property value
      * @param obj The object
      * @param name The property name
      * @param value The value to set
      * */
-    public void set (Object obj, String name, Object value) {
+    public void set(Object obj, String name, Object value) {
         try {
-            PropertyUtils.setNestedProperty (obj, name, value);
+            PropertyUtils.setNestedProperty(obj, name, value);
         } catch (Exception e) {
             error(e);
         }
     }
 
-    public Object newObjectOf(String clazz) {
+    /**
+     * Creates a new instance object of the given class.
+     * @param clazz The Class of the new Object
+     * @return The new Object or null on any error.
+     */
+    public Object newInstance(String clazz) {
         try {
-            return Class.forName(clazz).newInstance();
+            return getService().getFactory().newInstance(clazz);
         } catch (Exception e) {
             error(e);
             return null;

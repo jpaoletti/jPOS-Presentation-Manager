@@ -18,6 +18,7 @@
 package org.jpos.ee.pm.security.core;
 
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.util.NameRegistrar;
 import org.jpos.util.NameRegistrar.NotFoundException;
@@ -36,7 +37,7 @@ public class PMSecurityService extends QBeanSupport {
     protected void initService() throws Exception {
         getLog().info ("Security Manager activated");
         try {
-            connector = (PMSecurityConnector) Class.forName(cfg.get("connector")).newInstance();
+            connector = (PMSecurityConnector) getFactory().newInstance(cfg.get("connector"));
             connector.setService(this);
         } catch (Exception e) {
             getLog().error("Cannot load security connector", e);

@@ -378,7 +378,7 @@ public class Entity extends PMCoreObject {
     public DataAccess getDataAccess() {
         if (dataAccess == null) {
             try {
-                dataAccess = (DataAccess) Class.forName(PresentationManager.pm.getDefaultDataAccess()).newInstance();
+                dataAccess = (DataAccess) PresentationManager.pm.newInstance(PresentationManager.pm.getDefaultDataAccess());
             } catch (Exception e) {
                 getPresentationManager().error(e);
             }

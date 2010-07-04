@@ -41,7 +41,7 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
 
         ListFilter lfilter = null;
         if( filter != null && filter.compareTo("null") != 0 && filter.compareTo("") != 0) {
-            lfilter = (ListFilter) ctx.getPresentationManager().newObjectOf(filter);
+            lfilter = (ListFilter) ctx.getPresentationManager().newInstance(filter);
         }
         Entity e = ctx.getPresentationManager().getEntity(eid);
         List<?> list = null;
