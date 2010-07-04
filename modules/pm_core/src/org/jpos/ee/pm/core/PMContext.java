@@ -20,7 +20,6 @@ package org.jpos.ee.pm.core;
 import java.util.List;
 
 import org.jpos.ee.Constants;
-import org.jpos.ee.pm.security.core.PMSecurityUser;
 import org.jpos.transaction.Context;
 import org.jpos.util.Log;
 
@@ -41,15 +40,7 @@ public class PMContext extends Context implements Constants{
     public void setErrors(List<PMMessage> errors) {
         put(PM_ERRORS,errors);
     }
-    
-    public PMSecurityUser getUser(){
-        PMSecurityUser user = (PMSecurityUser) get(USER);
-        return user;
-    }
-    
-    public boolean isUserOnLine() {
-        return (getUser() != null);
-    }
+
     
     public PresentationManager getPresentationManager(){
         return PresentationManager.pm;

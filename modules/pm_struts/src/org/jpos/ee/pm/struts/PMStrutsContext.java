@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.security.core.PMSecurityUser;
 
 /**An extension of the org.jpos.ee.pm.core.PMContext class with some helpers
  * for PMStruts.*/
@@ -52,6 +53,17 @@ public class PMStrutsContext extends PMContext {
      */
     public void setRequest(HttpServletRequest request) {
         put(PM_HTTP_REQUEST, request);
+    }
+
+    /**Getter for the logged user*/
+    public PMSecurityUser getUser(){
+        PMSecurityUser user = (PMSecurityUser) get(USER);
+        return user;
+    }
+
+    /**True if there is a user online*/
+    public boolean isUserOnLine() {
+        return (getUser() != null);
     }
     
     /**
