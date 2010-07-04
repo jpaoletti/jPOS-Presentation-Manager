@@ -217,7 +217,30 @@ public class PMSecurityUser {
         return profiles;
     }
 
+    @Override
     public String toString() {
         return name;
+    }
+
+    public List<String> getPermissionList() {
+        List<String> result = new ArrayList<String>();
+        for (PMSecurityPermission perm : getPermissions()) {
+            result.add(perm.getName());
+        }
+        for (PMSecurityUserGroup group : getGroups()) {
+            for (PMSecurityPermission perm : group.getPermissions()) {
+                if (!result.contains(perm.getName())) {
+                    result.add(perm.getName());
+                }
+            }
+        }
+        for (PMSecurityProfile profile : getProfiles()) {
+            for (PMSecurityPermission perm : profile.getPermissions()) {
+                if (!result.contains(perm.getName())) {
+                    result.add(perm.getName());
+                }
+            }
+        }
+        return result;
     }
 }

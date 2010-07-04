@@ -18,9 +18,9 @@
 
 package org.jpos.ee.pm.menu;
 
+import java.util.List;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMService;
-import org.jpos.ee.pm.security.core.PMSecurityUser;
 
 /**A helper class to get the associated menu of a user. It builds the full menu 
  * and makes a rebuild without the options the user has not permission to see. 
@@ -34,18 +34,18 @@ public class MenuSupport {
      * @param service The PMService for the menu.
      * @return The filtered menu associated to the permissions of the user.
      * */
-    public static Menu getMenu(PMSecurityUser user, PMService service) throws PMException{
+    public static Menu getMenu(List<String> permissions, PMService service) throws PMException{
         try {
             MenuBuilder mb = new MenuBuilder("cfg/pm.menu.xml", service);
-            Menu menu = cleanWithoutPerms(mb.menu, user);
+            Menu menu = cleanWithoutPerms(mb.menu, permissions);
             return menu;
         } catch (Exception e) {
             throw new PMException("pm_core.cant.load.menu");
         }
     }
 
-    private static Menu cleanWithoutPerms(Menu menu, PMSecurityUser user) {
-        if(menu.getPermission()==null || menu.getPermission().trim().compareTo("")==0 || user.hasPermission(menu.getPermission())){
+    private static Menu cleanWithoutPerms(Menu menu, List<String> permissions) {
+        if(menu.getPermission()==null || menu.getPermission().trim().compareTo("")==0 || permissions.contains(menu.getPermission())){
             if(menu instanceof MenuItem){
                 return menu;
             }else{
@@ -54,7 +54,7 @@ public class MenuSupport {
                 ml.setPermission(menu.getPermission());
                 ml.setParent(menu.getParent());
                 for(Menu m : ((MenuList)menu).getSubmenus() ){
-                    Menu m2 = cleanWithoutPerms(m, user);
+                    Menu m2 = cleanWithoutPerms(m, permissions);
                     if(m2 != null) ml.add(m2);
                 }
                 return ml;

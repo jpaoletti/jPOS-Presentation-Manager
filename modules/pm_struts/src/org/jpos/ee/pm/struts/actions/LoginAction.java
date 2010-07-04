@@ -33,25 +33,30 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
 public class LoginAction extends EntityActionSupport {
 
     /** Opens an hibernate transaction before doExecute*/
+    @Override
     protected boolean openTransaction() {
         return false;
     }
 
     /**Makes the operation generate an audithory entry*/
+    @Override
     protected boolean isAudited() {
         return false;
     }
 
     /**Forces execute to check if any user is logged in*/
+    @Override
     protected boolean checkUser() {
         return false;
     }
 
     /**Forces execute to check if there is an entity defined in parameters*/
+    @Override
     protected boolean checkEntity() {
         return false;
     }
 
+    @Override
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         if (ctx.getPresentationManager().isLoginRequired()) {
             return super.prepare(ctx);
@@ -88,7 +93,7 @@ public class LoginAction extends EntityActionSupport {
     }
 
     private void loadMenu(PMStrutsContext ctx, PMSecurityUser u) throws PMException {
-        Menu menu = MenuSupport.getMenu(u, getPMService());
+        Menu menu = MenuSupport.getMenu(u.getPermissionList(), getPMService());
         ctx.getSession().setAttribute(USER, u);
         ctx.getSession().setAttribute(MENU, menu);
     }
