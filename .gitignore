@@ -5,4 +5,7 @@ manual/document.*
 !manual/document.tex
 manual/tmp
 manual/out
+modules/pm_*/nb*
+modules/pm_*/manifes*
+modules/pm_*/build
 
