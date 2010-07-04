@@ -20,7 +20,6 @@ package org.jpos.ee.pm.struts.actions;
 import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.EntityOwner;
-import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.struts.PMForwardException;
