@@ -1,3 +1,9 @@
+
+    public static final String PM_MAPPINGS = "PM_MAPPINGS";
+    public static final String PM_ACTION_FORM = "PM_ACTION_FORM";
+    public static final String PM_HTTP_REQUEST = "PM_HTTP_REQUEST";
+    public static final String PM_HTTP_RESPONSE = "PM_HTTP_RESPONSE";
+
     public static final String CONTINUE     = "continue";
     public static final String SUCCESS     = "success";
     public static final String FAILURE     = "failure";

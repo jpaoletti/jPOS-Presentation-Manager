@@ -1,8 +1,4 @@
 
-    public static final String PM_MAPPINGS = "PM_MAPPINGS";
-    public static final String PM_ACTION_FORM = "PM_ACTION_FORM"; 
-    public static final String PM_HTTP_REQUEST = "PM_HTTP_REQUEST";
-    public static final String PM_HTTP_RESPONSE = "PM_HTTP_RESPONSE";
     public static final String PM_OPERATION = "PM_OPERATION"; 
     public static final String PM_ENTITY_CONTAINER = "PM_ENTITY_CONTAINER";
     public static final String PM_ERRORS = "PM_ERRORS";
