@@ -29,7 +29,7 @@ import org.jpos.ee.Constants;
  */
 public interface OperationContext extends Constants{
 
-    /**This method is excecuted at the very beggining of the process, before
+    /**This method is executed at the very beginning of the process, before
      * converterting or replace any data on objects.
      */
     public void preConversion (PMContext ctx) throws PMException;
