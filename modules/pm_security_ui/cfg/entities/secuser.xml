@@ -15,6 +15,12 @@
           <converters>
               <converter class="org.jpos.ee.pm.struts.converter.EditStringConverter" operations="add"/>
           </converters>
+          <validator class="org.jpos.ee.pm.validator.LengthValidator">
+            <properties>
+                <property name="min-length" value="1" />
+                <property name="min-length-msg" value="pm.validator.username.toshort"/>
+            </properties>
+        </validator>
       </field>
       <field id="name" display="list add show" width="200">
           <converters>
