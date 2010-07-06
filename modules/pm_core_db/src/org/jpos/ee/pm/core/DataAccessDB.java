@@ -34,7 +34,7 @@ public class DataAccessDB implements DataAccess, Constants {
             DB db = (DB) ctx.get(PM_DB);
             Criteria c = db.session().createCriteria(Class.forName(getEntity(ctx).getClazz()));
             c.setMaxResults(1);
-            c.add(Restrictions.sqlRestriction(property+"="+value));
+            c.add(Restrictions.sqlRestriction(property + "=" + value));
             return c.uniqueResult();
         } catch (ClassNotFoundException e) {
             return null;
@@ -42,33 +42,38 @@ public class DataAccessDB implements DataAccess, Constants {
     }
 
     private Entity getEntity(PMContext ctx) throws PMException {
-        if(ctx.get(PM_ENTITY)==null)
+        if (ctx.get(PM_ENTITY) == null) {
             return ctx.getEntity();
-        else
+        } else {
             return (Entity) ctx.get(PM_ENTITY);
+        }
     }
 
-    public List<?> list(PMContext ctx, EntityFilter filter, Integer from , Integer count) throws PMException {
+    public List<?> list(PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException {
         //We use the filter only if the entity we use is the container one.
-        Criteria list = createCriteria(ctx, getEntity(ctx) ,filter);
-        if(count !=null) list.setMaxResults(count);
-        if(from !=null)  list.setFirstResult(from);
+        Criteria list = createCriteria(ctx, getEntity(ctx), filter);
+        if (count != null) {
+            list.setMaxResults(count);
+        }
+        if (from != null) {
+            list.setFirstResult(from);
+        }
         return list.list();
     }
 
     public void delete(PMContext ctx, Object object) throws PMException {
-        DB db = (DB)ctx.get(PM_DB);
+        DB db = (DB) ctx.get(PM_DB);
         db.session().delete(object);
     }
-    
-    public void update    (PMContext ctx, Object object) throws PMException{
-        DB db = (DB)ctx.get(PM_DB);
+
+    public void update(PMContext ctx, Object object) throws PMException {
+        DB db = (DB) ctx.get(PM_DB);
         db.session().update(object);
     }
 
     public void add(PMContext ctx, Object object) throws PMException {
-        try{
-            DB db = (DB)ctx.get(PM_DB);
+        try {
+            DB db = (DB) ctx.get(PM_DB);
             db.session().save(object);
         } catch (org.hibernate.exception.ConstraintViolationException e) {
             throw new PMException("constraint.violation.exception");
@@ -77,13 +82,13 @@ public class DataAccessDB implements DataAccess, Constants {
 
     public Long count(PMContext ctx) throws PMException {
         EntityFilter filter = ctx.getEntityContainer().getFilter();
-        Criteria count = createCriteria(ctx, getEntity(ctx) ,filter);
+        Criteria count = createCriteria(ctx, getEntity(ctx), filter);
         count.setProjection(Projections.rowCount());
         count.setMaxResults(1);
-        return (Long)count.uniqueResult();
+        return (Long) count.uniqueResult();
     }
-    
-    protected Criteria createCriteria(PMContext ctx, Entity entity, EntityFilter filter) throws PMException{
+
+    protected Criteria createCriteria(PMContext ctx, Entity entity, EntityFilter filter) throws PMException {
         Criteria c;
         DB db = (DB) ctx.get(PM_DB);
         try {
@@ -93,34 +98,42 @@ public class DataAccessDB implements DataAccess, Constants {
             ctx.getErrors().add(new PMMessage("class.not.found"));
             throw new PMException();
         }
-        
+
         String order = null;
         try {
             order = (ctx.getString(PM_LIST_ORDER) != null) ? entity.getFieldById(ctx.getString(PM_LIST_ORDER)).getProperty() : null;
-        } catch (Exception e) {}
-        boolean asc = (ctx.get(PM_LIST_ASC)==null)?true:(Boolean) ctx.get(PM_LIST_ASC);
-        //This is a temporary patch until i found how to sort propertys
-        if(order!=null && order.contains(".")) order = order.substring(0, order.indexOf("."));
-        if(order!= null && order.compareTo("")!=0){
-            if(asc)     c.addOrder(Order.asc (order));
-            else        c.addOrder(Order.desc(order));
+        } catch (Exception e) {
         }
-        
-        if(entity.getListfilter() != null) {
+        boolean asc = (ctx.get(PM_LIST_ASC) == null) ? true : (Boolean) ctx.get(PM_LIST_ASC);
+        //This is a temporary patch until i found how to sort propertys
+        if (order != null && order.contains(".")) {
+            order = order.substring(0, order.indexOf("."));
+        }
+        if (order != null && order.compareTo("") != 0) {
+            if (asc) {
+                c.addOrder(Order.asc(order));
+            } else {
+                c.addOrder(Order.desc(order));
+            }
+        }
+
+        if (entity.getListfilter() != null) {
             c.add((Criterion) entity.getListfilter().getListFilter(ctx));
         }
-        
-        if(filter != null){
-            for(Criterion criterion : ((DBEntityFilter) filter).getFilters()){
+
+        if (filter != null) {
+            for (Criterion criterion : ((DBEntityFilter) filter).getFilters()) {
                 c.add(criterion);
             }
         }
         //Weak entities must filter the parent
-        if(entity.isWeak()){
-            final Object instance = ctx.getEntityContainer().getOwner().getSelected().getInstance();
-            final String localProperty = entity.getOwner().getLocalProperty();
-            System.out.println("Filtering "+localProperty+" = "+instance);
-            c.add(Restrictions.eq(localProperty, instance));
+        if (entity.isWeak()) {
+            if (ctx.getEntityContainer().getOwner() != null && ctx.getEntityContainer().getOwner().getSelected() != null) {
+                final Object instance = ctx.getEntityContainer().getOwner().getSelected().getInstance();
+                final String localProperty = entity.getOwner().getLocalProperty();
+                System.out.println("Filtering " + localProperty + " = " + instance);
+                c.add(Restrictions.eq(localProperty, instance));
+            }
         }
 
         return c;
@@ -130,11 +143,10 @@ public class DataAccessDB implements DataAccess, Constants {
         DB db = (DB) ctx.get(PM_DB);
         final Object merged = db.session().merge(o);
         db.session().refresh(merged);
-        return  merged;
+        return merged;
     }
 
     public EntityFilter createFilter(PMContext ctx) throws PMException {
         return new DBEntityFilter();
     }
-
 }
