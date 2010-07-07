@@ -29,7 +29,12 @@ public class PMMessage {
     public PMMessage(String key){
         
     }
-    
+
+    @Override
+    public String toString() {
+        return "PMMessage{" + "key=" + key + ", message=" + message + '}';
+    }
+
     public PMMessage(String key, String message) {
         super();
         this.message = message;
