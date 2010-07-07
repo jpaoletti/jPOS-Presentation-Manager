@@ -16,4 +16,4 @@
 <a href='${hreff}' class='button' style="${style}" id="operation${operation.id}" ${onclick}>&nbsp;
 <c:if test="${labels == null or labels}">
 	<pm:message key="operation.${operation.id}" arg0="pm.entity.${entity.id}"/>&nbsp;
-</c:if></a>
+</c:if></a><% request.removeAttribute("onclick"); %>
