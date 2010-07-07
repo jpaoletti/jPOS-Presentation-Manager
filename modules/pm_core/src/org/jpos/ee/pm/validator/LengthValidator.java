@@ -30,29 +30,36 @@ import org.jpos.ee.pm.core.PMMessage;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  */
 public class LengthValidator extends ValidatorSupport {
-    
+
     /**The validate method*/
     public ValidationResult validate(PMContext ctx) {
         ValidationResult res = new ValidationResult();
-        Field field = (Field)ctx.get(PM_FIELD);
+        Field field = (Field) ctx.get(PM_FIELD);
         Object object = ctx.get(PM_FIELD_VALUE);
-        if(object instanceof String){
-			String fieldvalue = (String) object;
-	        
-	        res.setSuccessful(true);
-	        
-	        Integer len = fieldvalue.length();
-	        Integer maxl = getInt ("max-length");
-	        if (len > maxl){
-	            res.setSuccessful(false);
-	            res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", ""),field.getId(), len.toString(), maxl.toString()));
-	        }
-	        Integer minl = getInt ("min-length");
-	        if (len < minl){
-	            res.setSuccessful(false);
-	            res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", ""),field.getId(), len.toString(), minl.toString()));
-	        }
-        }else{
+
+        System.out.println("OBJECT " + object);
+
+        if (object instanceof String) {
+            String fieldvalue = (String) object;
+
+            res.setSuccessful(true);
+
+            Integer len = fieldvalue.length();
+            Integer maxl = getInt("max-length");
+            if (maxl != null) {
+                if (len > maxl) {
+                    res.setSuccessful(false);
+                    res.getMessages().add(new PMMessage(field.getId(), get("max-length-msg", "pm_core.validator.toolong"), field.getId(), len.toString(), maxl.toString()));
+                }
+            }
+            Integer minl = getInt("min-length");
+            if (minl != null) {
+                if (len < minl) {
+                    res.setSuccessful(false);
+                    res.getMessages().add(new PMMessage(field.getId(), get("min-length-msg", "pm_core.validator.tooshort"), field.getId(), len.toString(), minl.toString()));
+                }
+            }
+        } else {
             res.setSuccessful(false);
             res.getMessages().add(new PMMessage(field.getId(), "pm_core.validator.fieldnotstring", field.getId()));
         }

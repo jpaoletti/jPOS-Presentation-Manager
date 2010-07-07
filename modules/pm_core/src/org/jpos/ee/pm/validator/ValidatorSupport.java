@@ -56,8 +56,12 @@ public abstract class ValidatorSupport extends org.jpos.util.Validator implement
     /**Helper for an int property
      * @param name Property name
      * @return Property value as int*/
-    public int getInt (String name) {
-        return Integer.parseInt(get(name, "0").trim());
+    public Integer getInt (String name) {
+        try {
+            return Integer.parseInt(get(name, "").trim());
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     /**
