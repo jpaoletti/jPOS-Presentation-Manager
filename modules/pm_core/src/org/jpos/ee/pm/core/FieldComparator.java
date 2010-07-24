@@ -42,6 +42,9 @@ public class FieldComparator implements Comparator<Field> {
     public int compare(Field o1, Field o2) {
         int i = order.indexOf(o1.getId());
         int j = order.indexOf(o2.getId());
+        if(i==j) return 0;
+        if(i==-1 && j >= 0) return 1;
+        if(j==-1 && i >= 0) return -1;
         return i - j;
     }
 
