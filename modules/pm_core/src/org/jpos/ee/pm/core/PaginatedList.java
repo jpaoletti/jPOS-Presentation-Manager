@@ -23,7 +23,8 @@ import java.util.List;
 import org.jpos.ee.Constants;
 import org.jpos.util.DisplacedList;
 
-public class PaginatedList implements Constants{
+public class PaginatedList implements Constants {
+
     private Entity entity;
     private DisplacedList<Object> contents;
     private Integer page;
@@ -34,45 +35,46 @@ public class PaginatedList implements Constants{
     private boolean desc;
     private Operations operations;
     private Operations rowOperations;
-    
     private boolean searchable;
     private boolean paginable;
     private boolean showRowNumber;
     private String operationColWidth;
     private boolean hasSelectedScope;
-    
-    public List<Integer> getPageRange(){
+
+    public List<Integer> getPageRange() {
         List<Integer> r = new ArrayList<Integer>();
-        for(int i = 1 ; i <= getPages() ; i++) r.add(i);
+        for (int i = 1; i <= getPages(); i++) {
+            r.add(i);
+        }
         return r;
     }
-    
+
     public String toString() {
         return "PMList [entity=" + entity + ", page " + page + " of "
                 + pages + ", total=" + total + ", rowsPerPage=" + rowsPerPage
                 + ", order=" + order + ", desc=" + desc + "]";
     }
-    
-    public PaginatedList(){
+
+    public PaginatedList() {
         this.page = 1;
         rowsPerPage = 10; //Default
     }
-    
+
     public PaginatedList(DisplacedList<Object> contents, Long total) {
         super();
         this.contents = contents;
         rowsPerPage = 10; //Default
         this.page = 1;
-        if(total!=null)
-        	setTotal(total); 
+        if (total != null) {
+            setTotal(total);
+        }
     }
-    
+
     public void setRowsPerPage(Integer rowsPerPage) {
         this.rowsPerPage = rowsPerPage;
-        if(total!=null)
-        	this.pages = new Long(total.longValue() / rowsPerPage + 1);
+        setTotal(total);
     }
-    
+
     public String getOrder() {
         return order;
     }
@@ -90,35 +92,54 @@ public class PaginatedList implements Constants{
     }
 
     public DisplacedList<Object> getContents() {
-        if(contents==null) contents = new DisplacedList<Object>();
+        if (contents == null) {
+            contents = new DisplacedList<Object>();
+        }
         return contents;
     }
+
     public void setContents(DisplacedList<Object> contents) {
         this.contents = contents;
-        getContents().setDisplacement((int) ((getPage()-1)*getRowsPerPage()));
+        getContents().setDisplacement((int) ((getPage() - 1) * getRowsPerPage()));
     }
+
     public Integer getPage() {
-    	if(page==null) return 1;
+        if (page == null) {
+            return 1;
+        }
         return page;
     }
+
     public void setPage(Integer page) {
         this.page = page;
     }
+
     public Long getPages() {
-    	if(pages==null)return 1L;
+        if (pages == null) {
+            return 1L;
+        }
         return pages;
     }
+
     public void setPages(Long pages) {
         this.pages = pages;
     }
+
     public Long getTotal() {
         return total;
     }
+
     public void setTotal(Long total) {
         this.total = total;
-    	if(total != null)
-    		this.pages = total / rowsPerPage;
+        if (total != null) {
+            if (total % rowsPerPage == 0) {
+                this.pages = (total / rowsPerPage);
+            } else {
+                this.pages = (total / rowsPerPage)+1;
+            }
+        }
     }
+
     public Integer getRowsPerPage() {
         return rowsPerPage;
     }
@@ -146,84 +167,82 @@ public class PaginatedList implements Constants{
     public Operations getRowOperations() {
         return rowOperations;
     }
-    
-    public Integer from(){
-        return (this.getPage()!=null)?(((getPage()-1) * getRowsPerPage())):0;
-    }
-    
-    public Integer rpp(){
-        return (getRowsPerPage()!=null)?getRowsPerPage():DEFAULT_PAGE_SIZE;
+
+    public Integer from() {
+        return (this.getPage() != null) ? (((getPage() - 1) * getRowsPerPage())) : 0;
     }
 
-	/**
-	 * @param searchable the searchable to set
-	 */
-	public void setSearchable(boolean searchable) {
-		this.searchable = searchable;
-	}
+    public Integer rpp() {
+        return (getRowsPerPage() != null) ? getRowsPerPage() : DEFAULT_PAGE_SIZE;
+    }
 
-	/**
-	 * @return the searchable
-	 */
-	public boolean isSearchable() {
-		return searchable;
-	}
+    /**
+     * @param searchable the searchable to set
+     */
+    public void setSearchable(boolean searchable) {
+        this.searchable = searchable;
+    }
 
-	/**
-	 * @param paginable the paginable to set
-	 */
-	public void setPaginable(boolean paginable) {
-		this.paginable = paginable;
-	}
+    /**
+     * @return the searchable
+     */
+    public boolean isSearchable() {
+        return searchable;
+    }
 
-	/**
-	 * @return the paginable
-	 */
-	public boolean isPaginable() {
-		return paginable;
-	}
+    /**
+     * @param paginable the paginable to set
+     */
+    public void setPaginable(boolean paginable) {
+        this.paginable = paginable;
+    }
 
-	/**
-	 * @param showRowNumber the showRowNumber to set
-	 */
-	public void setShowRowNumber(boolean showRowNumber) {
-		this.showRowNumber = showRowNumber;
-	}
+    /**
+     * @return the paginable
+     */
+    public boolean isPaginable() {
+        return paginable;
+    }
 
-	/**
-	 * @return the showRowNumber
-	 */
-	public boolean isShowRowNumber() {
-		return showRowNumber;
-	}
+    /**
+     * @param showRowNumber the showRowNumber to set
+     */
+    public void setShowRowNumber(boolean showRowNumber) {
+        this.showRowNumber = showRowNumber;
+    }
 
-	/**
-	 * @param operationColWidth the operationColWidth to set
-	 */
-	public void setOperationColWidth(String operationColWidth) {
-		this.operationColWidth = operationColWidth;
-	}
+    /**
+     * @return the showRowNumber
+     */
+    public boolean isShowRowNumber() {
+        return showRowNumber;
+    }
 
-	/**
-	 * @return the operationColWidth
-	 */
-	public String getOperationColWidth() {
-		return operationColWidth;
-	}
+    /**
+     * @param operationColWidth the operationColWidth to set
+     */
+    public void setOperationColWidth(String operationColWidth) {
+        this.operationColWidth = operationColWidth;
+    }
 
+    /**
+     * @return the operationColWidth
+     */
+    public String getOperationColWidth() {
+        return operationColWidth;
+    }
 
-	/**
-	 * @param hasSelectedScope the hasSelectedScope to set
-	 */
-	public void setHasSelectedScope(boolean hasSelectedScope) {
-		this.hasSelectedScope = hasSelectedScope;
-	}
+    /**
+     * @param hasSelectedScope the hasSelectedScope to set
+     */
+    public void setHasSelectedScope(boolean hasSelectedScope) {
+        this.hasSelectedScope = hasSelectedScope;
+    }
 
-	/**
-	 * @return the hasSelectedScope
-	 */
-	public boolean isHasSelectedScope() {
-		return hasSelectedScope;
-	}
-
+    /**
+     * @return the hasSelectedScope
+     */
+    public boolean isHasSelectedScope() {
+        return hasSelectedScope;
+    }
 }
