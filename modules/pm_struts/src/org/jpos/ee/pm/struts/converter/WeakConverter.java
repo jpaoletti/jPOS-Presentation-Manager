@@ -50,17 +50,19 @@ public class WeakConverter extends StrutsEditConverter {
         return super.visualize(sb.toString());
     }
 
-    public static Collection getCollection(PMStrutsContext ctx) throws PMException{
+    public static Collection getCollection(PMStrutsContext ctx) throws PMException {
         final Collection collection = (Collection) ctx.getPresentationManager().get(ctx.getSelected().getInstance(), ctx.getRequest().getParameter("property"));
         final List<Object> result = new ArrayList<Object>();
         final Entity entity = getEntity(ctx);
-        for (Object object : collection) {
-            result.add(entity.getDataAccess().refresh(ctx, object));
+        if (collection != null) {
+            for (Object object : collection) {
+                result.add(entity.getDataAccess().refresh(ctx, object));
+            }
         }
         return result;
     }
 
-    public static Entity getEntity(PMStrutsContext ctx){
+    public static Entity getEntity(PMStrutsContext ctx) {
         return ctx.getPresentationManager().getEntity((String) ctx.getRequest().getParameter("weakid"));
     }
 }
