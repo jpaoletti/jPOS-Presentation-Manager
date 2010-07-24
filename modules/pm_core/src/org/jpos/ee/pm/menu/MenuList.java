@@ -17,17 +17,18 @@
  */
 package org.jpos.ee.pm.menu;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 /**This class represents an internal node in the menu tree. It contains another menus (list or leaf)
  * 
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  **/
 public class MenuList extends Menu{
-    private Vector<Menu> submenus;
+    private List<Menu> submenus;
 
     public MenuList() {
-        submenus = new Vector<Menu>();
+        submenus = new ArrayList<Menu>();
     }
 
     /**Add the given menu to the submenu list
@@ -42,14 +43,14 @@ public class MenuList extends Menu{
     /**
      * @return the submenus
      */
-    public Vector<Menu> getSubmenus() {
+    public List<Menu> getSubmenus() {
         return submenus;
     }
 
     /**
      * @param submenus the submenus to set
      */
-    public void setSubmenus(Vector<Menu> submenus) {
+    public void setSubmenus(List<Menu> submenus) {
         this.submenus = submenus;
     }
 }
