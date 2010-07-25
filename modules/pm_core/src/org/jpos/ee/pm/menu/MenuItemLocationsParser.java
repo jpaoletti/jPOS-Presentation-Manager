@@ -41,6 +41,12 @@ public final class MenuItemLocationsParser extends DefaultHandler {
     private LogEvent evt;
     private boolean error = false;
 
+    /**
+     * Constructor for the parser
+     *
+     * @param evt Event for log
+     * @param conf Configuration filename
+     */
     public MenuItemLocationsParser(LogEvent evt, String conf) {
         this.setConf(conf);
         this.evt = evt;
@@ -63,6 +69,14 @@ public final class MenuItemLocationsParser extends DefaultHandler {
         }
     }
 
+    /**
+     *
+     * @param uri
+     * @param localName
+     * @param qName
+     * @param attributes
+     * @throws SAXException
+     */
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         if (qName.compareTo("location") == 0) {
@@ -99,6 +113,11 @@ public final class MenuItemLocationsParser extends DefaultHandler {
         return locations;
     }
 
+    /**
+     * Indicates if there was an error dduring excecution
+     * 
+     * @return true if an error ocurred
+     */
     public boolean hasError() {
         return error;
     }

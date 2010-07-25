@@ -20,16 +20,23 @@ package org.jpos.ee.pm.core;
 import org.jpos.ee.Constants;
 import org.jpos.util.Log;
 
-
 /**This is the superclass of all the core objects of Presentation Manager and it provides some
  * helpers.
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
-public abstract class PMCoreObject implements Constants{
+public abstract class PMCoreObject implements Constants {
+
     private Boolean debug;
 
-    public void debug(String s){
-        if(getDebug()) PresentationManager.pm.debug(this,s);
+    /**
+     * Display a debug information on PM log if debug flag is active
+     *
+     * @param s String information
+     */
+    public void debug(String s) {
+        if (getDebug()) {
+            PresentationManager.pm.debug(this, s);
+        }
     }
 
     /**
@@ -43,17 +50,26 @@ public abstract class PMCoreObject implements Constants{
      * @return the debug
      */
     public Boolean getDebug() {
-        if(debug==null) return false;
+        if (debug == null) {
+            return false;
+        }
         return debug;
     }
-    
-    public Log getLog(){
+
+    /**
+     *
+     * @return
+     */
+    public Log getLog() {
         return PresentationManager.pm.getLog();
     }
 
-    /** Return the presentation manager singleton */
-    protected PresentationManager getPresentationManager(){
+    /**
+     * Return the presentation manager singleton
+     *
+     * @return The Presentation Manager
+     */
+    protected PresentationManager getPresentationManager() {
         return PresentationManager.pm;
     }
-
 }

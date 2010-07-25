@@ -38,89 +38,142 @@ import org.jpos.ee.pm.validator.Validator;
  * </pre>
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
-public class Field extends PMCoreObject{
+public class Field extends PMCoreObject {
+
     /**The id of the field, must be unique in the entity*/
     private String id;
     /**The property to be accesed on the entity instance objects. There must be
      * a getter and a setter for this name on the represented entity. When null,
-     default is the field id*/
+    default is the field id*/
     private String property;
     /**The width of the field value*/
     private String width;
     private String display;
     private ArrayList<Validator> validators;
     private Converters converters;
-    private String defaultValue;   
+    private String defaultValue;
     private String align; //left right center          
-    
-    public Field () {
+
+    /**
+     * Default constructor
+     */
+    public Field() {
         super();
-        align="left";
-        defaultValue="";
+        align = "left";
+        defaultValue = "";
     }
 
-    public String visualize(PMContext ctx, Operation operation, Entity entity) throws PMException{
-        debug("Converting ["+operation.getId()+"]"+entity.getId()+"."+getId());
+    /**
+     * Visualize the field using the given operation and entity
+     * @param ctx the context
+     * @param operation The operation
+     * @param entity The entity
+     * @return The string visualization
+     * @throws PMException
+     */
+    public String visualize(PMContext ctx, Operation operation, Entity entity) throws PMException {
+        debug("Converting [" + operation.getId() + "]" + entity.getId() + "." + getId());
         try {
             Converter c = null;
-            if(getConverters()!= null){
+            if (getConverters() != null) {
                 c = getConverters().getConverterForOperation(operation.getId());
             }
-            if(c == null){
-                c = getDefaultConverter(c);
+            if (c == null) {
+                c = getDefaultConverter();
             }
             ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
             ctx.put(PM_FIELD, this);
             return PresentationManager.pm.visualizationWrapper(c.visualize(ctx));
         } catch (Exception e) {
             getPresentationManager().error(e);
-            throw new ConverterException("Unable to convert "+entity.getId()+"."+getProperty());
+            throw new ConverterException("Unable to convert " + entity.getId() + "." + getProperty());
         }
     }
 
-    public Converter getDefaultConverter(Converter c) {
-        c = new GenericConverter();
+    /**
+     * Return the default converter if none is defined
+     *
+     * @return The converter
+     */
+    public Converter getDefaultConverter() {
+        Converter c = new GenericConverter();
         Properties properties = new Properties();
         properties.put("filename", "cfg/converters/show.tostring.converter");
         c.setProperties(properties);
         return c;
     }
 
-    public String visualize(PMContext ctx, Operation operation) throws PMException{
+    /**
+     * Visualize the field using the given operation and context entity
+     * @param ctx the context
+     * @param operation The operation
+     * @return The String visualization
+     * @throws PMException
+     */
+    public String visualize(PMContext ctx, Operation operation) throws PMException {
         return visualize(ctx, operation, ctx.getEntity());
     }
 
-    public String visualize(PMContext ctx) throws PMException{
+    /**
+     * Visualize the field using the context operation and entity
+     * @param ctx The context
+     * @return a String with the visualization
+     * @throws PMException
+     */
+    public String visualize(PMContext ctx) throws PMException {
         return visualize(ctx, ctx.getOperation());
     }
 
-    public int compareTo(Field o) {
-        return getId().compareTo(o.getId());
-    }
-    
+    /**
+     *
+     * @return
+     */
     public ArrayList<Validator> getValidators() {
         return validators;
     }
 
+    /**
+     *
+     * @param validators
+     */
     public void setValidators(ArrayList<Validator> validators) {
         this.validators = validators;
     }
 
-    public void setId (String id) {
+    /**
+     *
+     * @param id
+     */
+    public void setId(String id) {
         this.id = id;
     }
+
+    /**
+     *
+     * @return
+     */
     public String getId() {
         return id;
     }
 
-    public void setDisplay (String display) {
+    /**
+     *
+     * @param display
+     */
+    public void setDisplay(String display) {
         this.display = display;
     }
 
-    /** @return The list (separated by blanks) of operations id where this field
-     * will be displayed */
+    /**
+     * A (separated by blanks) list of operation ids where this field
+     * will be displayed
+     * 
+     * @return The list
+     */
     public String getDisplay() {
-    	if(display==null || display.trim().compareTo("")==0) return "all";
+        if (display == null || display.trim().compareTo("") == 0) {
+            return "all";
+        }
         return display;
     }
 
@@ -129,42 +182,61 @@ public class Field extends PMCoreObject{
      * @param operationId  The Operation id
      * @return true if field is displayed on the operation
      */
-    public boolean shouldDisplay (String operationId) {
-        if (operationId == null || getDisplay() == null) return false;
-        return "all".equalsIgnoreCase(getDisplay()) || getDisplay().indexOf (operationId) >= 0;
-    }
-    
-    @Deprecated
-    public Object fromString (String s) {
-        return s;
+    public boolean shouldDisplay(String operationId) {
+        if (operationId == null || getDisplay() == null) {
+            return false;
+        }
+        return "all".equalsIgnoreCase(getDisplay()) || getDisplay().indexOf(operationId) >= 0;
     }
 
-    @Deprecated
-    public String toString (Object obj) {
-        return obj.toString();
-    }
-
+    /**
+     *
+     * @param defaultValue
+     */
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getDefaultValue() {
         return defaultValue;
     }
+
+    /**
+     *
+     * @param align
+     */
     public void setAlign(String align) {
         this.align = align;
     }
+
+    /**
+     *
+     * @return
+     */
     public String getAlign() {
         return align;
     }
 
+    /**
+     *
+     * @param width
+     */
     public void setWidth(String width) {
         this.width = width;
     }
 
-
+    /**
+     *
+     * @return
+     */
     public String getWidth() {
-    	if(width==null) return "";
+        if (width == null) {
+            return "";
+        }
         return width;
     }
 
@@ -179,12 +251,19 @@ public class Field extends PMCoreObject{
      * @return the converters
      */
     public Converters getConverters() {
-        if(converters==null) converters = new Converters();
+        if (converters == null) {
+            converters = new Converters();
+        }
         return converters;
     }
 
+    /**
+     * String representation of the field
+     * @return
+     */
+    @Override
     public String toString() {
-    	return id;
+        return id;
     }
 
     /** @return the property of the entity instance object that can be accesed by
@@ -192,10 +271,16 @@ public class Field extends PMCoreObject{
      */
     public String getProperty() {
         String r = property;
-        if(r == null || r.trim().equals("")) r = id;
+        if (r == null || r.trim().equals("")) {
+            r = id;
+        }
         return r;
     }
 
+    /**
+     * Setter for property
+     * @param property
+     */
     public void setProperty(String property) {
         this.property = property;
     }

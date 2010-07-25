@@ -36,8 +36,12 @@ public class MenuItem extends Menu{
      * @see MenuItemLocation */
     private String location_value;
 
-    public MenuItem(String name, String location) {
-        setText(name);
+    /**
+     * Default constructor with name
+     * @param text The text of the menu item
+     */
+    public MenuItem(String text) {
+        setText(text);
     }
 
     /**

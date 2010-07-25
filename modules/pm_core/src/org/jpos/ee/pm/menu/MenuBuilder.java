@@ -15,13 +15,10 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jpos.ee.pm.menu;
 
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-
-import org.jpos.ee.pm.core.PMService;
 import org.jpos.ee.pm.core.PresentationManager;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -31,19 +28,17 @@ import org.xml.sax.helpers.DefaultHandler;
  * 
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
-public class MenuBuilder extends DefaultHandler{
-    public  MenuList menu;
-    public  MenuItem item;
+public class MenuBuilder extends DefaultHandler {
+
+    private MenuList menu;
+    private MenuItem item;
     private String conf;
-    private String value;
-    private PMService service;
 
     /**The constructor of the parser. It needs the configuration file name and the PMService. 
      * @param conf The relative filename of the pm.menu.xml file
-     * @param service The PMService*/
-    public MenuBuilder(String conf, PMService service) {
+     **/
+    public MenuBuilder(String conf) {
         this.conf = conf;
-        this.service = service;
         initMenu();
     }
 
@@ -55,40 +50,63 @@ public class MenuBuilder extends DefaultHandler{
         SAXParserFactory dbf = SAXParserFactory.newInstance();
         try {
             SAXParser db = dbf.newSAXParser();
-            db.parse(conf,this);
+            db.parse(conf, this);
             return menu;
-        }catch(Exception e) {
+        } catch (Exception e) {
             PresentationManager.pm.error(e);
         }
         return null;
     }
 
-    public void characters(char[] ch, int start, int length) throws SAXException {
-        value = new String(ch, start, length);
-    }
-
+    /**
+     *
+     * @throws SAXException
+     */
+    @Override
     public void startDocument() throws SAXException {
         menu = new MenuList();
     }
 
+    /**
+     *
+     * @param uri
+     * @param localName
+     * @param qName
+     * @param attributes
+     * @throws SAXException
+     */
+    @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         String s = attributes.getValue("text");
         String s2 = attributes.getValue("perm");
-        if(qName.compareTo("menu-list") == 0) processList(s,s2); else
-        if(qName.compareTo("menu-item") == 0) processItem(s,s2);
-        if(qName.compareTo("path") == 0)      value = null;
-        if(qName.compareTo("location") == 0){       
-            value = null;
+        if (qName.compareTo("menu-list") == 0) {
+            processList(s, s2);
+        } else if (qName.compareTo("menu-item") == 0) {
+            processItem(s, s2);
+        }
+        if (qName.compareTo("location") == 0) {
             item.parseLocation(attributes.getValue("id"), attributes.getValue("value"));
         }
     }
-  
+
+    /**
+     *
+     * @param uri
+     * @param localName
+     * @param qName
+     * @throws SAXException
+     */
+    @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
-        if(qName.compareTo("menu-list") == 0) if(menu.getParent()!= null) menu = menu.getParent();
+        if (qName.compareTo("menu-list") == 0) {
+            if (menu.getParent() != null) {
+                menu = menu.getParent();
+            }
+        }
     }
 
     private void processItem(String text, String perm) {
-        MenuItem m = new MenuItem(text, "");
+        MenuItem m = new MenuItem(text);
         m.setPermission(perm);
         item = m;
         menu.add(m);
@@ -100,5 +118,21 @@ public class MenuBuilder extends DefaultHandler{
         subm.setPermission(perm);
         menu.add(subm);
         menu = subm;
+    }
+
+    /**
+     * Getter for menu
+     * @return The MenuList
+     */
+    public MenuList getMenu() {
+        return menu;
+    }
+
+    /**
+     * Setter for menu
+     * @param menu
+     */
+    public void setMenu(MenuList menu) {
+        this.menu = menu;
     }
 }

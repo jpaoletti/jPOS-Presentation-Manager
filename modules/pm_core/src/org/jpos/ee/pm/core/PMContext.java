@@ -42,14 +42,26 @@ public class PMContext extends Context implements Constants{
     }
 
     
+    /**
+     * Getter for PM singleton
+     * @return
+     */
     public PresentationManager getPresentationManager(){
         return PresentationManager.pm;
     }
 
+    /**
+     * Return the persistance manager of the PM
+     * @return PersistenceManager
+     */
     public PersistenceManager getPersistanceManager(){
         return getPresentationManager().getPersistenceManager();
     }
 
+    /**
+     * Return the PM log
+     * @return
+     */
     public Log getLog(){
         return getPresentationManager().getLog();
     }
@@ -73,7 +85,9 @@ public class PMContext extends Context implements Constants{
     }
 
     /**
-     * @return the entity_container
+     * Returns the entity container 
+     * @param ignorenull If true, does not throws an exception on missing container
+     * @return The container
      * @throws PMException
      */
     public EntityContainer getEntityContainer(boolean ignorenull) throws PMException {
@@ -86,8 +100,9 @@ public class PMContext extends Context implements Constants{
     }
 
     /**
-     * @return the entity_container
-     * @throws PMException 
+     * Informs if there is a container in the context
+     *
+     * @return true if there is a container in the context
      */
     public boolean hasEntityContainer(){
         EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
@@ -106,18 +121,39 @@ public class PMContext extends Context implements Constants{
         return (Operation)get(PM_OPERATION);
     }
     
+    /**
+     * Return the entity in the container
+     * @return The entity
+     * @throws PMException
+     */
     public Entity getEntity()throws PMException{
         return getEntityContainer().getEntity();
     }
-    
+
+
+    /**
+     * Return the list of the container
+     * @return The list
+     * @throws PMException
+     */
     public PaginatedList getList() throws PMException{
         return getEntityContainer().getList();
     }
 
+    /**
+     * Return the selected item of the container
+     * @return The EntityInstanceWrapper
+     * @throws PMException
+     */
     public EntityInstanceWrapper getSelected() throws PMException{
         return getEntityContainer().getSelected();
     }
     
+    /**
+     * Indicate if there is a container with an entity
+     * 
+     * @return
+     */
     public boolean hasEntity() {
         try {
             return (hasEntityContainer() && getEntityContainer().getEntity() != null);

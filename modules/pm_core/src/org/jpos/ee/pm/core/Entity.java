@@ -113,6 +113,11 @@ public class Entity extends PMCoreObject {
         extendzEntity = null;
     }
 
+    /**
+     * Return the list of fields including inherited ones.
+     *
+     * @return The list
+     */
     public ArrayList<Field> getAllFields() {
         ArrayList<Field> r = new ArrayList<Field>();
         if (getFields() != null) {
@@ -128,15 +133,42 @@ public class Entity extends PMCoreObject {
         return r;
     }
 
+    /**
+     * Returns a list of this entity instances with null from and count and
+     * with the given filter
+     *
+     * @param ctx The context
+     * @param filter The filter
+     * @return The list
+     * @throws PMException
+     */
     public List<?> getList(PMContext ctx, EntityFilter filter) throws PMException {
         return getList(ctx, filter, null, null);
     }
 
+    /**
+     * Return a list of this entity instances with null from and count and the
+     * filter took from the entity container of the context
+     *
+     * @param ctx The context
+     * @return The list
+     * @throws PMException
+     */
     public List<?> getList(PMContext ctx) throws PMException {
         EntityFilter filter = (this.equals(ctx.getEntity())) ? ctx.getEntityContainer().getFilter() : null;
         return getList(ctx, filter, null, null);
     }
 
+    /**
+     * Returns a list taken from dataaccess with the given parameters.
+     * 
+     * @param ctx The context
+     * @param filter A filter
+     * @param from The index of the first element
+     * @param count The maximun number of items retrieved
+     * @return The list
+     * @throws PMException
+     */
     public List<?> getList(PMContext ctx, EntityFilter filter, Integer from, Integer count) throws PMException {
         ctx.put(PM_ENTITY, this);
         List<?> list = getDataAccess().list(ctx, filter, from, count);
@@ -186,6 +218,12 @@ public class Entity extends PMCoreObject {
         return getOrder() != null;
     }
 
+    /**
+     * String representation of an entity
+     * 
+     * @return The string
+     */
+    @Override
     public String toString() {
         return "Entity (" + id + ") " + clazz;
     }
@@ -400,6 +438,13 @@ public class Entity extends PMCoreObject {
         return weaks;
     }
 
+    /**
+     * Looks for the weak entity corresponding to the given field in this
+     * string entity
+     *
+     * @param field
+     * @return the weak entity
+     */
     public Entity getWeak(Field field) {
         for (Entity entity : getWeaks()) {
             if (entity.getOwner().getEntityProperty().equals(field.getProperty())) {
@@ -409,6 +454,11 @@ public class Entity extends PMCoreObject {
         return null;
     }
 
+    /**
+     * 
+     * @return the hashcode
+     */
+    @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
@@ -416,6 +466,12 @@ public class Entity extends PMCoreObject {
         return result;
     }
 
+    /**
+     * Compares two entities by id to check if they are equals
+     * @param obj
+     * @return true if both are the same entity
+     */
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -454,6 +510,12 @@ public class Entity extends PMCoreObject {
         return noCount;
     }
 
+    /**
+     * Looks for an apropiate highlight for this field+instance
+     * @param field
+     * @param instance
+     * @return the highlight
+     */
     public Highlight getHighlight(Field field, Object instance) {
         if (getHighlights() == null) {
             return null;
@@ -461,6 +523,10 @@ public class Entity extends PMCoreObject {
         return getHighlights().getHighlight(this, field, instance);
     }
 
+    /**
+     *
+     * @return true if the entity is weak
+     */
     public boolean isWeak() {
         return getOwner() != null;
     }

@@ -27,6 +27,9 @@ import java.util.List;
 public class MenuList extends Menu{
     private List<Menu> submenus;
 
+    /**
+     * Default constructor with a new empty list of submenus
+     */
     public MenuList() {
         submenus = new ArrayList<Menu>();
     }

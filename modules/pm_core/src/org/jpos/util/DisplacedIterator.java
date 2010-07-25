@@ -2,27 +2,50 @@ package org.jpos.util;
 
 import java.util.Iterator;
 
+/**
+ * Iterator for the displaced list
+ *
+ * @author jpaoletti
+ * @param <T>
+ */
 public class DisplacedIterator<T> implements Iterator<T> {
-	private Integer displacement;
-	private Integer pos = 0;
-	private DisplacedList<T> list ;
 
-	public DisplacedIterator(DisplacedList<T> list) {
-		this.list = list;
-		this.displacement = list.getDisplacement();
-		this.pos = displacement;
-	}
+    private Integer displacement;
+    private Integer pos = 0;
+    private DisplacedList<T> list;
 
-	public boolean hasNext() {
-		return (pos-displacement < list.size());
-	}
+    /**
+     * Constructor
+     *
+     * @param list
+     */
+    public DisplacedIterator(DisplacedList<T> list) {
+        this.list = list;
+        this.displacement = list.getDisplacement();
+        this.pos = displacement;
+    }
 
-	public T next() {
-		T item = list.get(pos);
-		pos++;
-		return item;
-	}
+    /**
+     *
+     * @return
+     */
+    public boolean hasNext() {
+        return (pos - displacement < list.size());
+    }
 
-	public void remove() {}
+    /**
+     *
+     * @return
+     */
+    public T next() {
+        T item = list.get(pos);
+        pos++;
+        return item;
+    }
 
+    /**
+     *
+     */
+    public void remove() {
+    }
 }

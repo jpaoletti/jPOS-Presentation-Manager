@@ -94,10 +94,18 @@ public class EntityOwner extends PMCoreObject{
         this.entityCollectionClass = entityCollectionClass;
     }
 
+    /**
+     * Getter for localPosition
+     * @return The localPosition
+     */
     public String getLocalPosition() {
         return localPosition;
     }
 
+    /**
+     *
+     * @param localPosition
+     */
     public void setLocalPosition(String localPosition) {
         this.localPosition = localPosition;
     }

@@ -88,7 +88,11 @@ public class Operation extends PMCoreObject {
         return (getDisplay()==null || getDisplay().compareTo("all")==0 || getDisplay().indexOf(other)!=-1);
     }
 
-    /**Redefines toString from object*/
+    /**
+     * Redefines toString from object
+     * @return
+     */
+    @Override
     public String toString() {
         return getId();
     }
@@ -215,10 +219,18 @@ public class Operation extends PMCoreObject {
         return getConfig (name, null);
     }
 
+    /**
+     *
+     * @param showTitle
+     */
     public void setShowTitle(Boolean showTitle) {
         this.showTitle = showTitle;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Boolean getShowTitle() {
         if(showTitle==null)return true;
         return showTitle;

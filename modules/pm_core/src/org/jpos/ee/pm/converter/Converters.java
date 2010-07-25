@@ -27,6 +27,11 @@ import org.jpos.ee.pm.core.PMService;
 public class Converters extends PMCoreObject{
     private List<Converter> converters;
 
+    /**
+     * Looks for an aproppiate converter for the given operation id.
+     * @param operId The operation id
+     * @return The first converter that matches this operation.
+     */
     public Converter getConverterForOperation(String operId){
         if(getConverters() != null)
         for(Converter converter : getConverters()){

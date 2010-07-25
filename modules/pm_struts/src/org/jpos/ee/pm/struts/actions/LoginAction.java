@@ -93,7 +93,7 @@ public class LoginAction extends EntityActionSupport {
     }
 
     private void loadMenu(PMStrutsContext ctx, PMSecurityUser u) throws PMException {
-        Menu menu = MenuSupport.getMenu(u.getPermissionList(), getPMService());
+        Menu menu = MenuSupport.getMenu(u.getPermissionList());
         ctx.getSession().setAttribute(USER, u);
         ctx.getSession().setAttribute(MENU, menu);
     }

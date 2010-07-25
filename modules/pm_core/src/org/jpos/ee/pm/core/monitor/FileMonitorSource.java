@@ -32,6 +32,13 @@ import java.util.List;
 public class FileMonitorSource extends MonitorSource {
     private String filename;
 
+    /**
+     * Get the file lines since the actual until the last.
+     * 
+     * @param actual Actual line identification
+     * @return The list of lines
+     * @throws Exception
+     */
     public List<MonitorLine> getLinesFrom(Object actual) throws Exception {
         //TODO Enhance line retrieve to get last lines directly
         String line = null;
@@ -65,6 +72,11 @@ public class FileMonitorSource extends MonitorSource {
         return result;
     }
     
+    /**
+     * Return the last file line
+     * @return The line
+     * @throws Exception
+     */
     public MonitorLine getLastLine() throws Exception {
         String line = null;
         MonitorLine result = new MonitorLine(); 
@@ -87,14 +99,25 @@ public class FileMonitorSource extends MonitorSource {
     }
 
 
+    /**
+     * Retrieve the filename
+     */
     public void init() {
         setFilename(getConfig("filename"));
     }
 
+    /**
+     *
+     * @param filename
+     */
     public void setFilename(String filename) {
         this.filename = filename;
     }
 
+    /**
+     *
+     * @return the filename
+     */
     public String getFilename() {
         return filename;
     }

@@ -43,6 +43,7 @@ public abstract class ValidatorSupport extends org.jpos.util.Validator implement
      
     /**Helper for a property
      * @param name Property name
+     * @param def Default value
      * @return Property value*/
     public String get (String name, String def) {
         if (properties != null) {

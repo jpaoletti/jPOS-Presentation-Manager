@@ -23,6 +23,11 @@ import java.util.List;
 import org.jpos.ee.Constants;
 import org.jpos.util.DisplacedList;
 
+/**
+ * This list represents a list with a paged representation.
+ * 
+ * @author jpaoletti
+ */
 public class PaginatedList implements Constants {
 
     private Entity entity;
@@ -41,6 +46,11 @@ public class PaginatedList implements Constants {
     private String operationColWidth;
     private boolean hasSelectedScope;
 
+    /**
+     * Returns a list with the existing pages index
+     * 
+     * @return
+     */
     public List<Integer> getPageRange() {
         List<Integer> r = new ArrayList<Integer>();
         for (int i = 1; i <= getPages(); i++) {
@@ -49,17 +59,31 @@ public class PaginatedList implements Constants {
         return r;
     }
 
+    /**
+     * String representation of the list
+     * @return
+     */
+    @Override
     public String toString() {
         return "PMList [entity=" + entity + ", page " + page + " of "
                 + pages + ", total=" + total + ", rowsPerPage=" + rowsPerPage
                 + ", order=" + order + ", desc=" + desc + "]";
     }
 
+    /**
+     * Default constructor
+     */
     public PaginatedList() {
         this.page = 1;
         rowsPerPage = 10; //Default
     }
 
+    /**
+     * Constructor with contents and total
+     * 
+     * @param contents
+     * @param total
+     */
     public PaginatedList(DisplacedList<Object> contents, Long total) {
         super();
         this.contents = contents;
@@ -70,27 +94,51 @@ public class PaginatedList implements Constants {
         }
     }
 
+    /**
+     *
+     * @param rowsPerPage
+     */
     public void setRowsPerPage(Integer rowsPerPage) {
         this.rowsPerPage = rowsPerPage;
         setTotal(total);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getOrder() {
         return order;
     }
 
+    /**
+     *
+     * @param order
+     */
     public void setOrder(String order) {
         this.order = order;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean isDesc() {
         return desc;
     }
 
+    /**
+     *
+     * @param desc
+     */
     public void setDesc(boolean desc) {
         this.desc = desc;
     }
 
+    /**
+     *
+     * @return
+     */
     public DisplacedList<Object> getContents() {
         if (contents == null) {
             contents = new DisplacedList<Object>();
@@ -98,11 +146,19 @@ public class PaginatedList implements Constants {
         return contents;
     }
 
+    /**
+     *
+     * @param contents
+     */
     public void setContents(DisplacedList<Object> contents) {
         this.contents = contents;
         getContents().setDisplacement((int) ((getPage() - 1) * getRowsPerPage()));
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getPage() {
         if (page == null) {
             return 1;
@@ -110,10 +166,18 @@ public class PaginatedList implements Constants {
         return page;
     }
 
+    /**
+     *
+     * @param page
+     */
     public void setPage(Integer page) {
         this.page = page;
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getPages() {
         if (pages == null) {
             return 1L;
@@ -121,14 +185,26 @@ public class PaginatedList implements Constants {
         return pages;
     }
 
+    /**
+     *
+     * @param pages
+     */
     public void setPages(Long pages) {
         this.pages = pages;
     }
 
+    /**
+     *
+     * @return
+     */
     public Long getTotal() {
         return total;
     }
 
+    /**
+     *
+     * @param total
+     */
     public void setTotal(Long total) {
         this.total = total;
         if (total != null) {
@@ -140,38 +216,74 @@ public class PaginatedList implements Constants {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public Integer getRowsPerPage() {
         return rowsPerPage;
     }
 
+    /**
+     *
+     * @param entity
+     */
     public void setEntity(Entity entity) {
         this.entity = entity;
     }
 
+    /**
+     *
+     * @return
+     */
     public Entity getEntity() {
         return entity;
     }
 
+    /**
+     *
+     * @param operations
+     */
     public void setOperations(Operations operations) {
         this.operations = operations;
     }
 
+    /**
+     *
+     * @return
+     */
     public Operations getOperations() {
         return operations;
     }
 
+    /**
+     *
+     * @param operations
+     */
     public void setRowOperations(Operations operations) {
         rowOperations = operations;
     }
 
+    /**
+     *
+     * @return
+     */
     public Operations getRowOperations() {
         return rowOperations;
     }
 
+    /**
+     * Returns the starting index of the list
+     * @return
+     */
     public Integer from() {
         return (this.getPage() != null) ? (((getPage() - 1) * getRowsPerPage())) : 0;
     }
 
+    /**
+     * Return the page size of the list (or de Row Per Page value)
+     * @return
+     */
     public Integer rpp() {
         return (getRowsPerPage() != null) ? getRowsPerPage() : DEFAULT_PAGE_SIZE;
     }

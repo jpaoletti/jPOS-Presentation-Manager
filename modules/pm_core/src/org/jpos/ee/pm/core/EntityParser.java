@@ -96,21 +96,27 @@ public class EntityParser {
 
     /**Parse an entity configuration file
      * @param filename The file name
-     * @return The obtained entity*/
+     * @return The obtained entity
+     * @throws FileNotFoundException
+     */
     public Entity parseEntityFile(String filename) throws FileNotFoundException{
         return (Entity) xstream.fromXML (new FileReader (filename));
     }
 
     /**Parse a monitor configuration file
      * @param filename The file name
-     * @return The obtained monitor*/
+     * @return The obtained monitor
+     * @throws FileNotFoundException 
+     */
     public Monitor parseMonitorFile(String filename) throws FileNotFoundException{
         return (Monitor) xstream.fromXML (new FileReader (filename), new Monitor());
     }
 
     /**Parse an operations file
      * @param filename The file name
-     * @return The operations*/
+     * @return The operations
+     * @throws FileNotFoundException
+     */
     public Operations parseOperationsFile(String filename) throws FileNotFoundException{
         return (Operations) xstream.fromXML (new FileReader (filename));
     }

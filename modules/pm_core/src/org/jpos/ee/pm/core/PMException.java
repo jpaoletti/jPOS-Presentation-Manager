@@ -17,25 +17,46 @@
  */
 package org.jpos.ee.pm.core;
 
-
+/**
+ * A generic expection for Presentation Manager engine.
+ * 
+ * @author jpaoletti
+ */
 public class PMException extends Exception {
+
     private String key;
     private static final long serialVersionUID = -1685585143991954053L;
 
+    /**
+     *
+     * @param key
+     */
     public PMException(String key) {
         setKey(key);
     }
 
+    /**
+     *
+     */
     public PMException() {
         super();
     }
 
+    /**
+     *
+     * @param nested
+     */
     public PMException(Throwable nested) {
         super(nested);
     }
 
+    /**
+     *
+     * @param s
+     * @param nested
+     */
     public PMException(String s, Throwable nested) {
-        super(s,nested);
+        super(s, nested);
     }
 
     /**

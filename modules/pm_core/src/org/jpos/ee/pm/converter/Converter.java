@@ -162,7 +162,12 @@ public class Converter extends PMCoreObject implements Constants {
         return operations;
     }
 
-    /**Visualization with some standard properties. */
+    /**Visualization with some standard properties.
+     * @param obj The object to visualize
+     * @param extra Some extra text. Not used at the moment.
+     * @return The string representation of the given object
+     * @throws ConverterException when an exception occurs trying to convert.
+     */
     public String visualize(Object obj, String extra) throws ConverterException {
         Integer pad = 0;
         String padc = getConfig("pad-count", "0");

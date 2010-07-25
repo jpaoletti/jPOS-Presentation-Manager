@@ -21,10 +21,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
-import org.jpos.ee.pm.core.Operation;
+import org.jpos.ee.pm.core.PMContext;
 
 /**Converter for BigDecimals and amounts <br>
  * Properties: currency and format
@@ -44,21 +42,23 @@ import org.jpos.ee.pm.core.Operation;
  * */
 public class ShowDecimalConverter extends ShowStringConverter {
     
-    public Object build(Entity entity, Field field, Operation operation,
-            EntityInstanceWrapper einstance, Object value) throws ConverterException {
+    @Override
+    public Object build(PMContext ctx) throws ConverterException {
         throw new IgnoreConvertionException("");
     }
 
-    public String visualize(Entity entity, Field field, Operation operation,EntityInstanceWrapper einstance, String extra) throws ConverterException {
+    @Override
+    public String visualize(PMContext ctx) throws ConverterException {
         BigDecimal o = null;
+        Field field = (Field) ctx.get(PM_FIELD);
         try{
-            o = (BigDecimal) getValue(einstance.getInstance(),field);
+            o = (BigDecimal) getValue(ctx.getSelected().getInstance(),field);
         }catch (Exception e) {}
         NumberFormat formatter = new DecimalFormat(getConfig("format", "#0.00"));
         if(o==null)
             return getConfig("null-value","0.00");
         else
-            return visualize(formatter.format(o),extra);
+            return visualize(formatter.format(o),ctx.getString(PM_EXTRA_DATA));
     }
 }
 

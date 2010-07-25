@@ -38,13 +38,18 @@ import org.jpos.util.Logger;
  */
 public class PresentationManager extends Observable {
 
+    /**
+     * Hash value for parameter encrypt
+     */
     public static String HASH = "abcde54321poiuy96356abcde54321poiuy96356";
-    // Singleton
+    /**
+     * Singleton
+     */
     public static PresentationManager pm;
-    protected static final String TAB = "    ";
-    protected static final String ERR = " ==>";
-    protected Map<Object, Entity> entities;
-    protected Map<String, MenuItemLocation> locations;
+    private static final String TAB = "    ";
+    private static final String ERR = " ==>";
+    private Map<Object, Entity> entities;
+    private Map<String, MenuItemLocation> locations;
     private Map<Object, Monitor> monitors;
     private String template;
     private String appversion;
@@ -59,6 +64,13 @@ public class PresentationManager extends Observable {
     private boolean debug;
     private PMService service;
 
+    /**
+     * Initialize the Presentation Manager
+     * @param cfg Configuration from bean
+     * @param log Logger from bean
+     * @param service Bean
+     * @return
+     */
     public boolean initialize(Configuration cfg, Log log, PMService service) {
         notifyObservers();
         error = false;
@@ -122,6 +134,12 @@ public class PresentationManager extends Observable {
         return !error;
     }
 
+    /**
+     * If debug flag is active, create a debug information log
+     * 
+     * @param invoquer The invoquer of the debug
+     * @param o Object to log
+     */
     public void debug(Object invoquer, Object o) {
         if (!debug) {
             return;
@@ -130,10 +148,6 @@ public class PresentationManager extends Observable {
         evt.addMessage("[" + invoquer.getClass().getName() + "]");
         evt.addMessage(o);
         Logger.log(evt);
-    }
-
-    protected String logEntity(Entity e, String symbol) {
-        return String.format("%s%s(%s) %-25s %s", TAB, TAB, symbol, e.getId(), e.getClazz());
     }
 
     private void loadMonitors(Configuration cfg, LogEvent evt, EntityParser parser) {
@@ -161,6 +175,10 @@ public class PresentationManager extends Observable {
 
     /**
      * Formatting helper for startup
+     * @param evt The event
+     * @param s1 Text
+     * @param s2 Extra description
+     * @param symbol Status symbol
      */
     public static void logItem(LogEvent evt, String s1, String s2, String symbol) {
         evt.addMessage(String.format("%s%s(%s) %-25s %s", TAB, TAB, symbol, s1, (s2 != null) ? s2 : ""));
@@ -221,6 +239,11 @@ public class PresentationManager extends Observable {
         evt.addMessage(TAB + "</entities>");
     }
 
+    /**
+     * Return the list of weak entities of the given entity.
+     * @param e The strong entity
+     * @return The list of weak entities
+     */
     protected List<Entity> weakEntities(Entity e) {
         List<Entity> res = new ArrayList<Entity>();
         for (Entity entity : getEntities().values()) {
@@ -235,6 +258,11 @@ public class PresentationManager extends Observable {
         }
     }
 
+    /**
+     * Return the entity of the given id
+     * @param id Entity id
+     * @return The entity
+     */
     public Entity getEntity(String id) {
         Entity e = getEntities().get(id);
         if (e == null) {
@@ -246,17 +274,30 @@ public class PresentationManager extends Observable {
         return e;
     }
 
+    /**
+     * Return the location of the given id
+     * @param id The location id
+     * @return The MenuItemLocation
+     */
     public MenuItemLocation getLocation(String id) {
         return locations.get(id);
     }
 
+    /**
+     * Return the monitor of the given id
+     * @param id The monitor id
+     * @return The monitor
+     */
     public Monitor getMonitor(String id) {
         return getMonitors().get(id);
     }
 
-    /**Create and fill a new Entity Container */
-    public EntityContainer newEntityContainer(String sid) {
-        Entity e = lookupEntity(sid);
+    /**Create and fill a new Entity Container
+     * @param id Entity id
+     * @return The container
+     */
+    public EntityContainer newEntityContainer(String id) {
+        Entity e = lookupEntity(id);
         if (e == null) {
             return null;
         }
@@ -277,82 +318,150 @@ public class PresentationManager extends Observable {
 
 
     /* Getters */
+    /**
+     * Getter for application version
+     * @return
+     */
     public String getAppversion() {
         return appversion;
     }
 
+    /**
+     * Getter for contact
+     * @return
+     */
     public String getContact() {
         return contact;
     }
 
+    /**
+     * Getter for default data access
+     * @return
+     */
     public String getDefaultDataAccess() {
         return defaultDataAccess;
     }
 
+    /**
+     * Getter for entities map
+     * @return
+     */
     public Map<Object, Entity> getEntities() {
         return entities;
     }
 
+    /**
+     * Getter for location map
+     * @return
+     */
     public Map<String, MenuItemLocation> getLocations() {
         return locations;
     }
 
+    /**
+     * Getter for log
+     * @return
+     */
     public Log getLog() {
         return log;
     }
 
+    /**
+     * Getter for login required
+     * @return
+     */
     public boolean isLoginRequired() {
         return loginRequired;
     }
 
+    /**
+     * Getter for monitor map
+     * @return
+     */
     public Map<Object, Monitor> getMonitors() {
         return monitors;
     }
 
+    /**
+     * Getter for persistanteManager
+     * @return
+     */
     public PersistenceManager getPersistenceManager() {
         return persistenceManager;
     }
 
+    /**
+     * Setter for persistenceManager
+     * @param persistenceManager
+     */
     public void setPersistenceManager(PersistenceManager persistenceManager) {
         this.persistenceManager = persistenceManager;
     }
 
+    /**
+     * Getter for subtitle resource key
+     * @return
+     */
     public String getSubtitle() {
         return subtitle;
     }
 
+    /**
+     * Getter for template id
+     * @return
+     */
     public String getTemplate() {
         return template;
     }
 
+    /**
+     * Getter for title resource key
+     * @return
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Getter for singleton pm
+     * @return
+     */
     public static PresentationManager getPm() {
         return pm;
     }
 
+    /**
+     * Getter for bean 
+     * @return
+     */
     public PMService getService() {
         return service;
     }
 
     /* Loggin helpers*/
-    /**Generate an info entry on the local logger*/
+    
+    /**
+     * Generate an info entry on the local logger
+     * @param o Object to log
+     */
     public void info(Object o) {
         LogEvent evt = getLog().createInfo();
         evt.addMessage(o);
         Logger.log(evt);
     }
 
-    /**Generate a warn entry on the local logger*/
+    /**Generate a warn entry on the local logger
+     * @param o Object to log
+     */
     public void warn(Object o) {
         LogEvent evt = getLog().createWarn();
         evt.addMessage(o);
         Logger.log(evt);
     }
 
-    /**Generate an error entry on the local logger*/
+    /**Generate an error entry on the local logger
+     * @param o Object to log
+     */
     public void error(Object o) {
         LogEvent evt = getLog().createError();
         evt.addMessage(o);

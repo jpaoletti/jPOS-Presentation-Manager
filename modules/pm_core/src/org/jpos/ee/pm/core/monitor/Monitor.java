@@ -57,10 +57,18 @@ public class Monitor extends Observable implements Runnable{
     /**Ignore actual and always get everything*/
     private Boolean all;
     
+    /**
+     * Default constructor
+     */
     public Monitor() {
         super();
     }
 
+    /**
+     * Inherited from observable
+     * @param o
+     */
+    @Override
     public synchronized void addObserver(Observer o) {
         super.addObserver(o);
         //Interrupts the sleeping Monitor
@@ -71,6 +79,9 @@ public class Monitor extends Observable implements Runnable{
 
     private Object actual = null;
 
+    /**
+     * Implemented from runnable
+     */
     public void run() {
         while(true){
             if(countObservers()==0){
@@ -89,6 +100,9 @@ public class Monitor extends Observable implements Runnable{
         }
     }
     
+    /**
+     * Start watching a monitor
+     */
     public void startWatching(){
         try {
             MonitorLine line = getSource().getLastLine();
@@ -100,6 +114,9 @@ public class Monitor extends Observable implements Runnable{
         }        
     }
     
+    /**
+     * Looks for new lines
+     */
     public void getNewLines(){
         List<String> result = new ArrayList<String>();
         try {

@@ -121,6 +121,11 @@ public class Operations extends PMCoreObject implements Constants {
         this.operations = operations;
     }
 
+    /**
+     * Returns the number of operations in the list
+     * 
+     * @return
+     */
     public int count() {
         return getOperations().size();
     }

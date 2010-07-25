@@ -17,7 +17,10 @@
  */
 package org.jpos.ee.pm.core;
 
-/**Similar to struts ActionMessage*/
+/**
+ * Similar to struts ActionMessage
+ * @author jpaoletti
+ */
 public class PMMessage {
     private String key;
     private String message;
@@ -26,26 +29,53 @@ public class PMMessage {
     private String arg2;
     private String arg3;
         
+    /**
+     * Constructor with a key
+     * 
+     * @param key The key
+     */
     public PMMessage(String key){
         
     }
 
+    /**
+     * String representation
+     * @return
+     */
     @Override
     public String toString() {
         return "PMMessage{" + "key=" + key + ", message=" + message + '}';
     }
 
+    /**
+     * Helper constructor
+     * @param key
+     * @param message
+     */
     public PMMessage(String key, String message) {
         super();
         this.message = message;
     }
 
+    /**
+     * Helper constructor
+     * @param key
+     * @param message
+     * @param arg0
+     */
     public PMMessage(String key, String message, String arg0) {
         super();
         this.message = message;
         this.arg0 = arg0;
     }
 
+    /**
+     * Helper constructor
+     * @param key
+     * @param message
+     * @param arg0
+     * @param arg1
+     */
     public PMMessage(String key, String message, String arg0, String arg1) {
         super();
         this.message = message;
@@ -53,6 +83,14 @@ public class PMMessage {
         this.arg1 = arg1;
     }
 
+    /**
+     * Helper constructor
+     * @param key
+     * @param message
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     */
     public PMMessage(String key, String message, String arg0, String arg1, String arg2) {
         super();
         this.message = message;
@@ -61,6 +99,15 @@ public class PMMessage {
         this.arg2 = arg2;
     }
 
+    /**
+     * Helper constructor
+     * @param key
+     * @param message
+     * @param arg0
+     * @param arg1
+     * @param arg2
+     * @param arg3
+     */
     public PMMessage(String key, String message, String arg0, String arg1, String arg2,    String arg3) {
         super();
         this.message = message;

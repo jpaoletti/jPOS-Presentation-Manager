@@ -33,6 +33,10 @@ public class MonitorObserver implements Observer{
     private Monitor monitor;
     private List<String> lines;
     
+    /**
+     *
+     * @param monitor
+     */
     public MonitorObserver(Monitor monitor) {
         super();
         this.setMonitor(monitor);
@@ -40,6 +44,11 @@ public class MonitorObserver implements Observer{
         setLines(new ArrayList<String>());
     }
     
+    /**
+     * Inherited from Observer
+     * @param o
+     * @param arg
+     */
     public void update(Observable o, Object arg) {
         if(arg instanceof String)
             lines.add((String) arg);
@@ -52,10 +61,18 @@ public class MonitorObserver implements Observer{
         }
     }
 
+    /**
+     * Setter for monitor
+     * @param monitor
+     */
     public void setMonitor(Monitor monitor) {
         this.monitor = monitor;
     }
 
+    /**
+     * Getter for monitor
+     * @return The monitor
+     */
     public Monitor getMonitor() {
         return monitor;
     }

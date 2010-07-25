@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package org.jpos.ee.pm.menu;
 
 /**This simple interface represents a MenuItem location, that is "where should this item points in 
@@ -51,5 +50,12 @@ package org.jpos.ee.pm.menu;
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
 public interface MenuItemLocation {
-    public Object build(MenuItem item, Object ... params);
+
+    /**
+     * Builds a custom representation of the goal of a menu item
+     * @param item The menu item
+     * @param params Generic parameters.
+     * @return The representation of the link
+     */
+    public Object build(MenuItem item, Object... params);
 }

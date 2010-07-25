@@ -20,11 +20,6 @@ package org.jpos.ee.pm.core;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntityFilter;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.Operation;
-import org.jpos.ee.pm.core.PaginatedList;
 
 /**
  * @author jpaoletti
@@ -46,6 +41,12 @@ public class EntityContainer {
     private EntityContainer owner;
     private Operation operation;
 
+    /**
+     * Main constructor
+     * 
+     * @param entity The contained entity
+     * @param sid The session id
+     */
     public EntityContainer(Entity entity, String sid) {
         super();
         setEntity(entity);
@@ -54,56 +55,111 @@ public class EntityContainer {
         setSelectedNew(false);
     }
 
+    /**
+     * Builds a string based on a session id and the entity id. Not implemented.
+     * 
+     * @param sid A session id
+     * @param eid The entity id
+     * @return The resulting string
+     */
     public static String buildId(String sid, String eid) {
         //return sid.substring(0,20) + eid.hashCode() + sid.substring(20);
         return eid;
     }
 
+    /**
+     * Getter for the id
+     * @return The id
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(String id) {
         this.id = id;
     }
 
+    /**
+     * Getter for the entity
+     * @return The entity
+     */
     public Entity getEntity() {
         return entity;
     }
 
+    /**
+     *
+     * @param entity
+     */
     public void setEntity(Entity entity) {
         this.entity = entity;
     }
 
+    /**
+     * Getter for the list
+     * @return The list
+     */
     public PaginatedList getList() {
         return list;
     }
 
+    /**
+     *
+     * @param list
+     */
     public void setList(PaginatedList list) {
         this.list = list;
     }
 
+    /**
+     *
+     * @param sid
+     */
     public void setSid(String sid) {
         this.sid = sid;
     }
 
+    /**
+     * Getter for the session id
+     * @return The  session id
+     */
     public String getSid() {
         return sid;
     }
 
+    /**
+     *
+     * @param selected
+     */
     public void setSelected(EntityInstanceWrapper selected) {
         this.selected = selected;
         setSelectedNew(false);
     }
 
+    /**
+     * Getter for the selected instance wrapper
+     * @return The wrapper
+     */
     public EntityInstanceWrapper getSelected() {
         return selected;
     }
 
+    /**
+     *
+     * @param new_
+     */
     public void setSelectedNew(boolean new_) {
         this.selectedNew = new_;
     }
 
+    /**
+     * Indicate if the actual selected is new
+     * @return true when selected is new
+     */
     public boolean isSelectedNew() {
         return selectedNew;
     }
@@ -139,18 +195,34 @@ public class EntityContainer {
         return selectedIndexes;
     }
 
+    /**
+     * Getter for the owner
+     * @return The owner
+     */
     public EntityContainer getOwner() {
         return owner;
     }
 
+    /**
+     *
+     * @param owner
+     */
     public void setOwner(EntityContainer owner) {
         this.owner = owner;
     }
 
+    /**
+     * Getter for the operation
+     * @return The operation
+     */
     public Operation getOperation() {
         return operation;
     }
 
+    /**
+     *
+     * @param operation
+     */
     public void setOperation(Operation operation) {
         this.operation = operation;
     }

@@ -3,8 +3,24 @@ package org.jpos.ee.pm.core.monitor;
 import org.jpos.iso.ISOException;
 import org.jpos.iso.ISOUtil;
 
+/**
+ * A formatter that receives an array and returns a formatted string.
+ *
+ * This formatter has two properties
+ *
+ * <b>separator</b> an intem separator
+ * <b>pads</b> a list of # separated padding item representation. Each padding
+ * item representation hast the form [A,B,C,D] where
+ * A: Index of the array where the item will be taken
+ * B: L or R, indicates the direction of the padding (Left or right)
+ * C: Padding character
+ * D: Padding length
+ *
+ * @author jpaoletti
+ */
 public class BasicObjectArrayFormatter extends MonitorFormatter {
     
+    @Override
     public String format(MonitorLine line){
         Object[] objects = (Object[]) line.getValue();
         String[] pads = getConfig("pads", "").split("#");

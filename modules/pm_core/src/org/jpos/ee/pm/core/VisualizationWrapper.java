@@ -32,8 +32,10 @@ public abstract class VisualizationWrapper {
     /** A map with the calculated values of the field*/    
     private Map<String,Object> values;
 
-    /**This abstract method must be defined for each implementation and must
+    /**
+     * This abstract method must be defined for each implementation and must
      * fill the values map.
+     * @param ctx The context
      * @param object The entity instance to get any data required for calculation*/
     public abstract void load(PMContext ctx,  Object object);
     

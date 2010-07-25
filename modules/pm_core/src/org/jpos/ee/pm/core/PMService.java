@@ -28,6 +28,12 @@ import org.jpos.util.NameRegistrar;
  * */
 public class PMService extends QBeanSupport implements Constants {
 
+    /**
+     * Initialize service
+     * 
+     * @throws Exception
+     */
+    @Override
     protected void initService() throws Exception {
         if (PresentationManager.pm == null) {
             PresentationManager.pm = new PresentationManager();
@@ -36,15 +42,19 @@ public class PMService extends QBeanSupport implements Constants {
         boolean ok = PresentationManager.pm.initialize(cfg, log, this);
         if (ok) {
             NameRegistrar.register(getName(), this);
-        }else{
+        } else {
             PresentationManager.pm = null;
         }
     }
 
-    /**Visualization wrapper. If there is no converter then I use this "void".
+    /**
+     * Visualization wrapper. If there is no converter then I use this "void".
      * If the string is a struts url (jsp or do) the I return it as is. Otherwise
      * I asume that the text must be shown in void converter as a plain text.
-     * */
+     *
+     * @param s Not wrapped string
+     * @return wrapped string
+     */
     public String visualizationWrapper(String s) {
         return s;
     }

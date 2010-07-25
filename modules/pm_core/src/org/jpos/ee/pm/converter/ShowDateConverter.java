@@ -40,17 +40,24 @@ import org.jpos.ee.pm.core.PMContext;
  * */
 public class ShowDateConverter extends Converter {
     
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
         throw new IgnoreConvertionException("");
     }
     
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);
         Date o = (Date) getValue(einstance.getInstance(), field);
         return (o==null)?"":getDateFormat().format(o);
     }
-    public DateFormat getDateFormat() {
+
+    /**
+     *
+     * @return the DateFormat object with the configured date format
+     */
+    protected DateFormat getDateFormat() {
         DateFormat df = new SimpleDateFormat (getConfig("format", "MM/dd/yyyy"));
         return df;
     }

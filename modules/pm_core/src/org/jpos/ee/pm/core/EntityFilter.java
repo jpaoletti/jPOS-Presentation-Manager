@@ -14,7 +14,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */package org.jpos.ee.pm.core;
+ */
+package org.jpos.ee.pm.core;
 
 
 public class EntityFilter extends PMCoreObject {
@@ -28,6 +29,9 @@ public class EntityFilter extends PMCoreObject {
     
     private EntityInstanceWrapper instance;
     
+    /**
+     * Default constructor
+     */
     public EntityFilter(){
         
     }
@@ -40,10 +44,18 @@ public class EntityFilter extends PMCoreObject {
         
     }
     
+    /**
+     * Setter for instance
+     * @param instance
+     */
     public void setInstance(EntityInstanceWrapper instance) {
         this.instance = instance;
     }
 
+    /**
+     * Getter for instance
+     * @return The wrapper
+     */
     public EntityInstanceWrapper getInstance() {
         return instance;
     }
