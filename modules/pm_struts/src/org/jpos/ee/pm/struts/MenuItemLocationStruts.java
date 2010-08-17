@@ -20,6 +20,11 @@ package org.jpos.ee.pm.struts;
 import org.jpos.ee.pm.menu.MenuItem;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 
+/**
+ * Location for internal links that uses loadPage javascript function
+ *
+ * @author jpaoletti
+ */
 public class MenuItemLocationStruts implements MenuItemLocation {
 
     public Object build(MenuItem item, Object... params) {
@@ -36,7 +41,7 @@ public class MenuItemLocationStruts implements MenuItemLocation {
         return context;
     }
 
-    protected String buildLink(MenuItem item, Object... params) {
+    private String buildLink(MenuItem item, Object... params) {
         return (String) params[0] + item.getLocation_value();
     }
 }

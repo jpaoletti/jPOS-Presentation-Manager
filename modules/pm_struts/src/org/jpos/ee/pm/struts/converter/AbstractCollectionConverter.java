@@ -3,11 +3,9 @@ package org.jpos.ee.pm.struts.converter;
 import java.util.List;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.Entity;
-import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.ListFilter;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
 /**
@@ -38,6 +36,15 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
     public List<?> getList(PMStrutsContext ctx, String entity_id) throws PMException {
         final String filter = getConfig("filter");
         final String eid = (entity_id==null)?getConfig("entity"):entity_id;
+        final String sort = getConfig("sord-field");
+        final String sortd = getConfig("sord-direction");
+
+        if(sort != null){
+            ctx.put(PM_LIST_ORDER, sort);
+            if(sortd != null){
+                ctx.put(PM_LIST_ASC, sortd.compareTo("asc"));
+            }
+        }
 
         ListFilter lfilter = null;
         if( filter != null && filter.compareTo("null") != 0 && filter.compareTo("") != 0) {

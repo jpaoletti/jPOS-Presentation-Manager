@@ -21,20 +21,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
+/**
+ * Converter for weak entities.
+ *
+ * Properties:
+ *
+ * <b>weak-entity</b> Id of the weak entity
+ * <b>show-list</b> If true (default) show the list of items
+ * <b>show-modify</b> If true (default) show a button to edit screen
+ *
+ * @author jpaoletti
+ */
 public class WeakConverter extends StrutsEditConverter {
 
-    public Object build(PMContext ctx) throws ConverterException {
-        throw new IgnoreConvertionException("");
-    }
-
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         Field field = (Field) ctx.get(PM_FIELD);
         StringBuilder sb = new StringBuilder();

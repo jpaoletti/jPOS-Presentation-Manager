@@ -89,7 +89,10 @@ public class MD5{
     return cmn(c ^ (b | (~d)), a, b, x, s, t);
   }
   
-  /** Take a string and return the hex representation of its MD5.
+  /**
+   * Take a string and return the hex representation of its MD5.
+   * @param str The string
+   * @return The result representation
    */
   public String calcMD5(String str)  {
     int[] x = str2blks_MD5(str);

@@ -21,12 +21,20 @@ package org.jpos.ee.pm.struts;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.PMService;
 
+/**
+ * QBean for struts Presentation Manager service
+ * 
+ * @author jpaoletti
+ */
 public class PMStrutsService extends PMService implements Constants{
     
-    /**Visualization wrapper. If there is no converter then I use this "void".
+    /**
+     * Visualization wrapper. If there is no converter then I use this "void".
      * If the string is a struts url (jsp or do) the I return it as is. Otherwise
      * I asume that the text must be shown in void converter as a plain text.
+     * 
      * */
+    @Override
     public String visualizationWrapper(String s){
         if(s==null)return "void.jsp?text=";
         if(s.contains(".jsp?") || s.contains(".do?"))

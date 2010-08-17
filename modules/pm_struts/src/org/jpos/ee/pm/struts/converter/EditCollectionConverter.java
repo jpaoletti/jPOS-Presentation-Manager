@@ -24,11 +24,16 @@ import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
-import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
+/**
+ * Converter for a collection of objects of another strong entity
+ * 
+ * @author jpaoletti
+ */
 public class EditCollectionConverter extends AbstractCollectionConverter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
         try{
             final PMStrutsContext c = (PMStrutsContext) ctx;
@@ -55,6 +60,14 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
         }
     }
 
+    /**
+     * Return the collection from the entity instance (or a new one if its null)
+     * 
+     * @param ctx The context
+     * @return The collection to edit
+     * @throws ConverterException
+     * @throws ConfigurationException
+     */
     protected Collection<Object> getCollection(PMContext ctx) throws ConverterException, ConfigurationException {
         String collection_class = getConfig("collection-class");
         if (collection_class == null) {
@@ -70,6 +83,7 @@ public class EditCollectionConverter extends AbstractCollectionConverter {
         return result;
     }
 
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         final String filter = getConfig("filter");
         final String entity = getConfig("entity");

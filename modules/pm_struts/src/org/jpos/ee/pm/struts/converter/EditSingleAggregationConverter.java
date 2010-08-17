@@ -30,9 +30,11 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
  * <converter class="org.jpos.ee.pm.converter.EditSingleAggregationConverter">
  *     <operationId>edit</operationId>
  *         <properties>
- *             <property name="entity"     value="the_other_entity" />
- *             <property name="with-null"     value="true" />
- *             <property name="filter"     value="field1=v1 , field2=v2" />
+ *             <property name="entity"         value="the_other_entity" />
+ *             <property name="with-null"      value="true" />
+ *             <property name="filter"         value="org.jpos.ee.pm.core.ListFilterXX" />
+ *             <property name="sort-field"     value="xxx" />
+ *             <property name="sort-direction" value="asc | desc" />
  *         </properties>
  * </converter>
  * }

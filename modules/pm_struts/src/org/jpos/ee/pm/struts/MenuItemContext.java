@@ -17,6 +17,11 @@
  */
 package org.jpos.ee.pm.struts;
 
+/**
+ * Helper class to build web based links for menu
+ * 
+ * @author jpaoletti
+ */
 public class MenuItemContext {
     private String prefix;
     private String sufix;

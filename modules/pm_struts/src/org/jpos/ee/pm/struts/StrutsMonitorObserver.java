@@ -37,6 +37,11 @@ import org.jpos.ee.pm.core.monitor.MonitorObserver;
 public class StrutsMonitorObserver extends MonitorObserver {
     private Timer timer;
 
+    /**
+     * Constructor
+     *
+     * @param monitor The monitor to observe
+     */
     public StrutsMonitorObserver(Monitor monitor) {
         super(monitor);
         schedule();
@@ -52,10 +57,11 @@ public class StrutsMonitorObserver extends MonitorObserver {
         timer.schedule(task, getMonitor().getDelay()*3);
     }
 
-    protected StrutsMonitorObserver self(){
+    private StrutsMonitorObserver self(){
         return this;
     }
 
+    @Override
     public synchronized List<String> getLines() {
         timer.cancel();
         timer.purge();

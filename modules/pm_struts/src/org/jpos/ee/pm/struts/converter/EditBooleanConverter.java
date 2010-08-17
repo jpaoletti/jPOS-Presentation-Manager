@@ -22,8 +22,15 @@ import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 
+/**
+ * Edit a boolean. with-null property indicates a third option with "null"
+ * value
+ * 
+ * @author jpaoletti
+ */
 public class EditBooleanConverter extends StrutsEditConverter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
         String res = ctx.getString(PM_FIELD_VALUE);
         if(res.compareTo("true")==0) return true;
@@ -31,6 +38,7 @@ public class EditBooleanConverter extends StrutsEditConverter {
         return null;
     }
     
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);

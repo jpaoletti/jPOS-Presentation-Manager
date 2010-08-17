@@ -20,6 +20,11 @@ package org.jpos.ee.pm.struts;
 import org.jpos.ee.pm.menu.MenuItem;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 
+/**
+ * Location representing external links.
+ * 
+ * @author jpaoletti
+ */
 public class MenuItemLocationExternal implements MenuItemLocation {
 
     public Object build(MenuItem item, Object... params) {
@@ -35,6 +40,12 @@ public class MenuItemLocationExternal implements MenuItemLocation {
         return context;
     }
 
+    /**
+     * Builds an external link
+     * @param item The menu item
+     * @param params Extra parameters
+     * @return The string with the external link
+     */
     protected String buildLink(MenuItem item, Object... params) {
         return item.getLocation_value();
     }

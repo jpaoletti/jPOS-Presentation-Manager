@@ -19,13 +19,17 @@ package org.jpos.ee.pm.struts.converter;
 
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
-import org.jpos.ee.pm.struts.PMEntitySupport;
 
+/**
+ * Converter for a class name. Not fully working at the moment
+ * 
+ * @author jpaoletti
+ */
 public class EditClassConverter  extends StrutsEditConverter{
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
         Object value = ctx.get(PM_FIELD_VALUE);
         if(value ==null) return null;
@@ -38,6 +42,7 @@ public class EditClassConverter  extends StrutsEditConverter{
         }
     }
 
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);

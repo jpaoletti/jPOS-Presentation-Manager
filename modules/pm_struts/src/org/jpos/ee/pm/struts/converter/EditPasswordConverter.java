@@ -20,9 +20,14 @@ package org.jpos.ee.pm.struts.converter;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.PMContext;
 
+/**
+ * Converter for passwords
+ * 
+ * @author jpaoletti
+ */
 public class EditPasswordConverter extends EditStringConverter {
-
     
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         return super.visualize("password_converter.jsp?");
     }
