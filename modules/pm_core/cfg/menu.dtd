@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!ENTITY % xhtml1-lat1 SYSTEM "xhtml1-lat1.ent">
-%xhtml1-lat1;
-<!ELEMENT menu (menu-list*)>
+<!ENTITY % xhtml1-lat1 SYSTEM "xhtml1-lat1.ent">%xhtml1-lat1;
+<!ELEMENT menu (menu-item*, menu-list*)>
 
-<!ELEMENT menu-item (path*)>
-<!ATTLIST menu-item text CDATA #REQUIRED>
-<!ATTLIST menu-item perm CDATA #REQUIRED>
-<!ELEMENT path (#PCDATA)>
+<!ELEMENT menu-item (location)>
+<!ATTLIST menu-item
+    text CDATA #REQUIRED
+    perm CDATA #REQUIRED>
+
+<!ELEMENT location (EMPTY)>
+<!ATTLIST location
+    id CDATA #REQUIRED
+    value CDATA #REQUIRED>
 
 <!ELEMENT menu-list (menu-list* , menu-item*)>
-<!ATTLIST menu-list text CDATA #REQUIRED>
-<!ATTLIST menu-list perm CDATA #REQUIRED>
+<!ATTLIST menu-list
+    text CDATA #REQUIRED
+    perm CDATA #REQUIRED>

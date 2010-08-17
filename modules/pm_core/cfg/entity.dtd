@@ -3,12 +3,13 @@
 <!ELEMENT id (#PCDATA) >
 <!ELEMENT clazz (#PCDATA) >
 
-<!ATTLIST entity 
-			id CDATA #REQUIRED
-		   	clazz CDATA #REQUIRED >
+<!ATTLIST entity
+    id CDATA #REQUIRED
+    clazz CDATA #REQUIRED >
 
 <!ELEMENT listfilter (EMPTY) >
-<!ATTLIST listfilter class 		CDATA #REQUIRED>
+<!ATTLIST listfilter class
+    CDATA #REQUIRED>
 
 <!ELEMENT rowsPerPage (#PCDATA) >
 <!ELEMENT auditable (#PCDATA) >
@@ -22,18 +23,20 @@
 <!ELEMENT operations (operation*) >
 <!ELEMENT operation (id, enabled?, scope?, visibleIn?, url?, context?, validators?, properties?) >
 
-<!ATTLIST operation 
-			id CDATA #REQUIRED
-		   	enabled CDATA #IMPLIED
-		   	scope CDATA #IMPLIED
-		   	visibleIn CDATA #IMPLIED >
+<!ATTLIST operation
+    id CDATA #REQUIRED
+    enabled CDATA #IMPLIED
+    scope CDATA #IMPLIED
+    visibleIn CDATA #IMPLIED >
 
 <!ELEMENT context ( EMPTY ) >
-<!ATTLIST context class 		CDATA #REQUIRED>
+<!ATTLIST context class
+    CDATA #REQUIRED>
+
 <!ELEMENT text (#PCDATA) >
 <!ELEMENT icon (#PCDATA) >
 <!ELEMENT enabled (#PCDATA) >
-<!ELEMENT scope (#PCDATA) > 
+<!ELEMENT scope (#PCDATA) >
 <!ELEMENT visibleIn (#PCDATA) >
 <!ELEMENT url (#PCDATA) >
 
@@ -43,26 +46,26 @@
 <!ELEMENT field (id, property?, display?, width?, align?, searchCriteria?, multiEditable?, converters?, field-validator*) >
 
 <!ATTLIST field
-			id CDATA #REQUIRED
-            property CDATA #IMPLIED
-		   	display CDATA #IMPLIED
-		   	width CDATA #IMPLIED
-		   	align CDATA #IMPLIED>
+    id CDATA #REQUIRED
+    property CDATA #IMPLIED
+    display CDATA #IMPLIED
+    width CDATA #IMPLIED
+    align CDATA #IMPLIED>
 
 <!ELEMENT display (#PCDATA) >
 <!ELEMENT property (#PCDATA) >
 <!ELEMENT width (#PCDATA)>
 <!ELEMENT converters (converter*)>
 <!ELEMENT converter (properties?)>
-<!ATTLIST converter 
-			class 		CDATA #REQUIRED
-			operations  CDATA #REQUIRED >
+<!ATTLIST converter
+    class   CDATA #REQUIRED
+    operations  CDATA #REQUIRED >
 <!ELEMENT field-validator (properties?)>
 <!ELEMENT properties (property*)>
 <!ELEMENT property ( EMPTY )>
-<!ATTLIST property 
-      name 		CDATA #REQUIRED
-      value 	CDATA #REQUIRED >
+<!ATTLIST property
+    name    CDATA #REQUIRED
+    value   CDATA #REQUIRED >
 <!ELEMENT listfilter (#PCDATA)>
 <!ELEMENT showToList (#PCDATA)>
 <!ELEMENT align (#PCDATA)>

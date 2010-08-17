@@ -1,16 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!ENTITY % xhtml1-lat1 SYSTEM "xhtml1-lat1.ent">  %xhtml1-lat1;
 <!ELEMENT monitor ( id, source, formatter, delay, max?, cleanup?, all? ) >
 <!ELEMENT id (#PCDATA) >
 
 <!ELEMENT formatter (EMPTY) >
-<!ATTLIST formatter class 		CDATA #REQUIRED>
+<!ATTLIST formatter class
+    CDATA #REQUIRED>
 
 <!ELEMENT source (properties?)>
 <!ELEMENT properties (property*)>
 <!ELEMENT property ( EMPTY )>
 <!ATTLIST property  
-    name      CDATA #REQUIRED
-    value     CDATA #REQUIRED>
+    name    CDATA #REQUIRED
+    value   CDATA #REQUIRED>
     
 <!ELEMENT delay (#PCDATA) >
 <!ELEMENT max (#PCDATA) >
