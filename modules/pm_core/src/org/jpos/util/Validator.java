@@ -22,12 +22,13 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.jpos.ee.pm.core.PMCoreObject;
 
 /**
  *
  * @author jpaoletti
  */
-public class Validator {
+public class Validator extends PMCoreObject{
 
     private static final ResourceBundle bundle =
             ResourceBundle.getBundle(Validator.class.getName());

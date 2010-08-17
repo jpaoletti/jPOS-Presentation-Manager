@@ -23,7 +23,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.jpos.ee.pm.converter.ConverterException;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 
@@ -42,38 +41,44 @@ import org.jpos.ee.pm.core.PMContext;
  * */
 public class EditDateConverter extends EditStringConverter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
         try {
             String value = ctx.getString(PM_FIELD_VALUE);
-            if (value != null)
-                return getDateFormat().parse ((String)value);
+            if (value != null) {
+                return getDateFormat().parse((String) value);
+            }
         } catch (ParseException e) {
             ctx.getPresentationManager().error(e);
         }
         return null;
     }
-    
+
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
-        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);
-        Date o = (Date) getValue(einstance.getInstance(), field);
-        try{
-            return super.visualize("date_converter.jsp?format="+normalize(javaToJavascriptDateFormat( getFormatString()) )+"&value="+getDateFormat().format(o));
-        }catch (Exception e) {
-            return super.visualize("date_converter.jsp?format="+normalize(javaToJavascriptDateFormat( getFormatString()) )+"&value=");
+        try {
+            Date o = (Date) getValue(ctx.getSelected().getInstance(), field);
+            return super.visualize("date_converter.jsp?format=" + normalize(javaToJavascriptDateFormat(getFormatString())) + "&value=" + getDateFormat().format(o));
+        } catch (Exception e) {
+            return super.visualize("date_converter.jsp?format=" + normalize(javaToJavascriptDateFormat(getFormatString())) + "&value=");
         }
     }
-    
+
+    /**
+     * Return the format object of the date
+     * @return The format
+     */
     public DateFormat getDateFormat() {
-        DateFormat df = new SimpleDateFormat (getFormatString());
+        DateFormat df = new SimpleDateFormat(getFormatString());
         return df;
     }
 
     private String getFormatString() {
         return getConfig("format", "MM/dd/yyyy");
     }
-    
-    private String javaToJavascriptDateFormat(String s){
+
+    private String javaToJavascriptDateFormat(String s) {
         /*
          * The format can be combinations of the following:
          * d - day of month (no leading zero)

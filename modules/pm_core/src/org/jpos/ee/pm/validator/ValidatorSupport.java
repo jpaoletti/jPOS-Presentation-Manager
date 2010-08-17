@@ -19,7 +19,6 @@ package org.jpos.ee.pm.validator;
 
 import java.util.Properties;
 
-import org.jpos.ee.Constants;
 
 /**Helper class for {@link Validator}. Includes a DB object and a properties attribute to define
  * attributes in the configuration file.
@@ -37,7 +36,7 @@ import org.jpos.ee.Constants;
  * </pre>
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  * */
-public abstract class ValidatorSupport extends org.jpos.util.Validator implements Validator, Constants{
+public abstract class ValidatorSupport extends org.jpos.util.Validator implements Validator{
     /**The properties*/
     private Properties properties;
      

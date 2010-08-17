@@ -17,7 +17,6 @@
  */
 package org.jpos.ee.pm.core;
 
-import org.jpos.ee.Constants;
 
 /**
  * This interface allows the programmer to defines some code to execute before
@@ -26,7 +25,7 @@ import org.jpos.ee.Constants;
  * @author jpaoletti 
  * 
  */
-public interface OperationContext extends Constants {
+public interface OperationContext {
 
     /**This method is executed at the very beginning of the process, before
      * converterting or replace any data on objects.

@@ -20,7 +20,6 @@ package org.jpos.ee.pm.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jpos.ee.Constants;
 import org.jpos.util.DisplacedList;
 
 /**
@@ -28,7 +27,9 @@ import org.jpos.util.DisplacedList;
  * 
  * @author jpaoletti
  */
-public class PaginatedList implements Constants {
+public class PaginatedList {
+
+    public static final int DEFAULT_PAGE_SIZE = 10;
 
     private Entity entity;
     private DisplacedList<Object> contents;

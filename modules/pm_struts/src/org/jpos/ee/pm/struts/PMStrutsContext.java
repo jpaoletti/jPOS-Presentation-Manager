@@ -17,37 +17,75 @@ import org.jpos.ee.pm.security.core.PMSecurityUser;
 /**An extension of the org.jpos.ee.pm.core.PMContext class with some helpers
  * for PMStruts.*/
 public class PMStrutsContext extends PMContext {
+
+    public static final String PM_MAPPINGS = "PM_MAPPINGS";
+    public static final String PM_ACTION_FORM = "PM_ACTION_FORM";
+    public static final String PM_HTTP_REQUEST = "PM_HTTP_REQUEST";
+    public static final String PM_HTTP_RESPONSE = "PM_HTTP_RESPONSE";
+
+    public static final String CONTINUE     = "continue";
+    public static final String SUCCESS     = "success";
+    public static final String FAILURE     = "failure";
+    public static final String USER     = "user";
+    public static final String DENIED     = "denied";
+    public static final String STRUTS_LOGIN     = "login";
+
+    public static final String PM_LIST = "PMLIST";
+    public static final String ENTITY = "entity";
+    public static final String REPORT = "report";
+    public static final String LOGGER_NAME = "Q2";
+    public static final String ACCESS_COUNT     = "accessCount";
+    public static final String ENTITY_INSTANCE     = "entity_instance";
+
+    public static final String ENTITY_SUPPORT     = "es";
+
+    public static final String CONTEXT_PATH     = "context_path";
+    public static final String MENU     = "menu";
+    public static final String FINISH     = "finish";
+    public static final String OPERATION = "operation";
+    public static final String OPERATIONS = "operations";
+    public static final String ITEM_OPERATIONS = "item_operations";
+    public static final String PM_ID     = "pmid";
+    public static final String PM_RID     = "pmrid";
+    public static final String LAST_PM_ID     = "last_pmid";
+    public static final String MODIFIED_OWNER_COLLECTION = "moc";
+    public static final String PM_MONITOR_CONTINUE = "PM_MONITOR_CONTINUE";
+    public static final String PM_MONITOR  = "PM_MONITOR";
     /**
      * @return the mapping
      */
     public ActionMapping getMapping() {
-        return (ActionMapping)get(PM_MAPPINGS);
+        return (ActionMapping) get(PM_MAPPINGS);
     }
+
     /**
      * @param mapping the mapping to set
      */
     public void setMapping(ActionMapping mapping) {
         put(PM_MAPPINGS, mapping);
     }
+
     /**
      * @return the form
      */
     public ActionForm getForm() {
         return (ActionForm) get(PM_ACTION_FORM);
     }
+
     /**
      * @param form the form to set
      */
     public void setForm(ActionForm form) {
         put(PM_ACTION_FORM, form);
     }
-    
+
     /**
      * @return the request
      */
     public HttpServletRequest getRequest() {
-        return (HttpServletRequest)get(PM_HTTP_REQUEST);
+        return (HttpServletRequest) get(PM_HTTP_REQUEST);
     }
+
     /**
      * @param request the request to set
      */
@@ -55,65 +93,103 @@ public class PMStrutsContext extends PMContext {
         put(PM_HTTP_REQUEST, request);
     }
 
-    /**Getter for the logged user*/
-    public PMSecurityUser getUser(){
+    /**Getter for the logged user
+     * @return The user
+     */
+    public PMSecurityUser getUser() {
         PMSecurityUser user = (PMSecurityUser) get(USER);
         return user;
     }
 
-    /**True if there is a user online*/
+    /**Indicates if there is a user online
+     * @return True if there is a user online
+     */
     public boolean isUserOnLine() {
         return (getUser() != null);
     }
-    
+
     /**
      * @return the response
      */
     public HttpServletResponse getResponse() {
         return (HttpServletResponse) get(PM_HTTP_RESPONSE);
     }
+
     /**
      * @param response the response to set
      */
     public void setResponse(HttpServletResponse response) {
-        put(PM_HTTP_RESPONSE,response);
+        put(PM_HTTP_RESPONSE, response);
     }
-    
+
     /* ActionForwards Helpers */
+    /**
+     * Helper for success action forward
+     * @return success action forward
+     */
     public ActionForward successful() {
         return getMapping().findForward(SUCCESS);
     }
-    
+
+    /**
+     * Helper for continue action forward
+     * @return continue action forward
+     */
     public ActionForward go() {
         return getMapping().findForward(CONTINUE);
     }
 
+    /**
+     * Helper for deny action forward
+     * @return deny action forward
+     */
     public ActionForward deny() {
         return getMapping().findForward(DENIED);
     }
+
+    /**
+     * Retrieve a request parameter
+     * @param s The parameter name
+     * @return The parameter value
+     */
     public String getParameter(String s) {
         return getRequest().getParameter(s);
     }
-    public HttpSession getSession(){
+
+    /**
+     * Retrieve the http session
+     * @return The session
+     */
+    public HttpSession getSession() {
         return getRequest().getSession();
     }
-    
-    public PMEntitySupport getEntitySupport(){        
-        PMEntitySupport r = (PMEntitySupport)getRequest().getSession().getAttribute(ENTITY_SUPPORT);
-        return r;    
-    }        
-    
-    public EntityContainer getEntityContainer(String id) throws PMException{
+
+    /**
+     * Getter for the entity support helper object
+     * @return The entity support
+     */
+    public PMEntitySupport getEntitySupport() {
+        PMEntitySupport r = (PMEntitySupport) getRequest().getSession().getAttribute(ENTITY_SUPPORT);
+        return r;
+    }
+
+    /**
+     * Retrieve the container with the given id from session
+     * 
+     * @param id The entity id
+     * @return The container
+     * @throws PMException when no container was found
+     */
+    public EntityContainer getEntityContainer(String id) throws PMException {
         EntityContainer ec = (EntityContainer) getSession().getAttribute(id);
-        if(ec == null){
+        if (ec == null) {
             getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.entity.not.found", id));
             throw new PMException();
         }
         return ec;
     }
-    
+
     private String getPmId() {
         return (String) getRequest().getAttribute(PM_ID);
     }
-    
 }

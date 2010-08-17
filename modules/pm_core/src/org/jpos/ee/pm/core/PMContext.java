@@ -19,14 +19,14 @@ package org.jpos.ee.pm.core;
 
 import java.util.List;
 
-import org.jpos.ee.Constants;
 import org.jpos.transaction.Context;
 import org.jpos.util.Log;
 
 /**An extension of the org.jpos.transaction.Context class with some helpers
  * for PM.*/
-public class PMContext extends Context implements Constants{
-    
+public class PMContext extends Context {
+
+    public static final String PM_ERRORS = "PM_ERRORS";
 
     /**
      * @return the errors
@@ -34,19 +34,19 @@ public class PMContext extends Context implements Constants{
     public List<PMMessage> getErrors() {
         return (List<PMMessage>) get(PM_ERRORS);
     }
+
     /**
      * @param errors the errors to set
      */
     public void setErrors(List<PMMessage> errors) {
-        put(PM_ERRORS,errors);
+        put(PM_ERRORS, errors);
     }
 
-    
     /**
      * Getter for PM singleton
      * @return
      */
-    public PresentationManager getPresentationManager(){
+    public PresentationManager getPresentationManager() {
         return PresentationManager.pm;
     }
 
@@ -54,7 +54,7 @@ public class PMContext extends Context implements Constants{
      * Return the persistance manager of the PM
      * @return PersistenceManager
      */
-    public PersistenceManager getPersistanceManager(){
+    public PersistenceManager getPersistanceManager() {
         return getPresentationManager().getPersistenceManager();
     }
 
@@ -62,7 +62,7 @@ public class PMContext extends Context implements Constants{
      * Return the PM log
      * @return
      */
-    public Log getLog(){
+    public Log getLog() {
         return getPresentationManager().getLog();
     }
 
@@ -70,15 +70,16 @@ public class PMContext extends Context implements Constants{
      * @param entityContainer the entity_container to set
      */
     public void setEntityContainer(EntityContainer entityContainer) {
-        put(PM_ENTITY_CONTAINER,entityContainer);
+        put(PMCoreObject.PM_ENTITY_CONTAINER, entityContainer);
     }
+
     /**
      * @return the entity_container
      * @throws PMException
      */
     public EntityContainer getEntityContainer() throws PMException {
-        EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
-        if(entityContainer == null){
+        EntityContainer entityContainer = (EntityContainer) get(PMCoreObject.PM_ENTITY_CONTAINER);
+        if (entityContainer == null) {
             throw new PMException("pm_core.entity.not.found");
         }
         return entityContainer;
@@ -91,9 +92,11 @@ public class PMContext extends Context implements Constants{
      * @throws PMException
      */
     public EntityContainer getEntityContainer(boolean ignorenull) throws PMException {
-        EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
-        if(ignorenull) return entityContainer;
-        if(entityContainer == null){
+        EntityContainer entityContainer = (EntityContainer) get(PMCoreObject.PM_ENTITY_CONTAINER);
+        if (ignorenull) {
+            return entityContainer;
+        }
+        if (entityContainer == null) {
             throw new PMException("pm_core.entity.not.found");
         }
         return entityContainer;
@@ -104,39 +107,40 @@ public class PMContext extends Context implements Constants{
      *
      * @return true if there is a container in the context
      */
-    public boolean hasEntityContainer(){
-        EntityContainer entityContainer = (EntityContainer) get(PM_ENTITY_CONTAINER);
+    public boolean hasEntityContainer() {
+        EntityContainer entityContainer = (EntityContainer) get(PMCoreObject.PM_ENTITY_CONTAINER);
         return entityContainer != null;
     }
+
     /**
      * @param operation the operation to set
      */
     public void setOperation(Operation operation) {
-        put(PM_OPERATION,operation);
+        put(PMCoreObject.PM_OPERATION, operation);
     }
+
     /**
      * @return the operation
      */
     public Operation getOperation() {
-        return (Operation)get(PM_OPERATION);
+        return (Operation) get(PMCoreObject.PM_OPERATION);
     }
-    
+
     /**
      * Return the entity in the container
      * @return The entity
      * @throws PMException
      */
-    public Entity getEntity()throws PMException{
+    public Entity getEntity() throws PMException {
         return getEntityContainer().getEntity();
     }
-
 
     /**
      * Return the list of the container
      * @return The list
      * @throws PMException
      */
-    public PaginatedList getList() throws PMException{
+    public PaginatedList getList() throws PMException {
         return getEntityContainer().getList();
     }
 
@@ -145,10 +149,10 @@ public class PMContext extends Context implements Constants{
      * @return The EntityInstanceWrapper
      * @throws PMException
      */
-    public EntityInstanceWrapper getSelected() throws PMException{
+    public EntityInstanceWrapper getSelected() throws PMException {
         return getEntityContainer().getSelected();
     }
-    
+
     /**
      * Indicate if there is a container with an entity
      * 
@@ -161,5 +165,4 @@ public class PMContext extends Context implements Constants{
             return false;
         }
     }
-
 }

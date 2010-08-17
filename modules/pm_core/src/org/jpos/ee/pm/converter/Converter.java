@@ -19,7 +19,6 @@ package org.jpos.ee.pm.converter;
 
 import java.util.Properties;
 
-import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
@@ -48,7 +47,7 @@ import org.jpos.iso.ISOUtil;
  * </pre>
  * @author J.Paoletti jeronimo.paoletti@gmail.com
  **/
-public class Converter extends PMCoreObject implements Constants {
+public class Converter extends PMCoreObject {
 
     private String operations;
     private Properties properties;

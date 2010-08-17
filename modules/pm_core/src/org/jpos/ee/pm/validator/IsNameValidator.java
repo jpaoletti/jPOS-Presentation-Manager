@@ -19,6 +19,7 @@ package org.jpos.ee.pm.validator;
 
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMCoreObject;
 import org.jpos.ee.pm.core.PMMessage;
 
 /**Validate that the field value is a valid name, so it cant use special characters. 
@@ -32,8 +33,8 @@ public class IsNameValidator extends ValidatorSupport {
     /**The validate method*/
     public ValidationResult validate(PMContext ctx) {
         ValidationResult res = new ValidationResult();
-        Field field = (Field)ctx.get(PM_FIELD);
-        String fieldvalue = (String) ctx.get(PM_FIELD_VALUE);
+        Field field = (Field)ctx.get(PMCoreObject.PM_FIELD);
+        String fieldvalue = (String) ctx.get(PMCoreObject.PM_FIELD_VALUE);
         
         res.setSuccessful(true);
         if (!isName (fieldvalue)){

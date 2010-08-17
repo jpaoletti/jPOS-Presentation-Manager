@@ -17,14 +17,12 @@
  */
 package org.jpos.ee.pm.core;
 
-import org.jpos.ee.Constants;
-
 /**
  * This interface encapsulate a transaction behaviour
  *
  * @author jpaoletti jeronimo.paoletti@gmail.com
  */
-public interface PersistenceManager extends Constants {
+public interface PersistenceManager {
 
     /**
      * Initialize persistance

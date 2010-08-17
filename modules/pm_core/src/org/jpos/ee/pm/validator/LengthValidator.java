@@ -19,6 +19,7 @@ package org.jpos.ee.pm.validator;
 
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMCoreObject;
 import org.jpos.ee.pm.core.PMMessage;
 
 /**Validate the length of the string.
@@ -34,8 +35,8 @@ public class LengthValidator extends ValidatorSupport {
     /**The validate method*/
     public ValidationResult validate(PMContext ctx) {
         ValidationResult res = new ValidationResult();
-        Field field = (Field) ctx.get(PM_FIELD);
-        Object object = ctx.get(PM_FIELD_VALUE);
+        Field field = (Field) ctx.get(PMCoreObject.PM_FIELD);
+        Object object = ctx.get(PMCoreObject.PM_FIELD_VALUE);
 
         System.out.println("OBJECT " + object);
 

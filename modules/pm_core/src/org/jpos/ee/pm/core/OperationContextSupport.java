@@ -22,7 +22,7 @@ package org.jpos.ee.pm.core;
  * 
  * @author jpaoletti jeronimo.paoletti@gmail.com
  */
-public class OperationContextSupport implements OperationContext{
+public class OperationContextSupport extends PMCoreObject implements OperationContext{
 
     public void preConversion(PMContext ctx) throws PMException {}
     public void preExecute(PMContext ctx) throws PMException {}

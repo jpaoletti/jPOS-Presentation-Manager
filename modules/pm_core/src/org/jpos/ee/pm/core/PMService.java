@@ -17,7 +17,6 @@
  */
 package org.jpos.ee.pm.core;
 
-import org.jpos.ee.Constants;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.util.NameRegistrar;
 
@@ -26,7 +25,7 @@ import org.jpos.util.NameRegistrar;
  * @author jpaoletti jeronimo.paoletti@gmail.com
  * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * */
-public class PMService extends QBeanSupport implements Constants {
+public class PMService extends QBeanSupport{
 
     /**
      * Initialize service

@@ -19,6 +19,7 @@ package org.jpos.ee.pm.validator;
 
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMCoreObject;
 import org.jpos.ee.pm.core.PMMessage;
 
 /**Validate that the specified field is not null
@@ -40,10 +41,10 @@ public class NotNull extends ValidatorSupport {
     /**The validation method*/
     public ValidationResult validate(PMContext ctx){
         ValidationResult res = new ValidationResult();
-        Object fieldvalue = (Object) ctx.get(PM_FIELD_VALUE);
+        Object fieldvalue = (Object) ctx.get(PMCoreObject.PM_FIELD_VALUE);
         res.setSuccessful(fieldvalue != null);
         if(!res.isSuccessful())
-            res.getMessages().add(new PMMessage(ENTITY, get("msg", "void") ,((Field)ctx.get(PM_FIELD)).getId()));
+            res.getMessages().add(new PMMessage("entity", get("msg", "void") ,((Field)ctx.get(PMCoreObject.PM_FIELD)).getId()));
         return res;
     }
 }
