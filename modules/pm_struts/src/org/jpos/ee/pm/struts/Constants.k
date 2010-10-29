@@ -32,4 +32,6 @@
     public static final String MODIFIED_OWNER_COLLECTION = "moc";
     public static final String PM_MONITOR_CONTINUE = "PM_MONITOR_CONTINUE";
     public static final String PM_MONITOR  = "PM_MONITOR";
+
+    public static final String ENTITY_FILTER  = "entity_filter";
     

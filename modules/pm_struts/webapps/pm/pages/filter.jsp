@@ -20,39 +20,48 @@
 <%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
 <%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
-<% es.putEntityInRequest(request);
-request.setAttribute("e_container", es.getContainer(request));%>
-<% es.putFilterInRequest(request);%>
+<%@page import="org.jpos.ee.pm.core.EntityFilter"%>
+<%@page import="org.jpos.ee.Constants"%>
+<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
+<%
+es.putEntityInRequest(request);
+request.setAttribute("e_container", es.getContainer(request));
+es.putFilterInRequest(request);
+%>
 <pm:page title="titles.filter">
-	<div id="add" class="boxed">
-		<pm:pmtitle entity="${entity}" operation="${operation}"/>
-		<html:form action="/${operation.id}.do?pmid=${pmid}">
-		<html:hidden property="finish" value="yes"/>
-		<fieldset>
-		<pm:operations labels="true" />
-        <div id="navigation_bar">
-        <pm:navigation container="${e_container.owner}"  />
-        </div>
-		<div class="content">
-			<table id="box-table-a">
-				<tbody id="list_body" >
-					<logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
-					<c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
-						<tr>
-							<th scope="row" width="175px"><div><label for="object.${field.id}"><pm:field-name entity="${entity}" field="${field}" /></label></div></th>
-							<td><div id="f_${field.id}_div"><pm:converted-item operation="${operation}" entity="${entity}" item="${entity_instance}" field="${field}" /></div></td>
-						</tr>
-					</c:if>
-					</logic:iterate>
-				</tbody>
-				<tfoot>
-					<tr><td colspan="2"><html:errors/>&nbsp;</td></tr>
-				</tfoot>
-			</table>
-			<html:submit styleId="${entity.id}_submit"><pm:message key="pm.struts.form.submit"/></html:submit>
-			<html:reset styleId="${entity.id}_submit"><pm:message key="pm.struts.form.reset" /></html:reset>		</div>
-		</fieldset>
-		</html:form>
-	</div>
+    <div id="add" class="boxed">
+        <pm:pmtitle entity="${entity}" operation="${operation}"/>
+        <html:form action="/${operation.id}.do?pmid=${pmid}">
+            <html:hidden property="finish" value="yes"/>
+            <fieldset>
+                <pm:operations labels="true" />
+                <div id="navigation_bar">
+                    <pm:navigation container="${e_container.owner}"  />
+                </div>
+                <div class="content">
+                    <table id="box-table-a">
+                        <tbody id="list_body" >
+                            <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
+                                <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                                    <tr>
+                                        <th scope="row" width="175px"><div><label for="object.${field.id}"><pm:field-name entity="${entity}" field="${field}" /></label></div></th>
+                                        <td>
+                                            <div id="f_${field.id}_div">
+                                                <pm:filter-operations field_id="${field.id}" filter="${entity_filter}" />
+                                                <pm:converted-item operation="${operation}" entity="${entity}" item="${entity_instance}" field="${field}" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </c:if>
+                            </logic:iterate>
+                        </tbody>
+                        <tfoot>
+                            <tr><td colspan="2"><html:errors/>&nbsp;</td></tr>
+                        </tfoot>
+                    </table>
+                    <html:submit styleId="${entity.id}_submit"><pm:message key="pm.struts.form.submit"/></html:submit>
+                    <html:reset styleId="${entity.id}_submit"><pm:message key="pm.struts.form.reset" /></html:reset>		</div>
+            </fieldset>
+        </html:form>
+    </div>
 </pm:page>

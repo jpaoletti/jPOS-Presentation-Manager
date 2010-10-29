@@ -17,33 +17,31 @@
  */
 package org.jpos.ee.pm.core;
 
+import java.util.HashMap;
+import java.util.Map;
 
 public class EntityFilter extends PMCoreObject {
-    public static final String __EQ__ = "eq";
-    public static final String __LT__ = "lt";
-    public static final String __LE__ = "le";
-    public static final String __GT__ = "gt";
-    public static final String __GE__ = "ge";
-    public static final String __NE__ = "ne";
-    public static final String __BETWEEN__ = "between";    
-    
+
+    private Map<String, FilterOperation> filterOperations;
     private EntityInstanceWrapper instance;
-    
+
     /**
      * Default constructor
      */
-    public EntityFilter(){
-        
+    public EntityFilter() {
+        filterOperations = new HashMap<String, FilterOperation>();
     }
 
-    public void process(Entity entity){
+    public boolean isOperation(String fid, FilterOperation oper) {
+        return getFilterOperations().get(fid) == oper;
+    }
 
+    public void process(Entity entity) {
     }
 
     public void clear() {
-        
     }
-    
+
     /**
      * Setter for instance
      * @param instance
@@ -60,4 +58,20 @@ public class EntityFilter extends PMCoreObject {
         return instance;
     }
 
+    public Map<String, FilterOperation> getFilterOperations() {
+        return filterOperations;
+    }
+
+    public void setFilterOperations(Map<String, FilterOperation> filterOperations) {
+        this.filterOperations = filterOperations;
+    }
+
+    public FilterOperation getFilterOperation(String id) {
+        final FilterOperation result = getFilterOperations().get(id);
+        if (result != null) {
+            return result;
+        } else {
+            return FilterOperation.EQ;
+        }
+    }
 }

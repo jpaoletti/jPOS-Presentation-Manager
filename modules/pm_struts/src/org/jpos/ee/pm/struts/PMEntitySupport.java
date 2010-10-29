@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.Entity;
+import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntitySupport;
 import org.jpos.ee.pm.core.PaginatedList;
 
@@ -99,17 +100,19 @@ public class PMEntitySupport extends EntitySupport implements Constants{
     }
     
     /**
-     * Insert the container filter into the request
+     * Insert the container filter and the filter into the request
+     * 
      * @param request The request
-     * @return The list
+     * @return The filter
      * @throws PMStrutsException when request has no container
      */
-    public Object putFilterInRequest(HttpServletRequest request) throws PMStrutsException{
+    public EntityFilter putFilterInRequest(HttpServletRequest request) throws PMStrutsException{
         EntityContainer container = getContainer(request);
         if(container==null) throw new PMStrutsException("container.not.found");
         Object r = container.getFilter().getInstance().getInstance();
         request.setAttribute(ENTITY_INSTANCE, r);
-        return r;
+        request.setAttribute(ENTITY_FILTER, container.getFilter());
+        return container.getFilter();
     }
     
     /**

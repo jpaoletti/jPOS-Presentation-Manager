@@ -19,75 +19,72 @@ package org.jpos.ee.pm.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 public class DBEntityFilter extends EntityFilter {
+
     private List<Criterion> filters;
-    
+
+    public DBEntityFilter() {
+        super();
+        this.setFilters(new ArrayList<Criterion>());
+    }
+
+    @Override
     public void clear() {
         getFilters().clear();
     }
 
-    public void process(Entity entity){
+    @Override
+    public void process(Entity entity) {
         debug("Processing filter");
-        for(Field field : entity.getAllFields()){
+        for (Field field : entity.getAllFields()) {
             //This is not the best way but works for now
-            if(field.shouldDisplay("filter")){
+            if (field.shouldDisplay("filter")) {
                 List<Object> values = new ArrayList<Object>();
-                for(Object o : getInstance().getInstances()){
+                for (Object o : getInstance().getInstances()) {
                     values.add(PresentationManager.pm.get(o, field.getProperty()));
                 }
-                debug("VALUES ["+field.getProperty()+"]: "+values);
-                Criterion c =null;
-                //if(false){
-                    /*String co = rc.getParameter("compare_operation");
-                    Criterion c =null;
-                       if(co!=null && co.compareTo("")!=0){
-                           c = getCompareCriterion(co, field.getId(), converted);
-                       }else{*/
-                if(values.get(0)!=null){
-                    if(values.get(0) instanceof String)
-                           c = Restrictions.ilike(field.getProperty(), "%"+values.get(0)+"%");
-                       else
-                           c = Restrictions.eq(field.getProperty(), values.get(0));
-                       if(c!=null) getFilters().add(c);
+                debug("VALUES [" + field.getProperty() + "]: " + values);
+                Criterion c = null;
+
+                if (values.get(0) != null) {
+                    c = getCompareCriterion(field.getId(), values.get(0));
+                    if (c != null) {
+                        getFilters().add(c);
+                    }
                 }
             }
         }
-        debug("FILTERS: "+getFilters());
-    }
-    
-    protected Criterion getCompareCriterion(String co, String fid, Object converted) {
-        // TODO Make this better
-        
-        if(co.compareTo(__LT__)==0)
-            return Restrictions.lt(fid, converted);
-        if(co.compareTo(__LE__)==0)
-            return Restrictions.le(fid, converted);
-        if(co.compareTo(__GT__)==0)
-            return Restrictions.gt(fid, converted);
-        if(co.compareTo(__GE__)==0)
-            return Restrictions.ge(fid, converted);
-        if(co.compareTo(__NE__)==0)
-            return Restrictions.ne(fid, converted);
-    
-        if(co.compareTo(__BETWEEN__)==0){
-            Entry<Object, Object> entry = (Entry<Object, Object>)converted;
-            Object lo = entry.getKey();
-            Object hi = entry.getValue();
-            return Restrictions.between(fid, lo, hi);
-        }
-        return Restrictions.eq(fid, converted);
-    }    
-    
-    public DBEntityFilter(){
-        this.setFilters(new ArrayList<Criterion>());
+        debug("FILTERS: " + getFilters());
     }
 
-    public void setFilters(List<Criterion> filters) {
+    protected Criterion getCompareCriterion(String fid, Object converted) {
+        switch (getFilterOperation(fid)) {
+            case LIKE:
+                if (converted instanceof String) {
+                    return Restrictions.ilike(fid, "%" + converted + "%");
+                } else {
+                    return Restrictions.eq(fid, converted);
+                }
+            case GE:
+                return Restrictions.ge(fid, converted);
+            case GT:
+                return Restrictions.gt(fid, converted);
+            case LE:
+                return Restrictions.le(fid, converted);
+            case LT:
+                return Restrictions.lt(fid, converted);
+            case NE:
+                return Restrictions.not(Restrictions.eq(fid, converted));
+            default:
+                return Restrictions.eq(fid, converted);
+        }
+    }
+
+    public final void setFilters(List<Criterion> filters) {
         this.filters = filters;
     }
 
