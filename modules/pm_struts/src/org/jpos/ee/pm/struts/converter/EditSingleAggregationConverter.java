@@ -44,6 +44,7 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class EditSingleAggregationConverter extends AbstractCollectionConverter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
         try{
             String s = ctx.getString(PM_FIELD_VALUE);
@@ -58,6 +59,7 @@ public class EditSingleAggregationConverter extends AbstractCollectionConverter 
         }
     }
     
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         String wn = getConfig("with-null", "false");
         boolean withNull= (wn==null || wn.compareTo("true")!=0)?false:true;
