@@ -23,18 +23,23 @@ import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class OperAction extends EntityActionSupport{
     
-	/**Opens an hibernate transaction before doExecute*/
+    /**Opens an DB transaction before doExecute*/
+    @Override
     protected boolean openTransaction() { return false;    }
     /**Makes the operation generate an audithory entry*/
+    @Override
     protected boolean isAudited() {    return false; }
     /**Forces execute to check if any user is logged in*/
+    @Override
     protected boolean checkUser(){     return true;}
     /**Forces execute to check if there is an entity defined in parameters*/
+    @Override
     protected boolean checkEntity(){ return true; }
 
+    @Override
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
     	Operations operations;
-        configureEntityContainer(ctx);
+        configureEntityContainer(ctx); 
         ctx.setOperation ( ctx.getEntity().getOperations().getOperation("list") );
         ctx.getRequest().setAttribute(OPERATION, ctx.getOperation());
         operations = ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation());

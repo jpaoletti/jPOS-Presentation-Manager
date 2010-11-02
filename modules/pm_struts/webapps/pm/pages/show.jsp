@@ -15,47 +15,41 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@include file="../inc/tag-libs.jsp" %>
-<%@include file="../inc/imports.jsp" %>
-<%@include file="../inc/defines.jsp" %>
-<%
-    es.putItemInRequest(request);
-	Entity e = (Entity)request.getAttribute("entity");
-	request.setAttribute("operation", e.getOperations().getOperation("show"));
-    request.setAttribute("e_container", es.getContainer(request));
-%>
+<%@include file="../inc/inc-full.jsp" %>
+<bean:define id="e_container" name="es" property="container" />
+<bean:define id="entity_instance" name="es" property="selected" />
 <pm:page title="titles.add">
-	<html:errors />
-	<div id="add" class="boxed">
-		<pm:pmtitle entity="${entity}" operation="${operation}"/>
-		<pm:operations labels="true" />
+    <html:errors />
+    <div id="add" class="boxed">
+        <pm:pmtitle entity="${entity}" operation="${operation}"/>
+        <pm:operations labels="true" />
         <div id="navigation_bar">
-        <pm:navigation container="${e_container.owner}"  />
+            <pm:navigation container="${e_container.owner}"  />
         </div>
-		<div class="content">
-			<table id="box-table-a">
-				<tbody id="list_body" >
-					<logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
-					<c:if test="${fn:contains(field.display,'show') or fn:contains(field.display,'all')}">
-						<tr>
-							<th scope="row" width="175px"><pm:field-name entity="${entity}" field="${field}" /></th>
-							<td><pm:converted-item operation="${operation}" entity="${entity}" item="${entity_instance}" field="${field}" /></td>
-						</tr>
-					</c:if>
-					</logic:iterate>
-				</tbody>
-				<tfoot>
-					<tr><td colspan="2">&nbsp;</td></tr>
-				</tfoot>
-			</table>
-		</div>
-	</div>
-	<logic:present name="entity" property="highlights">
-	<style>
-	<logic:iterate id="highlight" name="entity" property="highlights.highlights">
-		.${highlight.field}_${highlight.value} { background-color: ${highlight.color}; }
-	</logic:iterate>
-	</style>
-	</logic:present>	
-	<script type="text/javascript" src="${es.context_path}/js/highlight.js"></script>
+        <div class="content">
+            <table id="box-table-a">
+                <tbody id="list_body" >
+                    <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
+                        <c:if test="${fn:contains(field.display,'show') or fn:contains(field.display,'all')}">
+                            <tr>
+                                <th scope="row" width="175px"><pm:field-name entity="${entity}" field="${field}" /></th>
+                                <td><pm:converted-item operation="${operation}" entity="${entity}" item="${entity_instance}" field="${field}" /></td>
+                            </tr>
+                        </c:if>
+                    </logic:iterate>
+                </tbody>
+                <tfoot>
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <logic:present name="entity" property="highlights">
+        <style>
+            <logic:iterate id="highlight" name="entity" property="highlights.highlights">
+                .${highlight.field}_${highlight.value} { background-color: ${highlight.color}; }
+            </logic:iterate>
+        </style>
+    </logic:present>
+    <script type="text/javascript" src="${es.context_path}/js/highlight.js"></script>
 </pm:page>

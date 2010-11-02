@@ -1,18 +1,8 @@
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<%@page import="org.jpos.ee.pm.core.Entity"%>
-<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
+<%@include file="../inc/inc-full.jsp" %>
+<bean:define id="entity_instance" name="es" property="selected" />
 <script src="${es.context_path}/js/md5.js" type="text/javascript"></script>
 <script src="${es.context_path}/js/cookies.js" type="text/javascript"></script>
 <script src="${es.context_path}/js/encrypt.js" type="text/javascript"></script>
-<%  es.putEntityInRequest(request);
-    es.putItemInRequest(request);
-    Entity e = (Entity)request.getAttribute("entity");
-%>
 <pm:page title="titles.add">
     <div id="add" class="boxed">
         <pm:pmtitle entity="${entity}" operation="${operation}" />

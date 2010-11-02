@@ -15,37 +15,34 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@include file="../inc/tag-libs.jsp" %>
-<%@include file="../inc/imports.jsp" %>
+<%@include file="../inc/inc-full.jsp" %>
 <bean:define id="pmlist" name="PMLIST" type="org.jpos.ee.pm.core.PaginatedList" />
 <bean:define id="has_selected" name="PMLIST" property="hasSelectedScope" type="java.lang.Boolean" />
-<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <%
-es.putEntityInRequest(request);
 int c =  (pmlist.getTotal()==null || pmlist.getTotal() ==0) ? 1 : (int)Math.log10(pmlist.getTotal()) + 1;
 %>
-<bean:define id="entity"	  name="entity" type="org.jpos.ee.pm.core.Entity" toScope="request"/>
 <script type="text/javascript">
-function selectItem(i){
-    $.ajax({ url: "selectItem.do?pmid="+"${pmid}"+"&idx="+i});
-}
+    function selectItem(i){
+        $.ajax({ url: "selectItem.do?pmid="+"${pmid}"+"&idx="+i});
+    }
 </script>
 <table id="list" class="display" >
-        <thead>
-            <tr>
+    <thead>
+        <tr>
             <th scope="col" style="width:${pmlist.operationColWidth}">&nbsp;</th>
             <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
-					<c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
-                        <bean:define id="w" value="<%=(field.getWidth().compareTo("")!=0)?"style='width:"+field.getWidth()+"px;'":"" %>"></bean:define>
-                        <th scope="col" ${w} ><pm:field-name entity="${entity}" field="${field}" /></th>
-                    </c:if>
+                <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                    <bean:define id="w" value="<%=(field.getWidth().compareTo("")!=0)?"style='width:"+field.getWidth()+"px;'":"" %>"></bean:define>
+                    <th scope="col" ${w} ><pm:field-name entity="${entity}" field="${field}" /></th>
+                </c:if>
             </logic:iterate>
-            </tr>
-        </thead>
-        <tbody id="list_body" >
-            <bean:define id="contents" name="contents" type="org.jpos.util.DisplacedList" />
-            <logic:iterate id="item" name="contents">
+        </tr>
+    </thead>
+    <tbody id="list_body" >
+        <bean:define id="contents" name="contents" type="org.jpos.util.DisplacedList" />
+        <logic:iterate id="item" name="contents">
             <%
+            Entity entity = (Entity) request.getAttribute("entity");
             Integer i = contents.indexOf(item);
             request.setAttribute("i",i);
             Highlight h = entity.getHighlight(null,item);
@@ -57,7 +54,7 @@ function selectItem(i){
                 %>
                 <td style="color:gray; white-space: nowrap;">
                     <logic:equal name="has_selected" value="true">
-                        <bean:define id="checked" value="<%=(es.getContainer(request).getSelectedIndexes().contains(i))?"checked":"" %>" />
+                        <bean:define id="checked" value="<%=(es.getContainer().getSelectedIndexes().contains(i))?"checked":"" %>" />
                         <input type="checkbox" id="selected_item" value="${i}" onchange="selectItem(this.value);" ${checked} />
                     </logic:equal>
                     <%= (pmlist.isShowRowNumber())?String.format("[%0"+c+"d]", i):"" %> &nbsp;
@@ -65,41 +62,41 @@ function selectItem(i){
                         <img src="${es.context_path}/templates/${pm.template}/images/loading.gif" alt="loading" />
                     </span>
                     <script type="text/javascript">
-                    $('#g_'+"${i}").load('opers.do?pmid='+"${pmid}"+'&i='+"${i}",
-                       function() {
-                        //this function fix IE whitespace visualization bug
-                        $('#g_'+"${i}").html($('#g_'+"${i}").html().trim());
-                       });
+                        $('#g_'+"${i}").load('opers.do?pmid='+"${pmid}"+'&i='+"${i}",
+                        function() {
+                            //this function fix IE whitespace visualization bug
+                            $('#g_'+"${i}").html($('#g_'+"${i}").html().trim());
+                        });
                     </script>
                 </td>
                 <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
-					<c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
-                    <%
-                       Highlight h2 = entity.getHighlight(field, item);
-                       if(h2!=null) request.setAttribute("pm_hl_class2","pm_hl_"+entity.getHighlights().indexOf(h2));
-                    %>
-                    <td class=" ${pm_hl_class2}" align="${field.align}">
-                        <pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
-                    </td>
-                    <%
-                       h2 = null;
-                       request.removeAttribute("pm_hl_class2");
-                    %>
+                    <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                        <%
+                           Highlight h2 = entity.getHighlight(field, item);
+                           if(h2!=null) request.setAttribute("pm_hl_class2","pm_hl_"+entity.getHighlights().indexOf(h2));
+                        %>
+                        <td class=" ${pm_hl_class2}" align="${field.align}">
+                            <pm:converted-item operation="${operation}" entity="${entity}" item="${item}" field="${field}" />
+                        </td>
+                        <%
+                           h2 = null;
+                           request.removeAttribute("pm_hl_class2");
+                        %>
                     </c:if>
                 </logic:iterate>
             </tr>
-            </logic:iterate>
-        </tbody>
-        <tfoot>
-            <logic:equal name="PMLIST" property="searchable" value="true" >
+        </logic:iterate>
+    </tbody>
+    <tfoot>
+        <logic:equal name="PMLIST" property="searchable" value="true" >
             <tr>
-               <th><input type="hidden" name="search" class="search_init" /></th>
-               <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
-					<c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
-                    <th><input type="text" name="search_<pm:field-name entity="${entity}" field="${field}" />" value="<bean:message key="list.input.search"/><pm:field-name entity="${entity}" field="${field}" />" class="search_init" /></th>
-                    </c:if>
-               </logic:iterate>
+                <th><input type="hidden" name="search" class="search_init" /></th>
+                    <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
+                        <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                        <th><input type="text" name="search_<pm:field-name entity="${entity}" field="${field}" />" value="<bean:message key="list.input.search"/><pm:field-name entity="${entity}" field="${field}" />" class="search_init" /></th>
+                        </c:if>
+                    </logic:iterate>
             </tr>
-            </logic:equal>
-        </tfoot>
-    </table>
+        </logic:equal>
+    </tfoot>
+</table>

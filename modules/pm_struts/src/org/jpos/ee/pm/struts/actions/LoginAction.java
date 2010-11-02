@@ -67,10 +67,9 @@ public class LoginAction extends EntityActionSupport {
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
         if (ctx.getPresentationManager().isLoginRequired()) {
-            ctx.getSession().setAttribute(USER, null);
-            ctx.getSession().setAttribute(MENU, null);
-
             try {
+                ctx.getSession().setAttribute(USER, null);
+                ctx.getSession().setAttribute(MENU, null);
                 PMSecurityUser u = authenticate(ctx);
                 loadMenu(ctx, u);
                 if (u.isChangePassword()) {

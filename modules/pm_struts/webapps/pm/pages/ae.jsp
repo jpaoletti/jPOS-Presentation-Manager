@@ -15,11 +15,9 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@include file="../inc/tag-libs.jsp" %>
-<bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
-<% es.putEntityInRequest(request);
-request.setAttribute("e_container", es.getContainer(request));
-es.putItemInRequest(request);%>
+<%@include file="../inc/inc-full.jsp" %>
+<bean:define id="e_container" name="es" property="container" />
+<bean:define id="entity_instance" name="es" property="selected" />
 <pm:page title="titles.add">
 	<div id="add" class="boxed">
 		<pm:pmtitle entity="${entity}" operation="${operation}" />

@@ -15,9 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@include file="../inc/tag-libs.jsp" %>
-<%@include file="../inc/imports.jsp" %>
-<%@include file="../inc/defines.jsp" %>
+<%@include file="../inc/inc-full.jsp" %>
 
 <bean:define id="item_operations" 	name="item_operations" type="org.jpos.ee.pm.core.Operations" />
 <logic:iterate id="operation" indexId="i" name="item_operations" property="operations" type="org.jpos.ee.pm.core.Operation">

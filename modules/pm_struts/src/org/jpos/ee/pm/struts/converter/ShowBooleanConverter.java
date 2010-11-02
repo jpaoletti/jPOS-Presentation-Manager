@@ -38,10 +38,12 @@ import org.jpos.ee.pm.core.PMContext;
  * */
 public class ShowBooleanConverter extends Converter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
-        return new Boolean (ctx.getString(PM_FIELD_VALUE));
+        return Boolean.valueOf(ctx.getString(PM_FIELD_VALUE));
     }
     
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
     	EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Object value = getValue(einstance.getInstance(),(Field) ctx.get(PM_FIELD) );

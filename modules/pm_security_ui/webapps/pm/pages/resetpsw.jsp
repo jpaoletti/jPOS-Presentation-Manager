@@ -15,11 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *--%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
-<%  es.putEntityInRequest(request);%>
+<%@include file="../inc/inc-full.jsp" %>
 <pm:page title="titles.add">
     <div id="add" class="boxed">
         <pm:pmtitle entity="${entity}" operation="${operation}" />

@@ -15,15 +15,6 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%--
-  General definitions. Requires tag-libs.jsp
-
-  @author jpaoletti
---%>
-<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
-<jsp:setProperty name="es" property="request" value="<%= request %>" />
-<logic:present name="es" property="entity">
-    <bean:define id="entity" name="es" property="entity" type="org.jpos.ee.pm.core.Entity" />
-</logic:present>
-<bean:define id="messages" name="org.apache.struts.action.MESSAGE" type="org.apache.struts.util.MessageResources" scope="application"/>
-<bean:define id="ctx" name="PM_CONTEXT" type="org.jpos.ee.pm.core.PMContext" />
+<%@include file="tag-libs.jsp" %>
+<%@include file="imports.jsp" %>
+<%@include file="defines.jsp" %>

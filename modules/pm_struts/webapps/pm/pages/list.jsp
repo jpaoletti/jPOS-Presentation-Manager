@@ -15,19 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@include file="../inc/tag-libs.jsp" %>
-<%@include file="../inc/imports.jsp" %>
-<bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
-<%  
-	Entity e = es.putEntityInRequest(request);
-	request.setAttribute("operation", e.getOperations().getOperation("list"));
-	es.putListInRequest(request);
-    request.setAttribute("e_container", es.getContainer(request));
-%>
+<%@include file="../inc/inc-full.jsp" %>
+<bean:define id="PMLIST"  name="es" property="list" toScope="request"/>
+<bean:define id="e_container"  name="es" property="container" toScope="request"/>
 <bean:define id="operations"  name="PMLIST" property="operations" type="org.jpos.ee.pm.core.Operations" toScope="request"/>
 <bean:define id="contents" 	  name="PMLIST" property="contents" type="java.util.List<Object>" toScope="request"/>
-<bean:define id="operation"   name="operation" type="org.jpos.ee.pm.core.Operation" toScope="request"/>
-<bean:define id="entity"	  name="entity" type="org.jpos.ee.pm.core.Entity" toScope="request"/>
 <pm:page title="list">
 <script type="text/javascript" src="${es.context_path}/js/jquery.modal.js"></script>
 <script type="text/javascript" src="${es.context_path}/js/jquery.center.js"></script>
