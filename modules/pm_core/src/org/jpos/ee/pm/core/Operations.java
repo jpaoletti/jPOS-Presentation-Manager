@@ -23,12 +23,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.jpos.ee.Constants;
-
 /**Just a container for a list of operations and some helpers.
  * @author jpaoletti jeronimo.paoletti@gmail.com
  * */
-public class Operations extends PMCoreObject implements Constants {
+public class Operations extends PMCoreObject {
 
     /**The operation list*/
     private List<Operation> operations;
