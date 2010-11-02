@@ -1,4 +1,4 @@
-<!--/*
+<%--
  * jPOS Project [http://jpos.org]
  * Copyright (C) 2000-2010 Alejandro P. Revilla
  *
@@ -14,8 +14,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */-->
- <%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+--%>
+<%@include file="inc/tag-libs.jsp" %>
 <pm:page title="errors">
-Access denied
+    Access denied
 </pm:page>

@@ -1,4 +1,4 @@
-<!--/*
+<%--
  * jPOS Project [http://jpos.org]
  * Copyright (C) 2000-2010 Alejandro P. Revilla
  *
@@ -14,10 +14,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */-->
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+--%>
+<%@include file="inc/tag-libs.jsp" %>
 <pm:page title="errors">
     <div class="boxed">
         <h2 class="title"><pm:message key="errors.title" /></h2><br/>

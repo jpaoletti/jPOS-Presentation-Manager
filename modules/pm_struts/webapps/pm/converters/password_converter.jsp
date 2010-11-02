@@ -14,9 +14,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *--%>
- <%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+--%>
+<%@include file="../inc/tag-libs.jsp" %>
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" %>
 <bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
 <input type="password" value="" id="f_${param.f}" name="f_${param.f}" onkeyup="check_equal(this.form);" /><br/>

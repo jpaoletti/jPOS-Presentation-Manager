@@ -1,4 +1,4 @@
-<!--/*
+<%--
  * jPOS Project [http://jpos.org]
  * Copyright (C) 2000-2010 Alejandro P. Revilla
  *
@@ -14,26 +14,18 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */-->
- #set ($msg = $request.getParameter("msg"))
-#if (!$msg)
- #set ($msg = "Access denied")
-#end
+--%>
+<%--
+  Includes all the tag libraries from struts and jstl
 
-<div class="span-10" align="center">
-<img src="$request.contextPath/images/police_stop.gif">
-<h1 class="red">$msg</h1>
-<p align="left">
- <b>Dear $user.name,</b>
-</p>
-<p align="justify">
- <i>We are sorry, but your permission set doesn't allow 
- you to access the requested page. If you believe that this
- is a mistake, please contact the site administrator.</i>
-</p>
-
-<p align="right">
- <b>--Webmaster</b>
-</p>
-</div>
-
+  @author jpaoletti
+--%>
+<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
+<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
+<%@ taglib uri="/WEB-INF/tld/struts-nested.tld" prefix="nested" %>
+<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
+<%@ taglib uri="/WEB-INF/tld/x.tld" prefix="x" %>
+<%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
+<%@ taglib uri="/WEB-INF/tld/fmt.tld" prefix="fmt" %>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>

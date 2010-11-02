@@ -14,11 +14,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *--%>
-<%@page contentType="text/html; charset=ISO-8859-1" %>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+--%>
+<%@include file="../inc/tag-libs.jsp" %>
 <logic:equal value="true" parameter="checked">
 <input type="radio" value="true"  id="f_${param.f}" name="f_${param.f}" checked /><pm:message key="pm.converter.boolean_converter.yes" />
 <input type="radio" value="false" id="f_${param.f}" name="f_${param.f}" /> <pm:message key="pm.converter.boolean_converter.no" />

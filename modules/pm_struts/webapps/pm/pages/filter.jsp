@@ -15,13 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<%@page import="org.jpos.ee.pm.core.EntityFilter"%>
-<%@page import="org.jpos.ee.Constants"%>
+<%@include file="../inc/tag-libs.jsp" %>
+<%@include file="../inc/imports.jsp" %>
 <bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <%
 es.putEntityInRequest(request);

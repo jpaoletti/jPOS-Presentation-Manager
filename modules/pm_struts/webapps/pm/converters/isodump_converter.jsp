@@ -16,5 +16,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *--%>
 <%@page contentType="text/html; charset=ISO-8859-1" %>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<div><pre>${param.value}</bre></div>
+<div><pre>${param.value}</pre></div>

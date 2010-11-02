@@ -14,9 +14,8 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- *--%>
- <%@page contentType="text/html; charset=ISO-8859-1" %>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
+--%>
+<%@include file="../inc/tag-libs.jsp" %>
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="org.jpos.ee.pm.struts.PMEntitySupport" %>
 <bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
 <bean:define id="value"  	value="${param.value}"/>

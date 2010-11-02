@@ -15,14 +15,8 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/fmt.tld" prefix="fmt" %>
-<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
-<%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
-<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<%@page import="org.jpos.ee.pm.core.*"%>
+<%@include file="../inc/tag-libs.jsp" %>
+<%@include file="../inc/imports.jsp" %>
 <bean:define id="pmlist" name="PMLIST" type="org.jpos.ee.pm.core.PaginatedList" />
 <bean:define id="has_selected" name="PMLIST" property="hasSelectedScope" type="java.lang.Boolean" />
 <bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />

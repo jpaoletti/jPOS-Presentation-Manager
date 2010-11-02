@@ -15,15 +15,11 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %>
-<%@ page import="org.jpos.ee.pm.struts.PMEntitySupport"%>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<bean:define id="es" 	 			name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
+<%@include file="../inc/tag-libs.jsp" %>
+<%@include file="../inc/imports.jsp" %>
+<%@include file="../inc/defines.jsp" %>
+
 <bean:define id="item_operations" 	name="item_operations" type="org.jpos.ee.pm.core.Operations" />
-<bean:define id="messages" name="org.apache.struts.action.MESSAGE" type="org.apache.struts.util.MessageResources" scope="application"/>
-<% es.putEntityInRequest(request);%>
 <logic:iterate id="operation" indexId="i" name="item_operations" property="operations" type="org.jpos.ee.pm.core.Operation">
 	<pm:confirmation operation="${operation}" entity="${entity}" />
 	<logic:present name="operation" property="url">

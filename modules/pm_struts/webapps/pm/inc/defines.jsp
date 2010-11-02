@@ -15,11 +15,13 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@include file="../inc/tag-libs.jsp" %>
-<pm:page title="titles.welcome">
-	<div class="boxed">
-	<h2 class="title"><bean:message key="index.welcome" arg0="${user.name}"/></h2>
-	<jsp:useBean id="date" class="java.util.Date"/>
-	<p><bean:message key="index.time" /><fmt:formatDate value="${date}" pattern="dd/MM/yyyy HH:mm"/></p>
-	</div>
-</pm:page>
+<%--
+  General definitions. Requires tag-libs.jsp
+
+  @author jpaoletti
+--%>
+<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
+<bean:define id="messages" name="org.apache.struts.action.MESSAGE" type="org.apache.struts.util.MessageResources" scope="application"/>
+<%
+es.putEntityInRequest(request);
+%>

@@ -15,11 +15,7 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@ taglib uri="/WEB-INF/tld/struts-bean.tld" prefix="bean" %>
-<%@ taglib uri="/WEB-INF/tld/struts-html.tld" prefix="html" %>
-<%@ taglib uri="/WEB-INF/tld/struts-logic.tld" prefix="logic" %>
-<%@ taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@ taglib uri="/WEB-INF/tld/fn.tld" prefix="fn" %>
-<%@ taglib tagdir="/WEB-INF/tags" prefix="pm" %>
+<%@include file="../inc/tag-libs.jsp" %>
 <bean:define id="es"                name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <pm:page title="titles.monitor">
     <div class="boxed">
@@ -30,19 +26,19 @@
     </div>
     <html:errors />
     <script src="../js/jquery-plugin-arte.js" type="text/javascript"></script>
-        <script type="text/javascript">
-        $(document).ready(function(){
-            $.arte({'ajax_url':'${es.context_path}/monitor.do?pmid=${monitor.id}&continue=true', 'on_success':update_field, 'time':'${monitor.delay}' }).start();
-        });
-        function update_field(data){
-            var cleanup = ${monitor.cleanup};
-            if(data.trim().length > 0){
-                var res =  "<pre style='WHITE-SPACE: pre'>";
-                if(!cleanup) res = res+$("#line_container").html();
-                res=res+data+"</pre>";
-                $("#line_container").html(res);
-                $("#con").animate({ scrollTop: $("#con").attr("scrollHeight") - $('#con').height() }, 1000);
+    <script type="text/javascript">
+            $(document).ready(function(){
+                $.arte({'ajax_url':'${es.context_path}/monitor.do?pmid=${monitor.id}&continue=true', 'on_success':update_field, 'time':'${monitor.delay}' }).start();
+            });
+            function update_field(data){
+                var cleanup = ${monitor.cleanup};
+                if(data.trim().length > 0){
+                    var res =  "<pre style='WHITE-SPACE: pre'>";
+                    if(!cleanup) res = res+$("#line_container").html();
+                    res=res+data+"</pre>";
+                    $("#line_container").html(res);
+                    $("#con").animate({ scrollTop: $("#con").attr("scrollHeight") - $('#con').height() }, 1000);
+                }
             }
-        }
-        </script>
+    </script>
 </pm:page>
