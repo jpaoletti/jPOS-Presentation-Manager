@@ -21,7 +21,6 @@
         window.frames["mainframe"].location = url;
     }
 </script>
-
 <logic:present name="pm">
     <pm:page title="titles.index" >
         <div id="page-container">
@@ -46,7 +45,7 @@
 </logic:present>
 
 <logic:notPresent name="pm">
-    <style>
+    <style type="text/css" >
         #pm_error_div{
             margin: 70px;
             padding: 40px;
