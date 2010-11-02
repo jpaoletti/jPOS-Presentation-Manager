@@ -23,5 +23,8 @@
 <bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" />
 <bean:define id="messages" name="org.apache.struts.action.MESSAGE" type="org.apache.struts.util.MessageResources" scope="application"/>
 <%
-es.putEntityInRequest(request);
+Entity entity = es.putEntityInRequest(request);
+PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
 %>
+<bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
+
