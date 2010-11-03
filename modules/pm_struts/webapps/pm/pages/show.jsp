@@ -17,7 +17,7 @@
 --%>
 <%@include file="../inc/inc-full.jsp" %>
 <bean:define id="e_container" name="es" property="container" />
-<bean:define id="entity_instance" name="es" property="selected" />
+<bean:define id="entity_instance" name="es" property="selected" toScope="request"/>
 <pm:page title="titles.add">
     <html:errors />
     <div id="add" class="boxed">

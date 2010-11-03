@@ -17,8 +17,8 @@
 --%>
 <%@include file="../inc/inc-full.jsp" %>
 <bean:define id="e_container" name="es" property="container" />
-<bean:define id="entity_filter" name="es" property="filter" />
-<bean:define id="entity_instance" name="entity_filter" property="instance.instance" />
+<bean:define id="entity_filter" name="es" property="filter" toScope="request"/>
+<bean:define id="entity_instance" name="entity_filter" property="instance.instance" toScope="request"/>
 <pm:page title="titles.filter">
     <div id="add" class="boxed">
         <pm:pmtitle entity="${entity}" operation="${operation}"/>
