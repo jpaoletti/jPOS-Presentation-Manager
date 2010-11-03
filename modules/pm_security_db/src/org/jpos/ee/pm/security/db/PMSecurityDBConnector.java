@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.criterion.Restrictions;
 import org.jpos.ee.DB;
+import org.jpos.ee.pm.core.DBPersistenceManager;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.security.MD5_hex;
 import org.jpos.ee.pm.security.SECPermission;
@@ -37,6 +38,10 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
         this.service = service;
     }
 
+    protected DB getDb() {
+        return (DB) ctx.get(DBPersistenceManager.PM_DB);
+    }
+
     protected Log getLog() {
         return service.getLog();
     }
@@ -60,7 +65,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public void changePassword(String username, String password, String newpassword) throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         try {
             SECUser user = getDBUser(username);
             if (password != null) {
@@ -96,7 +101,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public SECUser getDBUser(String username) {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         SECUser u = null;
         try {
             u = (SECUser) db.session().createCriteria(SECUser.class).add(Restrictions.eq("nick", username)).uniqueResult();
@@ -113,7 +118,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
 
     public List<PMSecurityUser> getUsers() throws PMSecurityException {
         List<PMSecurityUser> result = new ArrayList<PMSecurityUser>();
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         try {
             List<SECUser> users = db.session().createCriteria(SECUser.class).list();
             for (SECUser u : users) {
@@ -126,7 +131,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public void addUser(PMSecurityUser user) throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         try {
             if (getDBUser(user.getUsername().toLowerCase()) != null) {
                 throw new UserAlreadyExistException();
@@ -142,7 +147,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public void updateUser(PMSecurityUser user) throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         try {
             checkUserRules(user.getUsername(), user.getPassword());
             SECUser secuser = getDBUser(user.getUsername());
@@ -158,7 +163,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public SECUserGroup getDBGroup(String groupname) {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         SECUserGroup g = null;
         try {
             g = (SECUserGroup) db.session().createCriteria(SECUserGroup.class).add(Restrictions.eq("name", groupname)).uniqueResult();
@@ -169,7 +174,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public List<PMSecurityUserGroup> getGroups() throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         List<PMSecurityUserGroup> groups = new ArrayList<PMSecurityUserGroup>();
         try {
             List<SECUserGroup> ug = db.session().createCriteria(SECUserGroup.class).list();
@@ -184,7 +189,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public void addGroup(PMSecurityUserGroup group) throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         try {
             if (getDBGroup(group.getName()) != null) {
                 throw new GroupAlreadyExistException();
@@ -199,7 +204,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public void updateGroup(PMSecurityUserGroup group) throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         try {
             SECUserGroup secuserg = getDBGroup(group.getName());
             db.session().refresh(secuserg);
@@ -212,7 +217,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
 
     public List<PMSecurityPermission> getPermissions() throws PMSecurityException {
         List<PMSecurityPermission> perms = new ArrayList<PMSecurityPermission>();
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         try {
             List<SECPermission> ps = db.session().createCriteria(SECPermission.class).list();
             for (SECPermission p : ps) {
@@ -316,7 +321,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     protected SECPermission getDBPerm(String name) {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         SECPermission p = null;
         try {
             p = (SECPermission) db.session().createCriteria(SECPermission.class).add(Restrictions.eq("name", name)).uniqueResult();
@@ -359,7 +364,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
 
     public void removeGroup(PMSecurityUserGroup group)
             throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         db.session().delete(getDBGroup(group.getName()));
     }
 
@@ -374,7 +379,7 @@ public class PMSecurityDBConnector implements PMSecurityConnector {
     }
 
     public void removeUser(PMSecurityUser object) throws PMSecurityException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb();
         db.session().delete(getDBUser(object.getUsername()));
     }
 }

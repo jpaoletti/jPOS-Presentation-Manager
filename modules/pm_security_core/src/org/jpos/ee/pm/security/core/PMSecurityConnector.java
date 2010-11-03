@@ -19,10 +19,9 @@ package org.jpos.ee.pm.security.core;
 
 import java.util.List;
 
-import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.PMContext;
 
-public interface PMSecurityConnector extends Constants{
+public interface PMSecurityConnector{
     
     public void setService(PMSecurityService service);
     public void setContext(PMContext ctx);

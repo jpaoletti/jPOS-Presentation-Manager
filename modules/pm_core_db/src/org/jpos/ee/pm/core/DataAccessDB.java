@@ -31,7 +31,7 @@ public class DataAccessDB implements DataAccess, Constants {
 
     public Object getItem(PMContext ctx, String property, String value) throws PMException {
         try {
-            DB db = (DB) ctx.get(PM_DB);
+            DB db = getDb(ctx);
             Criteria c = db.session().createCriteria(Class.forName(getEntity(ctx).getClazz()));
             c.setMaxResults(1);
             c.add(Restrictions.sqlRestriction(property + "=" + value));
@@ -39,6 +39,10 @@ public class DataAccessDB implements DataAccess, Constants {
         } catch (ClassNotFoundException e) {
             return null;
         }
+    }
+
+    protected DB getDb(PMContext ctx) {
+        return (DB) ctx.get(DBPersistenceManager.PM_DB);
     }
 
     private Entity getEntity(PMContext ctx) throws PMException {
@@ -62,18 +66,18 @@ public class DataAccessDB implements DataAccess, Constants {
     }
 
     public void delete(PMContext ctx, Object object) throws PMException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb(ctx);
         db.session().delete(object);
     }
 
     public void update(PMContext ctx, Object object) throws PMException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb(ctx);
         db.session().update(object);
     }
 
     public void add(PMContext ctx, Object object) throws PMException {
         try {
-            DB db = (DB) ctx.get(PM_DB);
+            DB db = getDb(ctx);
             db.session().save(object);
         } catch (org.hibernate.exception.ConstraintViolationException e) {
             throw new PMException("constraint.violation.exception");
@@ -90,7 +94,7 @@ public class DataAccessDB implements DataAccess, Constants {
 
     protected Criteria createCriteria(PMContext ctx, Entity entity, EntityFilter filter) throws PMException {
         Criteria c;
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb(ctx);
         try {
             c = db.session().createCriteria(Class.forName(entity.getClazz()));
         } catch (ClassNotFoundException e) {
@@ -139,7 +143,7 @@ public class DataAccessDB implements DataAccess, Constants {
     }
 
     public Object refresh(PMContext ctx, Object o) throws PMException {
-        DB db = (DB) ctx.get(PM_DB);
+        DB db = getDb(ctx);
         final Object merged = db.session().merge(o);
         db.session().refresh(merged);
         return merged;
