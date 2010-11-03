@@ -16,11 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 <%@include file="../inc/inc-full.jsp" %>
-<bean:define id="pmlist" name="PMLIST" type="org.jpos.ee.pm.core.PaginatedList" />
+<bean:define id="pmlist" name="es" property="list" type="org.jpos.ee.pm.core.PaginatedList" />
+<bean:define id="c" name="es" property="listTotalDigits" type="java.lang.Integer" />
 <bean:define id="has_selected" name="PMLIST" property="hasSelectedScope" type="java.lang.Boolean" />
-<%
-int c =  (pmlist.getTotal()==null || pmlist.getTotal() ==0) ? 1 : (int)Math.log10(pmlist.getTotal()) + 1;
-%>
 <script type="text/javascript">
     function selectItem(i){
         $.ajax({ url: "selectItem.do?pmid="+"${pmid}"+"&idx="+i});
@@ -40,7 +38,7 @@ int c =  (pmlist.getTotal()==null || pmlist.getTotal() ==0) ? 1 : (int)Math.log1
     </thead>
     <tbody id="list_body" >
         <bean:define id="contents" name="contents" type="org.jpos.util.DisplacedList" />
-        <logic:iterate id="item" name="contents">
+        <logic:iterate id="item" name="contents" >
             <%
             Entity entity = (Entity) request.getAttribute("entity");
             Integer i = contents.indexOf(item);
@@ -57,7 +55,10 @@ int c =  (pmlist.getTotal()==null || pmlist.getTotal() ==0) ? 1 : (int)Math.log1
                         <bean:define id="checked" value="<%=(es.getContainer().getSelectedIndexes().contains(i))?"checked":"" %>" />
                         <input type="checkbox" id="selected_item" value="${i}" onchange="selectItem(this.value);" ${checked} />
                     </logic:equal>
-                    <%= (pmlist.isShowRowNumber())?String.format("[%0"+c+"d]", i):"" %> &nbsp;
+                    <c:if test="${pmlist.showRowNumber}">
+                        <%= String.format("[%0"+c+"d]", i) %>
+                    </c:if>
+                    &nbsp;
                     <span style="white-space: nowrap;" class="operationspopup" id="g_${i}">
                         <img src="${es.context_path}/templates/${pm.template}/images/loading.gif" alt="loading" />
                     </span>
