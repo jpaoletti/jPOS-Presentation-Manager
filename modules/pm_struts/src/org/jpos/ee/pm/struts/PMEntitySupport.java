@@ -17,6 +17,8 @@
  */
 package org.jpos.ee.pm.struts;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jpos.ee.pm.core.EntityContainer;
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,8 +34,10 @@ import org.jpos.ee.pm.core.PaginatedList;
  * @author jpaoletti
  * @see EntitySupport
  */
-public class PMEntitySupport extends EntitySupport implements Constants {
+public class PMEntitySupport extends EntitySupport {
 
+    public static String PM_ID = "pmid";
+    public static final String LAST_PM_ID = "last_pmid";
     private String context_path;
     private static PMEntitySupport instance;
     private HttpServletRequest request;
@@ -73,9 +77,7 @@ public class PMEntitySupport extends EntitySupport implements Constants {
     public Entity getEntity() throws PMStrutsException {
         EntityContainer container = getContainer();
         if (container != null) {
-            Entity entity = container.getEntity();
-            request.setAttribute(ENTITY, entity);
-            return entity;
+            return container.getEntity();
         }
         return null;
     }
@@ -92,7 +94,6 @@ public class PMEntitySupport extends EntitySupport implements Constants {
             throw new PMStrutsException("container.not.found");
         }
         PaginatedList list = container.getList();
-        request.setAttribute(PM_LIST, list);
         return list;
     }
 
@@ -108,14 +109,12 @@ public class PMEntitySupport extends EntitySupport implements Constants {
             throw new PMStrutsException("container.not.found");
         }
         Object r = container.getSelected().getInstance();
-        request.setAttribute(ENTITY_INSTANCE, r);
         return r;
     }
 
     /**
-     * Insert the container filter and the filter into the request
+     * Returns the filter applied
      * 
-     * @param request The request
      * @return The filter
      * @throws PMStrutsException when request has no container
      */
@@ -124,10 +123,22 @@ public class PMEntitySupport extends EntitySupport implements Constants {
         if (container == null) {
             throw new PMStrutsException("container.not.found");
         }
-        Object r = container.getFilter().getInstance().getInstance();
-        request.setAttribute(ENTITY_INSTANCE, r);
-        request.setAttribute(ENTITY_FILTER, container.getFilter());
         return container.getFilter();
+    }
+
+    /**
+     * Returns de instance of the entity representing the filter
+     *
+     * @return The filter instance
+     * @throws PMStrutsException when request has no container
+     */
+    public Object getFilterInstance() throws PMStrutsException {
+        EntityContainer container = getContainer();
+        if (container == null) {
+            throw new PMStrutsException("container.not.found");
+        }
+        Object r = container.getFilter().getInstance().getInstance();
+        return r;
     }
 
     /**
@@ -154,5 +165,13 @@ public class PMEntitySupport extends EntitySupport implements Constants {
 
     public void setRequest(HttpServletRequest request) {
         this.request = request;
+    }
+
+    public Integer getListTotalDigits(){
+        try {
+            return (getList().getTotal() == null || getList().getTotal() == 0) ? 1 : (int) Math.log10(getList().getTotal()) + 1;
+        } catch (PMStrutsException ex) {
+            return 0;
+        }
     }
 }
