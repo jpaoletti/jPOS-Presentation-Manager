@@ -59,7 +59,7 @@ public class GeneralFilter implements Filter,Constants {
         ctx.setResponse((HttpServletResponse) response);
         ctx.setErrors(new ArrayList<PMMessage>());
         ctx.getRequest().setAttribute(PM_CONTEXT, ctx);
-        ctx.put(USER, ctx.getSession().getAttribute(USER));
+        ctx.put(ActionSupport.USER, ctx.getSession().getAttribute(ActionSupport.USER));
         
         try {
             ctx.getPresentationManager().getPersistenceManager().init(ctx);

@@ -39,6 +39,7 @@ public abstract class EntityActionSupport extends ActionSupport {
     /**Forces execute to check if there is an entity defined in parameters*/
     protected boolean checkEntity(){ return true; }
 
+    @Override
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         
@@ -69,6 +70,7 @@ public abstract class EntityActionSupport extends ActionSupport {
         return true;
     }
     
+    @Override
     protected void excecute(PMStrutsContext ctx) throws PMException {
         
         /* Validate de operation*/
@@ -125,14 +127,14 @@ public abstract class EntityActionSupport extends ActionSupport {
     }
 
     protected boolean configureEntityContainer(PMStrutsContext ctx) throws PMException {
-        String pmid = ctx.getRequest().getParameter(PM_ID);
+        String pmid = ctx.getRequest().getParameter(PMEntitySupport.PM_ID);
         if(pmid==null) {
-            pmid=(String) ctx.getSession().getAttribute(LAST_PM_ID);
+            pmid=(String) ctx.getSession().getAttribute(PMEntitySupport.LAST_PM_ID);
         }else{
-            ctx.getSession().setAttribute(LAST_PM_ID,pmid);
+            ctx.getSession().setAttribute(PMEntitySupport.LAST_PM_ID,pmid);
         }
         boolean fail = false;
-        ctx.getRequest().setAttribute(PM_ID, pmid);
+        ctx.getRequest().setAttribute(PMEntitySupport.PM_ID, pmid);
         if(pmid==null){
             if(checkEntity()) ctx.getEntityContainer();
         }else{

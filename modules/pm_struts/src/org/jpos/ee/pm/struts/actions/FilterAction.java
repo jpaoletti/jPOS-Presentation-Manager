@@ -33,6 +33,7 @@ import org.jpos.util.DisplacedList;
 
 public class FilterAction extends FieldProcessingActionSupport {
 
+    @Override
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         super.prepare(ctx);
         if (ctx.getParameter(FINISH) == null) {

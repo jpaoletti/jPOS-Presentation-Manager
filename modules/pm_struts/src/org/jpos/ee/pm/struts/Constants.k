@@ -4,13 +4,6 @@
     public static final String PM_HTTP_REQUEST = "PM_HTTP_REQUEST";
     public static final String PM_HTTP_RESPONSE = "PM_HTTP_RESPONSE";
 
-    public static final String CONTINUE     = "continue";
-    public static final String SUCCESS     = "success";
-    public static final String FAILURE     = "failure";
-    public static final String USER     = "user";
-    public static final String DENIED     = "denied";
-    public static final String STRUTS_LOGIN     = "login";
-    
     public static final String PM_LIST = "PMLIST";
     public static final String ENTITY = "entity";
     public static final String REPORT = "report";
@@ -26,9 +19,7 @@
     public static final String OPERATION = "operation";
     public static final String OPERATIONS = "operations";
     public static final String ITEM_OPERATIONS = "item_operations";
-    public static final String PM_ID     = "pmid";
     public static final String PM_RID     = "pmrid";
-    public static final String LAST_PM_ID     = "last_pmid";
     public static final String MODIFIED_OWNER_COLLECTION = "moc";
     public static final String PM_MONITOR_CONTINUE = "PM_MONITOR_CONTINUE";
     public static final String PM_MONITOR  = "PM_MONITOR";
