@@ -1,20 +1,19 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
   <class name="org.jpos.ee.pm.security.SECUserGroup" table="sec_groups">
-    <id name="id" column="id" type="long">
-      <generator class="native" />
+    <id column="id" name="id" type="long">
+      <generator class="native"/>
     </id>
     <property name="name" type="string">
-      <column name="name" sql-type="varchar(32)" unique="true" not-null="true" />
+      <column name="name" not-null="true" sql-type="varchar(32)" unique="true"/>
     </property>
-    <property name="description" length="255" not-null="false" type="string" />
-    <property name="active" type="yes_no" />
-    <property name="creation" type="date" />
-    
-    <set name="permissions" lazy="false" table="sec_group_perms" cascade="delete">
-        <key column="sec_group" />
-         <many-to-many class="org.jpos.ee.pm.security.SECPermission" column="sec_perm"/>
+    <property length="255" name="description" not-null="false" type="string"/>
+    <property name="active" type="yes_no"/>
+    <property name="creation" type="date"/>
+    <set cascade="delete" lazy="false" name="permissions" table="sec_group_perms">
+      <key column="sec_group"/>
+      <many-to-many class="org.jpos.ee.pm.security.SECPermission" column="sec_perm"/>
     </set>
   </class>
 </hibernate-mapping>
