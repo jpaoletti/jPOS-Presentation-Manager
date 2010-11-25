@@ -17,7 +17,6 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-
 import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
@@ -37,18 +36,24 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport {
         LogEvent evt = ctx.getPresentationManager().getLog().createDebug();
         evt.addMessage("Field [" + eid + "] ");
         int i = 0;
-        if(s==null) s="";
+        if (s == null) {
+            s = "";
+        }
         while (s != null) {
             evt.addMessage("    Object to convert: " + s);
             try {
-                Object o = wrapper.getInstance(i);
-                Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
+                final Object o = wrapper.getInstance(i);
+                final Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
                 ctx.put(PM_FIELD, f);
                 ctx.put(PM_FIELD_VALUE, s);
                 ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
-                Object converted = converter.build(ctx);
+                final Object converted = converter.build(ctx);
                 evt.addMessage("    Object converted: " + converted);
-                if (validateField(ctx, f, wrapper, converted)) {
+                if (converter.getValidate()) {
+                    if (validateField(ctx, f, wrapper, converted)) {
+                        ctx.getPresentationManager().set(o, f.getProperty(), converted);
+                    }
+                } else {
                     ctx.getPresentationManager().set(o, f.getProperty(), converted);
                 }
             } catch (IgnoreConvertionException e) {

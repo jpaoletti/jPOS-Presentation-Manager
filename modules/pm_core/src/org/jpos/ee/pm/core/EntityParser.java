@@ -28,7 +28,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.JDomDriver;
 
 /**This class is the general parser for the PM configurations files.
- * @author yero
+ * @author jpaoletti jeronimo.paoletti@gmail.com
  * */
 public class EntityParser {
     /**The parser*/
@@ -82,6 +82,7 @@ public class EntityParser {
         xstream.useAttributeFor(Highlight.class, "scope");
         
         xstream.useAttributeFor(Converter.class, "operations");
+        xstream.useAttributeFor(Converter.class, "validate");
         
         xstream.addImplicitCollection(Entity.class, "fields", Field.class);
         xstream.addImplicitCollection(Converters.class, "converters", Converter.class);

@@ -51,6 +51,7 @@ public class Converter extends PMCoreObject {
 
     private String operations;
     private Properties properties;
+    private Boolean validate;
 
     /**This method transforms the given value into a String to visualize it
      * @param ctx The context.
@@ -195,5 +196,14 @@ public class Converter extends PMCoreObject {
             res = res + suffix;
         }
         return res;
+    }
+
+    public Boolean getValidate() {
+        if(validate==null) return true;
+        return validate;
+    }
+
+    public void setValidate(Boolean validate) {
+        this.validate = validate;
     }
 }
