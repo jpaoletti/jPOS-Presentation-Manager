@@ -51,7 +51,7 @@ public class DBEntityFilter extends EntityFilter {
                 Criterion c = null;
 
                 if (values.get(0) != null) {
-                    c = getCompareCriterion(field.getId(), values.get(0));
+                    c = getCompareCriterion(field.getProperty(), values.get(0));
                     if (c != null) {
                         getFilters().add(c);
                     }
