@@ -21,61 +21,76 @@ import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.struts.PMStrutsContext;
 
 public class EditStringConverter extends StrutsEditConverter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
-        Object value =  ctx.get(PM_FIELD_VALUE);
-        return (value !=null)?value.toString():null;
-    }
-    
-    public String visualize(PMContext ctx) throws ConverterException {
-        EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
-        Field field = (Field) ctx.get(PM_FIELD);
-        Object p = getValue(einstance, field);
-        return super.visualize("string_converter.jsp?ml="+getConfig("max-length")+"&value="+normalize((p==null)?"":p.toString()));
+        final PMStrutsContext c = (PMStrutsContext) ctx;
+        final Object value = ctx.get(PM_FIELD_VALUE);
+        final String fid = ((Field) ctx.get(PM_FIELD)).getId();
+        final boolean isNull = Boolean.valueOf(c.getParameter("f_" + fid + "_null"));
+        if (isNull) {
+            return null ;
+        } else {
+            return (value != null) ? value.toString() : null;
+        }
     }
 
-    public String normalize (String s) {
-        StringBuffer str = new StringBuffer();
+    @Override
+    public String visualize(PMContext ctx) throws ConverterException {
+        final EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
+        final Field field = (Field) ctx.get(PM_FIELD);
+        final Object p = getValue(einstance, field);
+        final String value = normalize((p == null) ? "" : p.toString());
+        return super.visualize("string_converter.jsp?"
+                + "ml=" + getConfig("max-length")
+                + "&value=" + value
+                + "&isNull=" + (p == null)
+                + "&withNull=" + getConfig("with-null", "false"));
+    }
+
+    public String normalize(String s) {
+        StringBuilder str = new StringBuilder();
 
         int len = (s != null) ? s.length() : 0;
         for (int i = 0; i < len; i++) {
             char ch = s.charAt(i);
             switch (ch) {
-                case '<': 
+                case '<':
                     str.append("&lt;");
                     break;
-                case '>': 
+                case '>':
                     str.append("&gt;");
                     break;
-                case '&': 
+                case '&':
                     str.append("&amp;");
                     break;
-/*
+                /*
                 case '"': 
-                    str.append("&quot;");
-                    break;
-*/
-                case '\'': 
+                str.append("&quot;");
+                break;
+                 */
+                case '\'':
                     str.append("&apos;");
                     break;
                 case '\r':
-                case '\n': 
+                case '\n':
                     str.append("&#x");
                     str.append(Integer.toHexString((int) (ch & 0xFF)));
                     str.append(';');
                     break;
-                default: 
+                default:
                     if (ch < 0x20) {
                         str.append("&#x");
                         str.append(Integer.toHexString((int) (ch & 0xFF)));
                         str.append(';');
-                    }
-                    else if (ch > 0xff00) {
+                    } else if (ch > 0xff00) {
                         str.append((char) (ch & 0xFF));
-                    } else
+                    } else {
                         str.append(ch);
+                    }
             }
         }
         return (str.toString());
