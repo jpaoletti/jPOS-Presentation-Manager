@@ -36,12 +36,8 @@
                                 <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
                                     <tr>
                                         <th scope="row" width="175px"><div><label for="object.${field.id}"><pm:field-name entity="${entity}" field="${field}" /></label></div></th>
-                                        <td>
-                                            <div id="f_${field.id}_div">
-                                                <pm:filter-operations field_id="${field.id}" filter="${entity_filter}" />
-                                                <pm:converted-item operation="${operation}" entity="${entity}" item="${entity_instance}" field="${field}" />
-                                            </div>
-                                        </td>
+                                        <td><pm:filter-operations field_id="${field.id}" filter="${entity_filter}" /></td>
+                                        <td><pm:converted-item operation="${operation}" entity="${entity}" item="${entity_instance}" field="${field}" /></td>
                                     </tr>
                                 </c:if>
                             </logic:iterate>
