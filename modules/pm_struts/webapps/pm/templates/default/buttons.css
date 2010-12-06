@@ -52,3 +52,6 @@ a:hover {
 .list {
     background:url(img/list.gif) no-repeat 10px 8px;
 }
+.clearfilter{
+    background:url(img/clearfilter.gif) no-repeat 10px 8px;
+}

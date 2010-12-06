@@ -15,6 +15,10 @@
       <forward name="success" path="/list.do" redirect="true"/>
       <forward name="failure" path="/pages/list.jsp" />
     </action>
+    <action path="/clearfilter" type="org.jpos.ee.pm.struts.actions.ClearFilterAction">
+      <forward name="success" path="/list.do" redirect="true"/>
+      <forward name="failure" path="/pages/list.jsp" />
+    </action>
     <action path="/login" name="LoginActionForm" type="org.jpos.ee.pm.struts.actions.LoginAction" validate="true" input="/pages/login.jsp" >
       	<forward name="success" redirect="true" path="/pages/login.jsp"/>
       	<forward name="failure" redirect="false" path="/pages/login.jsp"/>
