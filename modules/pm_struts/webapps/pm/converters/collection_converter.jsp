@@ -16,19 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 <%@include file="../inc/tag-libs.jsp" %>
-<%@page import="org.jpos.ee.pm.struts.converter.*"%>
-<%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="java.util.Collection" import="org.jpos.ee.pm.struts.*"%>
-<%@page import="java.util.List" import="org.jpos.ee.pm.struts.PMEntitySupport" %>
-<bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
-<bean:define id="entity"     name="entity" type="org.jpos.ee.pm.core.Entity" />
-<bean:define id="es"         name="es" 	   type="org.jpos.ee.pm.struts.PMEntitySupport"  />
-<%
-    PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
-    List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
-	request.setAttribute("collection", list);
-	Collection listv = (Collection)ctx.getPresentationManager().get(tmp_object, request.getParameter("prop"));
-%>
+<bean:define id="listv"      name="ctx"    property="map.PM_FIELD_VALUE" type="java.util.Collection" />
+<bean:define id="collection" name="ctx"    property="tmpList" type="java.util.List" />
 <logic:iterate id="o" name="collection" type="java.lang.Object" indexId="i">
-	<bean:define id="checked" value="<%= (listv!=null && listv.contains(o))?"checked":"" %>" />
-	<input type="checkbox" ${checked} value="${i}" id="f_${param.f}" name="f_${param.f}" />&nbsp;${o}<br/>
+    <bean:define id="checked" value="<%= (listv!=null && listv.contains(o))?"checked":"" %>" />
+    <input type="checkbox" ${checked} value="${i}" id="f_${param.f}" name="f_${param.f}" />&nbsp;${o}<br/>
 </logic:iterate>

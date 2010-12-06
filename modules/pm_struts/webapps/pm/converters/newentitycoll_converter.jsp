@@ -18,15 +18,8 @@
 <%@include file="../inc/tag-libs.jsp" %>
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="java.util.Collection"%>
 <%@page import="java.util.List" import="org.jpos.ee.pm.struts.PMEntitySupport" import="org.jpos.ee.pmee.PMList" %>
-<bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
-<bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
-<bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />
-<%
-    PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
-	Entity e = es.getPmservice().getEntity(request.getParameter("entity"));
-	Collection listv = (Collection)ctx.getPresentationManager().get(tmp_object, request.getParameter("f"));
-	//TODO Finish this. 
-%>
+<bean:define id="listv"      name="ctx"    property="map.PM_FIELD_VALUE" type="java.util.Collection" />
+<bean:define id="collection" name="ctx"    property="tmpList" type="java.util.List" />
 <div id="">
 </div>
 <logic:iterate id="o" name="list" property="contents" type="java.lang.Object" indexId="i">

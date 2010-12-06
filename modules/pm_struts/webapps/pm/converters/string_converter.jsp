@@ -17,7 +17,6 @@
 --%>
 <%@include file="../inc/tag-libs.jsp" %>
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="org.jpos.ee.pm.struts.PMEntitySupport" %>
-<bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
 <bean:define id="value" value="${param.value}"/>
 <bean:define id="checked" value="${param.isNull ? 'checked' : ''}"/>
 <bean:define id="disabled" value="${ (param.isNull and param.withNull) ? 'disabled=disabled' : ''}"/>

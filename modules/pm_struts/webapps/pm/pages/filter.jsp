@@ -17,8 +17,7 @@
 --%>
 <%@include file="../inc/inc-full.jsp" %>
 <bean:define id="e_container" name="es" property="container" />
-<bean:define id="entity_filter" name="es" property="filter" toScope="request"/>
-<bean:define id="entity_instance" name="entity_filter" property="instance.instance" toScope="request"/>
+<bean:define id="entity_filter" name="es" property="filter" toScope="request" type="org.jpos.ee.pm.core.EntityFilter"/>
 <pm:page title="titles.filter">
     <div id="add" class="boxed">
         <pm:pmtitle entity="${entity}" operation="${operation}"/>
@@ -37,7 +36,7 @@
                                     <tr>
                                         <th scope="row" width="175px"><div><label for="object.${field.id}"><pm:field-name entity="${entity}" field="${field}" /></label></div></th>
                                         <td><pm:filter-operations field_id="${field.id}" filter="${entity_filter}" /></td>
-                                        <td><pm:converted-item operation="${operation}" entity="${entity}" item="${entity_instance}" field="${field}" /></td>
+                                        <td><pm:converted-item operation="${operation}" entity="${entity}" field="${field}" field_value="${entity_filter.filterValues[field.id][0]}" /></td>
                                     </tr>
                                 </c:if>
                             </logic:iterate>

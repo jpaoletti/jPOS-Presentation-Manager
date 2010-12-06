@@ -19,21 +19,13 @@
 <%@page import="org.jpos.ee.pm.core.*" import="org.jpos.ee.Constants" import="java.util.Collection"%>
 <%@page import="java.util.List" import="org.jpos.ee.pm.struts.PMEntitySupport" import="org.jpos.ee.pm.struts.converter.*"%>
 <%@page import="org.jpos.ee.pm.struts.converter.*" import="org.jpos.ee.pm.struts.*"%>
-<bean:define id="tmp_object" name = "entity_instance" type="java.lang.Object"/>
-<bean:define id="entity"   	name="entity" 	type="org.jpos.ee.pm.core.Entity" />
-<bean:define id="es" 	 	name="es" 		type="org.jpos.ee.pm.struts.PMEntitySupport"  />
-<%
-	PMStrutsContext ctx = (PMStrutsContext)request.getAttribute(Constants.PM_CONTEXT);
-    List<?> list = AbstractCollectionConverter.recoverList(ctx, request.getParameter("entity"), false);
-	request.setAttribute("collection", list);
-	Object selected = (Object)ctx.getPresentationManager().get(tmp_object, request.getParameter("prop"));
-%>
+<bean:define id="collection" name="ctx"    property="tmpList" type="java.util.List" />
 <select size="1" id="f_${param.f}" name="f_${param.f}">
 <c:if test="${param.with_null}">
 	<option value="-1" />&nbsp;<br/>
 </c:if>
 <logic:iterate id="o" name="collection" type="java.lang.Object" indexId="i">
-	<bean:define id="checked" value="<%= (o.equals(selected))?"selected":"" %>" />
+	<bean:define id="checked" value="${ o eq ctx.map.PM_FIELD_VALUE ? 'selected' : ''}" />
 	<option ${checked} value="${i}" />&nbsp;${o}<br/>
 </logic:iterate>
 </select>

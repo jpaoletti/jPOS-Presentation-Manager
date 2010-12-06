@@ -16,7 +16,7 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
 
     public void saveList(PMStrutsContext ctx, String eid){
         try {
-            ctx.getSession().setAttribute(getTmpName(ctx, eid), getList(ctx,null));
+            ctx.getSession().setAttribute(ctx.getTmpName(), getList(ctx,null));
         } catch (PMException ex) {
             ctx.getPresentationManager().error(ex);
         }
@@ -24,8 +24,8 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
 
     public static List<?> recoverList(PMStrutsContext ctx, String eid, boolean remove){
         try {
-            final List<?> r = (List<?>) ctx.getSession().getAttribute(getTmpName(ctx, eid));
-            if(remove) ctx.getSession().removeAttribute(getTmpName(ctx, eid));
+            final List<?> r = (List<?>) ctx.getSession().getAttribute(ctx.getTmpName());
+            if(remove) ctx.getSession().removeAttribute(ctx.getTmpName());
             return r;
         } catch (PMException ex) {
             ctx.getPresentationManager().error(ex);
@@ -61,10 +61,4 @@ public abstract class AbstractCollectionConverter extends StrutsEditConverter{
         }
         return list;
     }
-
-    public static String getTmpName(PMStrutsContext ctx,  String eid) throws PMException{
-        Field field = (Field) ctx.get(PM_FIELD);
-        return "tmp_"+ctx.getEntity().getId()+"_"+field.getId();
-    }
-
 }

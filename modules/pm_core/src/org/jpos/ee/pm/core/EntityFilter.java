@@ -18,18 +18,20 @@
 package org.jpos.ee.pm.core;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class EntityFilter extends PMCoreObject {
 
     private Map<String, FilterOperation> filterOperations;
-    private EntityInstanceWrapper instance;
+    private Map<String, List<Object>> filterValues;
 
     /**
      * Default constructor
      */
     public EntityFilter() {
         filterOperations = new HashMap<String, FilterOperation>();
+        filterValues = new HashMap<String, List<Object>>();
     }
 
     public boolean isOperation(String fid, FilterOperation oper) {
@@ -42,25 +44,19 @@ public class EntityFilter extends PMCoreObject {
     public void clear() {
     }
 
-    /**
-     * Setter for instance
-     * @param instance
-     */
-    public void setInstance(EntityInstanceWrapper instance) {
-        this.instance = instance;
-    }
-
-    /**
-     * Getter for instance
-     * @return The wrapper
-     */
-    public EntityInstanceWrapper getInstance() {
-        return instance;
+    public void addFilter(String fieldId, List<Object> values, FilterOperation operation){
+        filterOperations.put(fieldId, operation);
+        filterValues.put(fieldId, values);
     }
 
     public Map<String, FilterOperation> getFilterOperations() {
         return filterOperations;
     }
+
+    public Map<String, List<Object>> getFilterValues() {
+        return filterValues;
+    }
+    
 
     public void setFilterOperations(Map<String, FilterOperation> filterOperations) {
         this.filterOperations = filterOperations;

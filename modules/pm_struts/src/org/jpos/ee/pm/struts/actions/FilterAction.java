@@ -17,9 +17,13 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jpos.core.ConfigurationException;
+import org.jpos.ee.pm.converter.Converter;
+import org.jpos.ee.pm.converter.ConverterException;
+import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
@@ -39,33 +43,15 @@ public class FilterAction extends FieldProcessingActionSupport {
         if (ctx.getParameter(FINISH) == null) {
             if (ctx.getEntityContainer().getFilter() == null) {
                 //Creates filter bean and put it in session
-                //Object filter;
-                try {
-                    //filter = getPMService().getFactory().newInstance (rc.getEntity().getClazz());
-                    EntityFilter filter = ctx.getEntity().getDataAccess().createFilter(ctx);
-                    EntityInstanceWrapper wrapper = new EntityInstanceWrapper();
-                    int top = Integer.parseInt(ctx.getOperation().getConfig("instances", "1"));
-                    for (int i = 0; i < top; i++) {
-                        Object n1 = getPMService().getFactory().newInstance(ctx.getEntity().getClazz());
-                        wrapper.add(n1);
-                    }
-                    filter.setInstance(wrapper);
-                    ctx.getEntityContainer().setFilter(filter);
-                } catch (ConfigurationException e) {
-                    ctx.getPresentationManager().error(e);
-                    ctx.getErrors().add(new PMMessage(ENTITY, e.getMessage()));
-                    throw new PMException();
-                }
+                ctx.getEntityContainer().setFilter(ctx.getEntity().getDataAccess().createFilter(ctx));
             }
             throw new PMForwardException(CONTINUE);
         } else {
             final EntityFilter filter = ctx.getEntityContainer().getFilter();
             filter.clear();
-            final EntityInstanceWrapper instance = filter.getInstance();
             for (Field field : ctx.getEntity().getAllFields()) {
                 if (field.shouldDisplay(ctx.getOperation().getId())) {
-                    proccessField(ctx, field, instance);
-                    checkFilterOperation(ctx, filter, field);
+                    filter.addFilter(field.getId(), getFilterValues(ctx, field), getFilterOperation(ctx, field));
                 }
             }
             filter.process(ctx.getEntity());
@@ -88,27 +74,52 @@ public class FilterAction extends FieldProcessingActionSupport {
         pmList.setTotal(total);
     }
 
-    private void checkFilterOperation(final PMStrutsContext ctx, final EntityFilter filter, final Field field) {
+    private FilterOperation getFilterOperation(final PMStrutsContext ctx, final Field field) {
         String eid = "filter_oper_f_" + field.getId();
         String oper = ctx.getRequest().getParameter(eid);
         if (oper != null) {
             try {
                 int i = Integer.parseInt(oper);
-                switch(i){
-                    case 0: filter.getFilterOperations().put(field.getId(), FilterOperation.EQ); break;
-                    case 1: filter.getFilterOperations().put(field.getId(), FilterOperation.NE); break;
-                    case 2: filter.getFilterOperations().put(field.getId(), FilterOperation.LIKE); break;
-                    case 3: filter.getFilterOperations().put(field.getId(), FilterOperation.GT); break;
-                    case 4: filter.getFilterOperations().put(field.getId(), FilterOperation.GE); break;
-                    case 5: filter.getFilterOperations().put(field.getId(), FilterOperation.LT); break;
-                    case 6: filter.getFilterOperations().put(field.getId(), FilterOperation.LE); break;
-                    default: filter.getFilterOperations().put(field.getId(), FilterOperation.EQ);
+                switch (i) {
+                    case 0:
+                        return FilterOperation.EQ;
+                    case 1:
+                        return FilterOperation.NE;
+                    case 2:
+                        return FilterOperation.LIKE;
+                    case 3:
+                        return FilterOperation.GT;
+                    case 4:
+                        return FilterOperation.GE;
+                    case 5:
+                        return FilterOperation.LT;
+                    case 6:
+                        return FilterOperation.LE;
+                    default:
+                        return FilterOperation.EQ;
                 }
             } catch (Exception e) {
-                filter.getFilterOperations().put(field.getId(), FilterOperation.EQ);
+                return FilterOperation.EQ;
             }
         } else {
-            filter.getFilterOperations().put(field.getId(), FilterOperation.EQ);
+            return FilterOperation.EQ;
         }
+    }
+
+    private List<Object> getFilterValues(PMStrutsContext ctx, Field field) throws ConverterException {
+        final List<String> parameterValues = getParameterValues(ctx,field);
+        final List<Object> values = new ArrayList<Object>();
+        int i  = 0;
+        for (String value : parameterValues) {
+            try {
+                final Converter converter = field.getConverters().getConverterForOperation(ctx.getOperation().getId());
+                Object converted = getConvertedValue(ctx, field, value, null, converter);
+                values.add(converted);
+            } catch (IgnoreConvertionException e) {
+                //Do nothing, just ignore conversion.
+            }
+            i++;
+        }
+        return values;
     }
 }

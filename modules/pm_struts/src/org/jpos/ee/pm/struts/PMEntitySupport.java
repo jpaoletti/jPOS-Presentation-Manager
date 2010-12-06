@@ -111,7 +111,7 @@ public class PMEntitySupport extends EntitySupport {
         Object r = container.getSelected().getInstance();
         return r;
     }
-
+    
     /**
      * Returns the filter applied
      * 
@@ -124,21 +124,6 @@ public class PMEntitySupport extends EntitySupport {
             throw new PMStrutsException("container.not.found");
         }
         return container.getFilter();
-    }
-
-    /**
-     * Returns de instance of the entity representing the filter
-     *
-     * @return The filter instance
-     * @throws PMStrutsException when request has no container
-     */
-    public Object getFilterInstance() throws PMStrutsException {
-        EntityContainer container = getContainer();
-        if (container == null) {
-            throw new PMStrutsException("container.not.found");
-        }
-        Object r = container.getFilter().getInstance().getInstance();
-        return r;
     }
 
     /**

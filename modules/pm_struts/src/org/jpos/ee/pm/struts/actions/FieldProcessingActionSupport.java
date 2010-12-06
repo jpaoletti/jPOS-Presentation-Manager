@@ -17,7 +17,10 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.jpos.ee.pm.converter.Converter;
+import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
@@ -30,39 +33,43 @@ import org.jpos.util.Logger;
 
 public abstract class FieldProcessingActionSupport extends EntityActionSupport {
 
-    protected void proccessField(PMStrutsContext ctx, Field f, EntityInstanceWrapper wrapper) throws PMException {
-        String eid = "f_" + f.getId();
-        String s = getParamValues(ctx, eid, ";");
+    protected void proccessField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper) throws PMException {
         LogEvent evt = ctx.getPresentationManager().getLog().createDebug();
-        evt.addMessage("Field [" + eid + "] ");
-        int i = 0;
-        if (s == null) {
-            s = "";
-        }
-        while (s != null) {
-            evt.addMessage("    Object to convert: " + s);
+        evt.addMessage("Field [" + field.getId() + "] ");
+        final List<String> parameterValues = getParameterValues(ctx,field);
+        int i  = 0;
+        for (String value : parameterValues) {
+            evt.addMessage("    Object to convert: " + value);
             try {
-                final Object o = wrapper.getInstance(i);
-                final Converter converter = f.getConverters().getConverterForOperation(ctx.getOperation().getId());
-                ctx.put(PM_FIELD, f);
-                ctx.put(PM_FIELD_VALUE, s);
-                ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
-                final Object converted = converter.build(ctx);
+                final Converter converter = field.getConverters().getConverterForOperation(ctx.getOperation().getId());
+                Object converted = getConvertedValue(ctx, field, value, wrapper, converter);
                 evt.addMessage("    Object converted: " + converted);
-                if (converter.getValidate()) {
-                    if (validateField(ctx, f, wrapper, converted)) {
-                        ctx.getPresentationManager().set(o, f.getProperty(), converted);
-                    }
-                } else {
-                    ctx.getPresentationManager().set(o, f.getProperty(), converted);
-                }
+                doProcessField(wrapper, i, converter, ctx, field, converted);
             } catch (IgnoreConvertionException e) {
                 //Do nothing, just ignore conversion.
             }
             i++;
-            s = getParamValues(ctx, eid + "_" + i, ";");
         }
         Logger.log(evt);
+    }
+
+    protected void doProcessField(EntityInstanceWrapper wrapper, int i, final Converter converter, PMStrutsContext ctx, Field field, Object converted) throws PMException {
+        final Object o = wrapper.getInstance(i);
+        if (converter.getValidate()) {
+            if (validateField(ctx, field, wrapper, converted)) {
+                ctx.getPresentationManager().set(o, field.getProperty(), converted);
+            }
+        } else {
+            ctx.getPresentationManager().set(o, field.getProperty(), converted);
+        }
+    }
+
+    protected Object getConvertedValue(PMStrutsContext ctx, Field field, String values, EntityInstanceWrapper wrapper, final Converter converter) throws ConverterException {
+        ctx.put(PM_FIELD, field);
+        ctx.put(PM_FIELD_VALUE, values);
+        ctx.put(PM_ENTITY_INSTANCE_WRAPPER, wrapper);
+        final Object converted = converter.build(ctx);
+        return converted;
     }
 
     private boolean validateField(PMStrutsContext ctx, Field field, EntityInstanceWrapper wrapper, Object o) throws PMException {
@@ -97,5 +104,21 @@ public abstract class FieldProcessingActionSupport extends EntityActionSupport {
         } else {
             return null;
         }
+    }
+
+    protected List<String> getParameterValues(PMStrutsContext ctx, Field field) {
+        List<String> result = new ArrayList<String>();
+        String eid = "f_" + field.getId();
+        String s = getParamValues(ctx, eid, ";");
+        int i = 0;
+        if (s == null) {
+            s = "";
+        }
+        while(s != null){
+            result.add(s);
+            i++;
+            s = getParamValues(ctx, eid + "_" + i, ";");
+        }
+        return result;
     }
 }
