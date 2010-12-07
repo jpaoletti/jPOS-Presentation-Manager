@@ -125,16 +125,13 @@ public class DataAccessDB implements DataAccess, Constants {
         }
 
         if (filter != null) {
-            for (Criterion criterion : ((DBEntityFilter) filter).getFilters()) {
-                c.add(criterion);
-            }
+            c = ((DBEntityFilter) filter).applyFilters(c);
         }
         //Weak entities must filter the parent
         if (entity.isWeak()) {
             if (ctx.getEntityContainer().getOwner() != null && ctx.getEntityContainer().getOwner().getSelected() != null) {
                 final Object instance = ctx.getEntityContainer().getOwner().getSelected().getInstance();
                 final String localProperty = entity.getOwner().getLocalProperty();
-                System.out.println("Filtering " + localProperty + " = " + instance);
                 c.add(Restrictions.eq(localProperty, instance));
             }
         }
