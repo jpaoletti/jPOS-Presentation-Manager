@@ -25,9 +25,13 @@ import java.util.Observable;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jpos.core.Configuration;
+import org.jpos.ee.pm.converter.Converter;
 import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 import org.jpos.ee.pm.menu.MenuItemLocationsParser;
+import org.jpos.ee.pm.parser.EntityParser;
+import org.jpos.ee.pm.parser.MonitorParser;
+import org.jpos.ee.pm.parser.PMParser;
 import org.jpos.util.Log;
 import org.jpos.util.LogEvent;
 import org.jpos.util.Logger;
@@ -119,9 +123,8 @@ public class PresentationManager extends Observable {
             }
             evt.addMessage(TAB + "<configuration>");
 
-            EntityParser parser = new EntityParser();
-            loadEntities(cfg, evt, parser);
-            loadMonitors(cfg, evt, parser);
+            loadEntities(cfg, evt);
+            loadMonitors(cfg, evt);
             loadLocations(evt);
         } catch (Exception exception) {
             getLog().error(exception);
@@ -150,13 +153,14 @@ public class PresentationManager extends Observable {
         Logger.log(evt);
     }
 
-    private void loadMonitors(Configuration cfg, LogEvent evt, EntityParser parser) {
+    private void loadMonitors(Configuration cfg, LogEvent evt) {
+        PMParser parser = new MonitorParser();
         evt.addMessage(TAB + "<monitors>");
         Map<Object, Monitor> result = new HashMap<Object, Monitor>();
         String[] ss = cfg.getAll("monitor");
         for (Integer i = 0; i < ss.length; i++) {
             try {
-                Monitor m = parser.parseMonitorFile(ss[i]);
+                Monitor m = (Monitor) parser.parseFile(ss[i]);
                 result.put(m.getId(), m);
                 result.put(i, m);
                 m.getSource().init();
@@ -205,7 +209,8 @@ public class PresentationManager extends Observable {
         return getService().visualizationWrapper(s);
     }
 
-    private void loadEntities(Configuration cfg, LogEvent evt, EntityParser parser) {
+    private void loadEntities(Configuration cfg, LogEvent evt) {
+        EntityParser parser = new EntityParser();
         evt.addMessage(TAB + "<entities>");
         if (entities == null) {
             entities = new HashMap<Object, Entity>();
@@ -215,7 +220,7 @@ public class PresentationManager extends Observable {
         String[] ss = cfg.getAll("entity");
         for (Integer i = 0; i < ss.length; i++) {
             try {
-                Entity e = parser.parseEntityFile(ss[i]);
+                Entity e = (Entity) parser.parseFile(ss[i]);
                 try {
                     Class.forName(e.getClazz());
                     entities.put(e.getId(), e);
