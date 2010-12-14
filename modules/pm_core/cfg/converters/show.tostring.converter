@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <generic-converter>
 	<visualize>
-		return value.toString();
+		return (value==null)?"-":value.toString();
 	</visualize>
 	<build>
 		return "IgnoreConvertionException";
