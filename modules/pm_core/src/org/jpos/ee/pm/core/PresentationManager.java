@@ -26,10 +26,13 @@ import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jpos.core.Configuration;
 import org.jpos.ee.pm.converter.Converter;
+import org.jpos.ee.pm.converter.ConverterWrapper;
+import org.jpos.ee.pm.converter.ExternalConverters;
 import org.jpos.ee.pm.core.monitor.Monitor;
 import org.jpos.ee.pm.menu.MenuItemLocation;
 import org.jpos.ee.pm.menu.MenuItemLocationsParser;
 import org.jpos.ee.pm.parser.EntityParser;
+import org.jpos.ee.pm.parser.ExternalConverterParser;
 import org.jpos.ee.pm.parser.MonitorParser;
 import org.jpos.ee.pm.parser.PMParser;
 import org.jpos.util.Log;
@@ -55,6 +58,7 @@ public class PresentationManager extends Observable {
     private Map<Object, Entity> entities;
     private Map<String, MenuItemLocation> locations;
     private Map<Object, Monitor> monitors;
+    private List<ExternalConverters> externalConverters;
     private String template;
     private String appversion;
     private boolean loginRequired;
@@ -125,6 +129,7 @@ public class PresentationManager extends Observable {
 
             loadEntities(cfg, evt);
             loadMonitors(cfg, evt);
+            loadConverters(cfg, evt);
             loadLocations(evt);
         } catch (Exception exception) {
             getLog().error(exception);
@@ -535,5 +540,31 @@ public class PresentationManager extends Observable {
             error(e);
             return null;
         }
+    }
+
+    private void loadConverters(Configuration cfg, LogEvent evt) {
+        PMParser parser = new ExternalConverterParser();
+        evt.addMessage(TAB + "<external-converters>");
+        externalConverters = new ArrayList<ExternalConverters>();
+        String[] ss = cfg.getAll("external-converters");
+        for (Integer i = 0; i < ss.length; i++) {
+            try {
+                ExternalConverters ec = (ExternalConverters) parser.parseFile(ss[i]);
+                externalConverters.add(ec);
+                logItem(evt, ss[i], null, "*");
+            } catch (Exception exception) {
+                getLog().error(exception);
+                logItem(evt, ss[i], null, "!");
+            }
+        }
+        evt.addMessage(TAB + "</external-converters>");
+    }
+
+    public Converter findExternalConverter(String id){
+        for (ExternalConverters ecs : externalConverters) {
+            ConverterWrapper w = ecs.getWrapper(id);
+            if(w!=null) return w.getConverter();
+        }
+        return null;
     }
 }

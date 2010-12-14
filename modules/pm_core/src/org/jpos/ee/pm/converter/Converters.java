@@ -21,32 +21,61 @@ import java.util.List;
 import java.util.Properties;
 
 import org.jpos.ee.pm.core.PMCoreObject;
-import org.jpos.ee.pm.core.PMService;
+import org.jpos.ee.pm.core.PresentationManager;
 
 /**Collection of converters*/
-public class Converters extends PMCoreObject{
+public class Converters extends PMCoreObject {
+
+    private static final Converter defaultConverter = new GenericConverter();
+
+    static {
+        Properties properties = new Properties();
+        properties.put("filename", "cfg/converters/show.tostring.converter");
+        defaultConverter.setProperties(properties);
+    }
+
     private List<Converter> converters;
+    private List<ExternalConverter> externalConverters;
 
     /**
      * Looks for an aproppiate converter for the given operation id.
      * @param operId The operation id
      * @return The first converter that matches this operation.
      */
-    public Converter getConverterForOperation(String operId){
-        if(getConverters() != null)
-        for(Converter converter : getConverters()){
-            if(converter.getOperations().compareToIgnoreCase("all")==0)
-                return converter;
-            if(converter.getOperations().contains(operId))
-                return converter;
+    public Converter getConverterForOperation(String operId) {
+        if (getConverters() != null) {
+            for (Converter converter : getConverters()) {
+                if (check(converter, converter.getOperations(), operId)) {
+                    return converter;
+                }
+            }
         }
-        Converter c = new GenericConverter();
-        Properties properties = new Properties();
-        properties.put("filename", "cfg/converters/show.tostring.converter");
-        c.setProperties(properties);
-        return c;
+        if (getExternalConverters() != null) {
+            for (ExternalConverter ecs : getExternalConverters()) {
+                final Converter c = PresentationManager.getPm().findExternalConverter(ecs.getId());
+                if (check(c, (ecs.getOperations() == null) ? c.getOperations() : ecs.getOperations(), operId)) {
+                    //TODO Add override of properties.
+                    return c;
+                }
+            }
+        }
+        return defaultConverter;
     }
-    
+
+    protected boolean check(Converter converter, String operations, String operId) {
+        return converter != null
+                && (operations.trim().equalsIgnoreCase("all")
+                || operations.contains(operId));
+    }
+
+    public List<ExternalConverter> getExternalConverters() {
+        return externalConverters;
+    }
+
+    public void setExternalConverters(List<ExternalConverter> externalConverters) {
+        this.externalConverters = externalConverters;
+    }
+
     /**
      * @param converters the converters to set
      */
