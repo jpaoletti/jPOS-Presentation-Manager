@@ -17,8 +17,10 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
+import org.apache.tools.ant.types.selectors.PresentSelector;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PMSession;
 import org.jpos.ee.pm.menu.Menu;
 import org.jpos.ee.pm.menu.MenuSupport;
 import org.jpos.ee.pm.security.core.InvalidPasswordException;
@@ -27,6 +29,7 @@ import org.jpos.ee.pm.security.core.PMSecurityException;
 import org.jpos.ee.pm.security.core.PMSecurityService;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
 import org.jpos.ee.pm.security.core.UserNotFoundException;
+import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
@@ -66,12 +69,15 @@ public class LoginAction extends EntityActionSupport {
     }
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
+        PMSession session = ctx.getPresentationManager().registerSession(ctx.getSession().getId());
+        ctx.getSession().setAttribute(PMEntitySupport.PMSESSION, session);
         if (ctx.getPresentationManager().isLoginRequired()) {
             try {
                 ctx.getSession().setAttribute(USER, null);
                 ctx.getSession().setAttribute(MENU, null);
                 PMSecurityUser u = authenticate(ctx);
-                loadMenu(ctx, u);
+                session.setUser(u);
+                session.setMenu(loadMenu(ctx, u));
                 if (u.isChangePassword()) {
                     throw new PMForwardException("changepassword");
                 }
@@ -87,14 +93,16 @@ public class LoginAction extends EntityActionSupport {
         } else {
             PMSecurityUser u = new PMSecurityUser();
             u.setName(" ");
-            loadMenu(ctx, u);
+            session.setUser(u);
+            session.setMenu(loadMenu(ctx, u));
         }
     }
 
-    private void loadMenu(PMStrutsContext ctx, PMSecurityUser u) throws PMException {
+    private Menu loadMenu(PMStrutsContext ctx, PMSecurityUser u) throws PMException {
         Menu menu = MenuSupport.getMenu(u.getPermissionList());
         ctx.getSession().setAttribute(USER, u);
         ctx.getSession().setAttribute(MENU, menu);
+        return menu;
     }
 
     /**

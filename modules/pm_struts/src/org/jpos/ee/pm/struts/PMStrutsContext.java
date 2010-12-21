@@ -15,6 +15,7 @@ import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMMessage;
+import org.jpos.ee.pm.core.PMSession;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
 
 /**An extension of the org.jpos.ee.pm.core.PMContext class with some helpers
@@ -50,6 +51,10 @@ public class PMStrutsContext extends PMContext {
     public static final String MODIFIED_OWNER_COLLECTION = "moc";
     public static final String PM_MONITOR_CONTINUE = "PM_MONITOR_CONTINUE";
     public static final String PM_MONITOR = "PM_MONITOR";
+
+    public PMSession getPMSession(){
+        return getPresentationManager().getSession(getSession().getId());
+    }
 
     /**
      * @return the mapping
@@ -181,7 +186,7 @@ public class PMStrutsContext extends PMContext {
      * @throws PMException when no container was found
      */
     public EntityContainer getEntityContainer(String id) throws PMException {
-        EntityContainer ec = (EntityContainer) getSession().getAttribute(id);
+        EntityContainer ec = (EntityContainer) getPMSession().getContainer(id);
         if (ec == null) {
             getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.entity.not.found", id));
             throw new PMException();

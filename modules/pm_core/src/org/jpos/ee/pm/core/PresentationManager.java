@@ -45,14 +45,11 @@ import org.jpos.util.Logger;
  */
 public class PresentationManager extends Observable {
 
-    /**
-     * Hash value for parameter encrypt
-     */
+    /**  Hash value for parameter encrypt  */
     public static String HASH = "abcde54321poiuy96356abcde54321poiuy96356";
-    /**
-     * Singleton
-     */
+    /** Singleton */
     public static PresentationManager pm;
+    private Configuration cfg;
     private static final String TAB = "    ";
     private static final String ERR = " ==>";
     private Map<Object, Entity> entities;
@@ -71,6 +68,8 @@ public class PresentationManager extends Observable {
     private Log log;
     private boolean debug;
     private PMService service;
+    private final Map<String, PMSession> sessions = new HashMap<String, PMSession>();
+    private Timer sessionChecker;
 
     /**
      * Initialize the Presentation Manager
@@ -81,6 +80,7 @@ public class PresentationManager extends Observable {
      */
     public boolean initialize(Configuration cfg, Log log, PMService service) {
         notifyObservers();
+        this.cfg = cfg;
         error = false;
         this.log = log;
         this.debug = cfg.getBoolean("debug");
@@ -131,6 +131,7 @@ public class PresentationManager extends Observable {
             loadMonitors(cfg, evt);
             loadConverters(cfg, evt);
             loadLocations(evt);
+            createSessionChecker();
         } catch (Exception exception) {
             getLog().error(exception);
             error = true;
@@ -560,11 +561,83 @@ public class PresentationManager extends Observable {
         evt.addMessage(TAB + "</external-converters>");
     }
 
-    public Converter findExternalConverter(String id){
+    public Converter findExternalConverter(String id) {
         for (ExternalConverters ecs : externalConverters) {
             ConverterWrapper w = ecs.getWrapper(id);
-            if(w!=null) return w.getConverter();
+            if (w != null) {
+                return w.getConverter();
+            }
         }
         return null;
+    }
+
+    /**
+     * Creates a new session with the given id
+     * @param sessionId The new session id. Must be unique.
+     * @throws PMException on already defined session
+     * @return New session
+     */
+    public PMSession registerSession(String sessionId) throws PMException {
+        synchronized (sessions) {
+            if (sessions.containsKey(sessionId)) {
+                throw new PMException("Session already defined");
+            }
+            sessions.put(sessionId, new PMSession(sessionId));
+            return getSession(sessionId);
+        }
+    }
+
+    /**
+     * Return the session for the given id
+     * @param sessionId The id of the wanted session
+     * @return The session
+     */
+    public PMSession getSession(String sessionId) {
+        final PMSession s = sessions.get(sessionId);
+        if(s!=null)
+            s.setLastAccess(new Date());
+        return s;
+    }
+
+    /**
+     * Getter for the session map.
+     * @return Sessions
+     */
+    public Map<String, PMSession> getSessions() {
+        return sessions;
+    }
+
+    /**
+     * Removes the given id session 
+     */
+    public void removeSession(String sessionId) {
+        sessions.remove(sessionId);
+    }
+
+    public Configuration getCfg() {
+        return cfg;
+    }
+
+
+    private void createSessionChecker() {
+        final Long timeout = cfg.getLong("session-timeout", 60*60)*1000;
+        final int interval = cfg.getInt("session-check-interval", 60*5)*1000;
+        sessionChecker = new Timer();
+        sessionChecker.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                synchronized(sessions){
+                    List<String> toRemove = new ArrayList<String>();
+                    for (Map.Entry<String, PMSession> entry : sessions.entrySet()) {
+                        if(entry.getValue().getLastAccess().getTime()+timeout < System.currentTimeMillis()){
+                            toRemove.add(entry.getKey());
+                        }
+                    }
+                    for (String session : toRemove) {
+                        removeSession(session);
+                    }
+                }
+            }
+        }, 0, interval);
     }
 }

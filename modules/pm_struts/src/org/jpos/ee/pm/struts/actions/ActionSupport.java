@@ -32,6 +32,7 @@ import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.PMUnauthorizedException;
 import org.jpos.ee.pm.core.PresentationManager;
+import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.struts.PMStrutsService;
@@ -58,7 +59,16 @@ public abstract class ActionSupport extends Action implements Constants {
     }
 
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
-        if (checkUser() && ctx.getUser() == null) {
+        if(ctx.getPMSession()==null){
+            //Force logout
+            final PMEntitySupport es = PMEntitySupport.getInstance();
+            ctx.getSession().invalidate();
+            es.setContext_path(ctx.getRequest().getContextPath());
+            ctx.getSession().setAttribute(ENTITY_SUPPORT, es);
+            ctx.getRequest().setAttribute("reload", 1);
+            throw new PMUnauthorizedException();
+        }
+        if ((checkUser() && ctx.getUser() == null) || ctx.getPMSession() == null) {
             ctx.getRequest().setAttribute("reload", 1);
             throw new PMUnauthorizedException();
         }

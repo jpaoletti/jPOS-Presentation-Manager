@@ -17,15 +17,13 @@
  */
 package org.jpos.ee.pm.struts;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.jpos.ee.pm.core.EntityContainer;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.Entity;
 import org.jpos.ee.pm.core.EntityFilter;
 import org.jpos.ee.pm.core.EntitySupport;
+import org.jpos.ee.pm.core.PMSession;
 import org.jpos.ee.pm.core.PaginatedList;
 
 /**
@@ -35,6 +33,7 @@ import org.jpos.ee.pm.core.PaginatedList;
  * @see EntitySupport
  */
 public class PMEntitySupport extends EntitySupport {
+    public static final String PMSESSION = "pmsession";
 
     public static String PM_ID = "pmid";
     public static final String LAST_PM_ID = "last_pmid";
@@ -64,7 +63,14 @@ public class PMEntitySupport extends EntitySupport {
             throw new PMStrutsException("request.not.found");
         }
         String pmid = (String) request.getAttribute(PM_ID);
-        return (EntityContainer) request.getSession().getAttribute(pmid);
+        return getPMSession().getContainer(pmid);
+    }
+
+    public PMSession getPMSession() throws PMStrutsException {
+        if (request == null) {
+            throw new PMStrutsException("request.not.found");
+        }
+        return (PMSession) request.getSession().getAttribute(PMSESSION);
     }
 
     /**

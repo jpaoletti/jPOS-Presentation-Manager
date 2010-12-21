@@ -25,20 +25,20 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.jpos.ee.Constants;
+import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 
-public class LogoutAction extends Action implements Constants{
+public class LogoutAction extends Action implements Constants {
 
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form,
-            HttpServletRequest request, HttpServletResponse response)throws Exception {
-        
+            HttpServletRequest request, HttpServletResponse response) throws Exception {
+
+        final PMEntitySupport es = PMEntitySupport.getInstance();
+        PresentationManager.getPm().removeSession(request.getSession().getId());
         request.getSession().invalidate();
-        PMEntitySupport es = PMEntitySupport.getInstance();
         es.setContext_path(request.getContextPath());
         request.getSession().setAttribute(ENTITY_SUPPORT, es);
         return mapping.findForward(ActionSupport.SUCCESS);
     }
-    
-
 }
