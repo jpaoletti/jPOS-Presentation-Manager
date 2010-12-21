@@ -18,10 +18,13 @@
 package org.jpos.ee.pm.core;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Timer;
+import java.util.TimerTask;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jpos.core.Configuration;
@@ -56,17 +59,9 @@ public class PresentationManager extends Observable {
     private Map<String, MenuItemLocation> locations;
     private Map<Object, Monitor> monitors;
     private List<ExternalConverters> externalConverters;
-    private String template;
-    private String appversion;
-    private boolean loginRequired;
-    private String title;
-    private String subtitle;
-    private String contact;
-    private String defaultDataAccess;
     private PersistenceManager persistenceManager;
     private boolean error;
     private Log log;
-    private boolean debug;
     private PMService service;
     private final Map<String, PMSession> sessions = new HashMap<String, PMSession>();
     private Timer sessionChecker;
@@ -83,39 +78,26 @@ public class PresentationManager extends Observable {
         this.cfg = cfg;
         error = false;
         this.log = log;
-        this.debug = cfg.getBoolean("debug");
         this.service = service;
 
         LogEvent evt = getLog().createInfo();
         evt.addMessage("startup", "Presentation Manager activated");
         try {
             evt.addMessage(TAB + "<configuration>");
-
-            template = cfg.get("template", "default");
-            logItem(evt, "Template", template, "*");
-
-            defaultDataAccess = cfg.get("default-data-access", "org.jpos.ee.pm.core.DataAccessVoid");
+            
             try {
-                Class.forName(defaultDataAccess);
-                logItem(evt, "Default Data Access", defaultDataAccess, "*");
+                Class.forName(getDefaultDataAccess());
+                logItem(evt, "Default Data Access", getDefaultDataAccess(), "*");
             } catch (Exception e) {
-                logItem(evt, "Default Data Access", defaultDataAccess, "?");
+                logItem(evt, "Default Data Access", getDefaultDataAccess(), "?");
             }
 
-            appversion = cfg.get("appversion", "1.0.0");
-            logItem(evt, "Application version", appversion, "*");
-
-            title = cfg.get("title", "pm.title");
-            logItem(evt, "Title", title, "*");
-
-            subtitle = cfg.get("subtitle", "pm.subtitle");
-            logItem(evt, "Subtitle", subtitle, "*");
-
-            contact = cfg.get("contact", "mailto:jpaoletti@angras.com.ar");
-            logItem(evt, "Contact", contact, "*");
-
-            loginRequired = cfg.getBoolean("login-required", true);
-            logItem(evt, "Login Required", Boolean.toString(loginRequired), "*");
+            logItem(evt, "Template", getTemplate(), "*");
+            logItem(evt, "Application version", getAppversion(), "*");
+            logItem(evt, "Title", getTitle(), "*");
+            logItem(evt, "Subtitle", getSubtitle(), "*");
+            logItem(evt, "Contact", getContact(), "*");
+            logItem(evt, "Login Required", Boolean.toString(isLoginRequired()), "*");
 
             final String tmp = cfg.get("persistence-manager", "org.jpos.ee.pm.core.PersistenceManagerVoid");
             try {
@@ -143,6 +125,22 @@ public class PresentationManager extends Observable {
         return !error;
     }
 
+    public String getTitle() {
+        return cfg.get("title", "pm.title");
+    }
+
+    public String getTemplate() {
+        return cfg.get("template", "default");
+    }
+
+    public boolean isDebug() {
+        return cfg.getBoolean("debug");
+    }
+
+    public String getAppversion() {
+        return cfg.get("appversion", "1.0.0");
+    }
+
     /**
      * If debug flag is active, create a debug information log
      * 
@@ -150,7 +148,7 @@ public class PresentationManager extends Observable {
      * @param o Object to log
      */
     public void debug(Object invoquer, Object o) {
-        if (!debug) {
+        if (!isDebug()) {
             return;
         }
         LogEvent evt = getLog().createDebug();
@@ -329,20 +327,13 @@ public class PresentationManager extends Observable {
 
 
     /* Getters */
-    /**
-     * Getter for application version
-     * @return
-     */
-    public String getAppversion() {
-        return appversion;
-    }
-
+    
     /**
      * Getter for contact
      * @return
      */
     public String getContact() {
-        return contact;
+        return cfg.get("contact", "mailto:jeronimo.paoletti@gmail.com");
     }
 
     /**
@@ -350,7 +341,7 @@ public class PresentationManager extends Observable {
      * @return
      */
     public String getDefaultDataAccess() {
-        return defaultDataAccess;
+        return cfg.get("default-data-access", "org.jpos.ee.pm.core.DataAccessVoid");
     }
 
     /**
@@ -382,7 +373,7 @@ public class PresentationManager extends Observable {
      * @return
      */
     public boolean isLoginRequired() {
-        return loginRequired;
+        return cfg.getBoolean("login-required", true);
     }
 
     /**
@@ -410,30 +401,6 @@ public class PresentationManager extends Observable {
     }
 
     /**
-     * Getter for subtitle resource key
-     * @return
-     */
-    public String getSubtitle() {
-        return subtitle;
-    }
-
-    /**
-     * Getter for template id
-     * @return
-     */
-    public String getTemplate() {
-        return template;
-    }
-
-    /**
-     * Getter for title resource key
-     * @return
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
      * Getter for singleton pm
      * @return
      */
@@ -450,7 +417,6 @@ public class PresentationManager extends Observable {
     }
 
     /* Loggin helpers*/
-    
     /**
      * Generate an info entry on the local logger
      * @param o Object to log
@@ -618,6 +584,9 @@ public class PresentationManager extends Observable {
         return cfg;
     }
 
+    public String getSubtitle() {
+        return cfg.get("subtitle", "pm.subtitle");
+    }
 
     private void createSessionChecker() {
         final Long timeout = cfg.getLong("session-timeout", 60*60)*1000;
@@ -639,5 +608,8 @@ public class PresentationManager extends Observable {
                 }
             }
         }, 0, interval);
+    }
+    public String getCopyright(){
+        return cfg.get("copyright","jpos.org");
     }
 }
