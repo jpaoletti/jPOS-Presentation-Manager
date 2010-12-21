@@ -25,7 +25,7 @@ import java.util.Set;
  * @author jpaoletti
  * 
  * This class encapsulate an entity, its list and everything associated to an entity. An instance
- * of this class is inserted in web session under demand and stay in session for fast reference.
+ * of this class is inserted in session under demand and stay in session for fast reference.
  * 
  */
 public class EntityContainer {
@@ -226,4 +226,5 @@ public class EntityContainer {
     public void setOperation(Operation operation) {
         this.operation = operation;
     }
+
 }
