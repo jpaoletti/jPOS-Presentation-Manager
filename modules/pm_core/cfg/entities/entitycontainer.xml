@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE entity SYSTEM "cfg/entity.dtd">
+<entity id="entitycontainer" clazz="org.jpos.ee.pm.core.EntityContainer">
+    <dataAccess class="org.jpos.ee.pm.ui.DataAccessEntityContainer"/>
+    <owner>
+        <entityId>pmsession</entityId>
+        <entityProperty>containers</entityProperty>
+        <entityCollectionClass>java.util.Collection</entityCollectionClass>
+    </owner>
+    <operations>
+        <operation id="list" enabled="true" scope="item" display="all">
+            <properties>
+                <property name="operation-column-width" value="1px" />
+            </properties>
+        </operation>
+        <operation id="show" enabled="true" scope="item" display="list" />
+    </operations>
+    <field id="id" />
+    <field id="listcount" property="list.total" />
+    <field id="listpage" property="list.page" />
+</entity>

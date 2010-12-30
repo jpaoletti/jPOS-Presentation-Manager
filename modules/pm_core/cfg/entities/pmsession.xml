@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE entity SYSTEM "cfg/entity.dtd">
+<entity id="pmsession" clazz="org.jpos.ee.pm.core.PMSession">
+    <dataAccess class="org.jpos.ee.pm.ui.DataAccessPMSession" />
+    <operations>
+        <operation id="list" enabled="true" scope="item" display="all">
+            <properties>
+                <property name="operation-column-width" value="1px" />
+            </properties>
+        </operation>
+        <operation id="show" enabled="true" scope="item" display="list" />
+        <operation id="delete" enabled="true" scope="item" display="show list" confirm="true"/>
+    </operations>
+    <field id="id" />
+    <field id="userid" property="user.username" />
+    <field id="username" property="user.name" />
+    <field id="lastAccess" />
+    <field id="containers" display="show">
+        <converters>
+            <econverter id="containers-show" />
+        </converters>
+    </field>
+</entity>
