@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<external-converters>
+    <external-converter id="edit-long">
+        <converter class="org.jpos.ee.pm.struts.converter.EditLongConverter" operations="add" />
+    </external-converter>
+    <external-converter id="add-long">
+        <converter class="org.jpos.ee.pm.struts.converter.EditLongConverter" operations="edit" />
+    </external-converter>
+    <external-converter id="show-collection">
+        <converter class="org.jpos.ee.pm.struts.converter.ShowCollectionConverter" operations="show" />
+    </external-converter>
+    <external-converter id="containers-show">
+        <converter class="org.jpos.ee.pm.struts.converter.WeakConverter" operations="show" >
+            <properties>
+                <property name="weak-entity" value="entitycontainer" />
+                <property name="show-modify" value="false" />
+            </properties>
+        </converter>
+    </external-converter>
+</external-converters>
