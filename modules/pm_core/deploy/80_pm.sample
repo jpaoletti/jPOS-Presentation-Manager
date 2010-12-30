@@ -1,0 +1,29 @@
+<presentation-manager class="org.jpos.ee.pm.struts.PMStrutsService"  logger="Q2">
+    <property name="debug" value="false" />
+    <property name="appversion" value="1.0.0" />
+    <property name="login-required" value="true" />
+    <property name="ignore-db" value="false" />
+    <property name="contact" value="some@contact.org" />
+    <property name="template" value="default"/>
+    <property name="copyright" value="jpos.org"/>
+
+    <property name="default-data-access" value="org.jpos.ee.pm.core.DataAccessVoid"/>
+    <property name="persistence-manager" value="org.jpos.ee.pm.core.PersistenceManagerVoid"/>
+
+    <property name="title" value="some.title" />
+    <property name="subtitle" value="some.subtitle" />
+
+    <property name="session-timeout" value="3600" /> <!-- Seconds -->
+    <property name="session-check-interval" value="300" /> <!-- Seconds -->
+
+    <!-- External Converters -->
+    <property name="external-converters" value="cfg/econverters/core.econveters.xml" />
+    
+    <!-- Busissnes Entities -->
+
+    <property name="entity" value="cfg/entities/pmsession.xml" />
+    <property name="entity" value="cfg/entities/entitycontainer.xml" />
+
+    <!-- Monitors -->
+    <property name="monitor" value="cfg/monitors/q2.xml" />
+</presentation-manager>
