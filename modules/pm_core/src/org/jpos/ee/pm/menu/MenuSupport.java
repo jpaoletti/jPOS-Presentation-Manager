@@ -19,6 +19,7 @@ package org.jpos.ee.pm.menu;
 
 import java.util.List;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.PresentationManager;
 
 /**A helper class to get the associated menu of a user. It builds the full menu 
  * and makes a rebuild without the options the user has not permission to see. 
@@ -34,7 +35,7 @@ public class MenuSupport {
      * */
     public static Menu getMenu(List<String> permissions) throws PMException {
         try {
-            MenuBuilder mb = new MenuBuilder("cfg/pm.menu.xml");
+            MenuBuilder mb = new MenuBuilder(PresentationManager.getPm().getMenu());
             Menu menu = cleanWithoutPerms(mb.getMenu(), permissions);
             return menu;
         } catch (Exception e) {

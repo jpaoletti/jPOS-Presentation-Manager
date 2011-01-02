@@ -93,6 +93,7 @@ public class PresentationManager extends Observable {
             }
 
             logItem(evt, "Template", getTemplate(), "*");
+            logItem(evt, "Menu", getMenu(), "*");
             logItem(evt, "Application version", getAppversion(), "*");
             logItem(evt, "Title", getTitle(), "*");
             logItem(evt, "Subtitle", getSubtitle(), "*");
@@ -611,5 +612,9 @@ public class PresentationManager extends Observable {
     }
     public String getCopyright(){
         return cfg.get("copyright","jpos.org");
+    }
+
+    public String getMenu() {
+        return cfg.get("menu", "cfg/pm.menu.xml");
     }
 }
