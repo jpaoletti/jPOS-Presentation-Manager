@@ -1,7 +1,6 @@
 package org.jpos.ee.pm.struts;
 
 import java.util.List;
-import org.jpos.ee.pm.core.EntityContainer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,14 +8,10 @@ import javax.servlet.http.HttpSession;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionMessages;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.PMMessage;
-import org.jpos.ee.pm.core.PMSession;
-import org.jpos.ee.pm.security.core.PMSecurityUser;
 
 /**An extension of the org.jpos.ee.pm.core.PMContext class with some helpers
  * for PMStruts.*/
@@ -52,8 +47,8 @@ public class PMStrutsContext extends PMContext {
     public static final String PM_MONITOR_CONTINUE = "PM_MONITOR_CONTINUE";
     public static final String PM_MONITOR = "PM_MONITOR";
 
-    public PMSession getPMSession(){
-        return getPresentationManager().getSession(getSession().getId());
+    public PMStrutsContext(String sessionId) {
+        super(sessionId);
     }
 
     /**
@@ -98,21 +93,6 @@ public class PMStrutsContext extends PMContext {
         put(PM_HTTP_REQUEST, request);
     }
 
-    /**Getter for the logged user
-     * @return The user
-     */
-    public PMSecurityUser getUser() {
-        PMSecurityUser user = (PMSecurityUser) get(USER);
-        return user;
-    }
-
-    /**Indicates if there is a user online
-     * @return True if there is a user online
-     */
-    public boolean isUserOnLine() {
-        return (getUser() != null);
-    }
-
     /**
      * @return the response
      */
@@ -153,15 +133,6 @@ public class PMStrutsContext extends PMContext {
     }
 
     /**
-     * Retrieve a request parameter
-     * @param s The parameter name
-     * @return The parameter value
-     */
-    public String getParameter(String s) {
-        return getRequest().getParameter(s);
-    }
-
-    /**
      * Retrieve the http session
      * @return The session
      */
@@ -176,22 +147,6 @@ public class PMStrutsContext extends PMContext {
     public PMEntitySupport getEntitySupport() {
         PMEntitySupport r = (PMEntitySupport) getRequest().getSession().getAttribute(ENTITY_SUPPORT);
         return r;
-    }
-
-    /**
-     * Retrieve the container with the given id from session
-     * 
-     * @param id The entity id
-     * @return The container
-     * @throws PMException when no container was found
-     */
-    public EntityContainer getEntityContainer(String id) throws PMException {
-        EntityContainer ec = (EntityContainer) getPMSession().getContainer(id);
-        if (ec == null) {
-            getErrors().add(new PMMessage(ActionMessages.GLOBAL_MESSAGE, "pm_core.entity.not.found", id));
-            throw new PMException();
-        }
-        return ec;
     }
 
     private String getPmId() {
