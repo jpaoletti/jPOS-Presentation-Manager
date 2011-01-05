@@ -81,6 +81,14 @@ public class Operations extends PMCoreObject {
         return result;
     }
 
+    public Operations getItemOperations() {
+        return getOperationsForScope(SCOPE_ITEM);
+    }
+
+    public Operations getGeneralOperations() {
+        return getOperationsForScope(SCOPE_GRAL);
+    }
+
     /**Returns an Operations object for the given scope
      * @param scopes The scopes
      * @return The Operations
