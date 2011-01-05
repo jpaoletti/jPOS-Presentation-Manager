@@ -30,7 +30,6 @@ import org.jpos.util.DisplacedList;
 public class PaginatedList {
 
     public static final int DEFAULT_PAGE_SIZE = 10;
-
     private Entity entity;
     private DisplacedList<Object> contents;
     private Integer page;
@@ -212,7 +211,7 @@ public class PaginatedList {
             if (total % rowsPerPage == 0) {
                 this.pages = (total / rowsPerPage);
             } else {
-                this.pages = (total / rowsPerPage)+1;
+                this.pages = (total / rowsPerPage) + 1;
             }
         }
     }
@@ -357,5 +356,13 @@ public class PaginatedList {
      */
     public boolean isHasSelectedScope() {
         return hasSelectedScope;
+    }
+
+    public Integer getListTotalDigits() {
+        try {
+            return (getTotal() == null || getTotal() == 0) ? 1 : (int) Math.log10(getTotal()) + 1;
+        } catch (Exception ex) {
+            return 0;
+        }
     }
 }
