@@ -24,7 +24,6 @@ import org.jpos.ee.pm.core.Operation;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.EntityContainer;
-import org.jpos.ee.pm.core.PresentationManager;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 import org.jpos.ee.pm.validator.ValidationResult;
@@ -52,7 +51,7 @@ public abstract class EntityActionSupport extends ActionSupport {
         if(ctx.hasEntity()){
             ctx.getEntityContainer().setOperation(operation);
             if(ctx.getEntity().isWeak()){
-                ctx.getEntityContainer().setOwner(getEntityContainer(ctx,ctx.getEntity().getOwner().getEntityId()));
+                ctx.getEntityContainer().setOwner(ctx.getPMSession().getContainer(ctx.getEntity().getOwner().getEntityId()));
                 if(ctx.getEntityContainer().getOwner()== null) {
                     throw new PMException("owner.not.exists");
                 }
@@ -201,8 +200,5 @@ public abstract class EntityActionSupport extends ActionSupport {
         final Collection<Object> collection = (Collection<Object>) ctx.getPresentationManager().get(object, ctx.getEntity().getOwner().getEntityProperty());
         return collection;
     }
-    
-    protected EntityContainer getEntityContainer(PMStrutsContext ctx, String eid) {
-        return (EntityContainer) ctx.getRequest().getSession().getAttribute(EntityContainer.buildId(PresentationManager.HASH, eid));
-    }
+
 }

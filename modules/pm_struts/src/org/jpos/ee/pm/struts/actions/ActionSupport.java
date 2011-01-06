@@ -59,16 +59,12 @@ public abstract class ActionSupport extends Action implements Constants {
     }
 
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
-        if(ctx.getPMSession()==null){
+        if(checkUser() && ctx.getPMSession()==null){
             //Force logout
             final PMEntitySupport es = PMEntitySupport.getInstance();
             ctx.getSession().invalidate();
             es.setContext_path(ctx.getRequest().getContextPath());
             ctx.getSession().setAttribute(ENTITY_SUPPORT, es);
-            ctx.getRequest().setAttribute("reload", 1);
-            throw new PMUnauthorizedException();
-        }
-        if ((checkUser() && ctx.getUser() == null) || ctx.getPMSession() == null) {
             ctx.getRequest().setAttribute("reload", 1);
             throw new PMUnauthorizedException();
         }
