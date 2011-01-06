@@ -17,58 +17,25 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.jpos.core.ConfigurationException;
-import org.jpos.ee.pm.core.EntityInstanceWrapper;
-import org.jpos.ee.pm.core.EntityOwner;
-import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.operations.AddOperation;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
-public class AddAction extends RowActionSupport {
-    
-    public boolean testSelectedExist() { return false; }
-    protected boolean openTransaction() { return true; }
-
-    protected boolean prepare(PMStrutsContext ctx) throws PMException {
-        super.prepare(ctx);
-        if(ctx.getParameter(FINISH)==null){
-            //Creates bean and put it in session
-            Object obj;
-            try {
-                obj = getPMService().getFactory().newInstance (ctx.getEntity().getClazz());
-                ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
-                ctx.getEntityContainer().setSelectedNew(true);
-                throw new PMForwardException(CONTINUE);
-            } catch (ConfigurationException e) {
-                ctx.getPresentationManager().error(e);
-                throw new PMException("pm_core.unespected.error");
-            }
-        }
-        if(ctx.getSelected() == null){
-            throw new PMException("pm.instance.not.found");
-        }
-        for (Field f : ctx.getEntity().getAllFields()) {
-            if(f.shouldDisplay(ctx.getOperation().getId()))
-                proccessField(ctx, f, ctx.getSelected());
-        }
-        if(!ctx.getErrors().isEmpty())
-            throw new PMException();
-
-        if(ctx.getEntity().isWeak()){
-            final Object parent = ctx.getEntityContainer().getOwner().getSelected().getInstance();
-            final EntityOwner owner = ctx.getEntity().getOwner();
-            final Object instance = ctx.getSelected().getInstance();
-            ctx.getPresentationManager().set(instance,owner.getLocalProperty(), parent);
-            getOwnerCollection(ctx).add(instance);
-        }
-        
-        return true;
-    }
+public class AddAction extends ActionSupport {
 
     protected void doExecute(PMStrutsContext ctx) throws PMException {
-        Object instance = ctx.getSelected().getInstance();
-        ctx.getPresentationManager().debug(this,"Saving '"+ctx.getEntity().getId()+"' to Data Access");
-        ctx.getEntity().getDataAccess().add(ctx, instance);
+        final boolean finish = ctx.getParameter("finish") == null;
+        if (finish) {
+            ctx.put("clean_selected", true);
+            ctx.put("validate", false);
+        }
+
+        AddOperation op = new AddOperation("add");
+        op.excecute(ctx);
+
+        if (finish) {
+            throw new PMForwardException(CONTINUE);
+        }
     }
 }

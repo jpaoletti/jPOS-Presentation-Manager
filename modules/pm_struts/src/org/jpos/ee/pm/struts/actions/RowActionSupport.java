@@ -32,7 +32,7 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
         super.prepare(ctx);
 
         //If we get item param, we change the selected item on the container
-        String item = ctx.getParameter("item");
+        String item = (String) ctx.getParameter("item");
         if (item != null && item.trim().compareTo("") != 0) {
             Integer index = Integer.parseInt(item);
             ctx.getPresentationManager().debug(this, "Getting row index: " + index);
@@ -43,7 +43,7 @@ public abstract class RowActionSupport extends FieldProcessingActionSupport {
                 ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(al.get(index)));
             }
         } else {
-            String identified = ctx.getParameter("identified");
+            String identified = (String) ctx.getParameter("identified");
             if (identified != null && identified.trim().compareTo("") != 0) {
                 ctx.getPresentationManager().debug(this, "Getting row identified by: " + identified);
                 String[] ss = identified.split(":");

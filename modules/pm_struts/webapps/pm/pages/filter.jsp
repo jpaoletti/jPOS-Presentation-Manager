@@ -24,7 +24,7 @@
         <html:form action="/${operation.id}.do?pmid=${pmid}">
             <html:hidden property="finish" value="yes"/>
             <fieldset>
-                <pm:operations labels="true" />
+                <pm:operations labels="true" operations="${ctx.map.operations.operations}"/>
                 <div id="navigation_bar">
                     <pm:navigation container="${e_container.owner}"  />
                 </div>

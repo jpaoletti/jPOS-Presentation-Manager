@@ -30,7 +30,7 @@ public class EditStringConverter extends StrutsEditConverter {
         final PMStrutsContext c = (PMStrutsContext) ctx;
         final Object value = ctx.get(PM_FIELD_VALUE);
         final String fid = ((Field) ctx.get(PM_FIELD)).getId();
-        final boolean isNull = Boolean.valueOf(c.getParameter("f_" + fid + "_null"));
+        final boolean isNull = Boolean.valueOf((String)c.getParameter("f_" + fid + "_null"));
         if (isNull) {
             return null ;
         } else {
