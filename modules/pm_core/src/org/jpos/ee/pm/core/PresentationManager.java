@@ -17,30 +17,15 @@
  */
 package org.jpos.ee.pm.core;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Observable;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import org.apache.commons.beanutils.NestedNullException;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.jpos.core.Configuration;
-import org.jpos.ee.pm.converter.Converter;
-import org.jpos.ee.pm.converter.ConverterWrapper;
-import org.jpos.ee.pm.converter.ExternalConverters;
+import org.jpos.ee.pm.converter.*;
 import org.jpos.ee.pm.core.monitor.Monitor;
-import org.jpos.ee.pm.menu.MenuItemLocation;
-import org.jpos.ee.pm.menu.MenuItemLocationsParser;
-import org.jpos.ee.pm.parser.EntityParser;
-import org.jpos.ee.pm.parser.ExternalConverterParser;
-import org.jpos.ee.pm.parser.MonitorParser;
-import org.jpos.ee.pm.parser.PMParser;
-import org.jpos.util.Log;
-import org.jpos.util.LogEvent;
-import org.jpos.util.Logger;
+import org.jpos.ee.pm.menu.*;
+import org.jpos.ee.pm.parser.*;
+import org.jpos.util.*;
 
 /**
  *
@@ -52,6 +37,7 @@ public class PresentationManager extends Observable {
     public static String HASH = "abcde54321poiuy96356abcde54321poiuy96356";
     /** Singleton */
     public static PresentationManager pm;
+    private static Long sessionIdSeed = 0L;
     private Configuration cfg;
     private static final String TAB = "    ";
     private static final String ERR = " ==>";
@@ -84,7 +70,7 @@ public class PresentationManager extends Observable {
         evt.addMessage("startup", "Presentation Manager activated");
         try {
             evt.addMessage(TAB + "<configuration>");
-            
+
             try {
                 Class.forName(getDefaultDataAccess());
                 logItem(evt, "Default Data Access", getDefaultDataAccess(), "*");
@@ -328,13 +314,12 @@ public class PresentationManager extends Observable {
 
 
     /* Getters */
-    
     /**
      * Getter for contact
      * @return
      */
     public String getContact() {
-        return cfg.get("contact", "mailto:jeronimo.paoletti@gmail.com");
+        return cfg.get("contact", "jeronimo.paoletti@gmail.com");
     }
 
     /**
@@ -561,8 +546,9 @@ public class PresentationManager extends Observable {
      */
     public PMSession getSession(String sessionId) {
         final PMSession s = sessions.get(sessionId);
-        if(s!=null)
+        if (s != null) {
             s.setLastAccess(new Date());
+        }
         return s;
     }
 
@@ -590,16 +576,17 @@ public class PresentationManager extends Observable {
     }
 
     private void createSessionChecker() {
-        final Long timeout = cfg.getLong("session-timeout", 60*60)*1000;
-        final int interval = cfg.getInt("session-check-interval", 60*5)*1000;
+        final Long timeout = cfg.getLong("session-timeout", 60 * 60) * 1000;
+        final int interval = cfg.getInt("session-check-interval", 60 * 5) * 1000;
         sessionChecker = new Timer();
         sessionChecker.schedule(new TimerTask() {
+
             @Override
             public void run() {
-                synchronized(sessions){
+                synchronized (sessions) {
                     List<String> toRemove = new ArrayList<String>();
                     for (Map.Entry<String, PMSession> entry : sessions.entrySet()) {
-                        if(entry.getValue().getLastAccess().getTime()+timeout < System.currentTimeMillis()){
+                        if (entry.getValue().getLastAccess().getTime() + timeout < System.currentTimeMillis()) {
                             toRemove.add(entry.getKey());
                         }
                     }
@@ -610,11 +597,36 @@ public class PresentationManager extends Observable {
             }
         }, 0, interval);
     }
-    public String getCopyright(){
-        return cfg.get("copyright","jpos.org");
+
+    public String getCopyright() {
+        return cfg.get("copyright", "jpos.org");
     }
 
     public String getMenu() {
         return cfg.get("menu", "cfg/pm.menu.xml");
+    }
+
+    public static synchronized String newSessionId() {
+        sessionIdSeed++;
+        return sessionIdSeed.toString();
+    }
+
+    /**
+     * Returns the internacionalized string for the given key
+     */
+    public static String getMessage(String key, String... params) {
+        try {
+            ResourceBundle bundle = ResourceBundle.getBundle("org.jpos.ee.ApplicationResource");
+            String string = bundle.getString(key);
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    String param = params[i];
+                    string = string.replaceAll("{" + i + "}", param);
+                }
+            }
+            return string;
+        } catch (Exception e) {
+            return key;
+        }
     }
 }
