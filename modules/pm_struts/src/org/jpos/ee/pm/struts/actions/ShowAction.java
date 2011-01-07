@@ -19,19 +19,12 @@ package org.jpos.ee.pm.struts.actions;
 
 /**Action for show operation. */
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.operations.ShowOperation;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
-public class ShowAction extends RowActionSupport {
+public class ShowAction extends ActionSupport {
 
-    protected boolean isAudited() {    return false; }
-    
-    protected boolean prepare(PMStrutsContext ctx) throws PMException {
-        super.prepare(ctx);
-        if(ctx.getSelected() == null){
-            throw new PMException("pm.instance.not.found");
-        }
-        return true;
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
+        (new ShowOperation("show")).excecute(ctx);
     }
-    
-    protected void doExecute(PMStrutsContext ctx) throws PMException {}
 }

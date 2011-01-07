@@ -126,7 +126,7 @@ public abstract class EntityActionSupport extends ActionSupport {
     }
 
     protected boolean configureEntityContainer(PMStrutsContext ctx) throws PMException {
-        String pmid = ctx.getRequest().getParameter(PMEntitySupport.PM_ID);
+        String pmid = (String)ctx.getParameter(PMEntitySupport.PM_ID);
         if(pmid==null) {
             pmid=(String) ctx.getSession().getAttribute(PMEntitySupport.LAST_PM_ID);
         }else{

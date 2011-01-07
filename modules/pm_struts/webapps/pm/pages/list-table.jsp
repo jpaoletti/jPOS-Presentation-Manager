@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 <%@include file="../inc/inc-full.jsp" %>
-<bean:define id="pmlist" name="es" property="list" type="org.jpos.ee.pm.core.PaginatedList" />
-<bean:define id="c" name="es" property="listTotalDigits" type="java.lang.Integer" />
+<bean:define id="pmlist" name="ctx" property="entityContainer.list" toScope="request"  type="org.jpos.ee.pm.core.PaginatedList"/>
+<bean:define id="c" name="pmlist" property="listTotalDigits" type="java.lang.Integer" />
 <bean:define id="has_selected" name="PMLIST" property="hasSelectedScope" type="java.lang.Boolean" />
+<bean:define id="messages" name="org.apache.struts.action.MESSAGE" type="org.apache.struts.util.MessageResources" scope="application"/>
 <script type="text/javascript">
     function selectItem(i){
         $.ajax({ url: "selectItem.do?pmid="+"${pmid}"+"&idx="+i});
@@ -52,7 +53,7 @@
                 %>
                 <td style="color:gray; white-space: nowrap;">
                     <logic:equal name="has_selected" value="true">
-                        <bean:define id="checked" value="<%=(es.getContainer().getSelectedIndexes().contains(i))?"checked":"" %>" />
+                        <bean:define id="checked" value="<%=(ctx.getEntityContainer().getSelectedIndexes().contains(i))?"checked":"" %>" />
                         <input type="checkbox" id="selected_item" value="${i}" onchange="selectItem(this.value);" ${checked} />
                     </logic:equal>
                     <c:if test="${pmlist.showRowNumber}">
@@ -60,15 +61,16 @@
                     </c:if>
                     &nbsp;
                     <span style="white-space: nowrap;" class="operationspopup" id="g_${i}">
-                        <img src="${es.context_path}/templates/${pm.template}/images/loading.gif" alt="loading" />
+                        <logic:iterate id="itemOperation" indexId="j" name="ctx" property="map.operations.itemOperations.operations" type="org.jpos.ee.pm.core.Operation">
+                            <logic:present name="itemOperation" property="url">
+                                <bean:define id="furl" value="${itemOperation.url}" />
+                            </logic:present>
+                            <logic:notPresent name="itemOperation" property="url">
+                                <bean:define id="furl" value="${es.context_path}/${itemOperation.id}.do?pmid=${entity.id}&item=${i}" />
+                            </logic:notPresent>
+                            <a class="confirmable_${itemOperation.confirm}" href="${furl}" id="operation${itemOperation.id}" title="<%=messages.getMessage("operation."+itemOperation.getId())%>" ${onclick}><img src="${es.context_path}/templates/${pm.template}/img/${itemOperation.id}.gif" alt="${itemOperation.id}" /></a>
+                        </logic:iterate> &nbsp;
                     </span>
-                    <script type="text/javascript">
-                        $('#g_'+"${i}").load('opers.do?pmid='+"${pmid}"+'&i='+"${i}",
-                        function() {
-                            //this function fix IE whitespace visualization bug
-                            $('#g_'+"${i}").html($('#g_'+"${i}").html().trim());
-                        });
-                    </script>
                 </td>
                 <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
                     <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
@@ -101,3 +103,8 @@
         </logic:equal>
     </tfoot>
 </table>
+<script>
+$(".confirmable_true").bind('click',function(){
+     return confirm("<pm:message key='pm.operation.confirm.question' />");
+});
+</script>

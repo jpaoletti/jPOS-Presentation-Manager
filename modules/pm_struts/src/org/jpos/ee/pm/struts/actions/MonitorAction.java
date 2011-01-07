@@ -26,7 +26,7 @@ public class MonitorAction extends ActionSupport {
     protected boolean prepare(PMStrutsContext ctx) throws PMException {
         synchronized (ctx.getSession()) {
             super.prepare(ctx);
-            String c = ctx.getParameter("continue");
+            String c = (String) ctx.getParameter("continue");
             boolean kontinue = (c != null) && (c.compareTo("true") == 0);
             ctx.put(PM_MONITOR_CONTINUE, kontinue);
 

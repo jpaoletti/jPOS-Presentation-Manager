@@ -19,6 +19,7 @@ package org.jpos.ee.pm.struts.actions;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -32,45 +33,60 @@ import javax.servlet.http.HttpServletResponse;
 import org.jpos.ee.Constants;
 import org.jpos.ee.pm.core.PMMessage;
 import org.jpos.ee.pm.core.PresentationManager;
+import org.jpos.ee.pm.core.operations.OperationCommandSupport;
 import org.jpos.ee.pm.struts.PMEntitySupport;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
-public class GeneralFilter implements Filter,Constants {
+public class GeneralFilter implements Filter, Constants {
 
     public void destroy() {
-        
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response,FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest)request;
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        final HttpServletRequest req = (HttpServletRequest) request;
         req.setAttribute("pm", PresentationManager.pm);
-        if(PresentationManager.pm==null) {
+        if (PresentationManager.pm == null) {
             chain.doFilter(request, response);
-            return ;
+            return;
         }
         PMEntitySupport o = (PMEntitySupport) req.getSession().getAttribute(ENTITY_SUPPORT);
-        if(o == null){
+        if (o == null) {
             PMEntitySupport es = PMEntitySupport.getInstance();
             es.setContext_path(req.getContextPath());
             req.getSession().setAttribute(ENTITY_SUPPORT, es);
         }
-        PMStrutsContext ctx = new PMStrutsContext();
-        ctx.setRequest((HttpServletRequest) request);
+        PMStrutsContext ctx = new PMStrutsContext(req.getSession().getId());
+        req.setAttribute("ctx", ctx);
+        ctx.setRequest(req);
         ctx.setResponse((HttpServletResponse) response);
         ctx.setErrors(new ArrayList<PMMessage>());
         ctx.getRequest().setAttribute(PM_CONTEXT, ctx);
         ctx.put(ActionSupport.USER, ctx.getSession().getAttribute(ActionSupport.USER));
+
+        for (Object object : req.getParameterMap().entrySet()) {
+            Map.Entry entry = (Map.Entry) object;
+            ctx.put("param_" + entry.getKey(), entry.getValue());
+        }
         
+        final Object pmid = ctx.getParameter("pmid");
+        ctx.put(OperationCommandSupport.PM_ID, pmid);
+        ctx.getRequest().setAttribute("pmid", pmid);
+
+        final Object item = ctx.getParameter("item");
+        ctx.put(OperationCommandSupport.PM_ITEM, item);
+        ctx.getRequest().setAttribute("item", item);
+
+
         try {
             ctx.getPresentationManager().getPersistenceManager().init(ctx);
-            
+
             chain.doFilter(request, response);
         } catch (ServletException e) {
             error(ctx, e);
             throw e;
         } catch (Exception e) {
             error(ctx, e);
-        }finally{
+        } finally {
             try {
                 ctx.getPresentationManager().getPersistenceManager().finish(ctx);
             } catch (Exception e) {
@@ -80,11 +96,11 @@ public class GeneralFilter implements Filter,Constants {
     }
 
     protected void error(PMStrutsContext ctx, Exception e) {
-        if(ctx.getPresentationManager() != null)
+        if (ctx.getPresentationManager() != null) {
             ctx.getPresentationManager().error(e);
+        }
     }
 
     public void init(FilterConfig arg0) throws ServletException {
-        
     }
 }

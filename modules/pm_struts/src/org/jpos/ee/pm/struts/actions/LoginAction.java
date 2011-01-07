@@ -17,7 +17,6 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.apache.tools.ant.types.selectors.PresentSelector;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
 import org.jpos.ee.pm.core.PMSession;

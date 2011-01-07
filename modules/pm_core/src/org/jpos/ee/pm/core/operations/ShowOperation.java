@@ -1,4 +1,4 @@
-<%--
+/*
  * jPOS Project [http://jpos.org]
  * Copyright (C) 2000-2010 Alejandro P. Revilla
  *
@@ -14,16 +14,30 @@
  *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
---%>
-<%--
-  General definitions. Requires tag-libs.jsp
+ */
+package org.jpos.ee.pm.core.operations;
 
-  @author jpaoletti
---%>
-<bean:define id="ctx" name="PM_CONTEXT" type="org.jpos.ee.pm.struts.PMStrutsContext" toScope="request" />
-<bean:define id="es" name="es" type="org.jpos.ee.pm.struts.PMEntitySupport" toScope="request" />
-<jsp:setProperty name="es" property="request" value="<%= request %>" />
-<logic:present name="ctx" property="entity">
-    <bean:define id="entity" name="ctx" property="entity" toScope="request" type="org.jpos.ee.pm.core.Entity" />
-</logic:present>
-<bean:define id="messages" name="org.apache.struts.action.MESSAGE" type="org.apache.struts.util.MessageResources" toScope="application"/>
+import org.jpos.ee.pm.core.PMContext;
+import org.jpos.ee.pm.core.PMException;
+
+/**
+ *
+ * @author jpaoletti
+ */
+public class ShowOperation extends OperationCommandSupport{
+
+    public ShowOperation(String operationId) {
+        super(operationId);
+    }
+
+    @Override
+    protected void doExecute(PMContext ctx) throws PMException {
+        super.doExecute(ctx);
+    }
+
+    @Override
+    protected boolean checkSelected() {
+        return true;
+    }
+
+}

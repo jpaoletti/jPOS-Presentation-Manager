@@ -18,6 +18,7 @@
 package org.jpos.ee.pm.core;
 
 import java.util.List;
+import org.jpos.ee.pm.security.core.PMSecurityUser;
 
 import org.jpos.transaction.Context;
 import org.jpos.util.Log;
@@ -28,7 +29,12 @@ import org.jpos.util.Log;
  */
 public class PMContext extends Context {
 
+    private String sessionId;
     public static final String PM_ERRORS = "PM_ERRORS";
+
+    public PMContext(String sessionId) {
+        this.sessionId = sessionId;
+    }
 
     /**
      * @return the errors
@@ -85,6 +91,21 @@ public class PMContext extends Context {
             throw new PMException("pm_core.entity.not.found");
         }
         return entityContainer;
+    }
+
+    /**
+     * Retrieve the container with the given id from session
+     *
+     * @param id The entity id
+     * @return The container
+     * @throws PMException when no container was found
+     */
+    public EntityContainer getEntityContainer(String id) throws PMException {
+        EntityContainer ec = (EntityContainer) getPMSession().getContainer(id);
+        if (ec == null) {
+            throw new PMException("pm_core.entity.not.found");
+        }
+        return ec;
     }
 
     /**
@@ -165,6 +186,60 @@ public class PMContext extends Context {
             return (hasEntityContainer() && getEntityContainer().getEntity() != null);
         } catch (PMException e) {
             return false;
+        }
+    }
+
+    public PMSession getPMSession() {
+        return getPresentationManager().getSession(getSessionId());
+    }
+
+    public String getSessionId() {
+        return sessionId;
+    }
+
+    /**Getter for the logged user
+     * @return The user
+     */
+    public PMSecurityUser getUser() {
+        if (getPMSession() == null) {
+            return null;
+        }
+        return getPMSession().getUser();
+    }
+
+    /**Indicates if there is a user online
+     * @return True if there is a user online
+     */
+    public boolean isUserOnLine() {
+        return (getUser() != null);
+    }
+
+    public Object getParameter(String paramid) {
+        final Object v = get("param_" + paramid);
+        if (v == null) {
+            return null;
+        } else {
+            String[] s = (String[]) v;
+            if (s.length == 1) {
+                return s[0];
+            } else {
+                return s;
+            }
+        }
+    }
+
+    public Object[] getParameters(String paramid) {
+        return (Object[]) get("param_" + paramid);
+    }
+
+    public boolean getBoolean(String id, boolean def) {
+        try {
+            if (get(id) == null) {
+                return def;
+            }
+            return (Boolean) get(id);
+        } catch (Exception e) {
+            return def;
         }
     }
 }
