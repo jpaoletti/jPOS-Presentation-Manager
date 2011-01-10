@@ -614,14 +614,14 @@ public class PresentationManager extends Observable {
     /**
      * Returns the internacionalized string for the given key
      */
-    public static String getMessage(String key, String... params) {
+    public static String getMessage(String key, Object... params) {
         try {
             ResourceBundle bundle = ResourceBundle.getBundle("org.jpos.ee.ApplicationResource");
             String string = bundle.getString(key);
             if (params != null) {
                 for (int i = 0; i < params.length; i++) {
-                    String param = params[i];
-                    string = string.replaceAll("{" + i + "}", param);
+                    String param = (params[i]==null)?"":params[i].toString();
+                    string = string.replaceAll("\\{" + i + "\\}", param);
                 }
             }
             return string;
