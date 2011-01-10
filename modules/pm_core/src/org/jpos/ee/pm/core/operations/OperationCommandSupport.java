@@ -231,7 +231,7 @@ public class OperationCommandSupport implements OperationCommand {
     protected boolean configureEntityContainer(PMContext ctx) throws PMException {
         String pmid = ctx.getString(PM_ID);
         if (pmid == null) {
-            pmid = (String) ctx.getPMSession().getString(LAST_PM_ID);
+            pmid = ctx.getPMSession().getString(LAST_PM_ID);
         } else {
             ctx.getPMSession().put(LAST_PM_ID, pmid);
         }
