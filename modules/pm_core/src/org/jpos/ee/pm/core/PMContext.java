@@ -88,6 +88,7 @@ public class PMContext extends Context {
     public EntityContainer getEntityContainer() throws PMException {
         EntityContainer entityContainer = (EntityContainer) get(PMCoreObject.PM_ENTITY_CONTAINER);
         if (entityContainer == null) {
+            PresentationManager.getPm().error("Entity container not found");
             throw new PMException("pm_core.entity.not.found");
         }
         return entityContainer;
