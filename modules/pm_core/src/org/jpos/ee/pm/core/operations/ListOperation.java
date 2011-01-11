@@ -42,8 +42,14 @@ public class ListOperation extends OperationCommandSupport {
         }
 
         configureOrder(ctx, pmlist);
-        pmlist.setPage((Integer) ctx.get("page"));
-        pmlist.setRowsPerPage((Integer) ctx.get("rows_per_page"));
+        final Integer page = (Integer) ctx.get("page");
+        if (page != null) {
+            pmlist.setPage(page);
+        }
+        final Integer rpp = (Integer) ctx.get("rows_per_page");
+        if (rpp != null) {
+            pmlist.setRowsPerPage(rpp);
+        }
 
         ctx.put(Constants.PM_LIST_ORDER, pmlist.getOrder());
         ctx.put(Constants.PM_LIST_ASC, !pmlist.isDesc());
@@ -61,6 +67,6 @@ public class ListOperation extends OperationCommandSupport {
         } catch (PMException e) {
             PresentationManager.getPm().error(e);
         }
-        pmlist.setDesc(ctx.getBoolean("desc",false));
+        pmlist.setDesc(ctx.getBoolean("desc", false));
     }
 }
