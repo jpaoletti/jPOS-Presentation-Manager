@@ -17,39 +17,23 @@
  */
 package org.jpos.ee.pm.struts.actions;
 
-import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMException;
+import org.jpos.ee.pm.core.operations.EditOperation;
 import org.jpos.ee.pm.struts.PMForwardException;
 import org.jpos.ee.pm.struts.PMStrutsContext;
 
-public class EditAction extends RowActionSupport {
+public class EditAction extends ActionSupport {
+    protected void doExecute(PMStrutsContext ctx) throws PMException {
+        final boolean finish = ctx.getParameter("finish") == null;
+        if (finish) {
+            ctx.put("validate", false);
+        }
 
-    protected boolean openTransaction() {return true;}
-    protected boolean isAudited() {return true;}
-    protected boolean checkUser() {return true;}
-    protected boolean checkEntity() {return true;}
+        EditOperation op = new EditOperation("edit");
+        op.excecute(ctx);
 
-    protected boolean prepare(PMStrutsContext ctx) throws PMException {
-        super.prepare(ctx);
-        if (ctx.getRequest().getParameter(FINISH) == null) {
+        if (finish) {
             throw new PMForwardException(CONTINUE);
         }
-        if (ctx.getSelected() == null) {
-            throw new PMException("pm.instance.not.found");
-        }
-        for (Field f : ctx.getEntity().getAllFields()) {
-            if (f.shouldDisplay(ctx.getOperation().getId())) {
-                proccessField(ctx, f, ctx.getSelected());
-            }
-        }
-        if (!ctx.getErrors().isEmpty()) {
-            throw new PMException();
-        }
-        return true;
-    }
-
-    protected void doExecute(PMStrutsContext ctx) throws PMException {
-        ctx.getPresentationManager().debug(this, "Updating '" + ctx.getEntity().getId() + "' to Data Access");
-        ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
     }
 }
