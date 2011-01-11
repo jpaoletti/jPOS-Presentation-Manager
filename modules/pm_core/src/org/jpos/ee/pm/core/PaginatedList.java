@@ -33,7 +33,7 @@ public class PaginatedList {
     private Entity entity;
     private DisplacedList<Object> contents;
     private Integer page;
-    private Long pages;
+    private Integer pages;
     private Long total;
     private Integer rowsPerPage;
     private String order;
@@ -178,9 +178,9 @@ public class PaginatedList {
      *
      * @return
      */
-    public Long getPages() {
+    public Integer getPages() {
         if (pages == null) {
-            return 1L;
+            return 1;
         }
         return pages;
     }
@@ -189,7 +189,7 @@ public class PaginatedList {
      *
      * @param pages
      */
-    public void setPages(Long pages) {
+    public void setPages(Integer pages) {
         this.pages = pages;
     }
 
@@ -205,13 +205,13 @@ public class PaginatedList {
      *
      * @param total
      */
-    public void setTotal(Long total) {
+    public final void setTotal(Long total) {
         this.total = total;
         if (total != null) {
             if (total % rowsPerPage == 0) {
-                this.pages = (total / rowsPerPage);
+                this.pages = (int)(total / rowsPerPage);
             } else {
-                this.pages = (total / rowsPerPage) + 1;
+                this.pages = (int)(total / rowsPerPage) + 1;
             }
         }
     }

@@ -17,6 +17,7 @@
  */
 package org.jpos.ee.pm.core;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.jpos.ee.pm.security.core.PMSecurityUser;
 
@@ -34,6 +35,7 @@ public class PMContext extends Context {
 
     public PMContext(String sessionId) {
         this.sessionId = sessionId;
+        setErrors(new ArrayList<PMMessage>());
     }
 
     /**
@@ -46,7 +48,7 @@ public class PMContext extends Context {
     /**
      * @param errors the errors to set
      */
-    public void setErrors(List<PMMessage> errors) {
+    public final void setErrors(List<PMMessage> errors) {
         put(PM_ERRORS, errors);
     }
 
