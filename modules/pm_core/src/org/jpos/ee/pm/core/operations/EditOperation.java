@@ -17,35 +17,22 @@
  */
 package org.jpos.ee.pm.core.operations;
 
-import org.jpos.core.ConfigurationException;
 import org.jpos.ee.pm.core.*;
 
 /**
  *
  * @author jpaoletti
  */
-public class AddOperation extends OperationCommandSupport {
+public class EditOperation extends OperationCommandSupport {
 
-    public AddOperation(String operationId) {
+    public EditOperation(String operationId) {
         super(operationId);
     }
 
     @Override
     protected boolean prepare(PMContext ctx) throws PMException {
         super.prepare(ctx);
-        if (ctx.getParameter("finish") == null) {
-            //Creates bean and put it in session
-            Object obj;
-            try {
-                obj = getPMService().getFactory().newInstance(ctx.getEntity().getClazz());
-                ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(obj));
-                ctx.getEntityContainer().setSelectedNew(true);
-                return false;
-            } catch (ConfigurationException e) {
-                ctx.getPresentationManager().error(e);
-                throw new PMException("pm_core.unespected.error");
-            }
-        } else {
+        if (ctx.getParameter("finish") != null) {
             if (ctx.getSelected() == null) {
                 throw new PMException("pm.instance.not.found");
             }
@@ -57,32 +44,30 @@ public class AddOperation extends OperationCommandSupport {
             if (!ctx.getErrors().isEmpty()) {
                 throw new PMException();
             }
-
-            if (ctx.getEntity().isWeak()) {
-                final Object parent = ctx.getEntityContainer().getOwner().getSelected().getInstance();
-                final EntityOwner owner = ctx.getEntity().getOwner();
-                final Object instance = ctx.getSelected().getInstance();
-                ctx.getPresentationManager().set(instance, owner.getLocalProperty(), parent);
-                getOwnerCollection(ctx).add(instance);
-            }
+            return true;
         }
-        return true;
-    }
-
-    @Override
-    protected void doExecute(PMContext ctx) throws PMException {
-        Object instance = ctx.getSelected().getInstance();
-        ctx.getPresentationManager().debug(this, "Saving '" + ctx.getEntity().getId() + "' to Data Access");
-        ctx.getEntity().getDataAccess().add(ctx, instance);
-    }
-
-    @Override
-    public boolean checkSelected() {
         return false;
     }
 
     @Override
+    protected void doExecute(PMContext ctx) throws PMException {
+        super.doExecute(ctx);
+        ctx.getPresentationManager().debug(this, "Updating '" + ctx.getEntity().getId() + "' to Data Access");
+        ctx.getEntity().getDataAccess().update(ctx, ctx.getSelected().getInstance());
+    }
+
+    @Override
     protected boolean openTransaction() {
+        return true;
+    }
+
+    @Override
+    protected boolean checkUser() {
+        return true;
+    }
+
+    @Override
+    protected boolean checkEntity() {
         return true;
     }
 }

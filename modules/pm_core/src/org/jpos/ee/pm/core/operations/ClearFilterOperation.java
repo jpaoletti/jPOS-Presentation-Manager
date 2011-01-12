@@ -15,21 +15,24 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpos.ee.pm.struts.actions;
+package org.jpos.ee.pm.core.operations;
 
+import org.jpos.ee.pm.core.PMContext;
 import org.jpos.ee.pm.core.PMException;
-import org.jpos.ee.pm.core.operations.ClearFilterOperation;
-import org.jpos.ee.pm.struts.PMStrutsContext;
 
 /**
  *
  * @author jpaoletti
  */
-public class ClearFilterAction extends ActionSupport{
+public class ClearFilterOperation extends OperationCommandSupport {
 
-    @Override
-    protected void doExecute(PMStrutsContext ctx) throws PMException {
-        (new ClearFilterOperation("clearfilter")).excecute(ctx);
+    public ClearFilterOperation(String operationId) {
+        super(operationId);
     }
 
+    @Override
+    protected void doExecute(PMContext ctx) throws PMException {
+        super.doExecute(ctx);
+        ctx.getEntityContainer().setFilter(null);
+    }
 }

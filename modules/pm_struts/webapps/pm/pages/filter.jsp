@@ -20,8 +20,8 @@
 <bean:define id="entity_filter" name="es" property="filter" toScope="request" type="org.jpos.ee.pm.core.EntityFilter"/>
 <pm:page title="titles.filter">
     <div id="add" class="boxed">
-        <pm:pmtitle entity="${entity}" operation="${operation}"/>
-        <html:form action="/${operation.id}.do?pmid=${pmid}">
+        <pm:pmtitle entity="${entity}" operation="${ctx.operation}"/>
+        <html:form action="/${ctx.operation.id}.do?pmid=${pmid}">
             <html:hidden property="finish" value="yes"/>
             <fieldset>
                 <pm:operations labels="true" operations="${ctx.map.operations.operations}"/>
@@ -32,11 +32,11 @@
                     <table id="box-table-a">
                         <tbody id="list_body" >
                             <logic:iterate id="field" name="entity" property="orderedFields" type="org.jpos.ee.pm.core.Field">
-                                <c:if test="${fn:contains(field.display,operation.id) or fn:contains(field.display,'all')}">
+                                <c:if test="${fn:contains(field.display,ctx.operation.id) or fn:contains(field.display,'all')}">
                                     <tr>
                                         <th scope="row" width="175px"><div><label for="object.${field.id}"><pm:field-name entity="${entity}" field="${field}" /></label></div></th>
                                         <td><pm:filter-operations field_id="${field.id}" filter="${entity_filter}" /></td>
-                                        <td><pm:converted-item operation="${operation}" entity="${entity}" field="${field}" field_value="${entity_filter.filterValues[field.id][0]}" /></td>
+                                        <td><pm:converted-item operation="${ctx.operation}" entity="${entity}" field="${field}" field_value="${entity_filter.filterValues[field.id][0]}" /></td>
                                     </tr>
                                 </c:if>
                             </logic:iterate>

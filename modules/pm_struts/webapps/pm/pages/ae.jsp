@@ -16,8 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
 <%@include file="../inc/inc-full.jsp" %>
-<bean:define id="e_container" name="es" property="container" />
-<bean:define id="entity_instance" name="es" property="selected" toScope="request"/>
+<bean:define id="e_container" name="ctx" property="entityContainer" />
+<bean:define id="entity_instance" name="ctx" property="selected.instance" toScope="request"/>
 <pm:page title="titles.add">
 	<div id="add" class="boxed">
 		<pm:pmtitle entity="${entity}" operation="${ctx.operation}" />

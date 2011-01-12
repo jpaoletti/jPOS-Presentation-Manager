@@ -43,21 +43,34 @@ public class OperationCommandSupport implements OperationCommand {
     public static final String OPERATIONS = "operations";
     public static final String PM_ITEM = "item";
     private String operationId;
+    private Operation operation;
 
     public OperationCommandSupport(String operationId) {
         this.operationId = operationId;
     }
 
-    public void excecute(PMContext ctx) throws PMException {
+    protected boolean prepare(PMContext ctx) throws PMException {
         //No session or no user when user is required.
         if (ctx.getPMSession() == null || (checkUser() && ctx.getUser() == null)) {
             throw new PMUnauthorizedException();
         }
         configureEntityContainer(ctx);
-        final Operation operation = configureOperations(ctx);
+        operation = configureOperations(ctx);
         configureSelected(ctx);
         //Try to refresh selected object, if there is one
         refreshSelectedObject(ctx, null);
+        return true;
+    }
+
+    public void excecute(PMContext ctx) throws PMException {
+        boolean step = prepare(ctx);
+        if (step) {
+            internalExecute(ctx);
+        }
+    }
+
+    protected void internalExecute(PMContext ctx) throws PMException {
+        ctx.getPresentationManager().debug(this, "Executing operation " + getOperationId());
         /* Validate de operation*/
         if (ctx.getSelected() != null) {
             validate(ctx);
@@ -145,7 +158,7 @@ public class OperationCommandSupport implements OperationCommand {
                 ctx.getEntityContainer().setSelected(new EntityInstanceWrapper(al.get(index)));
             }
         } else {
-            String identified = ctx.getString("identified");
+            String identified = (String) ctx.getParameter("identified");
             if (identified != null && identified.trim().compareTo("") != 0) {
                 ctx.getPresentationManager().debug(this, "Getting row identified by: " + identified);
                 String[] ss = identified.split(":");
@@ -285,10 +298,6 @@ public class OperationCommandSupport implements OperationCommand {
         return operationId;
     }
 
-    protected void doExecute(PMContext ctx) throws PMException {
-        ctx.getPresentationManager().debug(this, "Executing operation " + getOperationId());
-    }
-
     protected PMService getPMService() throws PMException {
         try {
             return (PMService) PresentationManager.getPm().getService();
@@ -384,5 +393,9 @@ public class OperationCommandSupport implements OperationCommand {
             s = getParamValues(ctx, eid + "_" + i, ";");
         }
         return result;
+    }
+
+    protected void doExecute(PMContext ctx) throws PMException{
+        
     }
 }
