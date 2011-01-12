@@ -17,6 +17,7 @@
  */
 package org.jpos.ee.pm.core;
 
+import org.jpos.ee.pm.converter.Converter;
 import org.jpos.q2.QBeanSupport;
 import org.jpos.util.NameRegistrar;
 
@@ -26,6 +27,7 @@ import org.jpos.util.NameRegistrar;
  * http://github.com/jpaoletti/jPOS-Presentation-Manager
  * */
 public class PMService extends QBeanSupport{
+    private Converter defaultConverter;
 
     /**
      * Initialize service
@@ -41,20 +43,18 @@ public class PMService extends QBeanSupport{
         boolean ok = PresentationManager.pm.initialize(cfg, log, this);
         if (ok) {
             NameRegistrar.register(getName(), this);
+            setDefaultConverter(PresentationManager.getPm().getDefaultConverter());
         } else {
             PresentationManager.pm = null;
         }
     }
 
-    /**
-     * Visualization wrapper. If there is no converter then I use this "void".
-     * If the string is a struts url (jsp or do) the I return it as is. Otherwise
-     * I asume that the text must be shown in void converter as a plain text.
-     *
-     * @param s Not wrapped string
-     * @return wrapped string
-     */
-    public String visualizationWrapper(String s) {
-        return s;
+    public Converter getDefaultConverter() {
+        return defaultConverter;
     }
+
+    public void setDefaultConverter(Converter defaultConverter) {
+        this.defaultConverter = defaultConverter;
+    }
+
 }

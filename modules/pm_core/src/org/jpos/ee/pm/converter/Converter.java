@@ -53,7 +53,7 @@ public class Converter extends PMCoreObject {
     private Properties properties;
     private Boolean validate;
 
-    /**This method transforms the given value into a String to visualize it
+    /**This method transforms the given value into an object to visualize it
      * @param ctx The context.
      *         Field:             ctx.get(PM_FIELD);
      *         F.Value:           ctx.get(PM_FIELD_VALUE);
@@ -62,7 +62,7 @@ public class Converter extends PMCoreObject {
      *         Operation:        ctx.getOperation();
      * @return The string representation of the object 
      * @throws ConverterException*/
-    public String visualize(PMContext ctx) throws ConverterException {
+    public Object visualize(PMContext ctx) throws ConverterException {
         throw new IgnoreConvertionException();
     }
 

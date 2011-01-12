@@ -71,7 +71,7 @@ public class Field extends PMCoreObject {
      * @return The string visualization
      * @throws PMException
      */
-    public String visualize(PMContext ctx, Operation operation, Entity entity) throws PMException {
+    public Object visualize(PMContext ctx, Operation operation, Entity entity) throws PMException {
         debug("Converting [" + operation.getId() + "]" + entity.getId() + "." + getId());
         try {
             Converter c = null;
@@ -83,7 +83,7 @@ public class Field extends PMCoreObject {
             }
             ctx.put(PM_ENTITY_INSTANCE_WRAPPER, new EntityInstanceWrapper(ctx.get(PM_ENTITY_INSTANCE)));
             ctx.put(PM_FIELD, this);
-            return PresentationManager.pm.visualizationWrapper(c.visualize(ctx));
+            return c.visualize(ctx);
         } catch (Exception e) {
             getPresentationManager().error(e);
             throw new ConverterException("Unable to convert " + entity.getId() + "." + getProperty());
@@ -96,11 +96,15 @@ public class Field extends PMCoreObject {
      * @return The converter
      */
     public Converter getDefaultConverter() {
-        Converter c = new GenericConverter();
-        Properties properties = new Properties();
-        properties.put("filename", "cfg/converters/show.tostring.converter");
-        c.setProperties(properties);
-        return c;
+        if (getPresentationManager().getService().getDefaultConverter() == null) {
+            Converter c = new GenericConverter();
+            Properties properties = new Properties();
+            properties.put("filename", "cfg/converters/show.tostring.converter");
+            c.setProperties(properties);
+            return c;
+        }else{
+            return getPresentationManager().getService().getDefaultConverter();
+        }
     }
 
     /**
@@ -110,7 +114,7 @@ public class Field extends PMCoreObject {
      * @return The String visualization
      * @throws PMException
      */
-    public String visualize(PMContext ctx, Operation operation) throws PMException {
+    public Object visualize(PMContext ctx, Operation operation) throws PMException {
         return visualize(ctx, operation, ctx.getEntity());
     }
 
@@ -120,7 +124,7 @@ public class Field extends PMCoreObject {
      * @return a String with the visualization
      * @throws PMException
      */
-    public String visualize(PMContext ctx) throws PMException {
+    public Object visualize(PMContext ctx) throws PMException {
         return visualize(ctx, ctx.getOperation());
     }
 

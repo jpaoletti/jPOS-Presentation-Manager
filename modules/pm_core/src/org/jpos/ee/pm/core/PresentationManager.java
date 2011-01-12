@@ -85,6 +85,7 @@ public class PresentationManager extends Observable {
             logItem(evt, "Subtitle", getSubtitle(), "*");
             logItem(evt, "Contact", getContact(), "*");
             logItem(evt, "Login Required", Boolean.toString(isLoginRequired()), "*");
+            logItem(evt, "Default Converter", getDefaultConverterClass(), "*");
 
             final String tmp = cfg.get("persistence-manager", "org.jpos.ee.pm.core.PersistenceManagerVoid");
             try {
@@ -144,6 +145,10 @@ public class PresentationManager extends Observable {
         Logger.log(evt);
     }
 
+    protected String getDefaultConverterClass() {
+        return getCfg().get("default-converter");
+    }
+
     private void loadMonitors(Configuration cfg, LogEvent evt) {
         PMParser parser = new MonitorParser();
         evt.addMessage(TAB + "<monitors>");
@@ -191,13 +196,6 @@ public class PresentationManager extends Observable {
             error = true;
         }
         evt.addMessage(TAB + "</locations>");
-    }
-
-    /**Encapsulate a String that is going to be visualized by default (without a Converter)
-     * @param s The String
-     * @return The wrapped String*/
-    public String visualizationWrapper(String s) {
-        return getService().visualizationWrapper(s);
     }
 
     private void loadEntities(Configuration cfg, LogEvent evt) {
@@ -620,7 +618,7 @@ public class PresentationManager extends Observable {
             String string = bundle.getString(key);
             if (params != null) {
                 for (int i = 0; i < params.length; i++) {
-                    String param = (params[i]==null)?"":params[i].toString();
+                    String param = (params[i] == null) ? "" : params[i].toString();
                     string = string.replaceAll("\\{" + i + "\\}", param);
                 }
             }
@@ -628,5 +626,15 @@ public class PresentationManager extends Observable {
         } catch (Exception e) {
             return key;
         }
+    }
+
+    public Converter getDefaultConverter() {
+        try {
+            if (getDefaultConverterClass() != null && !"".equals(getDefaultConverterClass().trim())) {
+                return (Converter) newInstance(getDefaultConverterClass());
+            }
+        } catch (Exception e) {
+        }
+        return null;
     }
 }

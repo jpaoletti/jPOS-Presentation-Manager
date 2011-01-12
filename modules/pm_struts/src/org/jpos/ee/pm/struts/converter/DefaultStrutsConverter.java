@@ -15,25 +15,28 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jpos.ee.pm.struts;
+package org.jpos.ee.pm.struts.converter;
 
-/**This is an implementation of the PMService for struts.*/
-import org.jpos.ee.Constants;
-import org.jpos.ee.pm.core.PMService;
-import org.jpos.ee.pm.struts.converter.DefaultStrutsConverter;
+import org.jpos.ee.pm.converter.Converter;
+import org.jpos.ee.pm.converter.ConverterException;
+import org.jpos.ee.pm.core.PMContext;
 
 /**
- * QBean for struts Presentation Manager service
- * 
+ *
  * @author jpaoletti
  */
-public class PMStrutsService extends PMService implements Constants {
+public class DefaultStrutsConverter extends Converter {
 
     @Override
-    protected void initService() throws Exception {
-        super.initService();
-        if (getDefaultConverter() == null) {
-            setDefaultConverter(new DefaultStrutsConverter());
+    public Object visualize(PMContext ctx) throws ConverterException {
+        Object s = ctx.get(PM_FIELD_VALUE);
+        if (s == null) {
+            return "void.jsp?text=";
+        }
+        if (s instanceof String && s.toString().contains(".jsp?") || s.toString().contains(".do?")) {
+            return s;
+        } else {
+            return "void.jsp?text=" + s;
         }
     }
 }
