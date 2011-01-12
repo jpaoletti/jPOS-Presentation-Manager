@@ -38,6 +38,10 @@ public class PMContext extends Context {
         setErrors(new ArrayList<PMMessage>());
     }
 
+    public PMContext() {
+        this("");
+    }
+
     /**
      * @return the errors
      */
