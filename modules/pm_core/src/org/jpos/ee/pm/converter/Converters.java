@@ -18,21 +18,11 @@
 package org.jpos.ee.pm.converter;
 
 import java.util.List;
-import java.util.Properties;
-
 import org.jpos.ee.pm.core.PMCoreObject;
 import org.jpos.ee.pm.core.PresentationManager;
 
 /**Collection of converters*/
 public class Converters extends PMCoreObject {
-
-    private static final Converter defaultConverter = new GenericConverter();
-
-    static {
-        Properties properties = new Properties();
-        properties.put("filename", "cfg/converters/show.tostring.converter");
-        defaultConverter.setProperties(properties);
-    }
 
     private List<Converter> converters;
     private List<ExternalConverter> externalConverters;
@@ -59,7 +49,7 @@ public class Converters extends PMCoreObject {
                 }
             }
         }
-        return defaultConverter;
+        return null;
     }
 
     protected boolean check(Converter converter, String operations, String operId) {
