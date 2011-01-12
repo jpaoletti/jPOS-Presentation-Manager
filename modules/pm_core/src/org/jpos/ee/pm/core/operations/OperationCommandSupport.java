@@ -338,6 +338,7 @@ public class OperationCommandSupport implements OperationCommand {
     }
 
     protected Object getConvertedValue(PMContext ctx, Field field, String values, EntityInstanceWrapper wrapper, final Converter converter) throws ConverterException {
+        if(converter==null) throw new IgnoreConvertionException();
         ctx.put(Constants.PM_FIELD, field);
         ctx.put(Constants.PM_FIELD_VALUE, values);
         ctx.put(Constants.PM_ENTITY_INSTANCE_WRAPPER, wrapper);
