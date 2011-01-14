@@ -226,12 +226,15 @@ public class PMContext extends Context {
         if (v == null) {
             return null;
         } else {
-            String[] s = (String[]) v;
-            if (s.length == 1) {
-                return s[0];
-            } else {
-                return s;
+            if (v instanceof String[]) {
+                String[] s = (String[]) v;
+                if (s.length == 1) {
+                    return s[0];
+                } else {
+                    return s;
+                }
             }
+            return v;
         }
     }
 
