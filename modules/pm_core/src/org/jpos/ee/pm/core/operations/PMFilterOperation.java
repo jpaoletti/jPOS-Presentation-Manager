@@ -107,10 +107,10 @@ public class PMFilterOperation extends OperationCommandSupport {
     }
 
     private List<Object> getFilterValues(PMContext ctx, Field field) throws ConverterException {
-        final List<String> parameterValues = getParameterValues(ctx, field);
+        final List<Object> parameterValues = getParameterValues(ctx, field);
         final List<Object> values = new ArrayList<Object>();
         int i = 0;
-        for (String value : parameterValues) {
+        for (Object value : parameterValues) {
             try {
                 final Converter converter = field.getConverters().getConverterForOperation(ctx.getOperation().getId());
                 Object converted = getConvertedValue(ctx, field, value, null, converter);

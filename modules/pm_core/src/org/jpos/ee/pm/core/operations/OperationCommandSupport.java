@@ -309,9 +309,9 @@ public class OperationCommandSupport implements OperationCommand {
     protected void proccessField(PMContext ctx, Field field, EntityInstanceWrapper wrapper) throws PMException {
         LogEvent evt = ctx.getPresentationManager().getLog().createDebug();
         evt.addMessage("Field [" + field.getId() + "] ");
-        final List<String> parameterValues = getParameterValues(ctx, field);
+        final List<Object> parameterValues = getParameterValues(ctx, field);
         int i = 0;
-        for (String value : parameterValues) {
+        for (Object value : parameterValues) {
             evt.addMessage("    Object to convert: " + value);
             try {
                 final Converter converter = field.getConverters().getConverterForOperation(ctx.getOperation().getId());
@@ -337,8 +337,10 @@ public class OperationCommandSupport implements OperationCommand {
         }
     }
 
-    protected Object getConvertedValue(PMContext ctx, Field field, String values, EntityInstanceWrapper wrapper, final Converter converter) throws ConverterException {
-        if(converter==null) throw new IgnoreConvertionException();
+    protected Object getConvertedValue(PMContext ctx, Field field, Object values, EntityInstanceWrapper wrapper, final Converter converter) throws ConverterException {
+        if (converter == null) {
+            throw new IgnoreConvertionException();
+        }
         ctx.put(Constants.PM_FIELD, field);
         ctx.put(Constants.PM_FIELD_VALUE, values);
         ctx.put(Constants.PM_ENTITY_INSTANCE_WRAPPER, wrapper);
@@ -361,29 +363,36 @@ public class OperationCommandSupport implements OperationCommand {
         return ok;
     }
 
-    private String getParamValues(PMContext ctx, String name, String separator) {
-        String[] ss = (String[]) ctx.getParameters(name);
-        if (ss != null) {
-            StringBuilder s = new StringBuilder();
-            if (ss != null && ss.length > 0) {
-                s.append(ss[0]);
-            }
+    private Object getParamValues(PMContext ctx, String name, String separator) {
+        final Object parameters = ctx.getParameter(name);
+        if(parameters==null) return null;
+        //The following if keeps backward compatibility
+        if (parameters instanceof String[]) {
+            String[] ss = (String[]) parameters;
+            if (ss != null) {
+                StringBuilder s = new StringBuilder();
+                if (ss != null && ss.length > 0) {
+                    s.append(ss[0]);
+                }
 
-            //In this case we have a multivalue input
-            for (int i = 1; i < ss.length; i++) {
-                s.append(separator);
-                s.append(ss[i]);
+                //In this case we have a multivalue input
+                for (int i = 1; i < ss.length; i++) {
+                    s.append(separator);
+                    s.append(ss[i]);
+                }
+                return s.toString();
+            } else {
+                return null;
             }
-            return s.toString();
         } else {
-            return null;
+            return parameters;
         }
     }
 
-    protected List<String> getParameterValues(PMContext ctx, Field field) {
-        List<String> result = new ArrayList<String>();
+    protected List<Object> getParameterValues(PMContext ctx, Field field) {
+        List<Object> result = new ArrayList<Object>();
         String eid = "f_" + field.getId();
-        String s = getParamValues(ctx, eid, ";");
+        Object s = getParamValues(ctx, eid, ";");
         int i = 0;
         if (s == null) {
             s = "";
@@ -396,7 +405,6 @@ public class OperationCommandSupport implements OperationCommand {
         return result;
     }
 
-    protected void doExecute(PMContext ctx) throws PMException{
-        
+    protected void doExecute(PMContext ctx) throws PMException {
     }
 }
