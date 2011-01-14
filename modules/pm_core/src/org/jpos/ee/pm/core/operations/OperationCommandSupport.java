@@ -103,7 +103,7 @@ public class OperationCommandSupport implements OperationCommand {
                 }
             } catch (Exception e) {
                 ctx.getPresentationManager().error(e);
-                throw new PMException("pm.struts.cannot.commit.txn");
+                throw new PMException("pm_core.cannot.commit.txn");
             }
             tx = null;
         } catch (PMException e) {
