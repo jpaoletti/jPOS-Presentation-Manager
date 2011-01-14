@@ -171,7 +171,12 @@ public class PaginatedList {
      * @param page
      */
     public void setPage(Integer page) {
-        this.page = page;
+        //Out of range page sets to last one
+        if (getTotal() != null && page > getPages()) {
+            this.page = getPages();
+        } else {
+            this.page = page;
+        }
     }
 
     /**
@@ -209,9 +214,9 @@ public class PaginatedList {
         this.total = total;
         if (total != null) {
             if (total % rowsPerPage == 0) {
-                this.pages = (int)(total / rowsPerPage);
+                this.pages = (int) (total / rowsPerPage);
             } else {
-                this.pages = (int)(total / rowsPerPage) + 1;
+                this.pages = (int) (total / rowsPerPage) + 1;
             }
         }
     }
