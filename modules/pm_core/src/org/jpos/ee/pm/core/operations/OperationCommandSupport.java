@@ -238,7 +238,7 @@ public class OperationCommandSupport implements OperationCommand {
     }
 
     protected EntityContainer getEntityContainer(PMContext ctx, String eid) {
-        return (EntityContainer) ctx.getPMSession().get(EntityContainer.buildId(PresentationManager.HASH, eid));
+        return (EntityContainer) ctx.getPMSession().getContainer(EntityContainer.buildId(PresentationManager.HASH, eid));
     }
 
     protected boolean configureEntityContainer(PMContext ctx) throws PMException {
