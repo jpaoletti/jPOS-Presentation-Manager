@@ -185,10 +185,10 @@ public class OperationCommandSupport implements OperationCommand {
     }
 
     public Operation configureOperations(PMContext ctx) throws PMException {
-        final Operation operation = (ctx.hasEntity()) ? ctx.getEntity().getOperations().getOperation(operationId) : null;
-        ctx.setOperation(operation);
+        final Operation op = (ctx.hasEntity()) ? ctx.getEntity().getOperations().getOperation(operationId) : null;
+        ctx.setOperation(op);
         if (ctx.hasEntity()) {
-            ctx.getEntityContainer().setOperation(operation);
+            ctx.getEntityContainer().setOperation(op);
             if (ctx.getEntity().isWeak()) {
                 ctx.getEntityContainer().setOwner(getEntityContainer(ctx, ctx.getEntity().getOwner().getEntityId()));
                 if (ctx.getEntityContainer().getOwner() == null) {
@@ -201,7 +201,7 @@ public class OperationCommandSupport implements OperationCommand {
         if (ctx.hasEntityContainer()) {
             ctx.put(OPERATIONS, ctx.getEntity().getOperations().getOperationsFor(ctx.getOperation()));
         }
-        return operation;
+        return op;
     }
 
     public Object refreshSelectedObject(PMContext ctx, EntityContainer container) throws PMException {
