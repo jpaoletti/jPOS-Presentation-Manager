@@ -37,6 +37,7 @@ import org.jpos.util.Logger;
  */
 public class OperationCommandSupport implements OperationCommand {
 
+    public static final String FINISH = "finish";
     public static final String PM_ENTITY_INSTANCE = "PM_ENTITY_INSTANCE";
     public static final String LAST_PM_ID = "LAST_PM_ID";
     public static final String PM_ID = "PM_ID";
@@ -365,7 +366,9 @@ public class OperationCommandSupport implements OperationCommand {
 
     private Object getParamValues(PMContext ctx, String name, String separator) {
         final Object parameters = ctx.getParameter(name);
-        if(parameters==null) return null;
+        if (parameters == null) {
+            return null;
+        }
         //The following if keeps backward compatibility
         if (parameters instanceof String[]) {
             String[] ss = (String[]) parameters;
@@ -406,5 +409,14 @@ public class OperationCommandSupport implements OperationCommand {
     }
 
     protected void doExecute(PMContext ctx) throws PMException {
+    }
+
+    /**
+     * Indicates if the operation is finished. The operation has ended when
+     * the "finished" parameter is present.
+     * 
+     */
+    protected boolean finished(PMContext ctx) {
+        return ctx.getParameter(FINISH) != null;
     }
 }
