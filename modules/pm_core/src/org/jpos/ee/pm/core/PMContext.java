@@ -242,14 +242,87 @@ public class PMContext extends Context {
         return (Object[]) get("param_" + paramid);
     }
 
-    public boolean getBoolean(String id, boolean def) {
+    /**
+     * Getter for a boolean value.
+     * @param key The key
+     * @param def Default value if there is no item at key
+     * @return A boolean
+     */
+    public boolean getBoolean(String key, boolean def) {
         try {
-            if (get(id) == null) {
+            if (!contains(key)) {
                 return def;
             }
-            return (Boolean) get(id);
+            return (Boolean) get(key);
         } catch (Exception e) {
             return def;
+        }
+    }
+
+    /**
+     * Obtains a pair based on the given key. In there is no key, this method
+     * returns null
+     *
+     * @param key The key
+     * @return the ContextPair for the given key.
+     */
+    public ContextPair getPair(String key) {
+        if (!this.contains(key)) {
+            return null;
+        }
+        return new ContextPair(key, get(key));
+    }
+
+    /**
+     * Puts the key/value pair from each pair into the context
+     * @param pair The pair
+     */
+    public void put(ContextPair... pairs) {
+        for (int i = 0; i < pairs.length; i++) {
+            ContextPair pair = pairs[i];
+            this.put(pair.getKey(), pair.getValue());
+        }
+    }
+
+    /**
+     * Indicate if the key is present.
+     *
+     * @param key The key
+     * @return true if value asociated to the key is not null
+     */
+    public boolean contains(String key) {
+        return get(key) != null;
+    }
+
+    /**
+     * Helper class to simplify context pairs to be moved from one context to
+     * another.
+     *
+     */
+    public class ContextPair {
+
+        private String key;
+        private Object value;
+
+        public ContextPair(String key, Object value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public void setValue(Object value) {
+            this.value = value;
         }
     }
 }
