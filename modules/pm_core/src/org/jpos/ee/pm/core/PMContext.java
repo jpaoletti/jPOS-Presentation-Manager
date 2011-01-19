@@ -278,9 +278,11 @@ public class PMContext extends Context {
      * @param pair The pair
      */
     public void put(ContextPair... pairs) {
-        for (int i = 0; i < pairs.length; i++) {
-            ContextPair pair = pairs[i];
-            this.put(pair.getKey(), pair.getValue());
+        if (pairs != null) {
+            for (int i = 0; i < pairs.length; i++) {
+                ContextPair pair = pairs[i];
+                this.put(pair.getKey(), pair.getValue());
+            }
         }
     }
 
@@ -290,8 +292,15 @@ public class PMContext extends Context {
      * @param key The key
      * @return true if value asociated to the key is not null
      */
-    public boolean contains(String key) {
+    public boolean contains(final String key) {
         return get(key) != null;
+    }
+
+    /**
+     * Build a new pair
+     */
+    public ContextPair newPair(final String key, final Object value) {
+        return new ContextPair(key, value);
     }
 
     /**
@@ -299,7 +308,7 @@ public class PMContext extends Context {
      * another.
      *
      */
-    public class ContextPair {
+    public static class ContextPair {
 
         private String key;
         private Object value;
