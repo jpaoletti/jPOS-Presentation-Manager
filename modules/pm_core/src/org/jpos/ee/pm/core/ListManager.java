@@ -29,6 +29,12 @@ public class ListManager {
 
     public PaginatedList initList(PMContext ctx, Operations operations) throws PMException {
         PaginatedList pmlist = new PaginatedList();
+        //Initial values
+        pmlist.setDesc(false);
+        pmlist.setOrder(null);
+        pmlist.setPage(1);
+        pmlist.setRowsPerPage(10);
+
         pmlist.setEntity(ctx.getEntity());
         pmlist.setOperations(operations.getOperationsForScope(Constants.SCOPE_GRAL, Constants.SCOPE_SELECTED));
         String sortfield = ctx.getOperation().getConfig("sort-field");
