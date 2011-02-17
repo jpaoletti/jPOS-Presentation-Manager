@@ -16,9 +16,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jpos.ee.pm.core;
-
-import javax.servlet.ServletException;
-
 import org.hibernate.Transaction;
 import org.jpos.ee.DB;
 
@@ -44,7 +41,7 @@ public class DBPersistenceManager implements PersistenceManager {
             ctx.put(PM_DB, db);
         } catch (Exception e) {
             ctx.getPresentationManager().error(e);
-            throw new ServletException(e);
+            throw new PMException(e);
         }
     }
 
