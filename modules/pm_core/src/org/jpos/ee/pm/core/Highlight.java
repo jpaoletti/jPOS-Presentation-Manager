@@ -27,6 +27,10 @@ public class Highlight {
     private String color;
     /**instance: all the item. property: only the value */
     private String scope;
+
+    public boolean isInstance(){
+        return "instance".equals(getScope());
+    }
         
     /**
      * @param scope the scope to set
