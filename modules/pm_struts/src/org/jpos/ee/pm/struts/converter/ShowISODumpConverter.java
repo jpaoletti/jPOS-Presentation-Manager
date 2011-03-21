@@ -17,28 +17,36 @@
  */
 package org.jpos.ee.pm.struts.converter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import org.jpos.ee.pm.converter.ConverterException;
 import org.jpos.ee.pm.converter.IgnoreConvertionException;
 import org.jpos.ee.pm.core.EntityInstanceWrapper;
 import org.jpos.ee.pm.core.Field;
 import org.jpos.ee.pm.core.PMContext;
 import org.jpos.iso.ISOUtil;
-import org.mortbay.util.UrlEncoded;
 
 public class ShowISODumpConverter extends StrutsEditConverter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException {
         throw new IgnoreConvertionException("");
     }
-    
+
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);
         byte[] p = (byte[]) getValue(einstance, field);
-        if(p!=null) {
-            String string = ISOUtil.hexdump(p);//new String(p);
-            return super.visualize("isodump_converter.jsp?value="+UrlEncoded.encodeString(string));
-        } else
+        if (p != null) {
+            try {
+                String string = ISOUtil.hexdump(p); //new String(p);
+                return super.visualize("isodump_converter.jsp?value=" + URLEncoder.encode(string, "UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                throw new ConverterException(ex);
+            }
+        } else {
             return super.visualize("isodump_converter.jsp?value=-");
+        }
     }
 }
