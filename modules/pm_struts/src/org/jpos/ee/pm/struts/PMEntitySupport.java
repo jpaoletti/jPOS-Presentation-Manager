@@ -33,8 +33,8 @@ import org.jpos.ee.pm.core.PaginatedList;
  * @see EntitySupport
  */
 public class PMEntitySupport extends EntitySupport {
-    public static final String PMSESSION = "pmsession";
 
+    public static final String PMSESSION = "pmsession";
     public static String PM_ID = "pmid";
     public static final String LAST_PM_ID = "last_pmid";
     private String context_path;
@@ -117,7 +117,7 @@ public class PMEntitySupport extends EntitySupport {
         Object r = container.getSelected().getInstance();
         return r;
     }
-    
+
     /**
      * Returns the filter applied
      * 
@@ -158,11 +158,28 @@ public class PMEntitySupport extends EntitySupport {
         this.request = request;
     }
 
-    public Integer getListTotalDigits(){
+    public Integer getListTotalDigits() {
         try {
             return (getList().getTotal() == null || getList().getTotal() == 0) ? 1 : (int) Math.log10(getList().getTotal()) + 1;
         } catch (PMStrutsException ex) {
             return 0;
         }
+    }
+
+    public String getNavigationList(final EntityContainer container) {
+        final StringBuilder sb = new StringBuilder();
+        if (container != null) {
+            sb.append(getNavigationList(container.getOwner()));
+            sb.append("&nbsp; &gt; &nbsp;");
+            sb.append("<a href='");
+            sb.append(getContext_path());
+            sb.append("/");
+            sb.append(container.getOperation().getId());
+            sb.append(".do?pmid=");
+            sb.append(container.getEntity().getId()).append(" >");
+            sb.append(container.getSelected().getInstance());
+            sb.append("</a>");
+        }
+        return sb.toString();
     }
 }

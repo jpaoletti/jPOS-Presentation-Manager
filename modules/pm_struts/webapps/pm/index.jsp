@@ -25,7 +25,8 @@
     <pm:page title="titles.index" >
         <div id="page-container">
             <pm:header />
-            <pm:menu />
+            <%-- <pm:menu /> --%>
+            <jsp:include page="pages/menu.jsp" />
 
             <div id="content">
                 <logic:notPresent scope="session" name="user">

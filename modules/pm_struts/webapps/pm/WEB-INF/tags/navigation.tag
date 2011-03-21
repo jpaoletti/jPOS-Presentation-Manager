@@ -15,11 +15,5 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
 --%>
-<%@tag description="Navigation bar" pageEncoding="UTF-8"%>
-<%@tag import="org.jpos.ee.pm.core.*"%>
-<%@attribute name="container" required="false" type="org.jpos.ee.pm.core.EntityContainer" %>
-<%@taglib uri="/WEB-INF/tld/c.tld" prefix="c" %><%@taglib tagdir="/WEB-INF/tags" prefix="pm" %>
-<c:if test="${not empty container}">
-    <pm:navigation container="${container.owner}" />
-    &nbsp; &gt; &nbsp;<a href="${es.context_path}/${container.operation.id}.do?pmid=${container.entity.id}" >${container.selected.instance}</a>
-</c:if>
+<%@tag description="Navigation bar" pageEncoding="UTF-8"%><%@attribute name="container" required="false" type="org.jpos.ee.pm.core.EntityContainer" %>
+<%=((org.jpos.ee.pm.struts.PMEntitySupport) session.getAttribute("es")).getNavigationList(container)%>
