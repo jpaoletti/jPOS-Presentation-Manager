@@ -37,10 +37,12 @@ import org.jpos.ee.pm.core.PMContext;
  * */
 public class ShowStringConverter extends Converter {
 
+    @Override
     public Object build(PMContext ctx) throws ConverterException{
         throw new IgnoreConvertionException("");
     }
 
+    @Override
     public String visualize(Object obj, String extra) throws ConverterException{
         String prefix = getConfig("prefix");
         String suffix = getConfig("suffix");
@@ -52,6 +54,7 @@ public class ShowStringConverter extends Converter {
         return res;
         
     }
+    @Override
     public String visualize(PMContext ctx) throws ConverterException {
         EntityInstanceWrapper einstance = (EntityInstanceWrapper) ctx.get(PM_ENTITY_INSTANCE_WRAPPER);
         Field field = (Field) ctx.get(PM_FIELD);
