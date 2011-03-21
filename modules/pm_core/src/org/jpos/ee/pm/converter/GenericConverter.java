@@ -65,7 +65,13 @@ public class GenericConverter extends Converter {
             if ("IgnoreConvertionException".equals(res)) {
                 throw new IgnoreConvertionException("");
             }
-            return res;
+            final Converter c = field.getDefaultConverter();
+            if (c != null) {
+                ctx.put(PM_FIELD_VALUE, res);
+                return (String) c.visualize(ctx);
+            } else {
+                return res;
+            }
         } catch (EvalError e) {
             getLog().error("BSH Interpreter Evaluation", e);
         }
