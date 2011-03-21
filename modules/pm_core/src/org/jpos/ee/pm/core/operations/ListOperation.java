@@ -67,6 +67,5 @@ public class ListOperation extends OperationCommandSupport {
         } catch (PMException e) {
             PresentationManager.getPm().error(e);
         }
-        pmlist.setDesc(ctx.getBoolean("desc", false));
     }
 }
