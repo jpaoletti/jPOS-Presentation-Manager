@@ -1,3 +1,7 @@
+WARNING: this project was splitted into several submodules. See jpaoletti/jpospm-* projects
+
+-------------------------------------------------------------------------------
+
 jPOS-Presentation-Manager (jPOS-PM in short) is a jPOS-EE module intended
 to be a CRUD system with extended tools to fast build an administrative and
 monitoring web site for a jPOS-EE based project, based in xml definition files.
